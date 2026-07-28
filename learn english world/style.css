@@ -1,0 +1,268 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #172033;
+    min-height: 100vh;
+}
+
+
+/* الشريط العلوي */
+
+.topbar {
+    height: 75px;
+    background: white;
+    border-bottom: 1px solid #e7eaf0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 6%;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #3478f6;
+}
+
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile small {
+    display: block;
+    color: #8992a3;
+    margin-top: 4px;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+    background: #3478f6;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+
+/* المحتوى */
+
+.container {
+    width: min(1100px, 90%);
+    margin: 40px auto;
+}
+
+
+.welcome {
+    background: #3478f6;
+    color: white;
+
+    border-radius: 22px;
+    padding: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 35px;
+}
+
+.welcome h1 {
+    font-size: 32px;
+    margin: 10px 0;
+}
+
+.welcome p {
+    opacity: 0.9;
+    line-height: 1.7;
+}
+
+.small-title {
+    font-size: 14px;
+}
+
+
+.welcome-icon {
+    font-size: 90px;
+}
+
+
+/* عنوان القائمة */
+
+h2 {
+    margin-bottom: 18px;
+    font-size: 24px;
+}
+
+
+/* البطاقات */
+
+.menu {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+}
+
+
+.menu-card {
+    border: none;
+    background: white;
+
+    min-height: 125px;
+
+    border-radius: 18px;
+
+    padding: 22px;
+
+    display: flex;
+    align-items: center;
+
+    text-align: right;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 20px rgba(20, 30, 50, 0.05);
+
+    transition: 0.2s;
+}
+
+
+.menu-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(20, 30, 50, 0.1);
+}
+
+
+.card-icon {
+    width: 62px;
+    height: 62px;
+
+    border-radius: 16px;
+
+    background: #eef4ff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 30px;
+
+    flex-shrink: 0;
+}
+
+
+.card-text {
+    flex: 1;
+    margin-right: 18px;
+}
+
+
+.card-text h3 {
+    font-size: 19px;
+    margin-bottom: 7px;
+}
+
+
+.card-text p {
+    color: #8992a3;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+.arrow {
+    font-size: 22px;
+    color: #3478f6;
+}
+
+
+/* زر تعلم الكلمات */
+
+.main-card {
+    border: 2px solid #3478f6;
+}
+
+
+/* الفوتر */
+
+footer {
+    text-align: center;
+    color: #9aa2b1;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+
+/* الجوال */
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 0 5%;
+    }
+
+    .profile div:not(.avatar) {
+        display: none;
+    }
+
+    .container {
+        width: 92%;
+        margin: 25px auto;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome h1 {
+        font-size: 25px;
+    }
+
+    .welcome-icon {
+        font-size: 55px;
+    }
+
+    .menu {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-card {
+        min-height: 105px;
+    }
+}
+.settings-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 12px;
+    background: #eef4ff;
+    font-size: 22px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.settings-btn:hover {
+    transform: rotate(20deg);
+}

@@ -1,0 +1,319 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #172033;
+    min-height: 100vh;
+}
+
+
+/* الهيدر */
+
+.topbar {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #e7eaf0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 6%;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.back-btn,
+.home-btn {
+    border: none;
+    background: #eef4ff;
+    color: #3478f6;
+
+    padding: 10px 15px;
+    border-radius: 10px;
+
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.home-btn {
+    font-size: 20px;
+}
+
+
+/* المحتوى */
+
+.container {
+    width: min(800px, 92%);
+    margin: 35px auto;
+}
+
+
+/* التقدم */
+
+.progress-area {
+    margin-bottom: 25px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 9px;
+
+    color: #70798a;
+}
+
+.progress-info strong {
+    color: #3478f6;
+}
+
+.progress-bar {
+    height: 9px;
+    background: #e3e7ee;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#progressFill {
+    height: 100%;
+    width: 10%;
+    background: #3478f6;
+    border-radius: 20px;
+
+    transition: width 0.3s;
+}
+
+
+/* بطاقة الكلمة */
+
+.word-card {
+    background: white;
+    border-radius: 24px;
+
+    padding: 35px;
+
+    box-shadow: 0 8px 30px rgba(20, 30, 50, 0.07);
+}
+
+
+/* الصورة */
+
+.image-container {
+    width: 100%;
+    height: 300px;
+
+    background: #f0f4fa;
+
+    border-radius: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 30px;
+}
+
+.word-image {
+    font-size: 150px;
+}
+
+
+/* الكلمات */
+
+.word-content {
+    text-align: center;
+}
+
+.english-word {
+    font-size: 42px;
+    font-weight: bold;
+    color: #172033;
+}
+
+.arabic-word {
+    font-size: 22px;
+    color: #7d8798;
+
+    margin-top: 8px;
+}
+
+
+/* النطق */
+
+.sound-btn {
+    margin-top: 20px;
+
+    border: none;
+    border-radius: 12px;
+
+    padding: 12px 20px;
+
+    background: #eef4ff;
+    color: #3478f6;
+
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+/* المثال */
+
+.example {
+    background: #f7f9fc;
+
+    border-radius: 15px;
+
+    padding: 18px;
+
+    margin-top: 25px;
+
+    text-align: right;
+}
+
+.example span {
+    color: #3478f6;
+    font-weight: bold;
+}
+
+.example p {
+    font-size: 18px;
+    margin: 10px 0 5px;
+
+    direction: ltr;
+    text-align: left;
+}
+
+.example small {
+    color: #8992a3;
+}
+
+
+/* أزرار أعرف / لا أعرف */
+
+.knowledge-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+
+    margin-top: 20px;
+}
+
+.knowledge-buttons button {
+    border: none;
+
+    border-radius: 15px;
+
+    padding: 17px;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.dont-know {
+    background: #fff0f0;
+    color: #e05252;
+}
+
+.know {
+    background: #edf9f1;
+    color: #269653;
+}
+
+
+/* الإجراءات */
+
+.actions {
+    display: flex;
+    gap: 15px;
+
+    margin-top: 15px;
+}
+
+.actions button {
+    border: none;
+    border-radius: 14px;
+
+    padding: 16px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+}
+
+#favoriteBtn {
+    width: 130px;
+
+    background: white;
+    color: #f1a500;
+
+    border: 1px solid #e5e8ee;
+}
+
+#favoriteBtn.active {
+    background: #fff7df;
+}
+
+.next-btn {
+    flex: 1;
+
+    background: #3478f6;
+    color: white;
+
+    font-weight: bold;
+}
+
+
+/* الجوال */
+
+@media (max-width: 600px) {
+
+    .topbar {
+        padding: 0 4%;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+
+    .container {
+        width: 94%;
+        margin: 25px auto;
+    }
+
+    .word-card {
+        padding: 20px;
+    }
+
+    .image-container {
+        height: 220px;
+    }
+
+    .word-image {
+        font-size: 110px;
+    }
+
+    .english-word {
+        font-size: 34px;
+    }
+
+    .arabic-word {
+        font-size: 19px;
+    }
+
+    .knowledge-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+

@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>English Words</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+
+</head>
+
+
+<body>
+
+
+    <header class="topbar">
+
+        <div class="logo">
+            English<span>Words</span>
+        </div>
+
+
+        <div class="profile">
+
+            <div
+                class="avatar"
+                id="userAvatar">
+                ?
+            </div>
+
+
+            <div>
+
+                <strong id="welcomeText">
+                    مرحباً 👋
+                </strong>
+
+                <small id="userEmail">
+                    جاري التحميل...
+                </small>
+
+            </div>
+
+
+            <!-- تسجيل الخروج -->
+
+            <button
+                class="logout-btn"
+                onclick="logout()"
+                title="تسجيل الخروج">
+
+                🚪
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <main class="container">
+
+
+        <section class="welcome">
+
+            <div>
+
+                <p class="small-title">
+                    منصة تعلم الإنجليزية
+                </p>
+
+
+                <h1>
+                    تعلم كلمات جديدة كل يوم 🚀
+                </h1>
+
+
+                <p>
+                    تعلم الكلمات الإنجليزية بالصور،
+                    واستمع للنطق،
+                    ثم اختبر نفسك بطريقة ممتعة.
+                </p>
+
+            </div>
+
+
+            <div class="welcome-icon">
+                📚
+            </div>
+
+        </section>
+
+
+
+        <h2>
+            ماذا تريد أن تفعل؟
+        </h2>
+
+
+
+        <section class="menu">
+
+
+            <button
+                class="menu-card main-card"
+                onclick="startLearning()">
+
+                <div class="card-icon">
+                    📚
+                </div>
+
+                <div class="card-text">
+
+                    <h3>
+                        تعلم الكلمات
+                    </h3>
+
+                    <p>
+                        تعلم كلمات جديدة باستخدام الصور
+                    </p>
+
+                </div>
+
+                <span class="arrow">
+                    ←
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="menu-card"
+                onclick="comingSoon('اختبار الكلمات')">
+
+                <div class="card-icon">
+                    🧠
+                </div>
+
+                <div class="card-text">
+
+                    <h3>
+                        اختبار الكلمات
+                    </h3>
+
+                    <p>
+                        اختبر نفسك وتأكد من حفظ الكلمات
+                    </p>
+
+                </div>
+
+                <span class="arrow">
+                    ←
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="menu-card"
+                onclick="comingSoon('مراجعة الكلمات')">
+
+                <div class="card-icon">
+                    🔄
+                </div>
+
+                <div class="card-text">
+
+                    <h3>
+                        مراجعة الكلمات
+                    </h3>
+
+                    <p>
+                        راجع الكلمات التي تحتاج إلى تثبيت
+                    </p>
+
+                </div>
+
+                <span class="arrow">
+                    ←
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="menu-card"
+                onclick="comingSoon('كلماتي')">
+
+                <div class="card-icon">
+                    ⭐
+                </div>
+
+                <div class="card-text">
+
+                    <h3>
+                        كلماتي
+                    </h3>
+
+                    <p>
+                        شاهد الكلمات التي حفظتها
+                    </p>
+
+                </div>
+
+                <span class="arrow">
+                    ←
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="menu-card"
+                onclick="comingSoon('تقدمي')">
+
+                <div class="card-icon">
+                    📊
+                </div>
+
+                <div class="card-text">
+
+                    <h3>
+                        تقدمي
+                    </h3>
+
+                    <p>
+                        تابع مستواك وعدد الكلمات التي تعلمتها
+                    </p>
+
+                </div>
+
+                <span class="arrow">
+                    ←
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="menu-card"
+                onclick="comingSoon('تحدي اليوم')">
+
+                <div class="card-icon">
+                    🎯
+                </div>
+
+                <div class="card-text">
+
+                    <h3>
+                        تحدي اليوم
+                    </h3>
+
+                    <p>
+                        أنجز هدفك اليومي في تعلم الإنجليزية
+                    </p>
+
+                </div>
+
+                <span class="arrow">
+                    ←
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="settings-btn"
+                onclick="comingSoon('الإعدادات')">
+
+                ⚙️
+
+            </button>
+
+
+        </section>
+
+    </main>
+
+
+
+    <footer>
+
+        EnglishWords © 2026
+
+    </footer>
+
+
+
+    <script src="script.js"></script>
+
+
+
+    <!-- نظام الحساب -->
+
+    <script>
+
+        // التأكد من تسجيل الدخول
+        async function loadUser() {
+
+            const {
+                data: { user },
+                error
+            } = await supabaseClient.auth.getUser();
+
+
+            // إذا ما فيه مستخدم
+            if (error || !user) {
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            // اسم المستخدم
+            const name =
+                user.user_metadata?.name ||
+                user.email?.split("@")[0] ||
+                "مستخدم";
+
+
+            // البريد
+            const email =
+                user.email || "";
+
+
+            // عرض الاسم
+            document.getElementById(
+                "welcomeText"
+            ).textContent =
+                "مرحباً " + name + " 👋";
+
+
+            // عرض البريد
+            document.getElementById(
+                "userEmail"
+            ).textContent =
+                email;
+
+
+            // أول حرف من الاسم
+            document.getElementById(
+                "userAvatar"
+            ).textContent =
+                name.charAt(0).toUpperCase();
+
+        }
+
+
+
+        // تسجيل الخروج
+        async function logout() {
+
+            const { error } =
+                await supabaseClient.auth.signOut();
+
+
+            if (error) {
+
+                alert(
+                    "حدث خطأ أثناء تسجيل الخروج"
+                );
+
+                return;
+
+            }
+
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+
+        // تشغيل الحساب
+        loadUser();
+
+    </script>
+
+
+</body>
+
+</html>
+```
