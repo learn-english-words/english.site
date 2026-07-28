@@ -1,0 +1,218 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>لوحة التحكم</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <div class="logo">
+            English<span>Words</span>
+        </div>
+
+        <div class="page-title">
+            ⚙️ لوحة التحكم
+        </div>
+
+        <button onclick="goHome()" class="home-btn">
+            🏠 الرئيسية
+        </button>
+
+    </header>
+
+
+    <main class="container">
+
+        <section class="admin-header">
+
+            <div>
+                <span>إدارة المحتوى</span>
+                <h1>إضافة كلمة جديدة 📚</h1>
+                <p>
+                    أضف الكلمات والصور والجمل التي ستظهر للمتعلمين.
+                </p>
+            </div>
+
+        </section>
+
+
+        <section class="form-card">
+
+            <div class="form-grid">
+
+                <!-- الكلمة -->
+
+                <div class="field">
+                    <label>🇬🇧 الكلمة الإنجليزية</label>
+
+                    <input
+                        type="text"
+                        id="english"
+                        placeholder="مثال: Apple"
+                    >
+                </div>
+
+
+                <!-- المعنى -->
+
+                <div class="field">
+                    <label>🇸🇦 المعنى بالعربي</label>
+
+                    <input
+                        type="text"
+                        id="arabic"
+                        placeholder="مثال: تفاحة"
+                    >
+                </div>
+
+
+                <!-- المستوى -->
+
+                <div class="field">
+                    <label>📊 المستوى</label>
+
+                    <select id="level">
+
+                        <option value="A1">A1 - مبتدئ</option>
+
+                        <option value="A2">A2 - متوسط</option>
+
+                        <option value="B1">B1 - متقدم</option>
+
+                    </select>
+                </div>
+
+
+                <!-- التصنيف -->
+
+                <div class="field">
+                    <label>🗂️ التصنيف</label>
+
+                    <select id="category">
+
+                        <option value="food">🍔 الطعام</option>
+
+                        <option value="home">🏠 المنزل</option>
+
+                        <option value="cars">🚗 السيارات</option>
+
+                        <option value="clothes">👕 الملابس</option>
+
+                        <option value="family">👨‍👩‍👧 العائلة</option>
+
+                        <option value="nature">🌳 الطبيعة</option>
+
+                    </select>
+                </div>
+
+            </div>
+
+
+            <!-- الصورة -->
+
+            <div class="field image-field">
+
+                <label>🖼️ صورة الكلمة</label>
+
+                <input
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    onchange="previewImage(event)"
+                >
+
+                <div id="imagePreview" class="image-preview">
+                    <span>🖼️</span>
+                    <p>ستظهر معاينة الصورة هنا</p>
+                </div>
+
+            </div>
+
+
+            <!-- الجملة -->
+
+            <div class="form-grid">
+
+                <div class="field">
+
+                    <label>💡 جملة بالإنجليزية</label>
+
+                    <input
+                        type="text"
+                        id="example"
+                        placeholder="I eat an apple."
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>🇸🇦 ترجمة الجملة</label>
+
+                    <input
+                        type="text"
+                        id="exampleArabic"
+                        placeholder="أنا آكل تفاحة."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button class="save-btn" onclick="saveWord()">
+                💾 حفظ الكلمة
+            </button>
+
+        </section>
+
+
+        <!-- الكلمات -->
+
+        <section class="words-section">
+
+            <div class="section-title">
+
+                <div>
+                    <h2>📚 الكلمات المضافة</h2>
+                    <p>الكلمات الموجودة في البرنامج</p>
+                </div>
+
+                <strong id="wordCount">0 كلمة</strong>
+
+            </div>
+      
+
+
+            <div class="search-box">
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="🔍 ابحث عن كلمة..."
+        oninput="searchWords()"
+    >
+</div>
+
+            <div id="wordsList" class="words-list">
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="admin.js"></script>
+
+</body>
+</html>
+```
