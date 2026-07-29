@@ -18,7 +18,66 @@
 
 </head>
 
+<script>
+    // تسجيل زيارة الموقع
+    async function trackVisit() {
 
+        let visitorId = localStorage.getItem("visitor_id");
+
+        // إنشاء رقم خاص للزائر لأول مرة
+        if (!visitorId) {
+
+            visitorId = crypto.randomUUID();
+
+            localStorage.setItem(
+                "visitor_id",
+                visitorId
+            );
+        }
+
+
+        // معرفة هل الزائر مسجل دخول
+        const {
+            data: { user }
+        } = await supabaseClient.auth.getUser();
+
+
+        // تسجيل الزيارة
+        const { error } =
+            await supabaseClient
+                .from("visits")
+                .insert({
+
+                    visitor_id: visitorId,
+
+                    user_id: user
+                        ? user.id
+                        : null
+
+                });
+
+
+        if (error) {
+
+            console.error(
+                "خطأ تسجيل الزيارة:",
+                error
+            );
+
+        } else {
+
+            console.log(
+                "✅ تم تسجيل الزيارة"
+            );
+
+        }
+    }
+
+
+    // تشغيل تسجيل الزيارة
+    trackVisit();
+
+</script>
 <body>
 
     <main class="auth-container">
