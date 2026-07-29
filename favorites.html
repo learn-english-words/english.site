@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>كلماتي</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <button class="back-btn" onclick="goHome()">
+            ← رجوع
+        </button>
+
+        <div class="title">
+            ⭐ كلماتي
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <section class="welcome">
+
+            <div>
+
+                <p class="small-title">
+                    الكلمات المحفوظة
+                </p>
+
+                <h1>
+                    كلماتي ⭐
+                </h1>
+
+                <p>
+                    هنا تجد كل الكلمات التي حفظتها.
+                </p>
+
+            </div>
+
+            <div class="welcome-icon">
+                ⭐
+            </div>
+
+        </section>
+
+
+        <div id="favoritesCount">
+            جاري تحميل الكلمات...
+        </div>
+
+
+        <section id="favoritesList" class="menu">
+
+        </section>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="favorites.js"></script>
+
+</body>
+
+</html>

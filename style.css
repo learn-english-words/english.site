@@ -1,4 +1,3 @@
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -7,35 +6,67 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #f5f7fb;
-    color: #172033;
+
+    background:
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(91, 45, 190, 0.35),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 20% 80%,
+            rgba(35, 75, 190, 0.25),
+            transparent 35%
+        ),
+        #050817;
+
+    color: white;
     min-height: 100vh;
 }
 
 
-/* الشريط العلوي */
+/* =========================
+   الشريط العلوي
+========================= */
 
 .topbar {
     height: 75px;
-    background: white;
-    border-bottom: 1px solid #e7eaf0;
+
+    background: rgba(10, 17, 40, 0.88);
+
+    border-bottom: 1px solid rgba(130, 120, 255, 0.18);
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     padding: 0 6%;
+
+    backdrop-filter: blur(18px);
 }
 
 .logo {
     font-size: 25px;
     font-weight: bold;
+    color: white;
 }
 
 .logo span {
-    color: #3478f6;
+    background: linear-gradient(
+        135deg,
+        #4965ff,
+        #9b70ff
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
+
+/* =========================
+   الملف الشخصي
+========================= */
 
 .profile {
     display: flex;
@@ -45,7 +76,7 @@ body {
 
 .profile small {
     display: block;
-    color: #8992a3;
+    color: #9ca5bd;
     margin-top: 4px;
 }
 
@@ -54,7 +85,13 @@ body {
     height: 42px;
 
     border-radius: 50%;
-    background: #3478f6;
+
+    background: linear-gradient(
+        135deg,
+        #4267ff,
+        #8b3dff
+    );
+
     color: white;
 
     display: flex;
@@ -62,10 +99,15 @@ body {
     justify-content: center;
 
     font-weight: bold;
+
+    box-shadow:
+        0 8px 25px rgba(90, 65, 255, 0.3);
 }
 
 
-/* المحتوى */
+/* =========================
+   المحتوى
+========================= */
 
 .container {
     width: min(1100px, 90%);
@@ -73,11 +115,22 @@ body {
 }
 
 
+/* =========================
+   الترحيب
+========================= */
+
 .welcome {
-    background: #3478f6;
+    background:
+        linear-gradient(
+            135deg,
+            #4267ff,
+            #823cff
+        );
+
     color: white;
 
     border-radius: 22px;
+
     padding: 35px;
 
     display: flex;
@@ -85,6 +138,9 @@ body {
     justify-content: space-between;
 
     margin-bottom: 35px;
+
+    box-shadow:
+        0 20px 55px rgba(70, 55, 220, 0.25);
 }
 
 .welcome h1 {
@@ -101,36 +157,62 @@ body {
     font-size: 14px;
 }
 
-
 .welcome-icon {
     font-size: 90px;
+
+    filter:
+        drop-shadow(
+            0 10px 20px rgba(0, 0, 0, 0.18)
+        );
 }
 
 
-/* عنوان القائمة */
+/* =========================
+   عنوان القائمة
+========================= */
 
 h2 {
     margin-bottom: 18px;
     font-size: 24px;
+    color: #ffffff;
 }
 
 
-/* البطاقات */
+/* =========================
+   القائمة
+========================= */
 
 .menu {
     display: grid;
 
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 
     gap: 18px;
+
+    width: 100%;
 }
 
 
-.menu-card {
-    border: none;
-    background: white;
+/* =========================
+   البطاقات
+   نفس لون البانر
+========================= */
 
+.menu-card {
+    width: 100%;
+    min-width: 0;
     min-height: 125px;
+
+    border: 1px solid rgba(255, 255, 255, 0.22);
+
+    background:
+        linear-gradient(
+            135deg,
+            #4267ff,
+            #823cff
+        );
+
+    color: white;
 
     border-radius: 18px;
 
@@ -143,25 +225,48 @@ h2 {
 
     cursor: pointer;
 
-    box-shadow: 0 5px 20px rgba(20, 30, 50, 0.05);
+    box-shadow:
+        0 10px 30px rgba(70, 55, 220, 0.20);
 
-    transition: 0.2s;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
 }
 
+
+/* =========================
+   حركة البطاقات
+========================= */
 
 .menu-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(20, 30, 50, 0.1);
+
+    border-color:
+        rgba(255, 255, 255, 0.55);
+
+    box-shadow:
+        0 15px 40px rgba(70, 55, 220, 0.40);
 }
 
+
+/* =========================
+   أيقونات البطاقات
+========================= */
 
 .card-icon {
     width: 62px;
     height: 62px;
 
+    min-width: 62px;
+
     border-radius: 16px;
 
-    background: #eef4ff;
+    background:
+        rgba(255, 255, 255, 0.18);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.20);
 
     display: flex;
     align-items: center;
@@ -170,52 +275,142 @@ h2 {
     font-size: 30px;
 
     flex-shrink: 0;
+
+    backdrop-filter: blur(8px);
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
+
+/* =========================
+   النص
+========================= */
 
 .card-text {
     flex: 1;
+
+    min-width: 0;
+
     margin-right: 18px;
 }
 
-
 .card-text h3 {
     font-size: 19px;
+
     margin-bottom: 7px;
+
+    color: #ffffff;
 }
 
-
 .card-text p {
-    color: #8992a3;
+    color:
+        rgba(255, 255, 255, 0.78);
+
     font-size: 14px;
+
     line-height: 1.5;
 }
 
 
+/* =========================
+   السهم
+========================= */
+
 .arrow {
     font-size: 22px;
-    color: #3478f6;
+
+    color: white;
+
+    margin-right: 10px;
+
+    transition: 0.2s;
+}
+
+.menu-card:hover .arrow {
+    transform: translateX(-5px);
+
+    color: white;
 }
 
 
-/* زر تعلم الكلمات */
+/* =========================
+   بطاقة تعلم الكلمات
+========================= */
 
 .main-card {
-    border: 2px solid #3478f6;
+    border:
+        2px solid rgba(255, 255, 255, 0.45);
+
+    background:
+        linear-gradient(
+            135deg,
+            #4267ff,
+            #823cff
+        );
+
+    box-shadow:
+        0 12px 40px rgba(70, 55, 220, 0.35);
 }
 
 
-/* الفوتر */
+/* =========================
+   الفوتر
+========================= */
 
 footer {
     text-align: center;
-    color: #9aa2b1;
+
+    color: #707993;
+
     padding: 25px;
+
     margin-top: 30px;
 }
 
 
-/* الجوال */
+/* =========================
+   زر الإعدادات
+========================= */
+
+.settings-btn {
+    width: 44px;
+    height: 44px;
+
+    border:
+        1px solid rgba(130, 120, 255, 0.18);
+
+    border-radius: 12px;
+
+    background:
+        rgba(24, 31, 58, 0.85);
+
+    color: white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition:
+        0.2s,
+        background 0.2s;
+}
+
+.settings-btn:hover {
+    transform: rotate(20deg);
+
+    background:
+        linear-gradient(
+            135deg,
+            #4267ff,
+            #8b3dff
+        );
+}
+
+
+/* =========================
+   الجوال
+========================= */
 
 @media (max-width: 700px) {
 
@@ -246,23 +441,31 @@ footer {
 
     .menu {
         grid-template-columns: 1fr;
+        gap: 14px;
     }
 
     .menu-card {
         min-height: 105px;
+        padding: 17px;
     }
-}
-.settings-btn {
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 12px;
-    background: #eef4ff;
-    font-size: 22px;
-    cursor: pointer;
-    transition: 0.2s;
-}
 
-.settings-btn:hover {
-    transform: rotate(20deg);
+    .card-icon {
+        width: 54px;
+        height: 54px;
+        min-width: 54px;
+
+        font-size: 25px;
+    }
+
+    .card-text {
+        margin-right: 13px;
+    }
+
+    .card-text h3 {
+        font-size: 17px;
+    }
+
+    .card-text p {
+        font-size: 12px;
+    }
 }

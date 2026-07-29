@@ -1,10 +1,12 @@
-
 // ==========================================
-// قراءة الكلمات من لوحة التحكم
+// المتغيرات
 // ==========================================
 
-const allWords =
-    JSON.parse(localStorage.getItem("englishWords")) || [];
+let words = [];
+
+let currentIndex = 0;
+
+let favorite = false;
 
 
 // ==========================================
@@ -19,40 +21,58 @@ const selectedCategory =
 
 
 // ==========================================
-// فلترة الكلمات
+// جلب الكلمات من Supabase
 // ==========================================
 
-const words = allWords.filter(word => {
+async function loadWords() {
 
-    return (
-        word.level === selectedLevel &&
-        word.category === selectedCategory
-    );
+    const { data, error } =
+        await supabaseClient
+            .from("words")
+            .select("*")
+            .eq("level", selectedLevel)
+            .eq("category", selectedCategory)
+            .order("created_at", {
+                ascending: true
+            });
 
-});
+
+    if (error) {
+
+        console.error("Supabase error:", error);
+
+        alert(
+            "❌ حدث خطأ أثناء تحميل الكلمات."
+        );
+
+        return;
+    }
 
 
-// ==========================================
-// إذا ما فيه كلمات
-// ==========================================
+    words = data || [];
 
-if (words.length === 0) {
 
-    alert(
-        "ما فيه كلمات بهذا المستوى والتصنيف حتى الآن."
-    );
+    // ==========================================
+    // إذا ما فيه كلمات
+    // ==========================================
 
-    window.location.href = "learn.html";
+    if (words.length === 0) {
+
+        alert(
+            "ما فيه كلمات بهذا المستوى والتصنيف حتى الآن."
+        );
+
+        window.location.href =
+            "learn.html";
+
+        return;
+    }
+
+
+    // تحميل أول كلمة
+
+    loadWord();
 }
-
-
-// ==========================================
-// المتغيرات
-// ==========================================
-
-let currentIndex = 0;
-
-let favorite = false;
 
 
 // ==========================================
@@ -61,10 +81,16 @@ let favorite = false;
 
 function loadWord() {
 
-    const word = words[currentIndex];
+    const word =
+        words[currentIndex];
 
 
+    if (!word) return;
+
+
+    // ==========================================
     // الصورة
+    // ==========================================
 
     const imageBox =
         document.getElementById("wordEmoji");
@@ -91,19 +117,25 @@ function loadWord() {
     }
 
 
+    // ==========================================
     // الإنجليزية
+    // ==========================================
 
     document.getElementById("englishWord").textContent =
         word.english;
 
 
+    // ==========================================
     // العربية
+    // ==========================================
 
     document.getElementById("arabicWord").textContent =
         word.arabic;
 
 
+    // ==========================================
     // المثال
+    // ==========================================
 
     document.getElementById("exampleText").textContent =
         word.example || "";
@@ -113,7 +145,9 @@ function loadWord() {
         word.exampleArabic || "";
 
 
+    // ==========================================
     // التقدم
+    // ==========================================
 
     const number =
         currentIndex + 1;
@@ -131,7 +165,9 @@ function loadWord() {
         percent + "%";
 
 
+    // ==========================================
     // إعادة زر الحفظ
+    // ==========================================
 
     favorite = false;
 
@@ -145,6 +181,69 @@ function loadWord() {
 
     favoriteBtn.innerHTML =
         "☆ <span>حفظ</span>";
+
+
+    // التأكد هل الكلمة محفوظة
+
+    checkFavorite();
+}
+
+
+// ==========================================
+// التحقق من الكلمة المحفوظة
+// ==========================================
+
+async function checkFavorite() {
+
+    const word =
+        words[currentIndex];
+
+    if (!word || !word.id) return;
+
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+
+    if (!user) return;
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("favorites")
+            .select("id")
+            .eq("user_id", user.id)
+            .eq("word_id", word.id)
+            .maybeSingle();
+
+
+    if (error) {
+
+        console.error(
+            "Favorite check error:",
+            error
+        );
+
+        return;
+    }
+
+
+    if (data) {
+
+        favorite = true;
+
+
+        const button =
+            document.getElementById("favoriteBtn");
+
+
+        button.classList.add("active");
+
+
+        button.innerHTML =
+            "★ <span>محفوظة</span>";
+    }
 }
 
 
@@ -184,7 +283,9 @@ function answer(known) {
 
 
     console.log(
-        known ? "أعرف:" : "لا أعرف:",
+        known
+            ? "أعرف:"
+            : "لا أعرف:",
         word.english
     );
 
@@ -194,32 +295,147 @@ function answer(known) {
 
 
 // ==========================================
-// حفظ
+// حفظ / إزالة من المفضلة
 // ==========================================
 
-function toggleFavorite() {
-
-    favorite = !favorite;
-
+async function toggleFavorite() {
 
     const button =
         document.getElementById("favoriteBtn");
 
 
+    // التأكد من تسجيل الدخول
+
+    const {
+        data: { user },
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (userError || !user) {
+
+        alert(
+            "⚠️ يجب تسجيل الدخول أولاً."
+        );
+
+        window.location.href =
+            "login.html";
+
+        return;
+    }
+
+
+    const word =
+        words[currentIndex];
+
+
+    if (!word || !word.id) {
+
+        alert(
+            "⚠️ لا يمكن حفظ هذه الكلمة."
+        );
+
+        return;
+    }
+
+
+    // ==========================================
+    // إذا كانت محفوظة → حذف
+    // ==========================================
+
     if (favorite) {
 
-        button.classList.add("active");
+        const { error } =
+            await supabaseClient
+                .from("favorites")
+                .delete()
+                .eq("user_id", user.id)
+                .eq("word_id", word.id);
 
-        button.innerHTML =
-            "★ <span>محفوظة</span>";
 
-    } else {
+        if (error) {
+
+            console.error(error);
+
+            alert(
+                "❌ حدث خطأ أثناء إزالة الكلمة."
+            );
+
+            return;
+        }
+
+
+        favorite = false;
+
 
         button.classList.remove("active");
 
+
         button.innerHTML =
             "☆ <span>حفظ</span>";
+
+
+        return;
     }
+
+
+    // ==========================================
+    // حفظ الكلمة
+    // ==========================================
+
+    const { error } =
+        await supabaseClient
+            .from("favorites")
+            .insert({
+
+                user_id: user.id,
+
+                word_id: word.id
+
+            });
+
+
+    if (error) {
+
+        // موجودة مسبقًا
+
+        if (error.code === "23505") {
+
+            favorite = true;
+
+
+            button.classList.add("active");
+
+
+            button.innerHTML =
+                "★ <span>محفوظة</span>";
+
+
+            return;
+        }
+
+
+        console.error(error);
+
+
+        alert(
+            "❌ حدث خطأ أثناء حفظ الكلمة."
+        );
+
+
+        return;
+    }
+
+
+    favorite = true;
+
+
+    button.classList.add("active");
+
+
+    button.innerHTML =
+        "★ <span>محفوظة</span>";
 }
 
 
@@ -274,4 +490,4 @@ function goHome() {
 // تشغيل
 // ==========================================
 
-loadWord();
+loadWords();

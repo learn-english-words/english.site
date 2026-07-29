@@ -1,12 +1,39 @@
-
 // ==========================================
-// الكلمات المخزنة
+// متغيرات
 // ==========================================
 
-let words =
-    JSON.parse(localStorage.getItem("englishWords")) || [];
-
+let words = [];
 let selectedImage = "";
+
+
+// ==========================================
+// التأكد أن المستخدم هو Admin
+// ==========================================
+
+async function checkAdmin() {
+
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
+
+    if (error || !user) {
+        alert("⚠️ يجب تسجيل الدخول أولاً.");
+        window.location.href = "login.html";
+        return false;
+    }
+
+    const ADMIN_ID =
+        "a1b0ce48-3846-4af6-a688-05368f6ec9bd";
+
+    if (user.id !== ADMIN_ID) {
+        alert("❌ ليس لديك صلاحية دخول لوحة التحكم.");
+        window.location.href = "index.html";
+        return false;
+    }
+
+    return true;
+}
 
 
 // ==========================================
@@ -25,10 +52,7 @@ function previewImage(event) {
 
         selectedImage = reader.result;
 
-        const preview =
-            document.getElementById("imagePreview");
-
-        preview.innerHTML = `
+        document.getElementById("imagePreview").innerHTML = `
             <img src="${selectedImage}">
         `;
     };
@@ -38,10 +62,58 @@ function previewImage(event) {
 
 
 // ==========================================
+// رفع الصورة إلى Supabase Storage
+// ==========================================
+
+async function uploadImage(file) {
+
+    if (!file) return null;
+
+    const extension =
+        file.name.split(".").pop();
+
+    const fileName =
+        `${crypto.randomUUID()}.${extension}`;
+
+
+    const { error } =
+        await supabaseClient
+            .storage
+            .from("word-images")
+            .upload(fileName, file);
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert("❌ حدث خطأ أثناء رفع الصورة.");
+
+        return null;
+    }
+
+
+    const { data } =
+        supabaseClient
+            .storage
+            .from("word-images")
+            .getPublicUrl(fileName);
+
+
+    return data.publicUrl;
+}
+
+
+// ==========================================
 // حفظ كلمة
 // ==========================================
 
-function saveWord() {
+async function saveWord() {
+
+    const isAdmin = await checkAdmin();
+
+    if (!isAdmin) return;
+
 
     const english =
         document.getElementById("english").value.trim();
@@ -61,6 +133,12 @@ function saveWord() {
     const exampleArabic =
         document.getElementById("exampleArabic").value.trim();
 
+    const imageInput =
+        document.getElementById("image");
+
+    const file =
+        imageInput.files[0];
+
 
     // التحقق
 
@@ -74,7 +152,7 @@ function saveWord() {
     }
 
 
-    if (!selectedImage) {
+    if (!file && !selectedImage) {
 
         alert(
             "⚠️ اختر صورة للكلمة."
@@ -84,11 +162,41 @@ function saveWord() {
     }
 
 
+    // تعطيل الزر أثناء الحفظ
+
+    const saveButton =
+        document.querySelector(".save-btn");
+
+    saveButton.disabled = true;
+
+    saveButton.textContent =
+        "⏳ جاري الحفظ...";
+
+
+    // رفع الصورة
+
+    let imageUrl = selectedImage;
+
+    if (file) {
+
+        imageUrl =
+            await uploadImage(file);
+
+        if (!imageUrl) {
+
+            saveButton.disabled = false;
+
+            saveButton.textContent =
+                "💾 حفظ الكلمة";
+
+            return;
+        }
+    }
+
+
     // إنشاء الكلمة
 
     const word = {
-
-        id: Date.now(),
 
         english: english,
 
@@ -98,7 +206,7 @@ function saveWord() {
 
         category: category,
 
-        image: selectedImage,
+        image: imageUrl,
 
         example: example,
 
@@ -106,20 +214,38 @@ function saveWord() {
     };
 
 
-    // إضافة للكلمات
+    // إرسال إلى Supabase
 
-    words.push(word);
-
-
-    // حفظ
-
-    localStorage.setItem(
-        "englishWords",
-        JSON.stringify(words)
-    );
+    const { data, error } =
+        await supabaseClient
+            .from("words")
+            .insert(word)
+            .select()
+            .single();
 
 
-    // تنظيف الحقول
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ حدث خطأ أثناء حفظ الكلمة:\n" +
+            error.message
+        );
+
+        saveButton.disabled = false;
+
+        saveButton.textContent =
+            "💾 حفظ الكلمة";
+
+        return;
+    }
+
+
+    console.log("تم حفظ:", data);
+
+
+    // تنظيف النموذج
 
     document.getElementById("english").value = "";
 
@@ -140,12 +266,57 @@ function saveWord() {
     `;
 
 
-    // إعادة عرض الكلمات
+    saveButton.disabled = false;
+
+    saveButton.textContent =
+        "💾 حفظ الكلمة";
+
+
+    alert("✅ تم حفظ الكلمة في قاعدة البيانات!");
+
+
+    // تحديث القائمة
+
+    loadWords();
+}
+
+
+// ==========================================
+// جلب الكلمات من Supabase
+// ==========================================
+
+async function loadWords() {
+
+    const isAdmin = await checkAdmin();
+
+    if (!isAdmin) return;
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("words")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ لم نتمكن من تحميل الكلمات:\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    words = data || [];
 
     renderWords();
-
-
-    alert("✅ تم حفظ الكلمة!");
 }
 
 
@@ -162,19 +333,15 @@ function renderWords(displayWords = words) {
         document.getElementById("wordCount");
 
 
-    // عدد جميع الكلمات
-
     count.textContent =
         words.length + " كلمة";
 
-
-    // لا توجد كلمات
 
     if (displayWords.length === 0) {
 
         wordsList.innerHTML = `
             <div class="word-item">
-                لا توجد نتائج.
+                لا توجد كلمات.
             </div>
         `;
 
@@ -182,18 +349,13 @@ function renderWords(displayWords = words) {
     }
 
 
-    // تنظيف القائمة
-
     wordsList.innerHTML = "";
 
-
-    // عرض الكلمات
 
     displayWords.forEach(word => {
 
         const item =
             document.createElement("div");
-
 
         item.className =
             "word-item";
@@ -201,7 +363,7 @@ function renderWords(displayWords = words) {
 
         item.innerHTML = `
 
-            <img src="${word.image}">
+            <img src="${word.image || ""}">
 
             <div class="word-info">
 
@@ -223,24 +385,17 @@ function renderWords(displayWords = words) {
 
             </div>
 
-            
-<div class="word-actions">
+            <div class="word-actions">
 
-    <button
-        class="edit-btn"
-        onclick="editWord(${word.id})">
-        ✏️ تعديل
-    </button>
+                <button
+                    class="delete-btn"
+                    onclick="deleteWord('${word.id}')">
 
-    <button
-        class="delete-btn"
-        onclick="deleteWord(${word.id})">
-        🗑️ حذف
-    </button>
+                    🗑️ حذف
 
-</div>
+                </button>
 
-
+            </div>
         `;
 
 
@@ -259,18 +414,15 @@ function searchWords() {
     const input =
         document.getElementById("searchInput");
 
-
-    // إذا ما فيه مربع بحث
     if (!input) return;
 
 
     const search =
         input.value
-        .toLowerCase()
-        .trim();
+            .toLowerCase()
+            .trim();
 
 
-    // إذا البحث فاضي
     if (!search) {
 
         renderWords();
@@ -278,8 +430,6 @@ function searchWords() {
         return;
     }
 
-
-    // البحث بالإنجليزي أو العربي
 
     const filtered =
         words.filter(word =>
@@ -293,6 +443,7 @@ function searchWords() {
             word.arabic
                 .toLowerCase()
                 .includes(search)
+
         );
 
 
@@ -304,7 +455,13 @@ function searchWords() {
 // حذف كلمة
 // ==========================================
 
-function deleteWord(id) {
+async function deleteWord(id) {
+
+    const isAdmin =
+        await checkAdmin();
+
+    if (!isAdmin) return;
+
 
     if (
         !confirm(
@@ -315,119 +472,29 @@ function deleteWord(id) {
     }
 
 
-    words =
-        words.filter(
-            word => word.id !== id
+    const { error } =
+        await supabaseClient
+            .from("words")
+            .delete()
+            .eq("id", id);
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ حدث خطأ أثناء حذف الكلمة:\n" +
+            error.message
         );
 
-
-    // حفظ القائمة الجديدة
-
-    localStorage.setItem(
-        "englishWords",
-        JSON.stringify(words)
-    );
+        return;
+    }
 
 
-    // إعادة العرض
+    alert("🗑️ تم حذف الكلمة.");
 
-    renderWords();
-}
-
-
-// ==========================================
-// تعديل كلمة
-// ==========================================
-
-function editWord(id) {
-
-    const word =
-        words.find(
-            item => item.id === id
-        );
-
-
-    if (!word) return;
-
-
-    // تعبئة البيانات في النموذج
-
-    document.getElementById("english").value =
-        word.english;
-
-    document.getElementById("arabic").value =
-        word.arabic;
-
-    document.getElementById("level").value =
-        word.level;
-
-    document.getElementById("category").value =
-        word.category;
-
-    document.getElementById("example").value =
-        word.example || "";
-
-    document.getElementById("exampleArabic").value =
-        word.exampleArabic || "";
-
-
-    // الصورة الحالية
-
-    selectedImage =
-        word.image;
-
-
-    document.getElementById("imagePreview").innerHTML = `
-        <img src="${word.image}">
-    `;
-
-
-    // حذف الكلمة القديمة مؤقتًا
-
-    words =
-        words.filter(
-            item => item.id !== id
-        );
-
-
-    localStorage.setItem(
-        "englishWords",
-        JSON.stringify(words)
-    );
-
-
-    renderWords();
-
-
-    // نغير زر الحفظ مؤقتًا
-
-    const saveButton =
-        document.querySelector(".save-btn");
-
-
-    saveButton.textContent =
-        "💾 حفظ التعديل";
-
-
-    saveButton.onclick =
-        function () {
-
-            saveWord();
-
-            saveButton.textContent =
-                "💾 حفظ الكلمة";
-
-            saveButton.onclick =
-                saveWord;
-        };
-
-
-    // نرجع للأعلى
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+    loadWords();
 }
 
 
@@ -443,7 +510,18 @@ function goHome() {
 
 
 // ==========================================
-// تشغيل القائمة عند فتح الصفحة
+// التشغيل
 // ==========================================
 
-renderWords();
+(async function () {
+
+    const isAdmin =
+        await checkAdmin();
+
+    if (isAdmin) {
+
+        await loadWords();
+
+    }
+
+})();
