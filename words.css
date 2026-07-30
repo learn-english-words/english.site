@@ -472,119 +472,266 @@ body {
 /* =========================
    تصميم الجوال الجديد
 ========================= */
-/* =========================
-   الجوال
-========================= */
 
-@media (max-width: 700px) {
+@media (max-width: 750px) {
+
+    body {
+        padding: 0;
+    }
+
+    /* الهيدر */
 
     .topbar {
-        padding: 0 4%;
-        height: 65px;
+        height: 64px;
+        padding: 0 16px;
+
+        position: sticky;
+        top: 0;
+        z-index: 20;
     }
 
-    .profile div:not(.avatar) {
-        display: none;
+    .title {
+        font-size: 17px;
     }
 
-    .container {
-        width: 92%;
-        margin: 25px auto;
-    }
-
-    /* الترحيب */
-    .welcome {
-        padding: 25px;
-        border-radius: 20px;
-        margin-bottom: 28px;
-    }
-
-    .welcome h1 {
-        font-size: 25px;
-    }
-
-    .welcome p {
+    .back-btn,
+    .home-btn {
+        padding: 8px 11px;
         font-size: 13px;
     }
 
-    .welcome-icon {
-        font-size: 55px;
+
+    /* المحتوى */
+
+    .container {
+        width: 100%;
+        margin: 0;
+        padding: 18px 14px 30px;
     }
 
-    /* عنوان القسم */
-    h2 {
-        font-size: 21px;
-        margin-bottom: 14px;
+
+    /* التقدم */
+
+    .progress-area {
+        margin: 0 3px 15px;
     }
 
-    /* =========================
-       البطاقات - بطاقتين بالصف
-    ========================= */
-
-    .menu {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
+    .progress-info {
+        font-size: 13px;
     }
 
-    .menu-card {
-        min-height: 125px;
-        padding: 14px;
-        border-radius: 16px;
+    .progress-bar {
+        height: 7px;
+    }
 
+
+    /* بطاقة الكلمة */
+
+    .word-card {
+        display: flex;
         flex-direction: column;
-        justify-content: center;
+
+        width: 100%;
+        min-height: auto;
+
+        padding: 14px;
+
+        gap: 18px;
+
+        border-radius: 24px;
+
+        align-items: stretch;
+    }
+
+
+    /* الصورة */
+
+    .image-container {
+        width: 100%;
+        height: 245px;
+
+        border-radius: 19px;
+
+        order: 1;
+    }
+
+    .word-image {
+        width: 100%;
+        height: 100%;
+
+        font-size: 100px;
+    }
+
+    .word-image img {
+        padding: 15px;
+        border-radius: 19px;
+    }
+
+
+    /* محتوى الكلمة */
+
+    .word-content {
+        width: 100%;
+        order: 2;
+
         text-align: center;
     }
 
-    /* الأيقونة */
-    .card-icon {
-        width: 50px;
-        height: 50px;
+
+    .english-word {
+        font-size: 38px;
+
+        line-height: 1.15;
+
+        text-align: center;
+
+        margin-top: 2px;
+        margin-bottom: 7px;
+    }
+
+
+    .arabic-word {
+        font-size: 20px;
+
+        margin-bottom: 17px;
+
+        text-align: center;
+    }
+
+
+    /* زر النطق */
+
+    .sound-btn {
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        min-width: 145px;
+        height: 44px;
+
+        padding: 0 17px;
+
+        font-size: 14px;
+    }
+
+
+    /* المثال */
+
+    .example {
+        width: 100%;
+
+        margin-top: 18px;
+
+        padding: 16px;
+
+        border-radius: 15px;
+
+        text-align: right;
+    }
+
+    .example span {
+        font-size: 13px;
+    }
+
+    .example p {
+        font-size: 16px;
+
+        line-height: 1.5;
+
+        margin: 9px 0 5px;
+    }
+
+    .example small {
+        font-size: 13px;
+
+        line-height: 1.5;
+    }
+
+
+    /* أزرار أعرف / لا أعرف */
+
+    .knowledge-buttons {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+
+        margin-top: 14px;
+    }
+
+    .knowledge-buttons button {
+        height: 55px;
 
         border-radius: 14px;
 
-        font-size: 24px;
-
-        margin-bottom: 8px;
+        font-size: 14px;
     }
 
-    /* النص */
-    .card-text {
-        margin-right: 0;
+
+    /* الأزرار السفلية */
+
+    .actions {
+        display: grid;
+
+        grid-template-columns: 105px 1fr;
+
+        gap: 10px;
+
+        margin-top: 10px;
+    }
+
+    .actions button {
+        height: 55px;
+
+        border-radius: 14px;
+
+        font-size: 14px;
+    }
+
+    #favoriteBtn {
         width: 100%;
     }
 
-    .card-text h3 {
-        font-size: 15px;
-        margin-bottom: 5px;
+    .next-btn {
+        width: 100%;
+    }
+}
+
+
+/* =========================
+   الجوال الصغير جدًا
+========================= */
+
+@media (max-width: 380px) {
+
+    .container {
+        padding: 14px 10px 25px;
     }
 
-    .card-text p {
-        font-size: 11px;
-        line-height: 1.4;
+    .word-card {
+        padding: 11px;
+        border-radius: 21px;
     }
 
-    /* السهم */
-    .arrow {
-        display: none;
+    .image-container {
+        height: 215px;
     }
 
-    /* البطاقة الرئيسية */
-    .main-card {
-        border-width: 2px;
+    .english-word {
+        font-size: 34px;
     }
 
-    /* زر الإعدادات */
-    .settings-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 19px;
+    .arabic-word {
+        font-size: 18px;
     }
 
-    /* الفوتر */
-    footer {
-        padding: 20px;
-        margin-top: 20px;
-        font-size: 12px;
+    .knowledge-buttons button {
+        font-size: 13px;
+    }
+
+    .actions {
+        grid-template-columns: 95px 1fr;
     }
 }
