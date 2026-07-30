@@ -469,74 +469,269 @@ body {
         0 15px 35px rgba(92,65,255,0.35);
 }
 
-
 /* =========================
-   الجوال
+   تصميم الجوال الجديد
 ========================= */
 
 @media (max-width: 750px) {
 
+    body {
+        padding: 0;
+    }
+
+    /* الهيدر */
+
     .topbar {
-        padding: 0 4%;
+        height: 64px;
+        padding: 0 16px;
+
+        position: sticky;
+        top: 0;
+        z-index: 20;
     }
 
     .title {
-        font-size: 18px;
+        font-size: 17px;
     }
+
+    .back-btn,
+    .home-btn {
+        padding: 8px 11px;
+        font-size: 13px;
+    }
+
+
+    /* المحتوى */
 
     .container {
-        width: 94%;
-
-        margin: 25px auto 40px;
+        width: 100%;
+        margin: 0;
+        padding: 18px 14px 30px;
     }
+
+
+    /* التقدم */
+
+    .progress-area {
+        margin: 0 3px 15px;
+    }
+
+    .progress-info {
+        font-size: 13px;
+    }
+
+    .progress-bar {
+        height: 7px;
+    }
+
+
+    /* بطاقة الكلمة */
 
     .word-card {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
 
-        padding: 18px;
+        width: 100%;
+        min-height: auto;
 
-        gap: 22px;
+        padding: 14px;
+
+        gap: 18px;
+
+        border-radius: 24px;
+
+        align-items: stretch;
     }
 
+
+    /* الصورة */
+
     .image-container {
-        height: 260px;
+        width: 100%;
+        height: 245px;
+
+        border-radius: 19px;
+
+        order: 1;
     }
 
     .word-image {
-        font-size: 110px;
+        width: 100%;
+        height: 100%;
+
+        font-size: 100px;
     }
+
+    .word-image img {
+        padding: 15px;
+        border-radius: 19px;
+    }
+
+
+    /* محتوى الكلمة */
+
+    .word-content {
+        width: 100%;
+        order: 2;
+
+        text-align: center;
+    }
+
 
     .english-word {
         font-size: 38px;
 
+        line-height: 1.15;
+
         text-align: center;
+
+        margin-top: 2px;
+        margin-bottom: 7px;
     }
+
 
     .arabic-word {
-        text-align: center;
-
         font-size: 20px;
+
+        margin-bottom: 17px;
+
+        text-align: center;
     }
+
+
+    /* زر النطق */
 
     .sound-btn {
-        display: block;
+        display: inline-flex;
 
-        margin: 0 auto;
+        align-items: center;
+        justify-content: center;
+
+        min-width: 145px;
+        height: 44px;
+
+        padding: 0 17px;
+
+        font-size: 14px;
     }
 
+
+    /* المثال */
+
     .example {
+        width: 100%;
+
+        margin-top: 18px;
+
+        padding: 16px;
+
+        border-radius: 15px;
+
         text-align: right;
     }
 
-    .knowledge-buttons {
-        grid-template-columns: 1fr;
+    .example span {
+        font-size: 13px;
     }
 
+    .example p {
+        font-size: 16px;
+
+        line-height: 1.5;
+
+        margin: 9px 0 5px;
+    }
+
+    .example small {
+        font-size: 13px;
+
+        line-height: 1.5;
+    }
+
+
+    /* أزرار أعرف / لا أعرف */
+
+    .knowledge-buttons {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+
+        margin-top: 14px;
+    }
+
+    .knowledge-buttons button {
+        height: 55px;
+
+        border-radius: 14px;
+
+        font-size: 14px;
+    }
+
+
+    /* الأزرار السفلية */
+
     .actions {
-        flex-direction: column;
+        display: grid;
+
+        grid-template-columns: 105px 1fr;
+
+        gap: 10px;
+
+        margin-top: 10px;
+    }
+
+    .actions button {
+        height: 55px;
+
+        border-radius: 14px;
+
+        font-size: 14px;
     }
 
     #favoriteBtn {
         width: 100%;
+    }
+
+    .next-btn {
+        width: 100%;
+    }
+}
+
+
+/* =========================
+   الجوال الصغير جدًا
+========================= */
+
+@media (max-width: 380px) {
+
+    .container {
+        padding: 14px 10px 25px;
+    }
+
+    .word-card {
+        padding: 11px;
+        border-radius: 21px;
+    }
+
+    .image-container {
+        height: 215px;
+    }
+
+    .english-word {
+        font-size: 34px;
+    }
+
+    .arabic-word {
+        font-size: 18px;
+    }
+
+    .knowledge-buttons button {
+        font-size: 13px;
+    }
+
+    .actions {
+        grid-template-columns: 95px 1fr;
     }
 }
