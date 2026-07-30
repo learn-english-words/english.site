@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Daily Challenge - EnglishWords</title>
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+
+<!-- تنسيق صفحة تحدي اليوم -->
+<style>
+
+    body {
+        background: #f5f7fb;
+        color: #222;
+    }
+
+
+    .daily-container {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+
+    .daily-header {
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+
+    .daily-header h1 {
+        margin: 0 0 10px;
+        color: #222;
+    }
+
+
+    .daily-header p {
+        color: #666;
+        margin: 0;
+    }
+
+
+    /* =====================================
+       التحميل
+    ===================================== */
+
+    #loading {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        color: #222;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+
+    /* =====================================
+       صندوق التحدي
+    ===================================== */
+
+    #quizBox {
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+
+    .quiz-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        color: #222;
+        font-weight: bold;
+    }
+
+
+    #questionNumber,
+    #scoreText {
+        color: #333;
+    }
+
+
+    /* =====================================
+       شريط التقدم
+    ===================================== */
+
+    .progress-bar {
+        width: 100%;
+        height: 10px;
+        background: #e5e7eb;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+
+    #progressFill {
+        height: 100%;
+        width: 0%;
+        background: #2563eb;
+        transition: width 0.3s ease;
+    }
+
+
+    /* =====================================
+       الصورة
+    ===================================== */
+
+    #wordImage {
+        width: 100%;
+        height: 280px;
+        background: #f8fafc;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-bottom: 20px;
+        color: #777;
+        font-size: 50px;
+    }
+
+
+    /* =====================================
+       السؤال
+    ===================================== */
+
+    #questionText {
+        color: #222 !important;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+
+    /* =====================================
+       الإجابات
+    ===================================== */
+
+    #answers {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+
+    #answers button {
+        color: #222 !important;
+        background: #f3f4f6 !important;
+        border: 2px solid #e5e7eb !important;
+        min-height: 55px;
+    }
+
+
+    #answers button:hover:not(:disabled) {
+        background: #e5e7eb !important;
+    }
+
+
+    #answers button:disabled {
+        cursor: default;
+        opacity: 1;
+    }
+
+
+    /* =====================================
+       نتيجة التحدي
+    ===================================== */
+
+    #resultBox {
+        background: #ffffff !important;
+        color: #222222 !important;
+        padding: 35px 25px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+
+    #resultBox h2,
+    #resultBox h3,
+    #resultBox p,
+    #resultBox span,
+    #resultBox strong {
+        color: #222222 !important;
+    }
+
+
+    #finalScore {
+        color: #2563eb !important;
+        font-size: 40px;
+        font-weight: bold;
+        margin: 20px 0;
+    }
+
+
+    #resultMessage {
+        color: #444444 !important;
+        font-size: 18px;
+        margin: 15px 0 25px;
+    }
+
+
+    /* =====================================
+       زر الرئيسية
+    ===================================== */
+
+    .home-btn {
+        border: none;
+        background: #2563eb;
+        color: white;
+        padding: 14px 25px;
+        border-radius: 12px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+
+    .home-btn:hover {
+        opacity: 0.9;
+    }
+
+
+    /* =====================================
+       الجوال
+    ===================================== */
+
+    @media (max-width: 600px) {
+
+        .daily-container {
+            margin: 20px auto;
+            padding: 12px;
+        }
+
+
+        #answers {
+            grid-template-columns: 1fr;
+        }
+
+
+        #wordImage {
+            height: 230px;
+        }
+
+
+        #questionText {
+            font-size: 20px;
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<main class="daily-container">
+
+
+    <!-- =====================================
+         العنوان
+    ===================================== -->
+
+    <section class="daily-header">
+
+        <h1>
+            🎯 Daily Challenge
+        </h1>
+
+        <p>
+            Test your English every day!
+        </p>
+
+    </section>
+
+
+    <!-- =====================================
+         التحميل
+    ===================================== -->
+
+    <div id="loading">
+
+        <h2>
+            Loading...
+        </h2>
+
+        <p>
+            Preparing today's challenge
+        </p>
+
+    </div>
+
+
+    <!-- =====================================
+         التحدي
+    ===================================== -->
+
+    <section
+        id="quizBox"
+        style="display:none;"
+    >
+
+
+        <div class="quiz-top">
+
+            <span id="questionNumber">
+                Question 1 / 10
+            </span>
+
+
+            <span id="scoreText">
+                Score: 0
+            </span>
+
+        </div>
+
+
+        <!-- شريط التقدم -->
+
+        <div class="progress-bar">
+
+            <div
+                id="progressFill"
+            ></div>
+
+        </div>
+
+
+        <!-- الصورة -->
+
+        <div id="wordImage">
+
+            🖼️
+
+        </div>
+
+
+        <!-- السؤال -->
+
+        <div
+            id="questionText"
+        >
+            Choose the correct word
+        </div>
+
+
+        <!-- الإجابات -->
+
+        <div id="answers"></div>
+
+
+    </section>
+
+
+    <!-- =====================================
+         النتيجة
+    ===================================== -->
+
+    <section
+        id="resultBox"
+        style="display:none;"
+    >
+
+        <h2>
+            🎉 Challenge Complete!
+        </h2>
+
+
+        <p>
+            Your score
+        </p>
+
+
+        <div id="finalScore">
+            0 / 10
+        </div>
+
+
+        <p id="resultMessage">
+            Great job!
+        </p>
+
+
+        <button
+            class="home-btn"
+            onclick="goHome()"
+        >
+            🏠 Back to Home
+        </button>
+
+    </section>
+
+
+</main>
+
+
+<!-- JavaScript -->
+
+<script src="daily.js"></script>
+```
+
+</body>
+
+</html>

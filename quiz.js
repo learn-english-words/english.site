@@ -115,14 +115,11 @@ function addToReview(word) {
 
     if (!word || !word.id) return;
 
-
     let reviewWords =
         JSON.parse(
             localStorage.getItem("reviewWords")
         ) || [];
 
-
-    // لا نكرر نفس الكلمة
     const alreadyExists =
         reviewWords.some(
             item =>
@@ -130,13 +127,11 @@ function addToReview(word) {
                 String(word.id)
         );
 
-
     if (!alreadyExists) {
 
         reviewWords.push(word);
 
     }
-
 
     localStorage.setItem(
         "reviewWords",
@@ -160,12 +155,10 @@ async function startQuiz() {
         return;
     }
 
-
     const startButton =
         document.getElementById(
             "startQuizBtn"
         );
-
 
     if (startButton) {
 
@@ -176,17 +169,14 @@ async function startQuiz() {
 
     }
 
-
     allWords =
         await getWords();
-
 
     if (allWords.length < 4) {
 
         alert(
             "⚠️ نحتاج على الأقل 4 كلمات في هذا المستوى."
         );
-
 
         if (startButton) {
 
@@ -200,10 +190,8 @@ async function startQuiz() {
         return;
     }
 
-
     const shuffled =
         shuffle(allWords);
-
 
     const questionCount =
         Math.min(
@@ -211,36 +199,30 @@ async function startQuiz() {
             shuffled.length
         );
 
-
     quizWords =
         shuffled.slice(
             0,
             questionCount
         );
 
-
     currentQuestion = 0;
 
     score = 0;
-
 
     document.getElementById(
         "levelScreen"
     ).style.display =
         "none";
 
-
     document.getElementById(
         "quizScreen"
     ).style.display =
         "block";
 
-
     document.getElementById(
         "resultScreen"
     ).style.display =
         "none";
-
 
     updateScore();
 
@@ -257,7 +239,6 @@ function showQuestion() {
     const word =
         quizWords[currentQuestion];
 
-
     if (!word) {
 
         finishQuiz();
@@ -265,12 +246,10 @@ function showQuestion() {
         return;
     }
 
-
     document.getElementById(
         "questionNumber"
     ).textContent =
         `السؤال ${currentQuestion + 1} / ${quizWords.length}`;
-
 
     const progress =
         (
@@ -278,18 +257,15 @@ function showQuestion() {
             quizWords.length
         ) * 100;
 
-
     document.getElementById(
         "progressFill"
     ).style.width =
         progress + "%";
 
-
     const image =
         document.getElementById(
             "quizImage"
         );
-
 
     if (word.image) {
 
@@ -307,9 +283,7 @@ function showQuestion() {
             "none";
     }
 
-
     createAnswers(word);
-
 
     document.getElementById(
         "nextBtn"
@@ -329,9 +303,7 @@ function createAnswers(correctWord) {
             "answers"
         );
 
-
     answersContainer.innerHTML = "";
-
 
     const otherWords =
         allWords.filter(word =>
@@ -344,21 +316,17 @@ function createAnswers(correctWord) {
             word.english
         );
 
-
     const wrongAnswers =
         shuffle(otherWords)
             .slice(0, 3);
-
 
     let answers = [
         correctWord,
         ...wrongAnswers
     ];
 
-
     answers =
         shuffle(answers);
-
 
     answers.forEach(word => {
 
@@ -367,14 +335,11 @@ function createAnswers(correctWord) {
                 "button"
             );
 
-
         button.className =
             "answer-btn";
 
-
         button.textContent =
             word.english;
-
 
         button.onclick =
             () =>
@@ -383,7 +348,6 @@ function createAnswers(correctWord) {
                     word,
                     correctWord
                 );
-
 
         answersContainer.appendChild(
             button
@@ -408,13 +372,11 @@ function checkAnswer(
             ".answer-btn"
         );
 
-
     buttons.forEach(btn => {
 
         btn.disabled = true;
 
     });
-
 
     // ==========================================
     // صحيحة
@@ -429,13 +391,11 @@ function checkAnswer(
             "correct"
         );
 
-
         score++;
 
         updateScore();
 
     }
-
 
     // ==========================================
     // خاطئة
@@ -447,12 +407,8 @@ function checkAnswer(
             "wrong"
         );
 
-
-        // 🔥 حفظ الكلمة للمراجعة
         addToReview(correctWord);
 
-
-        // إظهار الإجابة الصحيحة
         buttons.forEach(btn => {
 
             if (
@@ -470,16 +426,13 @@ function checkAnswer(
 
     }
 
-
     const nextButton =
         document.getElementById(
             "nextBtn"
         );
 
-
     nextButton.style.display =
         "block";
-
 
     if (
         currentQuestion >=
@@ -506,7 +459,6 @@ function nextQuestion() {
 
     currentQuestion++;
 
-
     if (
         currentQuestion >=
         quizWords.length
@@ -516,7 +468,6 @@ function nextQuestion() {
 
         return;
     }
-
 
     showQuestion();
 }
@@ -533,7 +484,6 @@ function updateScore() {
             "score"
         );
 
-
     if (scoreElement) {
 
         scoreElement.textContent =
@@ -544,28 +494,84 @@ function updateScore() {
 
 
 // ==========================================
-// النتيجة
+// النتيجة + حفظ الاختبار
 // ==========================================
 
-function finishQuiz() {
+async function finishQuiz() {
+
+    const {
+        data: { user },
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (userError || !user) {
+
+        window.location.href =
+            "login.html";
+
+        return;
+    }
+
+
+    // ==========================================
+    // حفظ نتيجة الاختبار
+    // ==========================================
+
+    const {
+        error: saveError
+    } =
+        await supabaseClient
+            .from("quiz_results")
+            .insert({
+
+                user_id:
+                    user.id,
+
+                score:
+                    score,
+
+                total_questions:
+                    quizWords.length
+
+            });
+
+
+    if (saveError) {
+
+        console.error(
+            "Quiz result save error:",
+            saveError
+        );
+
+        alert(
+            "❌ انتهى الاختبار ولكن حدث خطأ أثناء حفظ النتيجة:\n" +
+            saveError.message
+        );
+
+        return;
+    }
+
+
+    // ==========================================
+    // إظهار النتيجة
+    // ==========================================
 
     document.getElementById(
         "quizScreen"
     ).style.display =
         "none";
 
-
     document.getElementById(
         "resultScreen"
     ).style.display =
         "block";
 
-
     document.getElementById(
         "finalScore"
     ).textContent =
         `${score} / ${quizWords.length}`;
-
 
     document.getElementById(
         "progressFill"
@@ -584,10 +590,8 @@ function restartQuiz() {
 
     score = 0;
 
-
     const shuffled =
         shuffle(allWords);
-
 
     const questionCount =
         Math.min(
@@ -595,25 +599,21 @@ function restartQuiz() {
             shuffled.length
         );
 
-
     quizWords =
         shuffled.slice(
             0,
             questionCount
         );
 
-
     document.getElementById(
         "resultScreen"
     ).style.display =
         "none";
 
-
     document.getElementById(
         "quizScreen"
     ).style.display =
         "block";
-
 
     updateScore();
 

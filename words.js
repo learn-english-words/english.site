@@ -334,124 +334,172 @@ function speakWord() {
     );
 }
 
-
-// ==========================================
-// أعرف / لا أعرف
-// ==========================================
-
 async function answer(known) {
 
-    const word =
-        words[currentIndex];
+
+const word =
+    words[currentIndex];
 
 
-    if (!word) return;
+if (!word || !word.id) {
+    return;
+}
 
 
-    // ==========================================
-    // الحصول على الحساب الحالي
-    // ==========================================
+// ==========================================
+// الحصول على الحساب الحالي
+// ==========================================
 
-    const {
-        data: { user },
-        error: userError
-    } =
-        await supabaseClient.auth.getUser();
-
-
-    if (userError || !user) {
-
-        alert(
-            "⚠️ يجب تسجيل الدخول أولاً."
-        );
+const {
+    data: { user },
+    error: userError
+} =
+    await supabaseClient.auth.getUser();
 
 
-        window.location.href =
-            "login.html";
-
-
-        return;
-    }
-
-
-    // ==========================================
-    // ❌ لا أعرف الكلمة
-    // ==========================================
-
-    if (!known) {
-
-        // هل الكلمة موجودة مسبقًا لهذا الحساب؟
-        const {
-            data: existing,
-            error: checkError
-        } =
-            await supabaseClient
-                .from("review_words")
-                .select("id")
-                .eq("user_id", user.id)
-                .eq("word_id", word.id)
-                .maybeSingle();
-
-if (checkError) {
-
-    console.error("Review check error:", checkError);
+if (userError || !user) {
 
     alert(
-        "❌ خطأ Supabase:\n\n" +
-        "Code: " + (checkError.code || "") + "\n" +
-        "Message: " + (checkError.message || "") + "\n" +
-        "Details: " + (checkError.details || "") + "\n" +
-        "Hint: " + (checkError.hint || "")
+        "⚠️ يجب تسجيل الدخول أولاً."
     );
+
+    window.location.href =
+        "login.html";
 
     return;
 }
 
 
-        // إذا غير موجودة، أضفها
-        if (!existing) {
+// ==========================================
+// ✅ أعرف الكلمة
+// ==========================================
 
-            const {
-                error: insertError
-            } =
-                await supabaseClient
-                    .from("review_words")
-                    .insert({
+if (known) {
 
-                        user_id: user.id,
+    const {
+        error: learnedError
+    } =
+        await supabaseClient
+            .from("learned_words")
+            .upsert(
+                {
+                    user_id: user.id,
+                    word_id: String(word.id)
+                },
+                {
+                    onConflict:
+                        "user_id,word_id"
+                }
+            );
 
-                        word_id: word.id
+if (learnedError) {
 
-                    });
+    console.error(
+        "Learned word error:",
+        learnedError
+    );
+
+    alert(
+        "❌ خطأ Supabase:\n\n" +
+        "Code: " + (learnedError.code || "") + "\n\n" +
+        "Message: " + (learnedError.message || "") + "\n\n" +
+        "Details: " + (learnedError.details || "") + "\n\n" +
+        "Hint: " + (learnedError.hint || "")
+    );
+
+    return;
+}
+
+}
 
 
-            if (insertError) {
+// ==========================================
+// ❌ لا أعرف الكلمة
+// ==========================================
 
-                console.error(
-                    "Review insert error:",
-                    insertError
-                );
+if (!known) {
+
+    const {
+        data: existing,
+        error: checkError
+    } =
+        await supabaseClient
+            .from("review_words")
+            .select("id")
+            .eq(
+                "user_id",
+                user.id
+            )
+            .eq(
+                "word_id",
+                String(word.id)
+            )
+            .maybeSingle();
 
 
-                alert(
-                    "❌ حدث خطأ أثناء حفظ الكلمة للمراجعة:\n" +
-                    insertError.message
-                );
+    if (checkError) {
 
+        console.error(
+            "Review check error:",
+            checkError
+        );
 
-                return;
-            }
-        }
+        alert(
+            "❌ حدث خطأ أثناء التحقق من كلمة المراجعة:\n" +
+            checkError.message
+        );
+
+        return;
     }
 
 
-    // ==========================================
-    // الانتقال للكلمة التالية
-    // ==========================================
+    // إذا غير موجودة، أضفها
 
-    nextWord();
+    if (!existing) {
+
+        const {
+            error: insertError
+        } =
+            await supabaseClient
+                .from("review_words")
+                .insert({
+
+                    user_id:
+                        user.id,
+
+                    word_id:
+                        String(word.id)
+
+                });
+
+
+        if (insertError) {
+
+            console.error(
+                "Review insert error:",
+                insertError
+            );
+
+            alert(
+                "❌ حدث خطأ أثناء حفظ الكلمة للمراجعة:\n" +
+                insertError.message
+            );
+
+            return;
+        }
+
+    }
+
 }
 
+
+// ==========================================
+// الانتقال للكلمة التالية
+// ==========================================
+
+nextWord();
+
+}
 
 // ==========================================
 // حفظ / إزالة من المفضلة

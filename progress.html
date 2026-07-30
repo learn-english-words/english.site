@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>تقدمي - EnglishWords</title>
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+
+<style>
+
+    body {
+        background: #f5f7fb;
+    }
+
+
+    .progress-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+
+    .progress-header {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+
+    .progress-header h1 {
+        margin: 0 0 10px;
+        color: #222;
+    }
+
+
+    .progress-header p {
+        margin: 0;
+        color: #666;
+    }
+
+
+    /* =====================================
+       البطاقات
+    ===================================== */
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+
+    .stat-card {
+        background: white;
+        padding: 25px;
+        border-radius: 18px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+
+    .stat-icon {
+        font-size: 35px;
+        margin-bottom: 10px;
+    }
+
+
+    .stat-title {
+        color: #666;
+        font-size: 15px;
+        margin-bottom: 8px;
+    }
+
+
+    .stat-number {
+        color: #222;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+
+    /* =====================================
+       نسبة التقدم
+    ===================================== */
+
+    .overall-progress {
+        background: white;
+        padding: 25px;
+        border-radius: 18px;
+        margin-top: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+
+    .overall-progress h2 {
+        color: #222;
+        margin-top: 0;
+    }
+
+
+    .progress-info {
+        display: flex;
+        justify-content: space-between;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+
+    .progress-bar {
+        width: 100%;
+        height: 15px;
+        background: #e5e7eb;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+
+    #overallProgressFill {
+        width: 0%;
+        height: 100%;
+        background: #2563eb;
+        transition: width 0.5s ease;
+    }
+
+
+    /* =====================================
+       أفضل نتيجة
+    ===================================== */
+
+    .best-score {
+        background: white;
+        padding: 25px;
+        border-radius: 18px;
+        margin-top: 20px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+
+    .best-score h2 {
+        color: #222;
+    }
+
+
+    #bestScore {
+        font-size: 35px;
+        font-weight: bold;
+        color: #2563eb;
+    }
+
+
+    /* =====================================
+       زر العودة
+    ===================================== */
+
+    .back-btn {
+        display: block;
+        margin: 25px auto 0;
+        border: none;
+        background: #2563eb;
+        color: white;
+        padding: 14px 25px;
+        border-radius: 12px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+
+    .back-btn:hover {
+        opacity: 0.9;
+    }
+
+
+    /* =====================================
+       الجوال
+    ===================================== */
+
+    @media (max-width: 600px) {
+
+        .progress-container {
+            margin: 20px auto;
+            padding: 12px;
+        }
+
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<main class="progress-container">
+
+
+    <!-- =====================================
+         العنوان
+    ===================================== -->
+
+    <section class="progress-header">
+
+        <h1>
+            📊 تقدمي
+        </h1>
+
+        <p>
+            تابع تقدمك في تعلم اللغة الإنجليزية
+        </p>
+
+    </section>
+
+
+    <!-- =====================================
+         الإحصائيات
+    ===================================== -->
+
+    <section class="stats-grid">
+
+
+        <!-- الكلمات المتعلمة -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📚
+            </div>
+
+            <div class="stat-title">
+                الكلمات المتعلمة
+            </div>
+
+            <div
+                class="stat-number"
+                id="learnedWords"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <!-- الكلمات المحفوظة -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ⭐
+            </div>
+
+            <div class="stat-title">
+                كلماتي المحفوظة
+            </div>
+
+            <div
+                class="stat-number"
+                id="favoriteWords"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <!-- كلمات المراجعة -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🔄
+            </div>
+
+            <div class="stat-title">
+                كلمات المراجعة
+            </div>
+
+            <div
+                class="stat-number"
+                id="reviewWords"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <!-- الاختبارات -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🧠
+            </div>
+
+            <div class="stat-title">
+                الاختبارات المكتملة
+            </div>
+
+            <div
+                class="stat-number"
+                id="completedQuizzes"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <!-- تحديات اليوم -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🎯
+            </div>
+
+            <div class="stat-title">
+                تحديات اليوم
+            </div>
+
+            <div
+                class="stat-number"
+                id="dailyChallenges"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <!-- متوسط التحديات -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🏆
+            </div>
+
+            <div class="stat-title">
+                متوسط نتيجة التحدي
+            </div>
+
+            <div
+                class="stat-number"
+                id="averageScore"
+            >
+                0%
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================
+         التقدم العام
+    ===================================== -->
+
+    <section class="overall-progress">
+
+        <h2>
+            📈 تقدمك العام
+        </h2>
+
+
+        <div class="progress-info">
+
+            <span>
+                الكلمات التي تعلمتها
+            </span>
+
+            <span id="progressPercent">
+                0%
+            </span>
+
+        </div>
+
+
+        <div class="progress-bar">
+
+            <div
+                id="overallProgressFill"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         أفضل نتيجة
+    ===================================== -->
+
+    <section class="best-score">
+
+        <h2>
+            🥇 أفضل نتيجة في تحدي اليوم
+        </h2>
+
+        <div id="bestScore">
+            0 / 10
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         العودة
+    ===================================== -->
+
+    <button
+        class="back-btn"
+        onclick="goHome()"
+    >
+        🏠 العودة للرئيسية
+    </button>
+
+
+</main>
+
+
+<!-- JavaScript -->
+
+<script src="progress.js"></script>
+```
+
+</body>
+
+</html>
