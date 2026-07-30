@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>مراجعة الكلمات</title>
+
+    <link rel="stylesheet" href="review.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <button class="back-btn" onclick="goBack()">
+        ← رجوع
+    </button>
+
+    <div class="title">
+        🔄 مراجعة الكلمات
+    </div>
+
+    <button class="home-btn" onclick="goHome()">
+        🏠
+    </button>
+
+</header>
+
+
+<main class="container">
+
+    <!-- التقدم -->
+
+    <div class="progress-area">
+
+        <div class="progress-info">
+
+            <span>تقدم المراجعة</span>
+
+            <strong id="progressText">
+                1 / 1
+            </strong>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div id="progressFill"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- بطاقة الكلمة -->
+
+    <section class="word-card">
+
+        <div class="image-container">
+
+            <div id="wordImage" class="word-image">
+                🖼️
+            </div>
+
+        </div>
+
+
+        <div class="word-content">
+
+            <div
+                class="english-word"
+                id="englishWord">
+                Apple
+            </div>
+
+
+            <div
+                class="arabic-word"
+                id="arabicWord">
+                تفاحة
+            </div>
+
+
+            <button
+                class="sound-btn"
+                onclick="speakWord()">
+
+                🔊 اسمع النطق
+
+            </button>
+
+
+            <div class="example">
+
+                <span>💡 مثال</span>
+
+                <p id="exampleText">
+                    I eat an apple.
+                </p>
+
+                <small id="exampleArabic">
+                    أنا آكل تفاحة.
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- أزرار المراجعة -->
+
+    <div class="knowledge-buttons">
+
+        <button
+            class="dont-know"
+            onclick="answer(false)">
+
+            ❌ ما زلت لا أعرفها
+
+        </button>
+
+
+        <button
+            class="know"
+            onclick="answer(true)">
+
+            ✅ الآن أعرفها
+
+        </button>
+
+    </div>
+
+
+    <!-- الإجراءات -->
+
+    <div class="actions">
+
+        <button
+            id="favoriteBtn"
+            onclick="toggleFavorite()">
+
+            ☆
+            <span>حفظ</span>
+
+        </button>
+
+
+        <button
+            class="next-btn"
+            onclick="nextWord()">
+
+            الكلمة التالية
+            ←
+
+        </button>
+
+    </div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="review.js"></script>
+
+</body>
+
+</html>

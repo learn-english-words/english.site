@@ -1,0 +1,540 @@
+/* ==========================================
+   الأساس
+========================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #172033;
+    min-height: 100vh;
+}
+
+
+/* ==========================================
+   الهيدر
+========================================== */
+
+.topbar {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #e7eaf0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 6%;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.back-btn,
+.home-btn {
+    border: none;
+    background: #eef4ff;
+    color: #3478f6;
+
+    padding: 11px 17px;
+    border-radius: 10px;
+
+    font-size: 15px;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.back-btn:hover,
+.home-btn:hover {
+    background: #e1ebff;
+    transform: translateY(-2px);
+}
+
+
+/* ==========================================
+   المحتوى
+========================================== */
+
+.container {
+    width: min(850px, 92%);
+    margin: 35px auto;
+}
+
+
+/* ==========================================
+   التقدم
+========================================== */
+
+.progress-area {
+    background: white;
+
+    padding: 18px 22px;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 5px 20px rgba(20, 30, 50, 0.05);
+
+    margin-bottom: 22px;
+}
+
+.progress-info {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 10px;
+
+    font-size: 14px;
+}
+
+.progress-info span {
+    color: #8992a3;
+}
+
+.progress-info strong {
+    color: #3478f6;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 9px;
+
+    background: #e9edf5;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+#progressFill {
+    width: 0%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        #3478f6,
+        #6c4df6
+    );
+
+    border-radius: 20px;
+
+    transition: width 0.3s ease;
+}
+
+
+/* ==========================================
+   بطاقة الكلمة
+========================================== */
+
+.word-card {
+    background: white;
+
+    border-radius: 24px;
+
+    padding: 30px;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 35px;
+
+    align-items: center;
+
+    box-shadow:
+        0 8px 30px rgba(20, 30, 50, 0.07);
+}
+
+
+/* ==========================================
+   الصورة
+========================================== */
+
+.image-container {
+    width: 100%;
+    height: 330px;
+
+    background: #f7f9fc;
+
+    border-radius: 20px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.word-image {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 90px;
+}
+
+.word-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    border-radius: 20px;
+}
+
+
+/* ==========================================
+   محتوى الكلمة
+========================================== */
+
+.word-content {
+    text-align: right;
+}
+
+.english-word {
+    font-size: 40px;
+
+    font-weight: bold;
+
+    color: #3478f6;
+
+    margin-bottom: 8px;
+
+    direction: ltr;
+
+    text-align: right;
+}
+
+.arabic-word {
+    font-size: 24px;
+
+    color: #596275;
+
+    margin-bottom: 25px;
+}
+
+
+/* ==========================================
+   زر النطق
+========================================== */
+
+.sound-btn {
+    border: none;
+
+    background: #eef4ff;
+
+    color: #3478f6;
+
+    padding: 12px 18px;
+
+    border-radius: 12px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+    margin-bottom: 25px;
+}
+
+.sound-btn:hover {
+    background: #dfeaff;
+
+    transform: translateY(-2px);
+}
+
+
+/* ==========================================
+   المثال
+========================================== */
+
+.example {
+    background: #f7f9fc;
+
+    border-radius: 16px;
+
+    padding: 18px;
+}
+
+.example > span {
+    display: block;
+
+    color: #3478f6;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    margin-bottom: 10px;
+}
+
+.example p {
+    font-size: 17px;
+
+    font-weight: bold;
+
+    direction: ltr;
+
+    text-align: right;
+
+    margin-bottom: 8px;
+}
+
+.example small {
+    color: #8992a3;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* ==========================================
+   أزرار أعرف / لا أعرف
+========================================== */
+
+.knowledge-buttons {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+
+    margin-top: 20px;
+}
+
+.knowledge-buttons button {
+    border: none;
+
+    padding: 17px;
+
+    border-radius: 15px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.knowledge-buttons button:hover {
+    transform: translateY(-2px);
+}
+
+.dont-know {
+    background: #fff0f0;
+
+    color: #e05252;
+}
+
+.dont-know:hover {
+    background: #ffe3e3;
+}
+
+.know {
+    background: #edf9f2;
+
+    color: #24945b;
+}
+
+.know:hover {
+    background: #ddf5e7;
+}
+
+
+/* ==========================================
+   الإجراءات
+========================================== */
+
+.actions {
+    display: grid;
+
+    grid-template-columns: 150px 1fr;
+
+    gap: 15px;
+
+    margin-top: 15px;
+}
+
+.actions button {
+    border: none;
+
+    border-radius: 15px;
+
+    padding: 16px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+#favoriteBtn {
+    background: white;
+
+    color: #3478f6;
+
+    border: 2px solid #e5eaf3;
+}
+
+#favoriteBtn:hover {
+    border-color: #3478f6;
+}
+
+#favoriteBtn.active {
+    background: #fff8df;
+
+    border-color: #f1c84b;
+
+    color: #d49a00;
+}
+
+.next-btn {
+    background: #3478f6;
+
+    color: white;
+}
+
+.next-btn:hover {
+    background: #2869df;
+
+    transform: translateY(-2px);
+}
+
+
+/* ==========================================
+   الجوال
+========================================== */
+
+@media (max-width: 700px) {
+
+    .topbar {
+        height: 64px;
+
+        padding: 0 4%;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+
+    .back-btn,
+    .home-btn {
+        padding: 9px 12px;
+
+        font-size: 14px;
+    }
+
+    .container {
+        width: 94%;
+
+        margin: 20px auto;
+    }
+
+    .word-card {
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+
+        padding: 18px;
+
+        border-radius: 20px;
+    }
+
+    .image-container {
+        height: 300px;
+    }
+
+    .word-image {
+        font-size: 75px;
+    }
+
+    .word-content {
+        text-align: center;
+    }
+
+    .english-word {
+        font-size: 34px;
+
+        text-align: center;
+    }
+
+    .arabic-word {
+        font-size: 21px;
+    }
+
+    .example {
+        text-align: right;
+    }
+
+    .knowledge-buttons {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+    }
+
+    .knowledge-buttons button {
+        padding: 15px 8px;
+
+        font-size: 14px;
+    }
+
+    .actions {
+        grid-template-columns: 1fr 1.5fr;
+    }
+
+    .actions button {
+        padding: 15px 8px;
+
+        font-size: 14px;
+    }
+}
+
+
+/* ==========================================
+   شاشات صغيرة جداً
+========================================== */
+
+@media (max-width: 400px) {
+
+    .image-container {
+        height: 250px;
+    }
+
+    .english-word {
+        font-size: 30px;
+    }
+
+    .arabic-word {
+        font-size: 19px;
+    }
+
+    .knowledge-buttons button {
+        font-size: 13px;
+    }
+
+}

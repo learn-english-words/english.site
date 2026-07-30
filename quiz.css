@@ -1,0 +1,713 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(91, 45, 190, 0.35),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 20% 80%,
+            rgba(35, 75, 190, 0.25),
+            transparent 35%
+        ),
+        #050817;
+
+    color: white;
+    min-height: 100vh;
+}
+
+
+/* =========================
+   الهيدر
+========================= */
+
+.topbar {
+    height: 75px;
+
+    background: rgba(10, 17, 40, 0.88);
+
+    border-bottom: 1px solid rgba(130, 120, 255, 0.18);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 6%;
+
+    backdrop-filter: blur(18px);
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.back-btn {
+    border: 1px solid rgba(130, 120, 255, 0.2);
+
+    background: rgba(24, 31, 58, 0.85);
+
+    color: white;
+
+    padding: 10px 17px;
+
+    border-radius: 11px;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: linear-gradient(
+        135deg,
+        #4267ff,
+        #8b3dff
+    );
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   المحتوى
+========================= */
+
+.container {
+    width: min(850px, 92%);
+    margin: 40px auto;
+}
+
+
+/* =========================
+   شاشة اختيار المستوى
+========================= */
+
+.level-screen {
+    width: 100%;
+}
+
+.intro {
+    background:
+        linear-gradient(
+            135deg,
+            #4267ff,
+            #823cff
+        );
+
+    border-radius: 22px;
+
+    padding: 35px;
+
+    text-align: center;
+
+    margin-bottom: 30px;
+
+    box-shadow:
+        0 20px 55px rgba(70, 55, 220, 0.25);
+}
+
+.intro-icon {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+.intro h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.intro p {
+    opacity: 0.9;
+    line-height: 1.7;
+}
+
+
+.level-screen h2 {
+    margin-bottom: 16px;
+    font-size: 23px;
+}
+
+
+.levels {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 16px;
+}
+
+
+.level-card {
+    border: 1px solid rgba(130, 120, 255, 0.16);
+
+    background: rgba(10, 17, 40, 0.82);
+
+    color: white;
+
+    border-radius: 18px;
+
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    text-align: right;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.22);
+
+    transition: 0.2s;
+
+    backdrop-filter: blur(15px);
+}
+
+.level-card:hover {
+    transform: translateY(-3px);
+
+    border-color:
+        rgba(112, 85, 255, 0.55);
+}
+
+.level-card.selected {
+    border: 2px solid #7657ff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(66, 103, 255, 0.18),
+            rgba(139, 61, 255, 0.18)
+        );
+
+    box-shadow:
+        0 10px 35px rgba(75, 55, 220, 0.25);
+}
+
+.level-card strong {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4267ff,
+            #8b3dff
+        );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    font-size: 18px;
+}
+
+.level-card h3 {
+    margin-bottom: 6px;
+}
+
+.level-card p {
+    color: #9ca5bd;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   زر البداية
+========================= */
+
+.start-btn {
+    width: 100%;
+
+    border: none;
+
+    border-radius: 16px;
+
+    padding: 17px;
+
+    margin-top: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4267ff,
+            #8b3dff
+        );
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+    box-shadow:
+        0 12px 30px rgba(75, 55, 220, 0.25);
+}
+
+.start-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 16px 35px rgba(75, 55, 220, 0.35);
+}
+
+.start-btn:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+}
+
+
+/* =========================
+   شاشة الاختبار
+========================= */
+
+.quiz-screen {
+    width: 100%;
+}
+
+.quiz-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 12px;
+
+    font-size: 16px;
+
+    color: #cbd2e5;
+}
+
+#score {
+    color: #b18cff;
+
+    font-weight: bold;
+}
+
+
+/* شريط التقدم */
+
+.progress-bar {
+    width: 100%;
+
+    height: 9px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    margin-bottom: 25px;
+}
+
+#progressFill {
+    height: 100%;
+
+    width: 0%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #4267ff,
+            #9b70ff
+        );
+
+    border-radius: 20px;
+
+    transition: width 0.3s;
+}
+
+
+/* بطاقة السؤال */
+
+.question-card {
+    background:
+        rgba(10, 17, 40, 0.86);
+
+    border: 1px solid rgba(130, 120, 255, 0.16);
+
+    border-radius: 22px;
+
+    padding: 25px;
+
+    text-align: center;
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.25);
+
+    backdrop-filter: blur(15px);
+}
+
+
+/* الصورة */
+
+.question-image {
+    width: 100%;
+
+    height: 330px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 18px;
+
+    margin-bottom: 25px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+}
+
+.question-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    border-radius: 18px;
+}
+
+
+.question-card h2 {
+    font-size: 21px;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   الخيارات
+========================= */
+
+.answers {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 14px;
+}
+
+.answer-btn {
+    min-height: 65px;
+
+    border-radius: 15px;
+
+    border: 1px solid rgba(130, 120, 255, 0.18);
+
+    background:
+        rgba(24, 31, 58, 0.85);
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    padding: 12px;
+
+    transition: 0.2s;
+}
+
+.answer-btn:hover {
+    transform: translateY(-2px);
+
+    border-color: #7657ff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(66, 103, 255, 0.2),
+            rgba(139, 61, 255, 0.2)
+        );
+}
+
+
+/* إجابة صحيحة */
+
+.answer-btn.correct {
+    background:
+        linear-gradient(
+            135deg,
+            #246b45,
+            #31815a
+        );
+
+    border-color: #49c47d;
+}
+
+
+/* إجابة خاطئة */
+
+.answer-btn.wrong {
+    background:
+        linear-gradient(
+            135deg,
+            #7c2935,
+            #9d3342
+        );
+
+    border-color: #e35b6b;
+}
+
+
+/* تعطيل الخيار */
+
+.answer-btn:disabled {
+    cursor: default;
+}
+
+
+/* =========================
+   التالي
+========================= */
+
+.next-btn {
+    width: 100%;
+
+    border: none;
+
+    border-radius: 16px;
+
+    padding: 16px;
+
+    margin-top: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4267ff,
+            #8b3dff
+        );
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.next-btn:hover {
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   النتيجة
+========================= */
+
+.result-screen {
+    text-align: center;
+
+    background:
+        rgba(10, 17, 40, 0.86);
+
+    border:
+        1px solid rgba(130, 120, 255, 0.18);
+
+    border-radius: 22px;
+
+    padding: 45px 30px;
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.25);
+}
+
+.result-icon {
+    font-size: 75px;
+
+    margin-bottom: 15px;
+}
+
+.result-screen h1 {
+    font-size: 30px;
+
+    margin-bottom: 12px;
+}
+
+.result-screen p {
+    color: #9ca5bd;
+
+    margin-bottom: 8px;
+}
+
+#finalScore {
+    display: block;
+
+    font-size: 40px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4965ff,
+            #9b70ff
+        );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    color: transparent;
+
+    margin-bottom: 20px;
+}
+
+.result-buttons {
+    display: flex;
+
+    gap: 12px;
+}
+
+.result-buttons .start-btn {
+    margin-top: 0;
+}
+
+.home-result-btn {
+    width: 100%;
+
+    border: 1px solid rgba(130, 120, 255, 0.2);
+
+    border-radius: 16px;
+
+    background:
+        rgba(24, 31, 58, 0.85);
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.home-result-btn:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #4267ff,
+            #8b3dff
+        );
+}
+
+
+/* =========================
+   الجوال
+========================= */
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 0 4%;
+
+        height: 68px;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+
+    .back-btn {
+        padding: 9px 12px;
+
+        font-size: 14px;
+    }
+
+    .container {
+        width: 92%;
+
+        margin: 25px auto;
+    }
+
+    .intro {
+        padding: 25px 18px;
+    }
+
+    .intro-icon {
+        font-size: 50px;
+    }
+
+    .intro h1 {
+        font-size: 26px;
+    }
+
+    .levels {
+        grid-template-columns: 1fr;
+    }
+
+    .level-card {
+        padding: 16px;
+    }
+
+    .question-card {
+        padding: 15px;
+    }
+
+    .question-image {
+        height: 270px;
+
+        margin-bottom: 20px;
+    }
+
+    .question-card h2 {
+        font-size: 19px;
+    }
+
+    .answers {
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 10px;
+    }
+
+    .answer-btn {
+        min-height: 62px;
+
+        font-size: 15px;
+
+        padding: 10px 6px;
+    }
+
+    .result-buttons {
+        flex-direction: column;
+    }
+}

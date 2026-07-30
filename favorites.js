@@ -11,9 +11,14 @@ async function loadFavorites() {
         document.getElementById("favoritesList");
 
 
+    // ==========================================
     // التأكد من تسجيل الدخول
-    const { data: { user }, error: userError } =
-        await supabaseClient.auth.getUser();
+    // ==========================================
+
+    const {
+        data: { user },
+        error: userError
+    } = await supabaseClient.auth.getUser();
 
 
     if (userError || !user) {
@@ -23,14 +28,25 @@ async function loadFavorites() {
 
         listElement.innerHTML = `
             <button class="menu-card" onclick="goLogin()">
-                <div class="card-icon">🔐</div>
 
-                <div class="card-text">
-                    <h3>تسجيل الدخول</h3>
-                    <p>سجل دخولك لرؤية كلماتك المحفوظة</p>
+                <div class="card-icon">
+                    🔐
                 </div>
 
-                <span class="arrow">←</span>
+                <div class="card-text">
+
+                    <h3>تسجيل الدخول</h3>
+
+                    <p>
+                        سجل دخولك لرؤية كلماتك المحفوظة
+                    </p>
+
+                </div>
+
+                <span class="arrow">
+                    ←
+                </span>
+
             </button>
         `;
 
@@ -38,26 +54,74 @@ async function loadFavorites() {
     }
 
 
-    // جلب المفضلات الخاصة بالمستخدم
-    const { data: favorites, error } =
-        await supabaseClient
-            .from("favorites")
-            .select("word_id")
-            .eq("user_id", user.id);
+    // ==========================================
+    // جلب الكلمات المحفوظة
+    // ==========================================
 
+    const {
+        data: favorites,
+        error
+    } = await supabaseClient
+        .from("favorites")
+        .select(`
+            id,
+            word_id,
+            words (
+                id,
+                english,
+                arabic,
+                level,
+                category,
+                image,
+                example,
+                exampleArabic
+            )
+        `)
+        .eq("user_id", user.id);
+
+
+    // ==========================================
+    // خطأ
+    // ==========================================
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            "Favorites error:",
+            error
+        );
 
         countElement.textContent =
             "❌ حدث خطأ أثناء تحميل الكلمات.";
+
+        listElement.innerHTML = `
+            <div class="menu-card">
+
+                <div class="card-icon">
+                    ⚠️
+                </div>
+
+                <div class="card-text">
+
+                    <h3>حدث خطأ</h3>
+
+                    <p>
+                        ${error.message}
+                    </p>
+
+                </div>
+
+            </div>
+        `;
 
         return;
     }
 
 
+    // ==========================================
     // لا توجد كلمات
+    // ==========================================
+
     if (!favorites || favorites.length === 0) {
 
         countElement.textContent =
@@ -72,7 +136,9 @@ async function loadFavorites() {
 
                 <div class="card-text">
 
-                    <h3>لا توجد كلمات محفوظة</h3>
+                    <h3>
+                        لا توجد كلمات محفوظة
+                    </h3>
 
                     <p>
                         عندما تضغط ⭐ حفظ على أي كلمة،
@@ -89,72 +155,37 @@ async function loadFavorites() {
 
 
     // ==========================================
-    // جلب الكلمات من LocalStorage
+    // استخراج الكلمات فقط
     // ==========================================
 
-    const allWords =
-        JSON.parse(
-            localStorage.getItem("englishWords")
-        ) || [];
-
-
-    const favoriteIds =
-        favorites.map(item =>
-            String(item.word_id)
-        );
-
-
-    const favoriteWords =
-        allWords.filter(word =>
-            favoriteIds.includes(String(word.id))
-        );
+    const favoriteWords = favorites
+        .map(item => item.words)
+        .filter(word => word);
 
 
     countElement.textContent =
         favoriteWords.length + " كلمة محفوظة";
 
 
+    listElement.innerHTML = "";
+
+
     // ==========================================
     // عرض الكلمات
     // ==========================================
 
-    listElement.innerHTML = "";
-
-
-    if (favoriteWords.length === 0) {
-
-        listElement.innerHTML = `
-            <div class="menu-card">
-
-                <div class="card-icon">
-                    ⚠️
-                </div>
-
-                <div class="card-text">
-
-                    <h3>لم نجد بيانات الكلمات</h3>
-
-                    <p>
-                        المفضلة موجودة في حسابك،
-                        لكن بيانات الكلمات غير موجودة على هذا الجهاز.
-                    </p>
-
-                </div>
-
-            </div>
-        `;
-
-        return;
-    }
-
-
-    favoriteWords.forEach(word => {
+    favoriteWords.forEach((word, index) => {
 
         const card =
             document.createElement("div");
 
+
         card.className =
             "menu-card";
+
+
+        // يجعل البطاقة قابلة للضغط
+        card.style.cursor = "pointer";
 
 
         card.innerHTML = `
@@ -163,15 +194,20 @@ async function loadFavorites() {
 
                 ${
                     word.image
-                    ? `<img
-                        src="${word.image}"
-                        style="
-                            width:60px;
-                            height:60px;
-                            object-fit:contain;
-                            border-radius:12px;
-                        "
-                    >`
+
+                    ? `
+                        <img
+                            src="${word.image}"
+                            alt="${word.english}"
+                            style="
+                                width:60px;
+                                height:60px;
+                                object-fit:contain;
+                                border-radius:12px;
+                            "
+                        >
+                    `
+
                     : "⭐"
                 }
 
@@ -188,20 +224,70 @@ async function loadFavorites() {
                     ${word.arabic}
                 </p>
 
+                <small>
+                    ${word.level || ""}
+                </small>
+
             </div>
 
 
             <span class="arrow">
-                ★
+                →
             </span>
 
         `;
+
+
+        // ==========================================
+        // عند الضغط على الكلمة
+        // ==========================================
+
+        card.addEventListener("click", function () {
+
+            openFavoriteWord(index);
+
+        });
 
 
         listElement.appendChild(card);
 
     });
 
+
+    // حفظ الكلمات مؤقتًا لاستخدامها في صفحة المراجعة
+
+    window.favoriteWords =
+        favoriteWords;
+}
+
+
+// ==========================================
+// فتح صفحة مراجعة الكلمات المحفوظة
+// ==========================================
+
+function openFavoriteWord(index) {
+
+    const favoriteWords =
+        window.favoriteWords || [];
+
+
+    if (!favoriteWords.length) return;
+
+
+    localStorage.setItem(
+        "favoriteReviewWords",
+        JSON.stringify(favoriteWords)
+    );
+
+
+    localStorage.setItem(
+        "favoriteReviewIndex",
+        index
+    );
+
+
+    window.location.href =
+        "favorite-review.html";
 }
 
 

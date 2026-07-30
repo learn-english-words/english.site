@@ -4,6 +4,7 @@
 
 let words = [];
 let selectedImage = "";
+let editingWordId = null;
 
 
 // ==========================================
@@ -18,8 +19,11 @@ async function checkAdmin() {
     } = await supabaseClient.auth.getUser();
 
     if (error || !user) {
+
         alert("⚠️ يجب تسجيل الدخول أولاً.");
+
         window.location.href = "login.html";
+
         return false;
     }
 
@@ -27,8 +31,11 @@ async function checkAdmin() {
         "a1b0ce48-3846-4af6-a688-05368f6ec9bd";
 
     if (user.id !== ADMIN_ID) {
+
         alert("❌ ليس لديك صلاحية دخول لوحة التحكم.");
+
         window.location.href = "index.html";
+
         return false;
     }
 
@@ -42,18 +49,33 @@ async function checkAdmin() {
 
 function previewImage(event) {
 
-    const file = event.target.files[0];
+    const file =
+        event.target.files[0];
 
     if (!file) return;
 
-    const reader = new FileReader();
+    const reader =
+        new FileReader();
 
     reader.onload = function () {
 
-        selectedImage = reader.result;
+        selectedImage =
+            reader.result;
 
-        document.getElementById("imagePreview").innerHTML = `
-            <img src="${selectedImage}">
+        document.getElementById(
+            "imagePreview"
+        ).innerHTML = `
+
+            <img
+                src="${selectedImage}"
+                style="
+                    width:100%;
+                    height:100%;
+                    object-fit:contain;
+                    border-radius:15px;
+                "
+            >
+
         `;
     };
 
@@ -80,14 +102,19 @@ async function uploadImage(file) {
         await supabaseClient
             .storage
             .from("word-images")
-            .upload(fileName, file);
+            .upload(
+                fileName,
+                file
+            );
 
 
     if (error) {
 
         console.error(error);
 
-        alert("❌ حدث خطأ أثناء رفع الصورة.");
+        alert(
+            "❌ حدث خطأ أثناء رفع الصورة."
+        );
 
         return null;
     }
@@ -105,42 +132,203 @@ async function uploadImage(file) {
 
 
 // ==========================================
-// حفظ كلمة
+// تعبئة النموذج عند التعديل
+// ==========================================
+
+function editWord(id) {
+
+    const word =
+        words.find(
+            item => String(item.id) === String(id)
+        );
+
+    if (!word) {
+
+        alert(
+            "❌ لم يتم العثور على الكلمة."
+        );
+
+        return;
+    }
+
+
+    // حفظ ID الكلمة التي نعدلها
+
+    editingWordId =
+        word.id;
+
+
+    // تعبئة البيانات
+
+    document.getElementById(
+        "english"
+    ).value =
+        word.english || "";
+
+
+    document.getElementById(
+        "arabic"
+    ).value =
+        word.arabic || "";
+
+
+    document.getElementById(
+        "level"
+    ).value =
+        word.level || "A1";
+
+
+    document.getElementById(
+        "category"
+    ).value =
+        word.category || "food";
+
+
+    document.getElementById(
+        "example"
+    ).value =
+        word.example || "";
+
+
+    document.getElementById(
+        "exampleArabic"
+    ).value =
+        word.exampleArabic || "";
+
+
+    // الصورة الحالية
+
+    selectedImage =
+        word.image || "";
+
+
+    if (word.image) {
+
+        document.getElementById(
+            "imagePreview"
+        ).innerHTML = `
+
+            <img
+                src="${word.image}"
+                style="
+                    width:100%;
+                    height:100%;
+                    object-fit:contain;
+                    border-radius:15px;
+                "
+            >
+
+        `;
+
+    } else {
+
+        document.getElementById(
+            "imagePreview"
+        ).innerHTML = `
+
+            <span>🖼️</span>
+
+            <p>
+                لا توجد صورة
+            </p>
+
+        `;
+    }
+
+
+    // تغيير شكل زر الحفظ
+
+    const saveButton =
+        document.querySelector(".save-btn");
+
+    saveButton.textContent =
+        "✏️ حفظ التعديلات";
+
+
+    // تغيير عنوان الصفحة
+
+    const title =
+        document.querySelector(".admin-header h1");
+
+    if (title) {
+
+        title.textContent =
+            "تعديل الكلمة ✏️";
+    }
+
+
+    // الانتقال للنموذج
+
+    document.querySelector(
+        ".form-card"
+    ).scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+
+// ==========================================
+// حفظ كلمة جديدة أو تعديل كلمة
 // ==========================================
 
 async function saveWord() {
 
-    const isAdmin = await checkAdmin();
+    const isAdmin =
+        await checkAdmin();
 
     if (!isAdmin) return;
 
 
     const english =
-        document.getElementById("english").value.trim();
+        document.getElementById(
+            "english"
+        ).value.trim();
+
 
     const arabic =
-        document.getElementById("arabic").value.trim();
+        document.getElementById(
+            "arabic"
+        ).value.trim();
+
 
     const level =
-        document.getElementById("level").value;
+        document.getElementById(
+            "level"
+        ).value;
+
 
     const category =
-        document.getElementById("category").value;
+        document.getElementById(
+            "category"
+        ).value;
+
 
     const example =
-        document.getElementById("example").value.trim();
+        document.getElementById(
+            "example"
+        ).value.trim();
+
 
     const exampleArabic =
-        document.getElementById("exampleArabic").value.trim();
+        document.getElementById(
+            "exampleArabic"
+        ).value.trim();
+
 
     const imageInput =
-        document.getElementById("image");
+        document.getElementById(
+            "image"
+        );
+
 
     const file =
         imageInput.files[0];
 
 
+    // ======================================
     // التحقق
+    // ======================================
 
     if (!english || !arabic) {
 
@@ -152,7 +340,13 @@ async function saveWord() {
     }
 
 
-    if (!file && !selectedImage) {
+    // إذا كانت كلمة جديدة لازم صورة
+
+    if (
+        !editingWordId &&
+        !file &&
+        !selectedImage
+    ) {
 
         alert(
             "⚠️ اختر صورة للكلمة."
@@ -162,41 +356,62 @@ async function saveWord() {
     }
 
 
-    // تعطيل الزر أثناء الحفظ
+    // ======================================
+    // تعطيل الزر
+    // ======================================
 
     const saveButton =
-        document.querySelector(".save-btn");
+        document.querySelector(
+            ".save-btn"
+        );
 
-    saveButton.disabled = true;
+
+    saveButton.disabled =
+        true;
+
 
     saveButton.textContent =
-        "⏳ جاري الحفظ...";
+        editingWordId
+            ? "⏳ جاري تعديل الكلمة..."
+            : "⏳ جاري الحفظ...";
 
 
-    // رفع الصورة
+    // ======================================
+    // الصورة
+    // ======================================
 
-    let imageUrl = selectedImage;
+    let imageUrl =
+        selectedImage;
+
+
+    // إذا اختار صورة جديدة
 
     if (file) {
 
         imageUrl =
             await uploadImage(file);
 
+
         if (!imageUrl) {
 
-            saveButton.disabled = false;
+            saveButton.disabled =
+                false;
 
             saveButton.textContent =
-                "💾 حفظ الكلمة";
+                editingWordId
+                    ? "✏️ حفظ التعديلات"
+                    : "💾 حفظ الكلمة";
 
             return;
         }
     }
 
 
-    // إنشاء الكلمة
+    // ======================================
+    // البيانات
+    // ======================================
 
-    const word = {
+    const wordData = {
 
         english: english,
 
@@ -214,14 +429,91 @@ async function saveWord() {
     };
 
 
-    // إرسال إلى Supabase
+    // ======================================
+    // تعديل كلمة موجودة
+    // ======================================
 
-    const { data, error } =
-        await supabaseClient
+    if (editingWordId) {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
             .from("words")
-            .insert(word)
+
+            .update(wordData)
+
+            .eq(
+                "id",
+                editingWordId
+            )
+
             .select()
             .single();
+
+
+        if (error) {
+
+            console.error(error);
+
+            alert(
+                "❌ حدث خطأ أثناء تعديل الكلمة:\n" +
+                error.message
+            );
+
+
+            saveButton.disabled =
+                false;
+
+
+            saveButton.textContent =
+                "✏️ حفظ التعديلات";
+
+
+            return;
+        }
+
+
+        console.log(
+            "تم تعديل:",
+            data
+        );
+
+
+        alert(
+            "✅ تم تعديل الكلمة بنجاح!"
+        );
+
+
+        // إنهاء وضع التعديل
+
+        resetForm();
+
+
+        // تحديث القائمة
+
+        await loadWords();
+
+        return;
+    }
+
+
+    // ======================================
+    // إضافة كلمة جديدة
+    // ======================================
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("words")
+
+        .insert(wordData)
+
+        .select()
+        .single();
 
 
     if (error) {
@@ -233,51 +525,123 @@ async function saveWord() {
             error.message
         );
 
-        saveButton.disabled = false;
+
+        saveButton.disabled =
+            false;
+
 
         saveButton.textContent =
             "💾 حفظ الكلمة";
+
 
         return;
     }
 
 
-    console.log("تم حفظ:", data);
+    console.log(
+        "تم حفظ:",
+        data
+    );
 
 
-    // تنظيف النموذج
-
-    document.getElementById("english").value = "";
-
-    document.getElementById("arabic").value = "";
-
-    document.getElementById("example").value = "";
-
-    document.getElementById("exampleArabic").value = "";
-
-    document.getElementById("image").value = "";
-
-    selectedImage = "";
+    alert(
+        "✅ تم حفظ الكلمة في قاعدة البيانات!"
+    );
 
 
-    document.getElementById("imagePreview").innerHTML = `
+    resetForm();
+
+
+    await loadWords();
+}
+
+
+// ==========================================
+// إعادة النموذج للوضع الطبيعي
+// ==========================================
+
+function resetForm() {
+
+    editingWordId =
+        null;
+
+    selectedImage =
+        "";
+
+
+    document.getElementById(
+        "english"
+    ).value = "";
+
+
+    document.getElementById(
+        "arabic"
+    ).value = "";
+
+
+    document.getElementById(
+        "example"
+    ).value = "";
+
+
+    document.getElementById(
+        "exampleArabic"
+    ).value = "";
+
+
+    document.getElementById(
+        "image"
+    ).value = "";
+
+
+    document.getElementById(
+        "level"
+    ).value = "A1";
+
+
+    document.getElementById(
+        "category"
+    ).value = "food";
+
+
+    document.getElementById(
+        "imagePreview"
+    ).innerHTML = `
+
         <span>🖼️</span>
-        <p>ستظهر معاينة الصورة هنا</p>
+
+        <p>
+            ستظهر معاينة الصورة هنا
+        </p>
+
     `;
 
 
-    saveButton.disabled = false;
+    const saveButton =
+        document.querySelector(
+            ".save-btn"
+        );
+
+
+    saveButton.disabled =
+        false;
+
 
     saveButton.textContent =
         "💾 حفظ الكلمة";
 
 
-    alert("✅ تم حفظ الكلمة في قاعدة البيانات!");
+    const title =
+        document.querySelector(
+            ".admin-header h1"
+        );
 
 
-    // تحديث القائمة
+    if (title) {
 
-    loadWords();
+        title.textContent =
+            "إضافة كلمة جديدة 📚";
+    }
 }
 
 
@@ -287,18 +651,27 @@ async function saveWord() {
 
 async function loadWords() {
 
-    const isAdmin = await checkAdmin();
+    const isAdmin =
+        await checkAdmin();
 
     if (!isAdmin) return;
 
 
-    const { data, error } =
-        await supabaseClient
-            .from("words")
-            .select("*")
-            .order("created_at", {
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("words")
+
+        .select("*")
+
+        .order(
+            "created_at",
+            {
                 ascending: false
-            });
+            }
+        );
 
 
     if (error) {
@@ -314,7 +687,9 @@ async function loadWords() {
     }
 
 
-    words = data || [];
+    words =
+        data || [];
+
 
     renderWords();
 }
@@ -324,13 +699,20 @@ async function loadWords() {
 // عرض الكلمات
 // ==========================================
 
-function renderWords(displayWords = words) {
+function renderWords(
+    displayWords = words
+) {
 
     const wordsList =
-        document.getElementById("wordsList");
+        document.getElementById(
+            "wordsList"
+        );
+
 
     const count =
-        document.getElementById("wordCount");
+        document.getElementById(
+            "wordCount"
+        );
 
 
     count.textContent =
@@ -340,68 +722,96 @@ function renderWords(displayWords = words) {
     if (displayWords.length === 0) {
 
         wordsList.innerHTML = `
+
             <div class="word-item">
                 لا توجد كلمات.
             </div>
+
         `;
 
         return;
     }
 
 
-    wordsList.innerHTML = "";
+    wordsList.innerHTML =
+        "";
 
 
-    displayWords.forEach(word => {
+    displayWords.forEach(
+        word => {
 
-        const item =
-            document.createElement("div");
+            const item =
+                document.createElement(
+                    "div"
+                );
 
-        item.className =
-            "word-item";
+
+            item.className =
+                "word-item";
 
 
-        item.innerHTML = `
+            item.innerHTML = `
 
-            <img src="${word.image || ""}">
+                <img
+                    src="${word.image || ""}"
+                    alt="${word.english || ""}"
+                >
 
-            <div class="word-info">
 
-                <h3>${word.english}</h3>
+                <div class="word-info">
 
-                <p>${word.arabic}</p>
+                    <h3>
+                        ${word.english || ""}
+                    </h3>
 
-                <div class="word-tags">
+                    <p>
+                        ${word.arabic || ""}
+                    </p>
 
-                    <span class="tag">
-                        ${word.level}
-                    </span>
 
-                    <span class="tag">
-                        ${word.category}
-                    </span>
+                    <div class="word-tags">
+
+                        <span class="tag">
+                            ${word.level || ""}
+                        </span>
+
+                        <span class="tag">
+                            ${word.category || ""}
+                        </span>
+
+                    </div>
 
                 </div>
 
-            </div>
 
-            <div class="word-actions">
+                <div class="word-actions">
 
-                <button
-                    class="delete-btn"
-                    onclick="deleteWord('${word.id}')">
-
-                    🗑️ حذف
-
-                </button>
-
-            </div>
-        `;
+                    <button
+                        class="edit-btn"
+                        onclick="editWord('${word.id}')"
+                    >
+                        ✏️ تعديل
+                    </button>
 
 
-        wordsList.appendChild(item);
+                    <button
+                        class="delete-btn"
+                        onclick="deleteWord('${word.id}')"
+                    >
+                        🗑️ حذف
+                    </button>
 
-    });
+                </div>
+
+            `;
+
+
+            wordsList.appendChild(
+                item
+            );
+
+        }
+    );
 }
 
 
@@ -412,7 +822,10 @@ function renderWords(displayWords = words) {
 function searchWords() {
 
     const input =
-        document.getElementById("searchInput");
+        document.getElementById(
+            "searchInput"
+        );
+
 
     if (!input) return;
 
@@ -432,22 +845,30 @@ function searchWords() {
 
 
     const filtered =
-        words.filter(word =>
+        words.filter(
+            word => {
 
-            word.english
-                .toLowerCase()
-                .includes(search)
+                return (
 
-            ||
+                    (word.english || "")
+                        .toLowerCase()
+                        .includes(search)
 
-            word.arabic
-                .toLowerCase()
-                .includes(search)
+                    ||
 
+                    (word.arabic || "")
+                        .toLowerCase()
+                        .includes(search)
+
+                );
+
+            }
         );
 
 
-    renderWords(filtered);
+    renderWords(
+        filtered
+    );
 }
 
 
@@ -468,15 +889,23 @@ async function deleteWord(id) {
             "هل تريد حذف هذه الكلمة؟"
         )
     ) {
+
         return;
     }
 
 
-    const { error } =
-        await supabaseClient
-            .from("words")
-            .delete()
-            .eq("id", id);
+    const {
+        error
+    } = await supabaseClient
+
+        .from("words")
+
+        .delete()
+
+        .eq(
+            "id",
+            id
+        );
 
 
     if (error) {
@@ -492,9 +921,23 @@ async function deleteWord(id) {
     }
 
 
-    alert("🗑️ تم حذف الكلمة.");
+    alert(
+        "🗑️ تم حذف الكلمة."
+    );
 
-    loadWords();
+
+    // إذا كان المستخدم يعدل كلمة وحذفها
+
+    if (
+        String(editingWordId) ===
+        String(id)
+    ) {
+
+        resetForm();
+    }
+
+
+    await loadWords();
 }
 
 
@@ -517,6 +960,7 @@ function goHome() {
 
     const isAdmin =
         await checkAdmin();
+
 
     if (isAdmin) {
 

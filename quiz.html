@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>اختبار الكلمات</title>
+
+    <link rel="stylesheet" href="quiz.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <button class="back-btn" onclick="goHome()">
+        ← رجوع
+    </button>
+
+    <div class="title">
+        🧠 اختبار الكلمات
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <!-- اختيار المستوى -->
+
+    <section id="levelScreen" class="level-screen">
+
+        <div class="intro">
+
+            <div class="intro-icon">
+                🧠
+            </div>
+
+            <h1>
+                اختبر كلماتك
+            </h1>
+
+            <p>
+                اختر مستواك وسنختبرك بكلمات عشوائية
+                من نفس المستوى.
+            </p>
+
+        </div>
+
+
+        <h2>
+            اختر المستوى
+        </h2>
+
+
+        <div class="levels">
+
+            <button
+                class="level-card"
+                data-level="A1"
+                onclick="selectLevel('A1')">
+
+                <strong>A1</strong>
+
+                <div>
+                    <h3>مبتدئ</h3>
+                    <p>كلمات إنجليزية أساسية</p>
+                </div>
+
+            </button>
+
+
+            <button
+                class="level-card"
+                data-level="A2"
+                onclick="selectLevel('A2')">
+
+                <strong>A2</strong>
+
+                <div>
+                    <h3>متوسط</h3>
+                    <p>كلمات أكثر تنوعًا</p>
+                </div>
+
+            </button>
+
+
+            <button
+                class="level-card"
+                data-level="B1"
+                onclick="selectLevel('B1')">
+
+                <strong>B1</strong>
+
+                <div>
+                    <h3>متقدم</h3>
+                    <p>كلمات بمستوى أعلى</p>
+                </div>
+
+            </button>
+
+        </div>
+
+
+        <button
+            id="startQuizBtn"
+            class="start-btn"
+            onclick="startQuiz()"
+            disabled>
+
+            🚀 ابدأ الاختبار
+
+        </button>
+
+    </section>
+
+
+    <!-- الاختبار -->
+
+    <section
+        id="quizScreen"
+        class="quiz-screen"
+        style="display:none;">
+
+        <div class="quiz-top">
+
+            <span id="questionNumber">
+                السؤال 1 / 20
+            </span>
+
+            <span id="score">
+                ⭐ 0
+            </span>
+
+        </div>
+
+
+        <div class="progress-bar">
+
+            <div id="progressFill"></div>
+
+        </div>
+
+
+        <div class="question-card">
+
+            <div class="question-image">
+
+                <img
+                    id="quizImage"
+                    src=""
+                    alt="صورة الكلمة">
+
+            </div>
+
+
+            <h2>
+                ما هي الكلمة الصحيحة؟
+            </h2>
+
+
+            <div
+                id="answers"
+                class="answers">
+
+            </div>
+
+        </div>
+
+
+        <button
+            id="nextBtn"
+            class="next-btn"
+            onclick="nextQuestion()"
+            style="display:none;">
+
+            الكلمة التالية ←
+
+        </button>
+
+    </section>
+
+
+    <!-- النتيجة -->
+
+    <section
+        id="resultScreen"
+        class="result-screen"
+        style="display:none;">
+
+        <div class="result-icon">
+            🎉
+        </div>
+
+        <h1>
+            انتهى الاختبار!
+        </h1>
+
+        <p>
+            نتيجتك
+        </p>
+
+        <strong id="finalScore">
+            0 / 20
+        </strong>
+
+
+        <div class="result-buttons">
+
+            <button
+                class="start-btn"
+                onclick="restartQuiz()">
+
+                🔄 اختبار مرة أخرى
+
+            </button>
+
+            <button
+                class="home-result-btn"
+                onclick="goHome()">
+
+                🏠 الرئيسية
+
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="quiz.js"></script>
+
+</body>
+
+</html>

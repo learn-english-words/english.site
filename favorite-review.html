@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>مراجعة كلماتي</title>
+
+    <link rel="stylesheet" href="words.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <button class="back-btn" onclick="goBack()">
+            ← رجوع
+        </button>
+
+        <div class="title">
+            ⭐ مراجعة كلماتي
+        </div>
+
+        <button class="home-btn" onclick="goHome()">
+            🏠
+        </button>
+
+    </header>
+
+
+    <main class="container">
+
+        <!-- التقدم -->
+
+        <div class="progress-area">
+
+            <div class="progress-info">
+
+                <span>تقدمك</span>
+
+                <strong id="progressText">
+                    1 / 1
+                </strong>
+
+            </div>
+
+
+            <div class="progress-bar">
+
+                <div id="progressFill"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- بطاقة الكلمة -->
+
+        <section class="word-card">
+
+            <div class="image-container">
+
+                <div id="wordEmoji" class="word-image">
+                    🖼️
+                </div>
+
+            </div>
+
+
+            <div class="word-content">
+
+                <div
+                    class="english-word"
+                    id="englishWord">
+                    Apple
+                </div>
+
+
+                <div
+                    class="arabic-word"
+                    id="arabicWord">
+                    تفاحة
+                </div>
+
+
+                <button
+                    class="sound-btn"
+                    onclick="speakWord()">
+
+                    🔊 اسمع النطق
+
+                </button>
+
+
+                <div class="example">
+
+                    <span>
+                        💡 مثال
+                    </span>
+
+
+                    <p id="exampleText">
+                        I eat an apple.
+                    </p>
+
+
+                    <small id="exampleArabic">
+                        أنا آكل تفاحة.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- الإجراءات -->
+
+        <div class="actions">
+
+            <button
+                id="favoriteBtn"
+                onclick="removeFavorite()">
+
+                ★
+                <span>محفوظة</span>
+
+            </button>
+
+
+            <button
+                class="next-btn"
+                onclick="nextWord()">
+
+                الكلمة التالية
+                ←
+
+            </button>
+
+        </div>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="favorite-review.js"></script>
+
+</body>
+
+</html>

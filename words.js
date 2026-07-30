@@ -1,3 +1,4 @@
+
 // ==========================================
 // المتغيرات
 // ==========================================
@@ -26,6 +27,23 @@ const selectedCategory =
 
 async function loadWords() {
 
+    const {
+        data: { user },
+        error: userError
+    } = await supabaseClient.auth.getUser();
+
+
+    // لازم يكون مسجل دخول
+    if (userError || !user) {
+
+        alert("⚠️ يجب تسجيل الدخول أولاً.");
+
+        window.location.href = "login.html";
+
+        return;
+    }
+
+
     const { data, error } =
         await supabaseClient
             .from("words")
@@ -39,7 +57,10 @@ async function loadWords() {
 
     if (error) {
 
-        console.error("Supabase error:", error);
+        console.error(
+            "Supabase error:",
+            error
+        );
 
         alert(
             "❌ حدث خطأ أثناء تحميل الكلمات."
@@ -101,6 +122,7 @@ function loadWord() {
         imageBox.innerHTML = `
             <img
                 src="${word.image}"
+                alt="${word.english}"
                 style="
                     width:100%;
                     height:100%;
@@ -121,7 +143,9 @@ function loadWord() {
     // الإنجليزية
     // ==========================================
 
-    document.getElementById("englishWord").textContent =
+    document.getElementById(
+        "englishWord"
+    ).textContent =
         word.english;
 
 
@@ -129,7 +153,9 @@ function loadWord() {
     // العربية
     // ==========================================
 
-    document.getElementById("arabicWord").textContent =
+    document.getElementById(
+        "arabicWord"
+    ).textContent =
         word.arabic;
 
 
@@ -137,11 +163,15 @@ function loadWord() {
     // المثال
     // ==========================================
 
-    document.getElementById("exampleText").textContent =
+    document.getElementById(
+        "exampleText"
+    ).textContent =
         word.example || "";
 
 
-    document.getElementById("exampleArabic").textContent =
+    document.getElementById(
+        "exampleArabic"
+    ).textContent =
         word.exampleArabic || "";
 
 
@@ -153,7 +183,9 @@ function loadWord() {
         currentIndex + 1;
 
 
-    document.getElementById("progressText").textContent =
+    document.getElementById(
+        "progressText"
+    ).textContent =
         number + " / " + words.length;
 
 
@@ -161,7 +193,9 @@ function loadWord() {
         (number / words.length) * 100;
 
 
-    document.getElementById("progressFill").style.width =
+    document.getElementById(
+        "progressFill"
+    ).style.width =
         percent + "%";
 
 
@@ -173,14 +207,21 @@ function loadWord() {
 
 
     const favoriteBtn =
-        document.getElementById("favoriteBtn");
+        document.getElementById(
+            "favoriteBtn"
+        );
 
 
-    favoriteBtn.classList.remove("active");
+    if (favoriteBtn) {
+
+        favoriteBtn.classList.remove(
+            "active"
+        );
 
 
-    favoriteBtn.innerHTML =
-        "☆ <span>حفظ</span>";
+        favoriteBtn.innerHTML =
+            "☆ <span>حفظ</span>";
+    }
 
 
     // التأكد هل الكلمة محفوظة
@@ -198,6 +239,7 @@ async function checkFavorite() {
     const word =
         words[currentIndex];
 
+
     if (!word || !word.id) return;
 
 
@@ -209,7 +251,10 @@ async function checkFavorite() {
     if (!user) return;
 
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from("favorites")
             .select("id")
@@ -235,14 +280,21 @@ async function checkFavorite() {
 
 
         const button =
-            document.getElementById("favoriteBtn");
+            document.getElementById(
+                "favoriteBtn"
+            );
 
 
-        button.classList.add("active");
+        if (button) {
+
+            button.classList.add(
+                "active"
+            );
 
 
-        button.innerHTML =
-            "★ <span>محفوظة</span>";
+            button.innerHTML =
+                "★ <span>محفوظة</span";
+        }
     }
 }
 
@@ -254,21 +306,32 @@ async function checkFavorite() {
 function speakWord() {
 
     const word =
-        words[currentIndex].english;
+        words[currentIndex];
+
+
+    if (!word) return;
 
 
     const speech =
-        new SpeechSynthesisUtterance(word);
+        new SpeechSynthesisUtterance(
+            word.english
+        );
 
 
-    speech.lang = "en-US";
+    speech.lang =
+        "en-US";
 
-    speech.rate = 0.8;
+
+    speech.rate =
+        0.8;
 
 
     window.speechSynthesis.cancel();
 
-    window.speechSynthesis.speak(speech);
+
+    window.speechSynthesis.speak(
+        speech
+    );
 }
 
 
@@ -276,19 +339,115 @@ function speakWord() {
 // أعرف / لا أعرف
 // ==========================================
 
-function answer(known) {
+async function answer(known) {
 
     const word =
         words[currentIndex];
 
 
-    console.log(
-        known
-            ? "أعرف:"
-            : "لا أعرف:",
-        word.english
+    if (!word) return;
+
+
+    // ==========================================
+    // الحصول على الحساب الحالي
+    // ==========================================
+
+    const {
+        data: { user },
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (userError || !user) {
+
+        alert(
+            "⚠️ يجب تسجيل الدخول أولاً."
+        );
+
+
+        window.location.href =
+            "login.html";
+
+
+        return;
+    }
+
+
+    // ==========================================
+    // ❌ لا أعرف الكلمة
+    // ==========================================
+
+    if (!known) {
+
+        // هل الكلمة موجودة مسبقًا لهذا الحساب؟
+        const {
+            data: existing,
+            error: checkError
+        } =
+            await supabaseClient
+                .from("review_words")
+                .select("id")
+                .eq("user_id", user.id)
+                .eq("word_id", word.id)
+                .maybeSingle();
+
+if (checkError) {
+
+    console.error("Review check error:", checkError);
+
+    alert(
+        "❌ خطأ Supabase:\n\n" +
+        "Code: " + (checkError.code || "") + "\n" +
+        "Message: " + (checkError.message || "") + "\n" +
+        "Details: " + (checkError.details || "") + "\n" +
+        "Hint: " + (checkError.hint || "")
     );
 
+    return;
+}
+
+
+        // إذا غير موجودة، أضفها
+        if (!existing) {
+
+            const {
+                error: insertError
+            } =
+                await supabaseClient
+                    .from("review_words")
+                    .insert({
+
+                        user_id: user.id,
+
+                        word_id: word.id
+
+                    });
+
+
+            if (insertError) {
+
+                console.error(
+                    "Review insert error:",
+                    insertError
+                );
+
+
+                alert(
+                    "❌ حدث خطأ أثناء حفظ الكلمة للمراجعة:\n" +
+                    insertError.message
+                );
+
+
+                return;
+            }
+        }
+    }
+
+
+    // ==========================================
+    // الانتقال للكلمة التالية
+    // ==========================================
 
     nextWord();
 }
@@ -301,7 +460,9 @@ function answer(known) {
 async function toggleFavorite() {
 
     const button =
-        document.getElementById("favoriteBtn");
+        document.getElementById(
+            "favoriteBtn"
+        );
 
 
     // التأكد من تسجيل الدخول
@@ -319,8 +480,10 @@ async function toggleFavorite() {
             "⚠️ يجب تسجيل الدخول أولاً."
         );
 
+
         window.location.href =
             "login.html";
+
 
         return;
     }
@@ -350,17 +513,25 @@ async function toggleFavorite() {
             await supabaseClient
                 .from("favorites")
                 .delete()
-                .eq("user_id", user.id)
-                .eq("word_id", word.id);
+                .eq(
+                    "user_id",
+                    user.id
+                )
+                .eq(
+                    "word_id",
+                    word.id
+                );
 
 
         if (error) {
 
             console.error(error);
 
+
             alert(
                 "❌ حدث خطأ أثناء إزالة الكلمة."
             );
+
 
             return;
         }
@@ -369,7 +540,9 @@ async function toggleFavorite() {
         favorite = false;
 
 
-        button.classList.remove("active");
+        button.classList.remove(
+            "active"
+        );
 
 
         button.innerHTML =
@@ -400,12 +573,17 @@ async function toggleFavorite() {
 
         // موجودة مسبقًا
 
-        if (error.code === "23505") {
+        if (
+            error.code ===
+            "23505"
+        ) {
 
             favorite = true;
 
 
-            button.classList.add("active");
+            button.classList.add(
+                "active"
+            );
 
 
             button.innerHTML =
@@ -431,7 +609,9 @@ async function toggleFavorite() {
     favorite = true;
 
 
-    button.classList.add("active");
+    button.classList.add(
+        "active"
+    );
 
 
     button.innerHTML =
@@ -491,3 +671,4 @@ function goHome() {
 // ==========================================
 
 loadWords();
+
