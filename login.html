@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -18,66 +17,7 @@
 
 </head>
 
-<script>
-    // تسجيل زيارة الموقع
-    async function trackVisit() {
 
-        let visitorId = localStorage.getItem("visitor_id");
-
-        // إنشاء رقم خاص للزائر لأول مرة
-        if (!visitorId) {
-
-            visitorId = crypto.randomUUID();
-
-            localStorage.setItem(
-                "visitor_id",
-                visitorId
-            );
-        }
-
-
-        // معرفة هل الزائر مسجل دخول
-        const {
-            data: { user }
-        } = await supabaseClient.auth.getUser();
-
-
-        // تسجيل الزيارة
-        const { error } =
-            await supabaseClient
-                .from("visits")
-                .insert({
-
-                    visitor_id: visitorId,
-
-                    user_id: user
-                        ? user.id
-                        : null
-
-                });
-
-
-        if (error) {
-
-            console.error(
-                "خطأ تسجيل الزيارة:",
-                error
-            );
-
-        } else {
-
-            console.log(
-                "✅ تم تسجيل الزيارة"
-            );
-
-        }
-    }
-
-
-    // تشغيل تسجيل الزيارة
-    trackVisit();
-
-</script>
 <body>
 
     <main class="auth-container">
@@ -157,6 +97,8 @@
             </div>
 
 
+            <!-- تسجيل الدخول بالبريد -->
+
             <button
                 class="main-btn"
                 onclick="login()">
@@ -165,6 +107,24 @@
 
             </button>
 
+
+            <!-- تسجيل الدخول باستخدام Google -->
+
+            <button
+                type="button"
+                class="google-btn"
+                onclick="loginWithGoogle()">
+
+                <span class="google-icon">
+                    G
+                </span>
+
+                تسجيل الدخول باستخدام Google
+
+            </button>
+
+
+            <!-- الرسائل -->
 
             <p
                 id="message"
@@ -198,7 +158,9 @@
 
     <script>
 
+        // ==========================================
         // إظهار / إخفاء كلمة المرور
+        // ==========================================
 
         function togglePassword() {
 
@@ -226,7 +188,9 @@
         }
 
 
-        // تسجيل الدخول
+        // ==========================================
+        // تسجيل الدخول بالبريد وكلمة المرور
+        // ==========================================
 
         async function login() {
 
@@ -275,7 +239,9 @@
             }
 
 
-            message.style.color = "#72e6a5";
+            message.style.color =
+                "#72e6a5";
+
 
             message.textContent =
                 "✅ تم تسجيل الدخول!";
@@ -290,9 +256,50 @@
 
         }
 
+
+        // ==========================================
+        // تسجيل الدخول باستخدام Google
+        // ==========================================
+
+        async function loginWithGoogle() {
+
+            const message =
+                document.getElementById("message");
+
+
+            message.textContent = "";
+
+
+            const { error } =
+                await supabaseClient.auth
+                .signInWithOAuth({
+
+                    provider: "google",
+
+                    options: {
+
+                        redirectTo:
+                            "https://sultanbnmadhiwsm-hub.github.io/index.html"
+
+                    }
+
+                });
+
+
+            if (error) {
+
+                message.style.color =
+                    "#ff6b7a";
+
+                message.textContent =
+                    "❌ " + error.message;
+
+            }
+
+        }
+
     </script>
 
 </body>
 
 </html>
-
