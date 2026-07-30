@@ -475,49 +475,116 @@ body {
 /* =========================
    الجوال
 ========================= */
-@media screen and (max-width: 700px) {
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 0 4%;
+        height: 65px;
+    }
+
+    .profile div:not(.avatar) {
+        display: none;
+    }
+
+    .container {
+        width: 92%;
+        margin: 25px auto;
+    }
+
+    /* الترحيب */
+    .welcome {
+        padding: 25px;
+        border-radius: 20px;
+        margin-bottom: 28px;
+    }
+
+    .welcome h1 {
+        font-size: 25px;
+    }
+
+    .welcome p {
+        font-size: 13px;
+    }
+
+    .welcome-icon {
+        font-size: 55px;
+    }
+
+    /* عنوان القسم */
+    h2 {
+        font-size: 21px;
+        margin-bottom: 14px;
+    }
+
+    /* =========================
+       البطاقات - بطاقتين بالصف
+    ========================= */
 
     .menu {
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 12px !important;
-        width: 100% !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
     }
 
     .menu-card {
-        width: 100% !important;
-        min-width: 0 !important;
-        min-height: 125px !important;
-        padding: 14px !important;
+        min-height: 125px;
+        padding: 14px;
+        border-radius: 16px;
 
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-
-        text-align: center !important;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
     }
 
+    /* الأيقونة */
     .card-icon {
-        width: 50px !important;
-        height: 50px !important;
-        margin: 0 0 8px 0 !important;
+        width: 50px;
+        height: 50px;
+
+        border-radius: 14px;
+
+        font-size: 24px;
+
+        margin-bottom: 8px;
     }
 
+    /* النص */
     .card-text {
-        width: 100% !important;
-        margin: 0 !important;
+        margin-right: 0;
+        width: 100%;
     }
 
     .card-text h3 {
-        font-size: 15px !important;
+        font-size: 15px;
+        margin-bottom: 5px;
     }
 
     .card-text p {
-        font-size: 11px !important;
+        font-size: 11px;
+        line-height: 1.4;
     }
 
+    /* السهم */
     .arrow {
-        display: none !important;
+        display: none;
+    }
+
+    /* البطاقة الرئيسية */
+    .main-card {
+        border-width: 2px;
+    }
+
+    /* زر الإعدادات */
+    .settings-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 19px;
+    }
+
+    /* الفوتر */
+    footer {
+        padding: 20px;
+        margin-top: 20px;
+        font-size: 12px;
     }
 }
