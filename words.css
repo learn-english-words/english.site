@@ -469,12 +469,7 @@ body {
         0 15px 35px rgba(92,65,255,0.35);
 }
 
-/* =========================
-   تصميم الجوال الجديد
-========================= */
-/* =========================
-   تصميم الجوال الجديد
-========================= */
+
 /* =========================
    الجوال
 ========================= */
@@ -497,162 +492,328 @@ body {
         text-size-adjust: 100%;
     }
 
+
+    /* =========================
+       الشريط العلوي
+    ========================= */
+
     .topbar {
         height: 70px;
+
         padding: 0 5%;
     }
 
-    .profile div:not(.avatar) {
-        display: none;
+
+    .title {
+        font-size: 19px;
     }
+
+
+    .back-btn,
+    .home-btn {
+        padding: 9px 12px;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================
+       المحتوى
+    ========================= */
 
     .container {
-        width: 92%;
+        width: 94%;
+
         max-width: 100%;
-        margin: 22px auto;
-    }
 
-    /* الترحيب */
-
-    .welcome {
-        padding: 25px 20px;
-        border-radius: 22px;
-    }
-
-    .welcome h1 {
-        font-size: 26px;
-    }
-
-    .welcome-icon {
-        font-size: 58px;
+        margin: 18px auto 35px;
     }
 
 
     /* =========================
-       البطاقات
+       التقدم
     ========================= */
 
-    .menu {
-        display: grid;
-
-        /* بطاقتين في الصف */
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-
-        gap: 14px;
-
-        width: 100%;
+    .progress-area {
+        margin-bottom: 16px;
     }
 
-    .menu-card {
+    .progress-info {
+        font-size: 14px;
+
+        margin-bottom: 8px;
+    }
+
+    .progress-bar {
+        height: 9px;
+    }
+
+
+    /* =========================
+       بطاقة الكلمة
+    ========================= */
+
+    .word-card {
+
         width: 100%;
-        min-width: 0;
-        min-height: 150px;
 
-        padding: 16px;
+        min-height: 0;
 
-        border-radius: 18px;
+        padding: 18px;
+
+        border-radius: 25px;
 
         display: flex;
+
         flex-direction: column;
+
+        gap: 20px;
+
         align-items: stretch;
-        justify-content: center;
-
-        text-align: right;
     }
 
 
-    /* الأيقونة */
+    /* =========================
+       إطار الصورة
+    ========================= */
 
-    .card-icon {
-        width: 58px;
-        height: 58px;
+    .image-container {
 
-        min-width: 58px;
-        min-height: 58px;
-
-        border-radius: 15px;
-
-        font-size: 28px;
-
-        margin-bottom: 12px;
-
-        align-self: flex-end;
-    }
-
-
-    /* النص */
-
-    .card-text {
         width: 100%;
 
-        margin-right: 0;
+        height: 330px;
 
-        flex: none;
-    }
+        min-height: 330px;
 
-    .card-text h3 {
-        font-size: 17px;
-
-        margin-bottom: 6px;
-
-        line-height: 1.4;
-    }
-
-    .card-text p {
-        font-size: 12px;
-
-        line-height: 1.5;
-
-        color: #9ca5bd;
-    }
-
-
-    /* السهم */
-
-    .arrow {
-        position: absolute;
-
-        left: 14px;
-        bottom: 14px;
-
-        font-size: 20px;
-    }
-
-    .menu-card {
-        position: relative;
-    }
-
-
-    /* =========================
-       بطاقة تعلم الكلمات
-    ========================= */
-
-    .main-card {
-        border: 2px solid rgba(112, 85, 255, 0.65);
-
-        box-shadow:
-            0 10px 35px rgba(75, 55, 220, 0.20);
-    }
-
-
-    /* =========================
-       الإعدادات
-    ========================= */
-
-    .settings-btn {
-        width: 42px;
-        height: 42px;
+        border-radius: 20px;
 
         flex-shrink: 0;
     }
 
 
+    .word-image {
+
+        width: 100%;
+
+        height: 100%;
+
+        font-size: 120px;
+    }
+
+
+    .word-image img {
+
+        width: 100%;
+
+        height: 100%;
+
+        object-fit: contain;
+
+        padding: 12px;
+
+        border-radius: 20px;
+    }
+
+
     /* =========================
-       الفوتر
+       محتوى الكلمة
     ========================= */
 
-    footer {
-        padding: 20px 10px;
-        margin-top: 25px;
+    .word-content {
+
+        width: 100%;
+
+        text-align: center;
     }
+
+
+    .english-word {
+
+        font-size: 46px;
+
+        line-height: 1.1;
+
+        margin-bottom: 8px;
+
+        text-align: center;
+
+        direction: ltr;
+    }
+
+
+    .arabic-word {
+
+        font-size: 23px;
+
+        margin-bottom: 18px;
+    }
+
+
+    /* =========================
+       زر النطق
+    ========================= */
+
+    .sound-btn {
+
+        width: 100%;
+
+        min-height: 54px;
+
+        padding: 12px 15px;
+
+        font-size: 16px;
+
+        border-radius: 14px;
+    }
+
+
+    /* =========================
+       المثال
+    ========================= */
+
+    .example {
+
+        width: 100%;
+
+        margin-top: 18px;
+
+        padding: 17px;
+
+        border-radius: 16px;
+
+        text-align: right;
+    }
+
+
+    .example p {
+
+        font-size: 18px;
+
+        line-height: 1.5;
+    }
+
+
+    .example small {
+
+        font-size: 14px;
+    }
+
+
+    /* =========================
+       أزرار أعرف / لا أعرف
+    ========================= */
+
+    .knowledge-buttons {
+
+        width: 100%;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 12px;
+
+        margin-top: 14px;
+    }
+
+
+    .knowledge-buttons button {
+
+        height: 62px;
+
+        font-size: 16px;
+
+        border-radius: 15px;
+    }
+
+
+    /* =========================
+       الأزرار السفلية
+    ========================= */
+
+    .actions {
+
+        width: 100%;
+
+        gap: 12px;
+
+        margin-top: 12px;
+    }
+
+
+    .actions button {
+
+        height: 62px;
+
+        border-radius: 15px;
+
+        font-size: 16px;
+    }
+
+
+    #favoriteBtn {
+
+        width: 38%;
+
+        min-width: 120px;
+    }
+
+
+    .next-btn {
+
+        flex: 1;
+    }
+
+}
+
+
+/* =========================
+   الجوالات الصغيرة
+========================= */
+
+@media (max-width: 390px) {
+
+    .container {
+
+        width: 94%;
+    }
+
+
+    .word-card {
+
+        padding: 15px;
+
+        gap: 17px;
+    }
+
+
+    .image-container {
+
+        height: 290px;
+
+        min-height: 290px;
+    }
+
+
+    .english-word {
+
+        font-size: 40px;
+    }
+
+
+    .arabic-word {
+
+        font-size: 21px;
+    }
+
+
+    .knowledge-buttons button {
+
+        font-size: 14px;
+    }
+
+
+    .actions button {
+
+        font-size: 14px;
+    }
+
 }
