@@ -841,13 +841,15 @@ body {
     .english-word {
         font-size: 44px;
     }
-}
-/* =========================
-   تثبيت الشريط العلوي
-========================= */
-
-.topbar {
+}.topbar {
     position: sticky;
     top: 0;
     z-index: 9999;
+
+    width: 100%;
+
+    background: rgba(10, 17, 40, 0.92);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 }
