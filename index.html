@@ -16,39 +16,217 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js"></script>
 
+
+    <style>
+
+        /* ==========================================
+           نافذة الحساب الخاص
+        ========================================== */
+
+        .privacy-overlay {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0, 0, 0, 0.55);
+
+            z-index: 9999;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+        }
+
+
+        .privacy-box {
+
+            width: 100%;
+
+            max-width: 430px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 28px;
+
+            text-align: center;
+
+            box-shadow: 0 15px 40px rgba(0,0,0,.25);
+
+        }
+
+
+        .privacy-icon {
+
+            font-size: 50px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .privacy-box h2 {
+
+            margin: 0 0 14px;
+
+            color: #111827;
+
+        }
+
+
+        .privacy-box p {
+
+            color: #555;
+
+            line-height: 1.8;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .privacy-box strong {
+
+            color: #111827;
+
+        }
+
+
+        .privacy-buttons {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+
+        }
+
+
+        .privacy-buttons button {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 13px;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+        }
+
+
+        .make-public-btn {
+
+            background: #2563eb;
+
+            color: white;
+
+        }
+
+
+        .make-public-btn:hover {
+
+            background: #1d4ed8;
+
+        }
+
+
+        .change-name-btn {
+
+            background: #eef2ff;
+
+            color: #2563eb;
+
+        }
+
+
+        .change-name-btn:hover {
+
+            background: #e0e7ff;
+
+        }
+
+
+        .cancel-privacy-btn {
+
+            background: #eeeeee;
+
+            color: #333;
+
+        }
+
+
+        .cancel-privacy-btn:hover {
+
+            background: #dddddd;
+
+        }
+
+    </style>
+
 </head>
 
 
 <body>
 
 
+    <!-- ==========================================
+         الشريط العلوي
+    ========================================== -->
+
     <header class="topbar">
 
+
         <div class="logo">
+
             English<span>Words</span>
+
         </div>
+
 
 
         <div class="profile">
 
+
             <div
                 class="avatar"
                 id="userAvatar">
+
                 ?
+
             </div>
+
 
 
             <div>
 
                 <strong id="welcomeText">
+
                     مرحباً 👋
+
                 </strong>
 
+
                 <small id="userEmail">
+
                     جاري التحميل...
+
                 </small>
 
             </div>
+
 
 
             <!-- زر الملف الشخصي -->
@@ -56,24 +234,12 @@
             <button
                 class="profile-btn"
                 onclick="window.location.href='profile.html'"
-                title="الملف الشخصي"
-                style="
-                    display: inline-block !important;
-                    visibility: visible !important;
-                    opacity: 1 !important;
-                    border: none;
-                    background: #2563eb;
-                    color: white;
-                    padding: 10px 14px;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    font-size: 18px;
-                    margin: 0 5px;
-                ">
+                title="الملف الشخصي">
 
                 👤
 
             </button>
+
 
 
             <!-- تسجيل الخروج -->
@@ -87,48 +253,71 @@
 
             </button>
 
+
         </div>
+
 
     </header>
 
 
+
+    <!-- ==========================================
+         المحتوى
+    ========================================== -->
 
     <main class="container">
 
 
         <section class="welcome">
 
+
             <div>
 
+
                 <p class="small-title">
+
                     منصة تعلم الإنجليزية
+
                 </p>
+
 
 
                 <h1>
+
                     تعلم كلمات جديدة كل يوم 🚀
+
                 </h1>
 
 
+
                 <p>
+
                     تعلم الكلمات الإنجليزية بالصور،
                     واستمع للنطق،
                     ثم اختبر نفسك بطريقة ممتعة.
+
                 </p>
 
+
             </div>
+
 
 
             <div class="welcome-icon">
+
                 📚
+
             </div>
+
 
         </section>
 
 
 
         <h2>
+
             ماذا تريد أن تفعل؟
+
         </h2>
 
 
@@ -136,205 +325,330 @@
         <section class="menu">
 
 
-            <!-- تعلم الكلمات -->
+            <!-- ==========================================
+                 الدردشة
+            ========================================== -->
+
+            <button
+                class="menu-card"
+                onclick="openChat()">
+
+
+                <div class="card-icon">
+
+                    💬
+
+                </div>
+
+
+                <div class="card-text">
+
+
+                    <h3>
+
+                        الدردشة
+
+                    </h3>
+
+
+                    <p>
+
+                        تحدث مع المستخدمين الآخرين
+
+                    </p>
+
+
+                </div>
+
+
+                <span class="arrow">
+
+                    ←
+
+                </span>
+
+
+            </button>
+
+
+
+            <!-- ==========================================
+                 تعلم الكلمات
+            ========================================== -->
 
             <button
                 class="menu-card main-card"
                 onclick="startLearning()">
 
+
                 <div class="card-icon">
+
                     📚
+
                 </div>
+
 
                 <div class="card-text">
 
+
                     <h3>
+
                         تعلم الكلمات
+
                     </h3>
 
+
                     <p>
+
                         تعلم كلمات جديدة باستخدام الصور
+
                     </p>
+
 
                 </div>
 
+
                 <span class="arrow">
+
                     ←
+
                 </span>
+
 
             </button>
 
 
 
-            <!-- الاختبار -->
+            <!-- ==========================================
+                 الاختبار
+            ========================================== -->
 
             <button
                 class="menu-card"
                 onclick="window.location.href='quiz.html'">
 
+
                 <div class="card-icon">
+
                     🧠
+
                 </div>
+
 
                 <div class="card-text">
 
+
                     <h3>
+
                         اختبار الكلمات
+
                     </h3>
 
+
                     <p>
+
                         اختبر نفسك وتأكد من حفظ الكلمات
+
                     </p>
+
 
                 </div>
 
+
                 <span class="arrow">
+
                     ←
+
                 </span>
+
 
             </button>
 
 
 
-            <!-- المراجعة -->
+            <!-- ==========================================
+                 المراجعة
+            ========================================== -->
 
             <button
                 class="menu-card"
                 onclick="window.location.href='review.html'">
 
+
                 <div class="card-icon">
+
                     🔄
+
                 </div>
+
 
                 <div class="card-text">
 
+
                     <h3>
+
                         مراجعة الكلمات
+
                     </h3>
 
+
                     <p>
+
                         راجع الكلمات التي تحتاج إلى تثبيت
+
                     </p>
+
 
                 </div>
 
+
                 <span class="arrow">
+
                     ←
+
                 </span>
+
 
             </button>
 
 
 
-            <!-- كلماتي -->
+            <!-- ==========================================
+                 كلماتي
+            ========================================== -->
 
             <button
                 class="menu-card"
                 onclick="window.location.href='favorites.html'">
 
+
                 <div class="card-icon">
+
                     ⭐
+
                 </div>
+
 
                 <div class="card-text">
 
+
                     <h3>
+
                         كلماتي
+
                     </h3>
 
+
                     <p>
+
                         شاهد الكلمات التي حفظتها
+
                     </p>
+
 
                 </div>
 
+
                 <span class="arrow">
+
                     ←
+
                 </span>
+
 
             </button>
 
 
 
-            <!-- تقدمي -->
+            <!-- ==========================================
+                 التقدم
+            ========================================== -->
 
             <button
                 class="menu-card"
                 onclick="window.location.href='progress.html'">
 
+
                 <div class="card-icon">
+
                     📊
+
                 </div>
+
 
                 <div class="card-text">
 
+
                     <h3>
+
                         تقدمي
+
                     </h3>
 
+
                     <p>
+
                         تابع مستواك وعدد الكلمات التي تعلمتها
+
                     </p>
+
 
                 </div>
 
+
                 <span class="arrow">
+
                     ←
+
                 </span>
+
 
             </button>
 
-<button
-    class="menu-card"
-    onclick="window.location.href='chat.html'">
 
-                 <div class="card-icon">
-                 💬
-                 </div>
 
-             <div class="card-text">
-
-                <h3>
-                  الدردشة
-                 </h3>
-
-              <p>
-              تحدث مع المستخدمين الآخرين
-                  </p>
-
-             </div>
-
-             <span class="arrow">
-              ←
-              </span>
-
-                </button>
-
-            <!-- تحدي اليوم -->
+            <!-- ==========================================
+                 تحدي اليوم
+            ========================================== -->
 
             <button
                 class="menu-card"
                 onclick="window.location.href='daily.html'">
 
+
                 <div class="card-icon">
+
                     🎯
+
                 </div>
+
 
                 <div class="card-text">
 
+
                     <h3>
+
                         تحدي اليوم
+
                     </h3>
 
+
                     <p>
+
                         أنجز هدفك اليومي في تعلم الإنجليزية
+
                     </p>
+
 
                 </div>
 
+
                 <span class="arrow">
+
                     ←
+
                 </span>
+
 
             </button>
 
@@ -353,9 +667,14 @@
 
         </section>
 
+
     </main>
 
 
+
+    <!-- ==========================================
+         الفوتر
+    ========================================== -->
 
     <footer>
 
@@ -365,13 +684,128 @@
 
 
 
+    <!-- ==========================================
+         نافذة الحساب الخاص
+    ========================================== -->
+
+    <div
+        class="privacy-overlay"
+        id="privacyOverlay">
+
+
+        <div class="privacy-box">
+
+
+            <div class="privacy-icon">
+
+                🔒
+
+            </div>
+
+
+
+            <h2>
+
+                حسابك خاص
+
+            </h2>
+
+
+
+            <p>
+
+
+                لاستخدام الدردشة، يجب تحويل حسابك إلى
+
+                <strong>
+                    عام 🌐
+                </strong>
+
+
+                <br>
+                <br>
+
+
+                عند تحويل حسابك إلى عام،
+
+                <strong>
+                    سيظهر اسمك لجميع المستخدمين في الدردشة.
+                </strong>
+
+
+                <br>
+                <br>
+
+
+                إذا كنت لا تريد إظهار اسمك الحالي،
+                يمكنك تغيير اسمك من الملف الشخصي أولًا.
+
+
+            </p>
+
+
+
+            <div class="privacy-buttons">
+
+
+                <!-- تحويل إلى عام -->
+
+                <button
+                    class="make-public-btn"
+                    onclick="goToPublicProfile()">
+
+                    تحويل إلى عام 🌐
+
+                </button>
+
+
+
+                <!-- تغيير الاسم -->
+
+                <button
+                    class="change-name-btn"
+                    onclick="goToProfile()">
+
+                    تغيير الاسم 👤
+
+                </button>
+
+
+
+                <!-- إلغاء -->
+
+                <button
+                    class="cancel-privacy-btn"
+                    onclick="closePrivacyMessage()">
+
+                    إلغاء
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
     <script src="script.js"></script>
 
 
 
-    <!-- نظام الحساب + تسجيل الزيارات -->
-
     <script>
+
+
+        // ==========================================
+        // المتغيرات
+        // ==========================================
+
+        let currentUser = null;
+
 
 
         // ==========================================
@@ -380,10 +814,15 @@
 
         async function recordHomePageVisit() {
 
+
             const {
+
                 data: { user },
+
                 error: userError
+
             } = await supabaseClient.auth.getUser();
+
 
 
             if (userError || !user) {
@@ -393,158 +832,421 @@
             }
 
 
+
             const {
+
                 data: visit,
+
                 error: visitError
+
             } = await supabaseClient
+
                 .from("home_page_visits")
+
                 .select("visit_count")
-                .eq("user_id", user.id)
+
+                .eq(
+                    "user_id",
+                    user.id
+                )
+
                 .maybeSingle();
+
 
 
             if (visitError) {
 
+
                 console.error(
+
                     "خطأ في قراءة الزيارات:",
+
                     visitError
+
                 );
+
 
                 return;
 
             }
 
 
+
+            // المستخدم دخل من قبل
+
             if (visit) {
 
+
                 const newCount =
+
                     (visit.visit_count || 0) + 1;
 
 
+
                 const {
+
                     error: updateError
+
                 } = await supabaseClient
+
                     .from("home_page_visits")
+
                     .update({
 
                         username:
+
                             user.user_metadata?.name ||
+
                             user.email?.split("@")[0] ||
+
                             "مستخدم",
 
+
                         visit_count:
+
                             newCount,
 
+
                         last_visit_at:
+
                             new Date().toISOString()
 
                     })
+
                     .eq(
                         "user_id",
                         user.id
                     );
 
 
+
                 if (updateError) {
 
+
                     console.error(
+
                         "خطأ في تحديث عدد الزيارات:",
+
                         updateError
+
                     );
 
+
                 }
+
 
             }
 
 
+            // أول زيارة
+
             else {
 
+
                 const {
+
                     error: insertError
+
                 } = await supabaseClient
+
                     .from("home_page_visits")
+
                     .insert({
 
                         user_id:
+
                             user.id,
 
+
                         username:
+
                             user.user_metadata?.name ||
+
                             user.email?.split("@")[0] ||
+
                             "مستخدم",
 
+
                         visit_count:
+
                             1,
 
+
                         last_visit_at:
+
                             new Date().toISOString()
 
                     });
 
 
+
                 if (insertError) {
 
+
                     console.error(
+
                         "خطأ في تسجيل الزيارة:",
+
                         insertError
+
                     );
+
 
                 }
 
+
             }
+
 
         }
 
 
 
         // ==========================================
-        // التأكد من تسجيل الدخول
+        // تحميل المستخدم
         // ==========================================
 
         async function loadUser() {
 
+
             const {
+
                 data: { user },
+
                 error
+
             } = await supabaseClient.auth.getUser();
+
 
 
             if (error || !user) {
 
+
                 window.location.href =
+
                     "login.html";
+
 
                 return;
 
             }
 
 
+
+            currentUser = user;
+
+
+
             const name =
+
                 user.user_metadata?.name ||
+
                 user.email?.split("@")[0] ||
+
                 "مستخدم";
 
 
+
             const email =
+
                 user.email || "";
 
 
+
             document.getElementById(
+
                 "welcomeText"
+
             ).textContent =
+
                 "مرحباً " + name + " 👋";
 
 
+
             document.getElementById(
+
                 "userEmail"
+
             ).textContent =
+
                 email;
 
 
+
             document.getElementById(
+
                 "userAvatar"
+
             ).textContent =
+
                 name.charAt(0).toUpperCase();
+
+
+        }
+
+
+
+        // ==========================================
+        // زر الدردشة
+        // ==========================================
+
+        async function openChat() {
+
+
+            // إذا لم يتم تحميل المستخدم بعد
+
+            if (!currentUser) {
+
+                await loadUser();
+
+            }
+
+
+
+            if (!currentUser) {
+
+                return;
+
+            }
+
+
+
+            // قراءة الخصوصية
+
+            const {
+
+                data: profile,
+
+                error
+
+            } = await supabaseClient
+
+                .from("profiles")
+
+                .select("is_public")
+
+                .eq(
+                    "id",
+                    currentUser.id
+                )
+
+                .maybeSingle();
+
+
+
+            if (error) {
+
+
+                console.error(
+
+                    "خطأ في قراءة الخصوصية:",
+
+                    error
+
+                );
+
+
+                alert(
+
+                    "حدث خطأ، حاول مرة أخرى."
+
+                );
+
+
+                return;
+
+            }
+
+
+
+            // ==========================================
+            // الحساب خاص
+            // ==========================================
+
+            if (
+
+                !profile ||
+
+                profile.is_public !== true
+
+            ) {
+
+
+                document.getElementById(
+
+                    "privacyOverlay"
+
+                ).style.display =
+
+                    "flex";
+
+
+                return;
+
+            }
+
+
+
+            // ==========================================
+            // الحساب عام
+            // ==========================================
+
+            window.location.href =
+
+                "chat.html";
+
+
+        }
+
+
+
+        // ==========================================
+        // تغيير الاسم
+        // ==========================================
+
+        function goToProfile() {
+
+
+            window.location.href =
+
+                "profile.html";
+
+
+        }
+
+
+
+        // ==========================================
+        // تحويل إلى عام
+        // ==========================================
+
+        function goToPublicProfile() {
+
+
+            window.location.href =
+
+                "profile.html";
+
+
+        }
+
+
+
+        // ==========================================
+        // إغلاق النافذة
+        // ==========================================
+
+        function closePrivacyMessage() {
+
+
+            document.getElementById(
+
+                "privacyOverlay"
+
+            ).style.display =
+
+                "none";
+
 
         }
 
@@ -556,30 +1258,42 @@
 
         async function logout() {
 
-            const { error } =
-                await supabaseClient.auth.signOut();
+
+            const {
+
+                error
+
+            } = await supabaseClient.auth.signOut();
+
 
 
             if (error) {
 
+
                 alert(
+
                     "حدث خطأ أثناء تسجيل الخروج"
+
                 );
+
 
                 return;
 
             }
 
 
+
             window.location.href =
+
                 "login.html";
+
 
         }
 
 
 
         // ==========================================
-        // تشغيل الأنظمة
+        // تشغيل
         // ==========================================
 
         loadUser();
@@ -593,3 +1307,4 @@
 </body>
 
 </html>
+
