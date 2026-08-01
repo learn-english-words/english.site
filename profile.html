@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -14,247 +14,146 @@
 
     <script src="supabase.js"></script>
 
-
     <style>
 
         * {
             box-sizing: border-box;
         }
 
-
         body {
-
             margin: 0;
-
             font-family: Arial, sans-serif;
-
             background: #f5f7fb;
-
         }
-
 
         .container {
-
             width: 90%;
-
             max-width: 500px;
-
             margin: 50px auto;
-
             background: white;
-
             padding: 30px;
-
             border-radius: 20px;
-
             box-shadow: 0 5px 20px rgba(0,0,0,.08);
-
         }
-
 
         h1 {
-
             text-align: center;
-
             margin-bottom: 30px;
-
         }
-
 
         .avatar {
-
             width: 90px;
-
             height: 90px;
-
             margin: 0 auto 20px;
-
             border-radius: 50%;
-
             background: #2563eb;
-
             color: white;
-
             display: flex;
-
             align-items: center;
-
             justify-content: center;
-
             font-size: 35px;
-
             font-weight: bold;
-
         }
-
 
         label {
-
             display: block;
-
             margin-bottom: 8px;
-
             font-weight: bold;
-
         }
 
-
-        input {
-
+        input[type="text"] {
             width: 100%;
-
             padding: 13px;
-
             border: 1px solid #ddd;
-
             border-radius: 10px;
-
-            margin-bottom: 25px;
-
+            margin-bottom: 10px;
             font-size: 16px;
-
+            direction: ltr;
+            text-align: left;
         }
 
+        .name-hint {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
 
         .privacy-title {
-
             font-weight: bold;
-
             margin-bottom: 12px;
-
         }
-
 
         .privacy-box {
-
             background: #f7f8fc;
-
             border-radius: 12px;
-
             padding: 15px;
-
             margin-bottom: 20px;
-
         }
-
 
         .option {
-
             display: flex;
-
             align-items: flex-start;
-
             gap: 10px;
-
             margin-bottom: 15px;
-
             cursor: pointer;
-
         }
-
 
         .option:last-child {
-
             margin-bottom: 0;
-
         }
-
 
         .option input {
-
             width: auto;
-
             margin: 4px 0 0;
-
         }
-
 
         .option-text {
-
             display: block;
-
         }
-
 
         .option-title {
-
             font-weight: bold;
-
             display: block;
-
             margin-bottom: 5px;
-
         }
-
 
         .option-description {
-
             color: #666;
-
             font-size: 14px;
-
             line-height: 1.6;
-
         }
-
 
         .save-btn {
-
             width: 100%;
-
             padding: 14px;
-
             border: none;
-
             border-radius: 10px;
-
             background: #2563eb;
-
             color: white;
-
             font-size: 16px;
-
             cursor: pointer;
-
         }
-
 
         .save-btn:hover {
-
             background: #1d4ed8;
-
         }
-
 
         .back-btn {
-
             width: 100%;
-
             padding: 12px;
-
             margin-top: 10px;
-
             border: none;
-
             border-radius: 10px;
-
             background: #eee;
-
             cursor: pointer;
-
             font-size: 15px;
-
         }
 
-
         #status {
-
             text-align: center;
-
             margin-top: 15px;
-
             font-weight: bold;
-
+            line-height: 1.6;
         }
 
     </style>
@@ -284,17 +183,24 @@
 
     <!-- الاسم -->
 
-    <label>
-        اسمك
+    <label for="nameInput">
+        اسم المستخدم
     </label>
 
 
     <input
         type="text"
         id="nameInput"
-        placeholder="اكتب اسمك"
-        maxlength="30"
+        placeholder="مثال: Sultan"
+        maxlength="20"
+        autocomplete="off"
     >
+
+
+    <div class="name-hint">
+        🇬🇧 استخدم حروف إنجليزية فقط من A إلى Z، والاسم من 2 إلى 20 حرفًا.
+        الاسم يجب أن يكون غير مستخدم من شخص آخر.
+    </div>
 
 
 
@@ -330,7 +236,7 @@
 
                 <span class="option-description">
 
-                    سيظهر حسابك للمستخدمين الآخرين في قائمة الدردشة.
+                    سيظهر اسمك للمستخدمين الآخرين في قائمة الدردشة.
 
                 </span>
 
@@ -417,20 +323,15 @@ let currentUser = null;
 
 async function loadProfile() {
 
-
     const {
-
         data: { user },
-
         error
-
     } = await supabaseClient.auth.getUser();
 
 
     if (error || !user) {
 
-        window.location.href =
-            "login.html";
+        window.location.href = "login.html";
 
         return;
 
@@ -440,15 +341,36 @@ async function loadProfile() {
     currentUser = user;
 
 
-    // الاسم الموجود في الحساب
+    // قراءة الاسم من profiles أولًا
+    const {
+        data: profile,
+        error: profileError
+    } = await supabaseClient
+        .from("profiles")
+        .select("display_name, is_public")
+        .eq("id", user.id)
+        .maybeSingle();
 
+
+    if (profileError) {
+
+        console.error(profileError);
+
+        showStatus(
+            "حدث خطأ أثناء تحميل الملف الشخصي",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    // الاسم
     const name =
-
+        profile?.display_name ||
         user.user_metadata?.name ||
-
-        user.email?.split("@")[0] ||
-
-        "مستخدم";
+        "User";
 
 
     document.getElementById(
@@ -462,43 +384,7 @@ async function loadProfile() {
         name.charAt(0).toUpperCase();
 
 
-
-    // قراءة إعداد الخصوصية
-
-    const {
-
-        data: profile,
-
-        error: profileError
-
-    } = await supabaseClient
-
-        .from("profiles")
-
-        .select("is_public")
-
-        .eq(
-            "id",
-            user.id
-        )
-
-        .maybeSingle();
-
-
-    if (profileError) {
-
-        console.error(
-            "خطأ في قراءة الملف الشخصي:",
-            profileError
-        );
-
-        return;
-
-    }
-
-
-    // إذا كان خاصًا
-
+    // الخصوصية
     if (
         profile &&
         profile.is_public === false
@@ -508,12 +394,7 @@ async function loadProfile() {
             "privateOption"
         ).checked = true;
 
-    }
-
-
-    // إذا كان عامًا
-
-    else {
+    } else {
 
         document.getElementById(
             "publicOption"
@@ -531,18 +412,20 @@ async function loadProfile() {
 
 async function saveProfile() {
 
-
     const newName =
-
         document.getElementById(
             "nameInput"
         ).value.trim();
 
 
+    // ==========================================
+    // التحقق من الاسم
+    // ==========================================
+
     if (!newName) {
 
         showStatus(
-            "اكتب اسمًا أولًا",
+            "اكتب اسم المستخدم أولًا",
             "red"
         );
 
@@ -554,7 +437,36 @@ async function saveProfile() {
     if (newName.length < 2) {
 
         showStatus(
-            "الاسم قصير جدًا",
+            "الاسم يجب أن يكون حرفين على الأقل",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    if (newName.length > 20) {
+
+        showStatus(
+            "الاسم يجب ألا يتجاوز 20 حرفًا",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    // إنجليزي فقط
+    const englishNameRegex =
+        /^[A-Za-z]+$/;
+
+
+    if (!englishNameRegex.test(newName)) {
+
+        showStatus(
+            "❌ استخدم حروف إنجليزية فقط، مثل: Sultan",
             "red"
         );
 
@@ -564,10 +476,11 @@ async function saveProfile() {
 
 
 
+    // ==========================================
     // معرفة الخصوصية
+    // ==========================================
 
     const isPublic =
-
         document.getElementById(
             "publicOption"
         ).checked;
@@ -575,13 +488,61 @@ async function saveProfile() {
 
 
     // ==========================================
-    // تحديث الاسم في الحساب
+    // التأكد أن الاسم غير مستخدم
     // ==========================================
 
     const {
+        data: existingUsers,
+        error: checkError
+    } = await supabaseClient
+        .from("profiles")
+        .select("id, display_name")
+        .ilike(
+            "display_name",
+            newName
+        )
+        .neq(
+            "id",
+            currentUser.id
+        );
 
+
+    if (checkError) {
+
+        console.error(checkError);
+
+        showStatus(
+            "حدث خطأ أثناء التحقق من الاسم",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        existingUsers &&
+        existingUsers.length > 0
+    ) {
+
+        showStatus(
+            "❌ هذا الاسم مستخدم بالفعل، اختر اسمًا آخر",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+
+    // ==========================================
+    // تحديث الاسم في Auth
+    // ==========================================
+
+    const {
         error: authError
-
     } = await supabaseClient.auth.updateUser({
 
         data: {
@@ -613,9 +574,7 @@ async function saveProfile() {
     // ==========================================
 
     const {
-
         error: profileError
-
     } = await supabaseClient
 
         .from("profiles")
@@ -638,6 +597,21 @@ async function saveProfile() {
 
         console.error(profileError);
 
+        // خطأ التكرار من قاعدة البيانات
+        if (
+            profileError.code === "23505"
+        ) {
+
+            showStatus(
+                "❌ هذا الاسم مستخدم بالفعل، اختر اسمًا آخر",
+                "red"
+            );
+
+            return;
+
+        }
+
+
         showStatus(
             "حدث خطأ أثناء حفظ إعدادات الملف الشخصي",
             "red"
@@ -649,7 +623,9 @@ async function saveProfile() {
 
 
 
+    // ==========================================
     // تحديث الصورة
+    // ==========================================
 
     document.getElementById(
         "avatar"
@@ -706,4 +682,4 @@ loadProfile();
 </body>
 
 </html>
-```
+
