@@ -791,6 +791,90 @@
 
     </div>
 
+<!-- ==========================================
+     نافذة رسالة الأدمن
+========================================== -->
+
+<div
+    class="admin-message-overlay"
+    id="adminMessageOverlay"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.55);
+        z-index:10000;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+    "
+>
+
+
+<div
+    style="
+        width:100%;
+        max-width:430px;
+        background:white;
+        border-radius:20px;
+        padding:28px;
+        text-align:center;
+        box-shadow:0 15px 40px rgba(0,0,0,.25);
+    "
+>
+
+    <div
+        style="
+            font-size:48px;
+            margin-bottom:10px;
+        "
+    >
+        📢
+    </div>
+
+
+    <h2
+        id="adminMessageTitle"
+        style="
+            margin:0 0 15px;
+            color:#111827;
+        "
+    >
+        رسالة جديدة
+    </h2>
+
+
+    <p
+        id="adminMessageText"
+        style="
+            color:#555;
+            line-height:1.8;
+            margin-bottom:22px;
+            white-space:pre-wrap;
+        "
+    ></p>
+
+
+    <button
+        onclick="closeAdminMessage()"
+        style="
+            width:100%;
+            border:none;
+            padding:13px;
+            border-radius:10px;
+            background:#2563eb;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        "
+    >
+        فهمت 👍
+    </button>
+
+</div>
+
+
+</div>
 
 
     <script src="script.js"></script>
