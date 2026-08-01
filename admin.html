@@ -208,6 +208,109 @@
 
         </section>
 
+
+
+
+
+
+<section class="messages-section">
+
+    <div class="section-title">
+        <div>
+            <h2>📢 رسائل المستخدمين</h2>
+            <p>أنشئ رسالة تظهر للمستخدمين خلال وقت تحدده</p>
+        </div>
+    </div>
+
+
+    <div class="form-card">
+
+        <div class="field">
+
+            <label>📝 عنوان الرسالة</label>
+
+            <input
+                type="text"
+                id="adminMessageTitle"
+                placeholder="مثال: اختر اسم مستخدمك"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>💬 نص الرسالة</label>
+
+            <textarea
+                id="adminMessageText"
+                placeholder="اكتب الرسالة هنا..."
+                rows="5"
+                style="
+                    width:100%;
+                    padding:13px;
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                    resize:vertical;
+                    font-size:16px;
+                "
+            ></textarea>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="field">
+
+                <label>🕐 يبدأ الظهور</label>
+
+                <input
+                    type="datetime-local"
+                    id="messageStartsAt"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                 <label>⏰ ينتهي الظهور</label>
+
+                  <input
+                       type="datetime-local"
+                        id="messageEndsAt"
+                >
+
+               </div>
+
+              </div>
+
+
+         <button
+              class="save-btn"
+                 onclick="saveAdminMessage()">
+
+                   📢 نشر الرسالة
+
+                </button>
+
+          </div>
+
+
+           <div
+         id="adminMessagesList"
+            class="words-list"
+            style="margin-top:20px;">
+
+                   جاري تحميل الرسائل...
+
+                </div>
+
+            </section>
+
+
+
     </main>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 

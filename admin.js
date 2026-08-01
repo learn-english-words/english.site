@@ -961,11 +961,354 @@ function goHome() {
     const isAdmin =
         await checkAdmin();
 
+if (isAdmin) {
 
-    if (isAdmin) {
+    await loadWords();
 
-        await loadWords();
+    await loadAdminMessages();
+
+}
+
+})();
+
+
+
+// ==========================================
+// نظام رسائل الأدمن
+// ==========================================
+
+async function saveAdminMessage() {
+
+    const isAdmin = await checkAdmin();
+
+    if (!isAdmin) return;
+
+
+    const title =
+        document.getElementById("adminMessageTitle")
+        .value
+        .trim();
+
+
+    const message =
+        document.getElementById("adminMessageText")
+        .value
+        .trim();
+
+
+    const startsInput =
+        document.getElementById("messageStartsAt")
+        .value;
+
+
+    const endsInput =
+        document.getElementById("messageEndsAt")
+        .value;
+
+
+    if (!title || !message || !startsInput || !endsInput) {
+
+        alert("⚠️ املأ جميع بيانات الرسالة.");
+
+        return;
 
     }
 
-})();
+
+    const startsAt =
+        new Date(startsInput).toISOString();
+
+
+    const endsAt =
+        new Date(endsInput).toISOString();
+
+
+    if (new Date(endsAt) <= new Date(startsAt)) {
+
+        alert("⚠️ وقت الانتهاء يجب أن يكون بعد وقت البداية.");
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } = await supabaseClient
+
+        .from("admin_messages")
+
+        .insert({
+
+            title: title,
+
+            message: message,
+
+            starts_at: startsAt,
+
+            ends_at: endsAt,
+
+            is_active: true
+
+        });
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ حدث خطأ أثناء نشر الرسالة:\n" +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    alert("✅ تم نشر الرسالة بنجاح!");
+
+    
+    document.getElementById(
+        "adminMessageTitle"
+    ).value = "";
+
+
+    document.getElementById(
+        "adminMessageText"
+    ).value = "";
+
+
+    document.getElementById(
+        "messageStartsAt"
+    ).value = "";
+
+
+    document.getElementById(
+        "messageEndsAt"
+    ).value = "";
+
+
+    await loadAdminMessages();
+
+}
+
+
+// ==========================================
+// تحميل رسائل الأدمن
+// ==========================================
+
+async function loadAdminMessages() {
+
+    const isAdmin = await checkAdmin();
+
+    if (!isAdmin) return;
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("admin_messages")
+
+        .select("*")
+
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
+
+
+    if (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "adminMessagesList"
+        ).textContent =
+            "❌ حدث خطأ في تحميل الرسائل.";
+
+        return;
+
+    }
+
+
+    const container =
+        document.getElementById(
+            "adminMessagesList"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (!data || data.length === 0) {
+
+        container.innerHTML = `
+            <div class="word-item">
+                لا توجد رسائل حتى الآن.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    data.forEach(msg => {
+
+        const item =
+            document.createElement("div");
+
+
+        item.className =
+            "word-item";
+
+
+        const start =
+            new Date(
+                msg.starts_at
+            ).toLocaleString("ar-SA");
+
+
+        const end =
+            new Date(
+                msg.ends_at
+            ).toLocaleString("ar-SA");
+
+
+        const now =
+            new Date();
+
+
+        const active =
+            msg.is_active &&
+            new Date(msg.starts_at) <= now &&
+            new Date(msg.ends_at) > now;
+
+
+        item.innerHTML = `
+
+            <div class="word-info">
+
+                <h3>
+                    📢 ${escapeHtml(msg.title)}
+                </h3>
+
+                <p>
+                    ${escapeHtml(msg.message)}
+                </p>
+
+                <div class="word-tags">
+
+                    <span class="tag">
+                        🕐 ${start}
+                    </span>
+
+                    <span class="tag">
+                        ⏰ ${end}
+                    </span>
+
+                    <span class="tag">
+                        ${active ? "🟢 فعالة" : "⚪ غير فعالة"}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="word-actions">
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteAdminMessage('${msg.id}')">
+
+                    🗑️ حذف
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(item);
+
+    });
+
+}
+
+
+// ==========================================
+// حذف رسالة
+// ==========================================
+
+async function deleteAdminMessage(id) {
+
+    const isAdmin = await checkAdmin();
+
+    if (!isAdmin) return;
+
+
+    if (!confirm("هل تريد حذف هذه الرسالة؟")) {
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } = await supabaseClient
+
+        .from("admin_messages")
+
+        .delete()
+
+        .eq(
+            "id",
+            id
+        );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ حدث خطأ أثناء حذف الرسالة:\n" +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    alert("🗑️ تم حذف الرسالة.");
+
+    await loadAdminMessages();
+
+}
+
+
+// ==========================================
+// حماية النص قبل عرضه
+// ==========================================
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text || "";
+
+    return div.innerHTML;
+
+}
