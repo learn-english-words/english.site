@@ -369,12 +369,9 @@
                 } = await supabaseClient
                     .from("home_page_visits")
                     .update({
-
-                        visit_count: newCount,
-
-                        last_visit_at:
-                            new Date().toISOString()
-
+                     username: user.user_metadata?.name || user.email?.split("@")[0] || "مستخدم",
+                     visit_count: newCount,
+                     last_visit_at: new Date().toISOString()
                     })
                     .eq("user_id", user.id);
 
@@ -401,16 +398,12 @@
                     error: insertError
                 } = await supabaseClient
                     .from("home_page_visits")
-                    .insert({
-
-                        user_id: user.id,
-
-                        visit_count: 1,
-
-                        last_visit_at:
-                            new Date().toISOString()
-
-                    });
+                   .insert({
+                 user_id: user.id,
+                 username: user.user_metadata?.name || user.email?.split("@")[0] || "مستخدم",
+                  visit_count: 1,
+                 last_visit_at: new Date().toISOString()
+                  });
 
 
                 if (insertError) {
