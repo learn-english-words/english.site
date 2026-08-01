@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -109,9 +109,91 @@
 
             border-radius: 10px;
 
-            margin-bottom: 20px;
+            margin-bottom: 25px;
 
             font-size: 16px;
+
+        }
+
+
+        .privacy-title {
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .privacy-box {
+
+            background: #f7f8fc;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .option {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+
+            cursor: pointer;
+
+        }
+
+
+        .option:last-child {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .option input {
+
+            width: auto;
+
+            margin: 4px 0 0;
+
+        }
+
+
+        .option-text {
+
+            display: block;
+
+        }
+
+
+        .option-title {
+
+            font-weight: bold;
+
+            display: block;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .option-description {
+
+            color: #666;
+
+            font-size: 14px;
+
+            line-height: 1.6;
 
         }
 
@@ -160,6 +242,8 @@
 
             cursor: pointer;
 
+            font-size: 15px;
+
         }
 
 
@@ -198,6 +282,8 @@
     </div>
 
 
+    <!-- الاسم -->
+
     <label>
         اسمك
     </label>
@@ -211,11 +297,89 @@
     >
 
 
+
+    <!-- الخصوصية -->
+
+    <div class="privacy-title">
+
+        ظهور حسابك في الدردشة
+
+    </div>
+
+
+    <div class="privacy-box">
+
+
+        <!-- عام -->
+
+        <label class="option">
+
+            <input
+                type="radio"
+                name="privacy"
+                value="public"
+                id="publicOption"
+            >
+
+
+            <span class="option-text">
+
+                <span class="option-title">
+                    🌐 عام
+                </span>
+
+                <span class="option-description">
+
+                    سيظهر حسابك للمستخدمين الآخرين في قائمة الدردشة.
+
+                </span>
+
+            </span>
+
+        </label>
+
+
+
+        <!-- خاص -->
+
+        <label class="option">
+
+            <input
+                type="radio"
+                name="privacy"
+                value="private"
+                id="privateOption"
+            >
+
+
+            <span class="option-text">
+
+                <span class="option-title">
+                    🔒 خاص
+                </span>
+
+                <span class="option-description">
+
+                    لن يظهر حسابك للمستخدمين الآخرين في قائمة الدردشة.
+
+                </span>
+
+            </span>
+
+        </label>
+
+
+    </div>
+
+
+
+    <!-- حفظ -->
+
     <button
         class="save-btn"
         onclick="saveProfile()">
 
-        💾 حفظ الاسم
+        💾 حفظ التغييرات
 
     </button>
 
@@ -240,7 +404,7 @@
 
 
 // ==========================================
-// المتغيرات
+// المستخدم الحالي
 // ==========================================
 
 let currentUser = null;
@@ -248,7 +412,7 @@ let currentUser = null;
 
 
 // ==========================================
-// تحميل المستخدم
+// تحميل الملف الشخصي
 // ==========================================
 
 async function loadProfile() {
@@ -276,6 +440,8 @@ async function loadProfile() {
     currentUser = user;
 
 
+    // الاسم الموجود في الحساب
+
     const name =
 
         user.user_metadata?.name ||
@@ -295,23 +461,82 @@ async function loadProfile() {
     ).textContent =
         name.charAt(0).toUpperCase();
 
+
+
+    // قراءة إعداد الخصوصية
+
+    const {
+
+        data: profile,
+
+        error: profileError
+
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select("is_public")
+
+        .eq(
+            "id",
+            user.id
+        )
+
+        .maybeSingle();
+
+
+    if (profileError) {
+
+        console.error(
+            "خطأ في قراءة الملف الشخصي:",
+            profileError
+        );
+
+        return;
+
+    }
+
+
+    // إذا كان خاصًا
+
+    if (
+        profile &&
+        profile.is_public === false
+    ) {
+
+        document.getElementById(
+            "privateOption"
+        ).checked = true;
+
+    }
+
+
+    // إذا كان عامًا
+
+    else {
+
+        document.getElementById(
+            "publicOption"
+        ).checked = true;
+
+    }
+
 }
 
 
 
 // ==========================================
-// حفظ الاسم
+// حفظ الملف الشخصي
 // ==========================================
 
 async function saveProfile() {
 
 
-    const input =
-        document.getElementById("nameInput");
-
-
     const newName =
-        input.value.trim();
+
+        document.getElementById(
+            "nameInput"
+        ).value.trim();
 
 
     if (!newName) {
@@ -338,13 +563,24 @@ async function saveProfile() {
     }
 
 
-    // تحديث اسم الحساب في Supabase Auth
+
+    // معرفة الخصوصية
+
+    const isPublic =
+
+        document.getElementById(
+            "publicOption"
+        ).checked;
+
+
+
+    // ==========================================
+    // تحديث الاسم في الحساب
+    // ==========================================
 
     const {
 
-        data,
-
-        error
+        error: authError
 
     } = await supabaseClient.auth.updateUser({
 
@@ -357,9 +593,9 @@ async function saveProfile() {
     });
 
 
-    if (error) {
+    if (authError) {
 
-        console.error(error);
+        console.error(authError);
 
         showStatus(
             "حدث خطأ أثناء حفظ الاسم",
@@ -371,7 +607,10 @@ async function saveProfile() {
     }
 
 
-    // تحديث الاسم في profiles
+
+    // ==========================================
+    // تحديث profiles
+    // ==========================================
 
     const {
 
@@ -383,7 +622,9 @@ async function saveProfile() {
 
         .update({
 
-            display_name: newName
+            display_name: newName,
+
+            is_public: isPublic
 
         })
 
@@ -398,8 +639,8 @@ async function saveProfile() {
         console.error(profileError);
 
         showStatus(
-            "تم تغيير الاسم لكن حدث خطأ في الملف الشخصي",
-            "orange"
+            "حدث خطأ أثناء حفظ إعدادات الملف الشخصي",
+            "red"
         );
 
         return;
@@ -407,14 +648,18 @@ async function saveProfile() {
     }
 
 
+
+    // تحديث الصورة
+
     document.getElementById(
         "avatar"
     ).textContent =
         newName.charAt(0).toUpperCase();
 
 
+
     showStatus(
-        "تم حفظ الاسم بنجاح ✅",
+        "تم حفظ التغييرات بنجاح ✅",
         "green"
     );
 
@@ -432,7 +677,9 @@ function showStatus(
 ) {
 
     const status =
-        document.getElementById("status");
+        document.getElementById(
+            "status"
+        );
 
 
     status.textContent =
@@ -459,4 +706,4 @@ loadProfile();
 </body>
 
 </html>
-
+```
