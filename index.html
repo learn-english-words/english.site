@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -107,6 +107,36 @@
 
 
         <section class="menu">
+
+
+            <!-- الدردشة -->
+
+            <button
+                class="menu-card"
+                onclick="window.location.href='chat.html'">
+
+                <div class="card-icon">
+                    💬
+                </div>
+
+                <div class="card-text">
+
+                    <h3>
+                        الدردشة
+                    </h3>
+
+                    <p>
+                        تحدث مع المستخدمين الآخرين
+                    </p>
+
+                </div>
+
+                <span class="arrow">
+                    ←
+                </span>
+
+            </button>
+
 
 
             <button
@@ -315,14 +345,12 @@
 
         async function recordHomePageVisit() {
 
-            // معرفة المستخدم الحالي
             const {
                 data: { user },
                 error: userError
             } = await supabaseClient.auth.getUser();
 
 
-            // إذا لم يوجد مستخدم
             if (userError || !user) {
 
                 return;
@@ -330,7 +358,6 @@
             }
 
 
-            // البحث عن المستخدم في جدول الزيارات
             const {
                 data: visit,
                 error: visitError
@@ -341,7 +368,6 @@
                 .maybeSingle();
 
 
-            // إذا حدث خطأ
             if (visitError) {
 
                 console.error(
@@ -354,10 +380,6 @@
             }
 
 
-            // ==========================================
-            // المستخدم دخل من قبل
-            // ==========================================
-
             if (visit) {
 
                 const newCount =
@@ -369,9 +391,9 @@
                 } = await supabaseClient
                     .from("home_page_visits")
                     .update({
-                     username: user.user_metadata?.name || user.email?.split("@")[0] || "مستخدم",
-                     visit_count: newCount,
-                     last_visit_at: new Date().toISOString()
+                        username: user.user_metadata?.name || user.email?.split("@")[0] || "مستخدم",
+                        visit_count: newCount,
+                        last_visit_at: new Date().toISOString()
                     })
                     .eq("user_id", user.id);
 
@@ -388,22 +410,18 @@
             }
 
 
-            // ==========================================
-            // أول زيارة للمستخدم
-            // ==========================================
-
             else {
 
                 const {
                     error: insertError
                 } = await supabaseClient
                     .from("home_page_visits")
-                   .insert({
-                 user_id: user.id,
-                 username: user.user_metadata?.name || user.email?.split("@")[0] || "مستخدم",
-                  visit_count: 1,
-                 last_visit_at: new Date().toISOString()
-                  });
+                    .insert({
+                        user_id: user.id,
+                        username: user.user_metadata?.name || user.email?.split("@")[0] || "مستخدم",
+                        visit_count: 1,
+                        last_visit_at: new Date().toISOString()
+                    });
 
 
                 if (insertError) {
@@ -433,7 +451,6 @@
             } = await supabaseClient.auth.getUser();
 
 
-            // إذا ما فيه مستخدم
             if (error || !user) {
 
                 window.location.href =
@@ -444,33 +461,28 @@
             }
 
 
-            // اسم المستخدم
             const name =
                 user.user_metadata?.name ||
                 user.email?.split("@")[0] ||
                 "مستخدم";
 
 
-            // البريد
             const email =
                 user.email || "";
 
 
-            // عرض الاسم
             document.getElementById(
                 "welcomeText"
             ).textContent =
                 "مرحباً " + name + " 👋";
 
 
-            // عرض البريد
             document.getElementById(
                 "userEmail"
             ).textContent =
                 email;
 
 
-            // أول حرف من الاسم
             document.getElementById(
                 "userAvatar"
             ).textContent =
@@ -523,4 +535,4 @@
 </body>
 
 </html>
-
+```

@@ -1,0 +1,728 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>الدردشة - EnglishWords</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+        }
+
+        .chat-container {
+            max-width: 900px;
+            height: 100vh;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .topbar {
+            padding: 18px;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back {
+            border: none;
+            background: rgba(255,255,255,.2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .topbar h2 {
+            margin: 0;
+        }
+
+        .users {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            overflow-x: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .user {
+            min-width: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            background: white;
+        }
+
+        .user:hover {
+            background: #eef4ff;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto auto 7px;
+            font-weight: bold;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 10px 14px;
+            border-radius: 15px;
+            word-break: break-word;
+        }
+
+        .mine {
+            align-self: flex-start;
+            background: #2563eb;
+            color: white;
+            border-bottom-left-radius: 4px;
+        }
+
+        .theirs {
+            align-self: flex-end;
+            background: #e5e7eb;
+            color: #111827;
+            border-bottom-right-radius: 4px;
+        }
+
+        .send-box {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .send-box input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        .send-box button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 0 20px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .send-box button:hover {
+            background: #1d4ed8;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            margin-top: 50px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="chat-container">
+
+
+    <header class="topbar">
+
+        <button
+            class="back"
+            onclick="window.location.href='index.html'">
+
+            ←
+
+        </button>
+
+        <h2>
+            💬 الدردشة
+        </h2>
+
+    </header>
+
+
+
+    <!-- المستخدمون -->
+
+    <div
+        class="users"
+        id="usersList">
+
+        جاري تحميل المستخدمين...
+
+    </div>
+
+
+
+    <!-- اسم الشخص الذي نتحدث معه -->
+
+    <div
+        style="padding: 12px 20px; border-bottom: 1px solid #ddd; font-weight: bold;"
+        id="chatTitle">
+
+        اختر مستخدمًا للدردشة
+
+    </div>
+
+
+
+    <!-- الرسائل -->
+
+    <div
+        class="messages"
+        id="messages">
+
+        <div class="empty">
+
+            اختر مستخدمًا من الأعلى لبدء المحادثة 💬
+
+        </div>
+
+    </div>
+
+
+
+    <!-- إرسال الرسالة -->
+
+    <div class="send-box">
+
+        <input
+            type="text"
+            id="messageInput"
+            placeholder="اكتب رسالتك..."
+            autocomplete="off"
+        >
+
+        <button onclick="sendMessage()">
+
+            إرسال
+
+        </button>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+// ==========================================
+// المتغيرات
+// ==========================================
+
+let currentUser = null;
+
+let selectedUser = null;
+
+let currentConversation = null;
+
+let realtimeChannel = null;
+
+
+
+// ==========================================
+// تحميل المستخدم الحالي
+// ==========================================
+
+async function loadCurrentUser() {
+
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
+
+
+    if (error || !user) {
+
+        window.location.href = "login.html";
+
+        return;
+
+    }
+
+
+    currentUser = user;
+
+    loadUsers();
+
+}
+
+
+
+// ==========================================
+// تحميل المستخدمين
+// ==========================================
+
+async function loadUsers() {
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("profiles")
+        .select("id, display_name")
+        .neq("id", currentUser.id)
+        .order("display_name");
+
+
+    if (error) {
+
+        console.error(error);
+
+        document.getElementById("usersList").textContent =
+            "حدث خطأ في تحميل المستخدمين";
+
+        return;
+
+    }
+
+
+    const container =
+        document.getElementById("usersList");
+
+
+    container.innerHTML = "";
+
+
+    if (!data || data.length === 0) {
+
+        container.textContent =
+            "لا يوجد مستخدمون آخرون";
+
+        return;
+
+    }
+
+
+    data.forEach(user => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "user";
+
+
+        const avatar =
+            document.createElement("div");
+
+        avatar.className = "avatar";
+
+        avatar.textContent =
+            (user.display_name || "?")
+            .charAt(0)
+            .toUpperCase();
+
+
+        const name =
+            document.createElement("div");
+
+        name.textContent =
+            user.display_name || "مستخدم";
+
+
+        div.appendChild(avatar);
+
+        div.appendChild(name);
+
+
+        div.onclick = () => {
+
+            openConversation(user);
+
+        };
+
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+
+// ==========================================
+// فتح محادثة
+// ==========================================
+
+async function openConversation(user) {
+
+    selectedUser = user;
+
+
+    document.getElementById("chatTitle").textContent =
+        "💬 " + (user.display_name || "مستخدم");
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("conversations")
+        .select("*")
+        .or(
+            `and(user1_id.eq.${currentUser.id},user2_id.eq.${user.id}),and(user1_id.eq.${user.id},user2_id.eq.${currentUser.id})`
+        )
+        .maybeSingle();
+
+
+    if (error) {
+
+        console.error(error);
+
+        return;
+
+    }
+
+
+    if (data) {
+
+        currentConversation = data;
+
+    }
+
+    else {
+
+        const {
+            data: newConversation,
+            error: createError
+        } = await supabaseClient
+            .from("conversations")
+            .insert({
+
+                user1_id: currentUser.id,
+
+                user2_id: user.id
+
+            })
+            .select()
+            .single();
+
+
+        if (createError) {
+
+            console.error(createError);
+
+            return;
+
+        }
+
+
+        currentConversation =
+            newConversation;
+
+    }
+
+
+    loadMessages();
+
+    subscribeToMessages();
+
+}
+
+
+
+// ==========================================
+// تحميل الرسائل
+// ==========================================
+
+async function loadMessages() {
+
+    if (!currentConversation) return;
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("messages")
+        .select("*")
+        .eq(
+            "conversation_id",
+            currentConversation.id
+        )
+        .order(
+            "created_at",
+            { ascending: true }
+        );
+
+
+    if (error) {
+
+        console.error(error);
+
+        return;
+
+    }
+
+
+    const container =
+        document.getElementById("messages");
+
+
+    container.innerHTML = "";
+
+
+    if (!data || data.length === 0) {
+
+        container.innerHTML =
+            '<div class="empty">لا توجد رسائل بعد 👋</div>';
+
+        return;
+
+    }
+
+
+    data.forEach(message => {
+
+        displayMessage(message);
+
+    });
+
+
+    container.scrollTop =
+        container.scrollHeight;
+
+}
+
+
+
+// ==========================================
+// عرض رسالة
+// ==========================================
+
+function displayMessage(message) {
+
+    const container =
+        document.getElementById("messages");
+
+
+    const div =
+        document.createElement("div");
+
+
+    div.className = "message";
+
+
+    if (message.sender_id === currentUser.id) {
+
+        div.classList.add("mine");
+
+    }
+
+    else {
+
+        div.classList.add("theirs");
+
+    }
+
+
+    div.textContent =
+        message.message;
+
+
+    container.appendChild(div);
+
+
+    container.scrollTop =
+        container.scrollHeight;
+
+}
+
+
+
+// ==========================================
+// إرسال رسالة
+// ==========================================
+
+async function sendMessage() {
+
+    if (!currentConversation) {
+
+        alert("اختر مستخدمًا أولًا");
+
+        return;
+
+    }
+
+
+    const input =
+        document.getElementById("messageInput");
+
+
+    const text =
+        input.value.trim();
+
+
+    if (!text) return;
+
+
+    const {
+        error
+    } = await supabaseClient
+        .from("messages")
+        .insert({
+
+            conversation_id:
+                currentConversation.id,
+
+            sender_id:
+                currentUser.id,
+
+            message:
+                text
+
+        });
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert("حدث خطأ أثناء إرسال الرسالة");
+
+        return;
+
+    }
+
+
+    input.value = "";
+
+}
+
+
+
+// ==========================================
+// Realtime
+// ==========================================
+
+function subscribeToMessages() {
+
+
+    if (realtimeChannel) {
+
+        supabaseClient.removeChannel(
+            realtimeChannel
+        );
+
+    }
+
+
+    realtimeChannel =
+        supabaseClient
+            .channel(
+                "chat-" + currentConversation.id
+            )
+            .on(
+
+                "postgres_changes",
+
+                {
+                    event: "INSERT",
+
+                    schema: "public",
+
+                    table: "messages",
+
+                    filter:
+                        "conversation_id=eq." +
+                        currentConversation.id
+
+                },
+
+                payload => {
+
+                    displayMessage(
+                        payload.new
+                    );
+
+                }
+
+            )
+            .subscribe();
+
+}
+
+
+
+// ==========================================
+// زر Enter للإرسال
+// ==========================================
+
+document
+    .getElementById("messageInput")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                sendMessage();
+
+            }
+
+        }
+    );
+
+
+
+// ==========================================
+// تشغيل
+// ==========================================
+
+loadCurrentUser();
+
+
+</script>
+
+
+</body>
+
+</html>
+
