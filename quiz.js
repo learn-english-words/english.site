@@ -55,7 +55,9 @@ async function getWords() {
         await supabaseClient
             .from("words")
             .select("*")
-            .eq("level", selectedLevel);
+            .eq("level", selectedLevel)
+            .not("image", "is", null)
+            .neq("image", "");
 
     if (error) {
 
@@ -73,8 +75,6 @@ async function getWords() {
 
     return data || [];
 }
-
-
 // ==========================================
 // خلط
 // ==========================================
