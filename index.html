@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -50,6 +50,33 @@
 
             </div>
 
+
+            <!-- زر الملف الشخصي -->
+
+            <button
+                class="profile-btn"
+                onclick="window.location.href='profile.html'"
+                title="الملف الشخصي"
+                style="
+                    display: inline-block !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    border: none;
+                    background: #2563eb;
+                    color: white;
+                    padding: 10px 14px;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    font-size: 18px;
+                    margin: 0 5px;
+                ">
+
+                👤
+
+            </button>
+
+
+            <!-- تسجيل الخروج -->
 
             <button
                 class="logout-btn"
@@ -109,11 +136,7 @@
         <section class="menu">
 
 
-            <!-- الدردشة -->
-
-           
-
-
+            <!-- تعلم الكلمات -->
 
             <button
                 class="menu-card main-card"
@@ -143,6 +166,8 @@
 
 
 
+            <!-- الاختبار -->
+
             <button
                 class="menu-card"
                 onclick="window.location.href='quiz.html'">
@@ -170,6 +195,8 @@
             </button>
 
 
+
+            <!-- المراجعة -->
 
             <button
                 class="menu-card"
@@ -199,6 +226,8 @@
 
 
 
+            <!-- كلماتي -->
+
             <button
                 class="menu-card"
                 onclick="window.location.href='favorites.html'">
@@ -226,6 +255,8 @@
             </button>
 
 
+
+            <!-- تقدمي -->
 
             <button
                 class="menu-card"
@@ -255,6 +286,8 @@
 
 
 
+            <!-- تحدي اليوم -->
+
             <button
                 class="menu-card"
                 onclick="window.location.href='daily.html'">
@@ -282,6 +315,8 @@
             </button>
 
 
+
+            <!-- الإعدادات -->
 
             <button
                 class="settings-btn"
@@ -367,11 +402,23 @@
                 } = await supabaseClient
                     .from("home_page_visits")
                     .update({
-                        username: user.user_metadata?.name || user.email?.split("@")[0] || "مستخدم",
-                        visit_count: newCount,
-                        last_visit_at: new Date().toISOString()
+
+                        username:
+                            user.user_metadata?.name ||
+                            user.email?.split("@")[0] ||
+                            "مستخدم",
+
+                        visit_count:
+                            newCount,
+
+                        last_visit_at:
+                            new Date().toISOString()
+
                     })
-                    .eq("user_id", user.id);
+                    .eq(
+                        "user_id",
+                        user.id
+                    );
 
 
                 if (updateError) {
@@ -393,10 +440,21 @@
                 } = await supabaseClient
                     .from("home_page_visits")
                     .insert({
-                        user_id: user.id,
-                        username: user.user_metadata?.name || user.email?.split("@")[0] || "مستخدم",
-                        visit_count: 1,
-                        last_visit_at: new Date().toISOString()
+
+                        user_id:
+                            user.id,
+
+                        username:
+                            user.user_metadata?.name ||
+                            user.email?.split("@")[0] ||
+                            "مستخدم",
+
+                        visit_count:
+                            1,
+
+                        last_visit_at:
+                            new Date().toISOString()
+
                     });
 
 
@@ -511,4 +569,3 @@
 </body>
 
 </html>
-```
