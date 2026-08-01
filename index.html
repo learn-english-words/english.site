@@ -51,8 +51,6 @@
             </div>
 
 
-            <!-- تسجيل الخروج -->
-
             <button
                 class="logout-btn"
                 onclick="logout()"
@@ -141,7 +139,7 @@
 
             <button
                 class="menu-card"
-               onclick="window.location.href='quiz.html'"
+                onclick="window.location.href='quiz.html'">
 
                 <div class="card-icon">
                     🧠
@@ -194,7 +192,10 @@
             </button>
 
 
-             <button class="menu-card" onclick="window.location.href='favorites.html'">
+
+            <button
+                class="menu-card"
+                onclick="window.location.href='favorites.html'">
 
                 <div class="card-icon">
                     ⭐
@@ -222,7 +223,7 @@
 
             <button
                 class="menu-card"
-              onclick="window.location.href='progress.html'"
+                onclick="window.location.href='progress.html'">
 
                 <div class="card-icon">
                     📊
@@ -249,30 +250,31 @@
 
 
             <button
-    class="menu-card"
-    onclick="window.location.href='daily.html'">
+                class="menu-card"
+                onclick="window.location.href='daily.html'">
 
-    <div class="card-icon">
-        🎯
-      </div>
+                <div class="card-icon">
+                    🎯
+                </div>
 
-        <div class="card-text">
+                <div class="card-text">
 
-            <h3>
-              تحدي اليوم
-           </h3>
+                    <h3>
+                        تحدي اليوم
+                    </h3>
 
-           <p>
-            أنجز هدفك اليومي في تعلم الإنجليزية
-           </p>
+                    <p>
+                        أنجز هدفك اليومي في تعلم الإنجليزية
+                    </p>
 
-       </div>
-  
-       <span class="arrow">
-          ←
-          </span>
+                </div>
 
-        </button>
+                <span class="arrow">
+                    ←
+                </span>
+
+            </button>
+
 
 
             <button
@@ -302,11 +304,134 @@
 
 
 
-    <!-- نظام الحساب -->
+    <!-- نظام الحساب + تسجيل الزيارات -->
 
     <script>
 
+
+        // ==========================================
+        // تسجيل زيارة الصفحة الرئيسية
+        // ==========================================
+
+        async function recordHomePageVisit() {
+
+            // معرفة المستخدم الحالي
+            const {
+                data: { user },
+                error: userError
+            } = await supabaseClient.auth.getUser();
+
+
+            // إذا لم يوجد مستخدم
+            if (userError || !user) {
+
+                return;
+
+            }
+
+
+            // البحث عن المستخدم في جدول الزيارات
+            const {
+                data: visit,
+                error: visitError
+            } = await supabaseClient
+                .from("home_page_visits")
+                .select("visit_count")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+
+            // إذا حدث خطأ
+            if (visitError) {
+
+                console.error(
+                    "خطأ في قراءة الزيارات:",
+                    visitError
+                );
+
+                return;
+
+            }
+
+
+            // ==========================================
+            // المستخدم دخل من قبل
+            // ==========================================
+
+            if (visit) {
+
+                const newCount =
+                    (visit.visit_count || 0) + 1;
+
+
+                const {
+                    error: updateError
+                } = await supabaseClient
+                    .from("home_page_visits")
+                    .update({
+
+                        visit_count: newCount,
+
+                        last_visit_at:
+                            new Date().toISOString()
+
+                    })
+                    .eq("user_id", user.id);
+
+
+                if (updateError) {
+
+                    console.error(
+                        "خطأ في تحديث عدد الزيارات:",
+                        updateError
+                    );
+
+                }
+
+            }
+
+
+            // ==========================================
+            // أول زيارة للمستخدم
+            // ==========================================
+
+            else {
+
+                const {
+                    error: insertError
+                } = await supabaseClient
+                    .from("home_page_visits")
+                    .insert({
+
+                        user_id: user.id,
+
+                        visit_count: 1,
+
+                        last_visit_at:
+                            new Date().toISOString()
+
+                    });
+
+
+                if (insertError) {
+
+                    console.error(
+                        "خطأ في تسجيل الزيارة:",
+                        insertError
+                    );
+
+                }
+
+            }
+
+        }
+
+
+
+        // ==========================================
         // التأكد من تسجيل الدخول
+        // ==========================================
+
         async function loadUser() {
 
             const {
@@ -362,7 +487,10 @@
 
 
 
+        // ==========================================
         // تسجيل الخروج
+        // ==========================================
+
         async function logout() {
 
             const { error } =
@@ -387,8 +515,14 @@
 
 
 
-        // تشغيل الحساب
+        // ==========================================
+        // تشغيل الأنظمة
+        // ==========================================
+
         loadUser();
+
+        recordHomePageVisit();
+
 
     </script>
 
@@ -396,3 +530,4 @@
 </body>
 
 </html>
+
