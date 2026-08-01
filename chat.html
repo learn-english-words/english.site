@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -297,7 +297,7 @@ async function loadCurrentUser() {
 
 
 // ==========================================
-// تحميل المستخدمين
+// تحميل المستخدمين العامين فقط
 // ==========================================
 
 async function loadUsers() {
@@ -307,16 +307,29 @@ async function loadUsers() {
         error
     } = await supabaseClient
         .from("profiles")
-        .select("id, display_name")
+
+        // الاسم + حالة الخصوصية
+        .select("id, display_name, is_public")
+
+        // لا يظهر المستخدم نفسه
         .neq("id", currentUser.id)
+
+        // لا يظهر إلا الحسابات العامة
+        .eq("is_public", true)
+
         .order("display_name");
 
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            "خطأ في تحميل المستخدمين:",
+            error
+        );
 
-        document.getElementById("usersList").textContent =
+        document.getElementById(
+            "usersList"
+        ).textContent =
             "حدث خطأ في تحميل المستخدمين";
 
         return;
@@ -333,8 +346,8 @@ async function loadUsers() {
 
     if (!data || data.length === 0) {
 
-        container.textContent =
-            "لا يوجد مستخدمون آخرون";
+        container.innerHTML =
+            '<div class="empty" style="margin: 10px;">لا يوجد مستخدمون متاحون للدردشة حاليًا 🔒</div>';
 
         return;
 
@@ -354,17 +367,22 @@ async function loadUsers() {
 
         avatar.className = "avatar";
 
+
+        const displayName =
+            user.display_name || "مستخدم";
+
+
         avatar.textContent =
-            (user.display_name || "?")
-            .charAt(0)
-            .toUpperCase();
+            displayName
+                .charAt(0)
+                .toUpperCase();
 
 
         const name =
             document.createElement("div");
 
         name.textContent =
-            user.display_name || "مستخدم";
+            displayName;
 
 
         div.appendChild(avatar);
@@ -396,8 +414,11 @@ async function openConversation(user) {
     selectedUser = user;
 
 
-    document.getElementById("chatTitle").textContent =
-        "💬 " + (user.display_name || "مستخدم");
+    document.getElementById(
+        "chatTitle"
+    ).textContent =
+        "💬 " +
+        (user.display_name || "مستخدم");
 
 
     const {
@@ -427,6 +448,7 @@ async function openConversation(user) {
 
     }
 
+
     else {
 
         const {
@@ -436,9 +458,11 @@ async function openConversation(user) {
             .from("conversations")
             .insert({
 
-                user1_id: currentUser.id,
+                user1_id:
+                    currentUser.id,
 
-                user2_id: user.id
+                user2_id:
+                    user.id
 
             })
             .select()
@@ -489,7 +513,9 @@ async function loadMessages() {
         )
         .order(
             "created_at",
-            { ascending: true }
+            {
+                ascending: true
+            }
         );
 
 
@@ -547,14 +573,19 @@ function displayMessage(message) {
         document.createElement("div");
 
 
-    div.className = "message";
+    div.className =
+        "message";
 
 
-    if (message.sender_id === currentUser.id) {
+    if (
+        message.sender_id ===
+        currentUser.id
+    ) {
 
         div.classList.add("mine");
 
     }
+
 
     else {
 
@@ -585,7 +616,9 @@ async function sendMessage() {
 
     if (!currentConversation) {
 
-        alert("اختر مستخدمًا أولًا");
+        alert(
+            "اختر مستخدمًا أولًا"
+        );
 
         return;
 
@@ -593,7 +626,9 @@ async function sendMessage() {
 
 
     const input =
-        document.getElementById("messageInput");
+        document.getElementById(
+            "messageInput"
+        );
 
 
     const text =
@@ -625,7 +660,9 @@ async function sendMessage() {
 
         console.error(error);
 
-        alert("حدث خطأ أثناء إرسال الرسالة");
+        alert(
+            "حدث خطأ أثناء إرسال الرسالة"
+        );
 
         return;
 
@@ -657,13 +694,15 @@ function subscribeToMessages() {
     realtimeChannel =
         supabaseClient
             .channel(
-                "chat-" + currentConversation.id
+                "chat-" +
+                currentConversation.id
             )
             .on(
 
                 "postgres_changes",
 
                 {
+
                     event: "INSERT",
 
                     schema: "public",
@@ -701,7 +740,9 @@ document
         "keydown",
         function(event) {
 
-            if (event.key === "Enter") {
+            if (
+                event.key === "Enter"
+            ) {
 
                 sendMessage();
 
@@ -725,4 +766,4 @@ loadCurrentUser();
 </body>
 
 </html>
-
+```
