@@ -1375,16 +1375,110 @@
         }
 
 
+// ==========================================
+// تحميل رسالة الأدمن للمستخدم
+// ==========================================
 
+async function loadAdminMessage() {
+
+    const now = new Date().toISOString();
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("admin_messages")
+
+        .select("*")
+
+        .eq("is_active", true)
+
+        .lte("starts_at", now)
+
+        .gt("ends_at", now)
+
+        .order("created_at", {
+            ascending: false
+        })
+
+        .limit(1);
+
+
+    if (error) {
+
+        console.error(
+            "خطأ في تحميل رسالة الأدمن:",
+            error
+        );
+
+        return;
+    }
+
+
+    // لا توجد رسالة فعالة
+
+    if (!data || data.length === 0) {
+
+        return;
+    }
+
+
+    const message = data[0];
+
+
+    document.getElementById(
+        "adminMessageTitle"
+    ).textContent =
+        message.title;
+
+
+    document.getElementById(
+        "adminMessageText"
+    ).textContent =
+        message.message;
+
+
+    document.getElementById(
+        "adminMessageOverlay"
+    ).style.display =
+        "flex";
+
+}
+
+
+            // ==========================================
+        // إغلاق رسالة الأدمن
         // ==========================================
-        // تشغيل
-        // ==========================================
 
-        loadUser();
+        function closeAdminMessage() {
 
-        recordHomePageVisit();
+         document.getElementById(
+        "adminMessageOverlay"
+             ).style.display =
+            "none";
+
+        }
 
 
+
+
+// ==========================================
+// تشغيل
+// ==========================================
+
+async function startHomePage() {
+
+    await loadUser();
+
+    await recordHomePageVisit();
+
+    await loadAdminMessage();
+
+}
+
+
+startHomePage();
     </script>
 
 
