@@ -1,3 +1,7 @@
+/* ==========================================
+   EnglishWords - الصفحة الرئيسية
+========================================== */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -5,92 +9,89 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-
-    background:
-        radial-gradient(
-            circle at 80% 20%,
-            rgba(91, 45, 190, 0.35),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 20% 80%,
-            rgba(35, 75, 190, 0.25),
-            transparent 35%
-        ),
-        #050817;
-
-    color: white;
+    font-family: Arial, "Tahoma", sans-serif;
+    background: #f8f9fc;
+    color: #171827;
     min-height: 100vh;
 }
 
 
-/* =========================
+/* ==========================================
    الشريط العلوي
-========================= */
+========================================== */
 
 .topbar {
-    height: 75px;
+    width: 100%;
+    min-height: 82px;
 
-    background: rgba(10, 17, 40, 0.88);
-
-    border-bottom: 1px solid rgba(130, 120, 255, 0.18);
+    background: #ffffff;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    padding: 0 6%;
+    padding: 15px 6%;
 
-    backdrop-filter: blur(18px);
+    border-bottom: 1px solid #eeeeF4;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
+
+/* الشعار */
+
 .logo {
-    font-size: 25px;
-    font-weight: bold;
-    color: white;
+    font-size: 24px;
+    font-weight: 800;
+    color: #171827;
 }
 
 .logo span {
-    background: linear-gradient(
-        135deg,
-        #4965ff,
-        #9b70ff
-    );
-
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: #6657e8;
 }
 
 
-/* =========================
+/* ==========================================
    الملف الشخصي
-========================= */
+========================================== */
 
 .profile {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 11px;
+}
+
+.profile > div:not(.avatar) {
+    text-align: right;
+}
+
+.profile strong {
+    font-size: 15px;
+    color: #171827;
 }
 
 .profile small {
     display: block;
-    color: #9ca5bd;
+    color: #8a8c99;
     margin-top: 4px;
+    font-size: 12px;
 }
 
+
 .avatar {
-    width: 42px;
-    height: 42px;
+    width: 46px;
+    height: 46px;
 
     border-radius: 50%;
 
-    background: linear-gradient(
-        135deg,
-        #4267ff,
-        #8b3dff
-    );
+    background:
+        linear-gradient(
+            135deg,
+            #8b7cf6,
+            #6657e8
+        );
 
     color: white;
 
@@ -98,125 +99,175 @@ body {
     align-items: center;
     justify-content: center;
 
+    font-size: 18px;
     font-weight: bold;
 
     box-shadow:
-        0 8px 25px rgba(90, 65, 255, 0.3);
+        0 5px 15px rgba(102, 87, 232, .20);
 }
 
 
-/* =========================
+/* ==========================================
+   أزرار أعلى الصفحة
+========================================== */
+
+.profile-btn,
+.logout-btn {
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #f4f3ff;
+
+    cursor: pointer;
+
+    font-size: 19px;
+
+    transition: .2s;
+}
+
+.profile-btn:hover,
+.logout-btn:hover {
+    background: #e9e7ff;
+    transform: translateY(-2px);
+}
+
+
+/* ==========================================
    المحتوى
-========================= */
+========================================== */
 
 .container {
-    width: min(1100px, 90%);
-    margin: 40px auto;
+    width: min(1050px, 92%);
+    margin: 28px auto 45px;
 }
 
 
-/* =========================
-   الترحيب
-========================= */
+/* ==========================================
+   البانر الرئيسي
+========================================== */
 
 .welcome {
-    background:
-        linear-gradient(
-            135deg,
-            #4267ff,
-            #823cff
-        );
+    min-height: 220px;
 
-    color: white;
+    border-radius: 25px;
 
-    border-radius: 22px;
-
-    padding: 35px;
+    padding: 32px 38px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    margin-bottom: 35px;
+    overflow: hidden;
 
-    box-shadow:
-        0 20px 55px rgba(70, 55, 220, 0.25);
-}
-
-.welcome h1 {
-    font-size: 32px;
-    margin: 10px 0;
-}
-
-.welcome p {
-    opacity: 0.9;
-    line-height: 1.7;
-}
-
-.small-title {
-    font-size: 14px;
-}
-
-.welcome-icon {
-    font-size: 90px;
-
-    filter:
-        drop-shadow(
-            0 10px 20px rgba(0, 0, 0, 0.18)
-        );
-}
-
-
-/* =========================
-   عنوان القائمة
-========================= */
-
-h2 {
-    margin-bottom: 18px;
-    font-size: 24px;
-    color: #ffffff;
-}
-
-
-/* =========================
-   القائمة
-========================= */
-
-.menu {
-    display: grid;
-
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-
-    gap: 18px;
-
-    width: 100%;
-}
-
-
-/* =========================
-   البطاقات
-   نفس لون البانر
-========================= */
-
-.menu-card {
-    width: 100%;
-    min-width: 0;
-    min-height: 125px;
-
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: white;
 
     background:
         linear-gradient(
             135deg,
-            #4267ff,
-            #823cff
+            #5c5bea,
+            #8667ed
         );
 
-    color: white;
+    box-shadow:
+        0 15px 35px rgba(102, 87, 232, .20);
 
-    border-radius: 18px;
+    position: relative;
 
-    padding: 22px;
+    margin-bottom: 30px;
+}
+
+
+/* تأثير زخرفي */
+
+.welcome::after {
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.08);
+
+    left: -70px;
+    bottom: -100px;
+}
+
+
+.welcome h1 {
+    font-size: 31px;
+    margin: 9px 0 10px;
+    line-height: 1.4;
+}
+
+.welcome p {
+    line-height: 1.8;
+    color: rgba(255,255,255,.90);
+}
+
+.small-title {
+    font-size: 14px;
+    opacity: .9;
+}
+
+.welcome-icon {
+    font-size: 85px;
+    z-index: 1;
+
+    filter:
+        drop-shadow(
+            0 10px 15px rgba(0,0,0,.15)
+        );
+}
+
+
+/* ==========================================
+   عنوان ماذا تريد
+========================================== */
+
+.container > h2 {
+    font-size: 22px;
+    margin-bottom: 17px;
+    color: #171827;
+}
+
+
+/* ==========================================
+   القائمة
+========================================== */
+
+.menu {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 15px;
+}
+
+
+/* ==========================================
+   البطاقات
+========================================== */
+
+.menu-card {
+    width: 100%;
+    min-height: 108px;
+
+    border: 1px solid #eeeeF4;
+
+    border-radius: 19px;
+
+    background: #ffffff;
+
+    color: #171827;
+
+    padding: 18px;
 
     display: flex;
     align-items: center;
@@ -226,142 +277,202 @@ h2 {
     cursor: pointer;
 
     box-shadow:
-        0 10px 30px rgba(70, 55, 220, 0.20);
+        0 5px 18px rgba(30, 32, 55, .05);
 
     transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        border-color 0.2s ease;
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
 }
 
-
-/* =========================
-   حركة البطاقات
-========================= */
 
 .menu-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
 
-    border-color:
-        rgba(255, 255, 255, 0.55);
+    border-color: #dcd8ff;
 
     box-shadow:
-        0 15px 40px rgba(70, 55, 220, 0.40);
+        0 10px 28px rgba(30, 32, 55, .09);
 }
 
 
-/* =========================
-   أيقونات البطاقات
-========================= */
+.menu-card:active {
+    transform: scale(.98);
+}
+
+
+/* ==========================================
+   أيقونة البطاقة
+========================================== */
 
 .card-icon {
-    width: 62px;
-    height: 62px;
+    width: 58px;
+    height: 58px;
 
-    min-width: 62px;
+    min-width: 58px;
 
-    border-radius: 16px;
+    border-radius: 17px;
 
-    background:
-        rgba(255, 255, 255, 0.18);
-
-    border:
-        1px solid rgba(255, 255, 255, 0.20);
+    background: #f0efff;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    font-size: 30px;
-
-    flex-shrink: 0;
-
-    backdrop-filter: blur(8px);
+    font-size: 28px;
 
     box-shadow:
-        0 6px 18px rgba(0, 0, 0, 0.15);
+        inset 0 0 0 1px rgba(102,87,232,.05);
 }
 
 
-/* =========================
+/* ==========================================
    النص
-========================= */
+========================================== */
 
 .card-text {
     flex: 1;
-
     min-width: 0;
 
-    margin-right: 18px;
+    margin-right: 15px;
 }
 
 .card-text h3 {
-    font-size: 19px;
+    font-size: 18px;
 
-    margin-bottom: 7px;
+    margin-bottom: 6px;
 
-    color: #ffffff;
+    color: #171827;
 }
 
 .card-text p {
-    color:
-        rgba(255, 255, 255, 0.78);
+    color: #858794;
 
-    font-size: 14px;
+    font-size: 13px;
 
     line-height: 1.5;
 }
 
 
-/* =========================
+/* ==========================================
    السهم
-========================= */
+========================================== */
 
 .arrow {
     font-size: 22px;
 
-    color: white;
+    color: #8b8c99;
 
     margin-right: 10px;
 
-    transition: 0.2s;
+    transition: .2s;
 }
 
 .menu-card:hover .arrow {
-    transform: translateX(-5px);
-
-    color: white;
+    color: #6657e8;
+    transform: translateX(-4px);
 }
 
 
-/* =========================
+/* ==========================================
    بطاقة تعلم الكلمات
-========================= */
+========================================== */
 
 .main-card {
-    border:
-        2px solid rgba(255, 255, 255, 0.45);
-
     background:
         linear-gradient(
             135deg,
-            #4267ff,
-            #823cff
+            #f0efff,
+            #ffffff
         );
 
-    box-shadow:
-        0 12px 40px rgba(70, 55, 220, 0.35);
+    border:
+        1px solid #dcd8ff;
+}
+
+.main-card .card-icon {
+    background: #dfdcff;
 }
 
 
-/* =========================
+/* ==========================================
+   ألوان مختلفة للأيقونات
+========================================== */
+
+.menu-card:nth-child(1) .card-icon {
+    background: #eee9ff;
+}
+
+.menu-card:nth-child(2) .card-icon {
+    background: #def8ed;
+}
+
+.menu-card:nth-child(3) .card-icon {
+    background: #fff0d9;
+}
+
+.menu-card:nth-child(4) .card-icon {
+    background: #ffe5f0;
+}
+
+.menu-card:nth-child(5) .card-icon {
+    background: #fff5cf;
+}
+
+.menu-card:nth-child(6) .card-icon {
+    background: #e4f1ff;
+}
+
+.menu-card:nth-child(7) .card-icon {
+    background: #ffe8d9;
+}
+
+
+/* ==========================================
+   الإعدادات
+========================================== */
+
+.settings-btn {
+    width: 48px;
+    height: 48px;
+
+    border: 1px solid #eeeeF4;
+
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    color: #686a78;
+
+    font-size: 21px;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+    box-shadow:
+        0 5px 15px rgba(30,32,55,.05);
+}
+
+.settings-btn:hover {
+    color: #6657e8;
+
+    background: #f3f1ff;
+
+    transform: rotate(10deg);
+}
+
+
+/* ==========================================
    الفوتر
-========================= */
+========================================== */
 
 footer {
     text-align: center;
 
-    color: #707993;
+    color: #9a9ba5;
+
+    font-size: 12px;
 
     padding: 25px;
 
@@ -369,103 +480,200 @@ footer {
 }
 
 
-/* =========================
-   زر الإعدادات
-========================= */
+/* ==========================================
+   نافذة الخصوصية
+========================================== */
 
-.settings-btn {
-    width: 44px;
-    height: 44px;
-
-    border:
-        1px solid rgba(130, 120, 255, 0.18);
-
-    border-radius: 12px;
-
-    background:
-        rgba(24, 31, 58, 0.85);
-
-    color: white;
-
-    font-size: 22px;
-
-    cursor: pointer;
-
-    transition:
-        0.2s,
-        background 0.2s;
+.privacy-overlay {
+    backdrop-filter: blur(5px);
 }
 
-.settings-btn:hover {
-    transform: rotate(20deg);
+.privacy-box {
+    animation: popup .25s ease;
+}
 
-    background:
-        linear-gradient(
-            135deg,
-            #4267ff,
-            #8b3dff
-        );
+@keyframes popup {
+
+    from {
+        opacity: 0;
+        transform: scale(.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 
-/* =========================
+/* ==========================================
    الجوال
-========================= */
+========================================== */
 
 @media (max-width: 700px) {
 
-    .topbar {
-        padding: 0 5%;
+    body {
+        background: #f8f9fc;
     }
 
-    .profile div:not(.avatar) {
+
+    .topbar {
+        min-height: 72px;
+
+        padding:
+            12px 4%;
+    }
+
+
+    .logo {
+        font-size: 20px;
+    }
+
+
+    .profile {
+        gap: 7px;
+    }
+
+
+    .profile > div:not(.avatar) {
         display: none;
     }
 
+
+    .avatar {
+        width: 42px;
+        height: 42px;
+    }
+
+
+    .profile-btn,
+    .logout-btn {
+        width: 36px;
+        height: 36px;
+
+        font-size: 17px;
+    }
+
+
     .container {
         width: 92%;
-        margin: 25px auto;
+
+        margin:
+            20px auto 35px;
     }
+
+
+    /* البانر */
 
     .welcome {
-        padding: 25px;
+
+        min-height: 190px;
+
+        padding:
+            25px 22px;
+
+        border-radius: 22px;
+
+        margin-bottom: 25px;
     }
+
 
     .welcome h1 {
-        font-size: 25px;
+        font-size: 24px;
     }
 
-    .welcome-icon {
-        font-size: 55px;
+
+    .welcome p {
+        font-size: 13px;
     }
+
+
+    .welcome-icon {
+        font-size: 52px;
+    }
+
+
+    .container > h2 {
+        font-size: 19px;
+    }
+
+
+    /* البطاقات */
 
     .menu {
         grid-template-columns: 1fr;
-        gap: 14px;
+
+        gap: 12px;
     }
+
 
     .menu-card {
-        min-height: 105px;
-        padding: 17px;
+        min-height: 92px;
+
+        padding: 15px;
+
+        border-radius: 17px;
     }
+
 
     .card-icon {
-        width: 54px;
-        height: 54px;
-        min-width: 54px;
+        width: 52px;
+        height: 52px;
+
+        min-width: 52px;
 
         font-size: 25px;
+
+        border-radius: 15px;
     }
+
 
     .card-text {
-        margin-right: 13px;
+        margin-right: 12px;
     }
 
+
     .card-text h3 {
-        font-size: 17px;
+        font-size: 16px;
     }
+
 
     .card-text p {
         font-size: 12px;
     }
+
+
+    .arrow {
+        font-size: 19px;
+    }
+
+
+    footer {
+        padding-bottom: 25px;
+    }
+}
+
+
+/* ==========================================
+   شاشات صغيرة جدًا
+========================================== */
+
+@media (max-width: 380px) {
+
+    .welcome {
+        padding: 21px 18px;
+    }
+
+    .welcome h1 {
+        font-size: 21px;
+    }
+
+    .welcome-icon {
+        font-size: 43px;
+    }
+
+    .menu-card {
+        padding: 13px;
+    }
+
 }

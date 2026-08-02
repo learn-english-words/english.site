@@ -1,180 +1,1013 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>English Words</title>
+<title>EnglishWords</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 
 
-    <style>
+<style>
 
-        /* ==========================================
-           نافذة الحساب الخاص
-        ========================================== */
+/* ==================================================
+   التصميم الجديد
+================================================== */
 
-        .privacy-overlay {
+* {
+    box-sizing: border-box;
+}
 
-            display: none;
+body {
+    margin: 0;
+    background: #f8f9fc;
+    font-family: Arial, Tahoma, sans-serif;
+    color: #171827;
+}
 
-            position: fixed;
+button {
+    font-family: inherit;
+}
 
-            inset: 0;
 
-            background: rgba(0, 0, 0, 0.55);
+/* ==================================================
+   الصفحة
+================================================== */
 
-            z-index: 9999;
+.app-page {
 
-            align-items: center;
+    width: 100%;
+    max-width: 600px;
 
-            justify-content: center;
+    margin: auto;
 
-            padding: 20px;
+    min-height: 100vh;
 
-        }
+    padding: 20px 18px 105px;
+}
 
 
-        .privacy-box {
+/* ==================================================
+   الهيدر
+================================================== */
 
-            width: 100%;
+.new-header {
 
-            max-width: 430px;
+    display: flex;
 
-            background: white;
+    align-items: center;
 
-            border-radius: 20px;
+    justify-content: space-between;
 
-            padding: 28px;
+    margin-bottom: 22px;
+}
 
-            text-align: center;
 
-            box-shadow: 0 15px 40px rgba(0,0,0,.25);
+.user-area {
 
-        }
+    display: flex;
 
+    align-items: center;
 
-        .privacy-icon {
+    gap: 12px;
+}
 
-            font-size: 50px;
 
-            margin-bottom: 10px;
+.avatar-new {
 
-        }
+    width: 58px;
+    height: 58px;
 
+    border-radius: 50%;
 
-        .privacy-box h2 {
+    background: linear-gradient(
+        135deg,
+        #7667f5,
+        #5b4ee8
+    );
 
-            margin: 0 0 14px;
+    color: white;
 
-            color: #111827;
+    display: flex;
 
-        }
+    align-items: center;
+    justify-content: center;
 
+    font-size: 23px;
+    font-weight: bold;
 
-        .privacy-box p {
+    overflow: hidden;
+}
 
-            color: #555;
 
-            line-height: 1.8;
+.user-info strong {
 
-            margin-bottom: 22px;
+    display: block;
 
-        }
+    font-size: 19px;
 
+    margin-bottom: 5px;
+}
 
-        .privacy-box strong {
 
-            color: #111827;
+.user-info small {
 
-        }
+    color: #888;
 
+    font-size: 13px;
+}
 
-        .privacy-buttons {
 
-            display: flex;
+.header-actions {
 
-            flex-direction: column;
+    display: flex;
 
-            gap: 10px;
+    gap: 8px;
+}
 
-        }
 
+.header-icon {
 
-        .privacy-buttons button {
+    width: 45px;
+    height: 45px;
 
-            width: 100%;
+    border: none;
 
-            border: none;
+    background: white;
 
-            padding: 13px;
+    border-radius: 50%;
 
-            border-radius: 10px;
+    font-size: 22px;
 
-            font-size: 15px;
+    cursor: pointer;
 
-            cursor: pointer;
+    box-shadow: 0 3px 12px rgba(0,0,0,.07);
 
-        }
+    position: relative;
+}
 
 
-        .make-public-btn {
+.notification-number {
 
-            background: #2563eb;
+    position: absolute;
 
-            color: white;
+    top: -2px;
+    right: -2px;
 
-        }
+    background: #ef3f58;
 
+    color: white;
 
-        .make-public-btn:hover {
+    min-width: 19px;
+    height: 19px;
 
-            background: #1d4ed8;
+    border-radius: 20px;
 
-        }
+    font-size: 11px;
 
+    display: flex;
 
-        .change-name-btn {
+    align-items: center;
+    justify-content: center;
+}
 
-            background: #eef2ff;
 
-            color: #2563eb;
+/* ==================================================
+   بانر التعلم
+================================================== */
 
-        }
+.learning-banner {
 
+    position: relative;
 
-        .change-name-btn:hover {
+    min-height: 190px;
 
-            background: #e0e7ff;
+    border-radius: 25px;
 
-        }
+    overflow: hidden;
 
+    padding: 25px;
 
-        .cancel-privacy-btn {
+    margin-bottom: 18px;
 
-            background: #eeeeee;
+    background:
+        linear-gradient(
+            120deg,
+            #6254eb,
+            #8374ed
+        );
 
-            color: #333;
+    color: white;
 
-        }
+    box-shadow:
+        0 10px 25px rgba(98,84,235,.22);
+}
 
 
-        .cancel-privacy-btn:hover {
+.learning-banner h1 {
 
-            background: #dddddd;
+    margin: 0 0 10px;
 
-        }
+    font-size: 27px;
+}
 
-    </style>
+
+.learning-banner p {
+
+    margin: 0;
+
+    line-height: 1.8;
+
+    font-size: 14px;
+
+    opacity: .9;
+
+    max-width: 230px;
+}
+
+
+.start-learning-btn {
+
+    border: none;
+
+    background: white;
+
+    color: #5d52dc;
+
+    padding: 12px 20px;
+
+    border-radius: 25px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    margin-top: 18px;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,.12);
+}
+
+
+.books-decoration {
+
+    position: absolute;
+
+    left: 15px;
+    bottom: 12px;
+
+    font-size: 75px;
+
+    transform: rotate(-4deg);
+}
+
+
+/* ==================================================
+   العناوين
+================================================== */
+
+.section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin: 22px 4px 12px;
+}
+
+
+.section-title h2 {
+
+    margin: 0;
+
+    font-size: 18px;
+}
+
+
+.section-title button {
+
+    border: none;
+
+    background: transparent;
+
+    color: #5c51dc;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   بطاقة التقدم
+================================================== */
+
+.progress-card {
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 20px 10px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    box-shadow:
+        0 4px 18px rgba(0,0,0,.06);
+}
+
+
+.stat {
+
+    text-align: center;
+
+    border-left: 1px solid #eeeeee;
+
+}
+
+
+.stat:last-child {
+
+    border-left: none;
+}
+
+
+.stat-icon {
+
+    font-size: 25px;
+
+    margin-bottom: 8px;
+}
+
+
+.stat-number {
+
+    display: block;
+
+    font-size: 21px;
+
+    font-weight: bold;
+
+    margin-bottom: 5px;
+}
+
+
+.stat-label {
+
+    color: #8a8a94;
+
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   تحدي اليوم
+================================================== */
+
+.challenge-card {
+
+    background:
+        linear-gradient(
+            110deg,
+            #fff8ee,
+            #fffdf8
+        );
+
+    border-radius: 20px;
+
+    padding: 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    box-shadow:
+        0 3px 15px rgba(0,0,0,.04);
+}
+
+
+.challenge-icon {
+
+    width: 62px;
+    height: 62px;
+
+    border-radius: 18px;
+
+    background: #fff;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 35px;
+}
+
+
+.challenge-content {
+
+    flex: 1;
+}
+
+
+.challenge-content strong {
+
+    display: block;
+
+    color: #d87720;
+
+    margin-bottom: 9px;
+}
+
+
+.challenge-progress {
+
+    width: 100%;
+
+    height: 8px;
+
+    background: #eadfcf;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    margin-bottom: 7px;
+}
+
+
+.challenge-fill {
+
+    height: 100%;
+
+    width: 0%;
+
+    background: #f3a516;
+
+    border-radius: 20px;
+
+    transition: .4s;
+}
+
+
+.challenge-count {
+
+    color: #888;
+
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   الأقسام الرئيسية
+================================================== */
+
+.main-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+}
+
+
+.main-card-new {
+
+    border: none;
+
+    border-radius: 20px;
+
+    padding: 18px;
+
+    min-height: 105px;
+
+    text-align: right;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    transition: transform .15s;
+}
+
+
+.main-card-new:active {
+
+    transform: scale(.97);
+}
+
+
+.main-card-new .icon {
+
+    width: 53px;
+    height: 53px;
+
+    border-radius: 17px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+
+    flex-shrink: 0;
+}
+
+
+.main-card-new h3 {
+
+    margin: 0 0 6px;
+
+    font-size: 16px;
+}
+
+
+.main-card-new p {
+
+    margin: 0;
+
+    color: #888;
+
+    font-size: 12px;
+}
+
+
+.card-learning {
+
+    background: #e4f9ef;
+}
+
+
+.card-learning .icon {
+
+    background: #c9f2df;
+}
+
+
+.card-quiz {
+
+    background: #eaf3ff;
+}
+
+
+.card-quiz .icon {
+
+    background: #d8e9ff;
+}
+
+
+.card-review {
+
+    background: #fff0f6;
+}
+
+
+.card-review .icon {
+
+    background: #ffddea;
+}
+
+
+.card-chat {
+
+    background: #f0edff;
+}
+
+
+.card-chat .icon {
+
+    background: #e1dcff;
+}
+
+
+/* ==================================================
+   الكلمات المحفوظة
+================================================== */
+
+.saved-list {
+
+    display: flex;
+
+    gap: 10px;
+
+    overflow-x: auto;
+
+    padding: 3px 2px 10px;
+
+    scrollbar-width: none;
+}
+
+
+.saved-list::-webkit-scrollbar {
+
+    display: none;
+}
+
+
+.saved-word {
+
+    flex: 0 0 96px;
+
+    min-height: 120px;
+
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 9px;
+
+    text-align: center;
+
+    border: 1px solid #eeeeee;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.04);
+
+    position: relative;
+}
+
+
+.saved-word .star {
+
+    position: absolute;
+
+    top: 5px;
+    right: 6px;
+
+    font-size: 15px;
+}
+
+
+.saved-word .saved-image {
+
+    width: 55px;
+    height: 55px;
+
+    margin: auto auto 5px;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #f5f5f8;
+
+    font-size: 30px;
+}
+
+
+.saved-word img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+
+.saved-word strong {
+
+    display: block;
+
+    font-size: 13px;
+
+    margin-bottom: 3px;
+}
+
+
+.saved-word small {
+
+    color: #888;
+
+    font-size: 11px;
+}
+
+
+/* ==================================================
+   الشريط السفلي
+================================================== */
+
+.bottom-nav {
+
+    position: fixed;
+
+    z-index: 5000;
+
+    bottom: 10px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: calc(100% - 24px);
+
+    max-width: 570px;
+
+    height: 74px;
+
+    background: rgba(255,255,255,.96);
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.12);
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    align-items: center;
+
+    padding: 6px;
+}
+
+
+.bottom-nav button {
+
+    height: 62px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #9696a0;
+
+    cursor: pointer;
+
+    border-radius: 22px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 3px;
+
+    font-size: 21px;
+}
+
+
+.bottom-nav button span {
+
+    font-size: 10px;
+}
+
+
+.bottom-nav .active {
+
+    background:
+        linear-gradient(
+            145deg,
+            #7669f3,
+            #5b4ee8
+        );
+
+    color: white;
+
+    width: 65px;
+
+    height: 65px;
+
+    justify-self: center;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 7px 18px rgba(92,80,230,.3);
+}
+
+
+/* ==================================================
+   نافذة الخصوصية
+================================================== */
+
+.privacy-overlay,
+.admin-message-overlay {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.55);
+
+    z-index: 9999;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+}
+
+
+.privacy-box,
+.admin-message-box {
+
+    width: 100%;
+
+    max-width: 430px;
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 28px;
+
+    text-align: center;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.25);
+}
+
+
+.privacy-icon {
+
+    font-size: 50px;
+
+    margin-bottom: 10px;
+}
+
+
+.privacy-box h2,
+.admin-message-box h2 {
+
+    margin: 0 0 14px;
+}
+
+
+.privacy-box p,
+.admin-message-box p {
+
+    color: #555;
+
+    line-height: 1.8;
+
+    margin-bottom: 22px;
+}
+
+
+.privacy-buttons {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.privacy-buttons button {
+
+    width: 100%;
+
+    border: none;
+
+    padding: 13px;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+
+.make-public-btn {
+
+    background: #2563eb;
+
+    color: white;
+}
+
+
+.change-name-btn {
+
+    background: #eef2ff;
+
+    color: #2563eb;
+}
+
+
+.cancel-privacy-btn {
+
+    background: #eeeeee;
+
+    color: #333;
+}
+
+
+.admin-close-btn {
+
+    width: 100%;
+
+    border: none;
+
+    padding: 13px;
+
+    border-radius: 12px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   الجوال
+================================================== */
+
+@media (max-width: 420px) {
+
+    .app-page {
+
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .learning-banner {
+
+        min-height: 180px;
+
+        padding: 22px;
+    }
+
+    .learning-banner h1 {
+
+        font-size: 24px;
+    }
+
+    .books-decoration {
+
+        font-size: 62px;
+
+        left: 5px;
+    }
+
+    .main-card-new {
+
+        padding: 13px;
+
+        gap: 8px;
+    }
+
+    .main-card-new .icon {
+
+        width: 46px;
+        height: 46px;
+
+        font-size: 24px;
+    }
+
+    .main-card-new h3 {
+
+        font-size: 14px;
+    }
+
+    .main-card-new p {
+
+        font-size: 10px;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -182,26 +1015,21 @@
 <body>
 
 
+<main class="app-page">
+
+
     <!-- ==========================================
-         الشريط العلوي
+         الهيدر
     ========================================== -->
 
-    <header class="topbar">
+    <header class="new-header">
 
 
-        <div class="logo">
-
-            English<span>Words</span>
-
-        </div>
-
-
-
-        <div class="profile">
+        <div class="user-area">
 
 
             <div
-                class="avatar"
+                class="avatar-new"
                 id="userAvatar">
 
                 ?
@@ -209,47 +1037,48 @@
             </div>
 
 
-
-            <div>
+            <div class="user-info">
 
                 <strong id="welcomeText">
-
                     مرحباً 👋
-
                 </strong>
 
-
-                <small id="userEmail">
-
-                    جاري التحميل...
-
+                <small>
+                    جاهز لتعلم شيء جديد اليوم؟
                 </small>
 
             </div>
 
 
+        </div>
 
-            <!-- زر الملف الشخصي -->
+
+        <div class="header-actions">
+
 
             <button
-                class="profile-btn"
-                onclick="window.location.href='profile.html'"
-                title="الملف الشخصي">
+                class="header-icon"
+                onclick="showAdminMessageAgain()">
 
-                👤
+                🔔
+
+                <span
+                    id="notificationNumber"
+                    class="notification-number"
+                    style="display:none">
+
+                    1
+
+                </span>
 
             </button>
 
 
-
-            <!-- تسجيل الخروج -->
-
             <button
-                class="logout-btn"
-                onclick="logout()"
-                title="تسجيل الخروج">
+                class="header-icon"
+                onclick="window.location.href='profile.html'">
 
-                🚪
+                👤
 
             </button>
 
@@ -262,528 +1091,528 @@
 
 
     <!-- ==========================================
-         المحتوى
+         بانر ابدأ التعلم
     ========================================== -->
 
-    <main class="container">
+    <section class="learning-banner">
 
 
-        <section class="welcome">
+        <h1>
+            ابدأ التعلم 📚
+        </h1>
+
+
+        <p>
+            تعلم كلمات جديدة
+            <br>
+            وطوّر مستواك في الإنجليزية
+        </p>
+
+
+        <button
+            class="start-learning-btn"
+            onclick="startLearning()">
+
+            ابدأ الآن
+            ←
+
+        </button>
+
+
+        <div class="books-decoration">
+            📚
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         تقدمك اليوم
+    ========================================== -->
+
+    <div class="section-title">
+
+        <h2>
+            تقدمك اليوم
+        </h2>
+
+
+        <button
+            onclick="window.location.href='progress.html'">
+
+            عرض التفاصيل
+
+        </button>
+
+    </div>
+
+
+    <section class="progress-card">
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                🔥
+            </div>
+
+            <span
+                id="streakNumber"
+                class="stat-number">
+
+                0
+
+            </span>
+
+            <span class="stat-label">
+                يوم متتالي
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                📖
+            </div>
+
+            <span
+                id="learnedNumber"
+                class="stat-number">
+
+                0
+
+            </span>
+
+            <span class="stat-label">
+                كلمة متعلمة
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                📈
+            </div>
+
+            <span
+                id="progressNumber"
+                class="stat-number">
+
+                0%
+
+            </span>
+
+            <span class="stat-label">
+                نسبة التقدم
+            </span>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         تحدي اليوم
+    ========================================== -->
+
+    <div class="section-title">
+
+        <h2>
+            🔥 تحدي اليوم
+        </h2>
+
+    </div>
+
+
+    <section class="challenge-card">
+
+
+        <div class="challenge-icon">
+            🎯
+        </div>
+
+
+        <div class="challenge-content">
+
+            <strong>
+                تعلم 15 كلمة جديدة اليوم
+            </strong>
+
+
+            <div class="challenge-progress">
+
+                <div
+                    id="challengeFill"
+                    class="challenge-fill">
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="challengeCount"
+                class="challenge-count">
+
+                0 / 15
+
+            </div>
+
+        </div>
+
+
+        <div style="font-size:35px;">
+            🎁
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         الأقسام الرئيسية
+    ========================================== -->
+
+    <div class="section-title">
+
+        <h2>
+            الأقسام الرئيسية
+        </h2>
+
+    </div>
+
+
+    <section class="main-grid">
+
+
+        <!-- التعلم -->
+
+        <button
+            class="main-card-new card-learning"
+            onclick="startLearning()">
+
+
+            <div class="icon">
+                📚
+            </div>
 
 
             <div>
 
-
-                <p class="small-title">
-
-                    منصة تعلم الإنجليزية
-
-                </p>
-
-
-
-                <h1>
-
-                    تعلم كلمات جديدة كل يوم 🚀
-
-                </h1>
-
-
+                <h3>
+                    التعلم
+                </h3>
 
                 <p>
-
-                    تعلم الكلمات الإنجليزية بالصور،
-                    واستمع للنطق،
-                    ثم اختبر نفسك بطريقة ممتعة.
-
+                    تعلم كلمات جديدة
                 </p>
 
+            </div>
+
+
+        </button>
+
+
+
+        <!-- الاختبار -->
+
+        <button
+            class="main-card-new card-quiz"
+            onclick="window.location.href='quiz.html'">
+
+
+            <div class="icon">
+                🏆
+            </div>
+
+
+            <div>
+
+                <h3>
+                    الاختبار
+                </h3>
+
+                <p>
+                    اختبر مستواك
+                </p>
 
             </div>
 
 
+        </button>
 
-            <div class="welcome-icon">
 
-                📚
+
+        <!-- المراجعة -->
+
+        <button
+            class="main-card-new card-review"
+            onclick="window.location.href='review.html'">
+
+
+            <div class="icon">
+                🧠
+            </div>
+
+
+            <div>
+
+                <h3>
+                    المراجعة
+                </h3>
+
+                <p>
+                    راجع الكلمات المحفوظة
+                </p>
 
             </div>
 
 
-        </section>
+        </button>
 
 
+
+        <!-- الدردشة -->
+
+        <button
+            class="main-card-new card-chat"
+            onclick="openChat()">
+
+
+            <div class="icon">
+                💬
+            </div>
+
+
+            <div>
+
+                <h3>
+                    الدردشة
+                </h3>
+
+                <p>
+                    تحدث مع المستخدمين
+                </p>
+
+            </div>
+
+
+        </button>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         الكلمات المحفوظة
+    ========================================== -->
+
+    <div class="section-title">
 
         <h2>
-
-            ماذا تريد أن تفعل؟
-
+            كلماتك المحفوظة
         </h2>
 
 
+        <button
+            onclick="window.location.href='favorites.html'">
 
-        <section class="menu">
+            عرض الكل
 
+        </button>
 
-            <!-- ==========================================
-                 الدردشة
-            ========================================== -->
+    </div>
 
-            <button
-                class="menu-card"
-                onclick="openChat()">
-
-
-                <div class="card-icon">
-
-                    💬
-
-                </div>
-
-
-                <div class="card-text">
-
-
-                    <h3>
-
-                        الدردشة
-
-                    </h3>
-
-
-                    <p>
-
-                        تحدث مع المستخدمين الآخرين
-
-                    </p>
-
-
-                </div>
-
-
-                <span class="arrow">
-
-                    ←
-
-                </span>
-
-
-            </button>
-
-
-
-            <!-- ==========================================
-                 تعلم الكلمات
-            ========================================== -->
-
-            <button
-                class="menu-card main-card"
-                onclick="startLearning()">
-
-
-                <div class="card-icon">
-
-                    📚
-
-                </div>
-
-
-                <div class="card-text">
-
-
-                    <h3>
-
-                        تعلم الكلمات
-
-                    </h3>
-
-
-                    <p>
-
-                        تعلم كلمات جديدة باستخدام الصور
-
-                    </p>
-
-
-                </div>
-
-
-                <span class="arrow">
-
-                    ←
-
-                </span>
-
-
-            </button>
-
-
-
-            <!-- ==========================================
-                 الاختبار
-            ========================================== -->
-
-            <button
-                class="menu-card"
-                onclick="window.location.href='quiz.html'">
-
-
-                <div class="card-icon">
-
-                    🧠
-
-                </div>
-
-
-                <div class="card-text">
-
-
-                    <h3>
-
-                        اختبار الكلمات
-
-                    </h3>
-
-
-                    <p>
-
-                        اختبر نفسك وتأكد من حفظ الكلمات
-
-                    </p>
-
-
-                </div>
-
-
-                <span class="arrow">
-
-                    ←
-
-                </span>
-
-
-            </button>
-
-
-
-            <!-- ==========================================
-                 المراجعة
-            ========================================== -->
-
-            <button
-                class="menu-card"
-                onclick="window.location.href='review.html'">
-
-
-                <div class="card-icon">
-
-                    🔄
-
-                </div>
-
-
-                <div class="card-text">
-
-
-                    <h3>
-
-                        مراجعة الكلمات
-
-                    </h3>
-
-
-                    <p>
-
-                        راجع الكلمات التي تحتاج إلى تثبيت
-
-                    </p>
-
-
-                </div>
-
-
-                <span class="arrow">
-
-                    ←
-
-                </span>
-
-
-            </button>
-
-
-
-            <!-- ==========================================
-                 كلماتي
-            ========================================== -->
-
-            <button
-                class="menu-card"
-                onclick="window.location.href='favorites.html'">
-
-
-                <div class="card-icon">
-
-                    ⭐
-
-                </div>
-
-
-                <div class="card-text">
-
-
-                    <h3>
-
-                        كلماتي
-
-                    </h3>
-
-
-                    <p>
-
-                        شاهد الكلمات التي حفظتها
-
-                    </p>
-
-
-                </div>
-
-
-                <span class="arrow">
-
-                    ←
-
-                </span>
-
-
-            </button>
-
-
-
-            <!-- ==========================================
-                 التقدم
-            ========================================== -->
-
-            <button
-                class="menu-card"
-                onclick="window.location.href='progress.html'">
-
-
-                <div class="card-icon">
-
-                    📊
-
-                </div>
-
-
-                <div class="card-text">
-
-
-                    <h3>
-
-                        تقدمي
-
-                    </h3>
-
-
-                    <p>
-
-                        تابع مستواك وعدد الكلمات التي تعلمتها
-
-                    </p>
-
-
-                </div>
-
-
-                <span class="arrow">
-
-                    ←
-
-                </span>
-
-
-            </button>
-
-
-
-            <!-- ==========================================
-                 تحدي اليوم
-            ========================================== -->
-
-            <button
-                class="menu-card"
-                onclick="window.location.href='daily.html'">
-
-
-                <div class="card-icon">
-
-                    🎯
-
-                </div>
-
-
-                <div class="card-text">
-
-
-                    <h3>
-
-                        تحدي اليوم
-
-                    </h3>
-
-
-                    <p>
-
-                        أنجز هدفك اليومي في تعلم الإنجليزية
-
-                    </p>
-
-
-                </div>
-
-
-                <span class="arrow">
-
-                    ←
-
-                </span>
-
-
-            </button>
-
-
-
-            <!-- الإعدادات -->
-
-            <button
-                class="settings-btn"
-                onclick="comingSoon('الإعدادات')">
-
-                ⚙️
-
-            </button>
-
-
-        </section>
-
-
-    </main>
-
-
-
-    <!-- ==========================================
-         الفوتر
-    ========================================== -->
-
-    <footer>
-
-        EnglishWords © 2026
-
-    </footer>
-
-
-
-    <!-- ==========================================
-         نافذة الحساب الخاص
-    ========================================== -->
 
     <div
-        class="privacy-overlay"
-        id="privacyOverlay">
+        id="savedWords"
+        class="saved-list">
 
 
-        <div class="privacy-box">
+        <div class="saved-word">
 
-
-            <div class="privacy-icon">
-
-                🔒
-
+            <div class="saved-image">
+                ⭐
             </div>
 
+            <strong>
+                لا توجد
+            </strong>
+
+            <small>
+                كلمات بعد
+            </small>
+
+        </div>
 
 
-            <h2>
-
-                حسابك خاص
-
-            </h2>
-
-
-
-            <p>
-
-
-                لاستخدام الدردشة، يجب تحويل حسابك إلى
-
-                <strong>
-                    عام 🌐
-                </strong>
-
-
-                <br>
-                <br>
-
-
-                عند تحويل حسابك إلى عام،
-
-                <strong>
-                    سيظهر اسمك لجميع المستخدمين في الدردشة.
-                </strong>
-
-
-                <br>
-                <br>
-
-
-                إذا كنت لا تريد إظهار اسمك الحالي،
-                يمكنك تغيير اسمك من الملف الشخصي أولًا.
-
-
-            </p>
+    </div>
 
 
 
-            <div class="privacy-buttons">
-
-
-                <!-- تحويل إلى عام -->
-
-                <button
-                    class="make-public-btn"
-                    onclick="goToPublicProfile()">
-
-                    تحويل إلى عام 🌐
-
-                </button>
+</main>
 
 
 
-                <!-- تغيير الاسم -->
+<!-- ==================================================
+     الشريط السفلي
+================================================== -->
 
-                <button
-                    class="change-name-btn"
-                    onclick="goToProfile()">
-
-                    تغيير الاسم 👤
-
-                </button>
+<nav class="bottom-nav">
 
 
+    <button
+        onclick="startLearning()">
 
-                <!-- إلغاء -->
+        📖
 
-                <button
-                    class="cancel-privacy-btn"
-                    onclick="closePrivacyMessage()">
+        <span>
+            التعلم
+        </span>
 
-                    إلغاء
-
-                </button>
+    </button>
 
 
-            </div>
+    <button
+        onclick="window.location.href='review.html'">
+
+        🔄
+
+        <span>
+            المراجعة
+        </span>
+
+    </button>
+
+
+    <button
+        class="active"
+        onclick="window.scrollTo({
+            top:0,
+            behavior:'smooth'
+        })">
+
+        🏠
+
+        <span>
+            الرئيسية
+        </span>
+
+    </button>
+
+
+    <button
+        onclick="window.location.href='favorites.html'">
+
+        🔖
+
+        <span>
+            المحفوظة
+        </span>
+
+    </button>
+
+
+    <button
+        onclick="window.location.href='profile.html'">
+
+        ⋯
+
+        <span>
+            المزيد
+        </span>
+
+    </button>
+
+
+</nav>
+
+
+
+<!-- ==================================================
+     نافذة الحساب الخاص
+================================================== -->
+
+<div
+    class="privacy-overlay"
+    id="privacyOverlay">
+
+
+    <div class="privacy-box">
+
+
+        <div class="privacy-icon">
+            🔒
+        </div>
+
+
+        <h2>
+            حسابك خاص
+        </h2>
+
+
+        <p>
+
+            لاستخدام الدردشة، يجب تحويل حسابك إلى
+
+            <strong>
+                عام 🌐
+            </strong>
+
+            <br><br>
+
+            عند تحويل حسابك إلى عام،
+
+            <strong>
+                سيظهر اسمك لجميع المستخدمين في الدردشة.
+            </strong>
+
+            <br><br>
+
+            إذا كنت لا تريد إظهار اسمك الحالي،
+            يمكنك تغيير اسمك من الملف الشخصي أولًا.
+
+        </p>
+
+
+        <div class="privacy-buttons">
+
+
+            <button
+                class="make-public-btn"
+                onclick="goToPublicProfile()">
+
+                تحويل إلى عام 🌐
+
+            </button>
+
+
+            <button
+                class="change-name-btn"
+                onclick="goToProfile()">
+
+                تغيير الاسم 👤
+
+            </button>
+
+
+            <button
+                class="cancel-privacy-btn"
+                onclick="closePrivacyMessage()">
+
+                إلغاء
+
+            </button>
 
 
         </div>
@@ -791,597 +1620,524 @@
 
     </div>
 
-<!-- ==========================================
+
+</div>
+
+
+
+<!-- ==================================================
      نافذة رسالة الأدمن
-========================================== -->
+================================================== -->
 
 <div
     class="admin-message-overlay"
-    id="adminMessageOverlay"
-    style="
-        display:none;
-        position:fixed;
-        inset:0;
-        background:rgba(0,0,0,.55);
-        z-index:10000;
-        align-items:center;
-        justify-content:center;
-        padding:20px;
-    "
->
+    id="adminMessageOverlay">
 
 
-<div
-    style="
-        width:100%;
-        max-width:430px;
-        background:white;
-        border-radius:20px;
-        padding:28px;
-        text-align:center;
-        box-shadow:0 15px 40px rgba(0,0,0,.25);
-    "
->
+    <div class="admin-message-box">
 
-    <div
-        style="
-            font-size:48px;
-            margin-bottom:10px;
-        "
-    >
-        📢
+
+        <div style="font-size:48px;margin-bottom:10px;">
+            📢
+        </div>
+
+
+        <h2 id="adminMessageTitle">
+            رسالة جديدة
+        </h2>
+
+
+        <p
+            id="adminMessageText"
+            style="white-space:pre-wrap;">
+
+        </p>
+
+
+        <button
+            class="admin-close-btn"
+            onclick="closeAdminMessage()">
+
+            فهمت 👍
+
+        </button>
+
+
     </div>
 
 
-    <h2
-        id="adminMessageTitle"
-        style="
-            margin:0 0 15px;
-            color:#111827;
-        "
-    >
-        رسالة جديدة
-    </h2>
-
-
-    <p
-        id="adminMessageText"
-        style="
-            color:#555;
-            line-height:1.8;
-            margin-bottom:22px;
-            white-space:pre-wrap;
-        "
-    ></p>
-
-
-    <button
-        onclick="closeAdminMessage()"
-        style="
-            width:100%;
-            border:none;
-            padding:13px;
-            border-radius:10px;
-            background:#2563eb;
-            color:white;
-            font-size:16px;
-            cursor:pointer;
-        "
-    >
-        فهمت 👍
-    </button>
-
 </div>
 
 
-</div>
+
+<script src="script.js"></script>
 
 
-    <script src="script.js"></script>
+<script>
+
+/* ==================================================
+   المتغيرات
+================================================== */
+
+let currentUser = null;
+
+let currentAdminMessage = null;
 
 
+/* ==================================================
+   تحميل المستخدم
+================================================== */
 
-    <script>
+async function loadUser() {
 
-
-        // ==========================================
-        // المتغيرات
-        // ==========================================
-
-        let currentUser = null;
-
-
-
-        // ==========================================
-        // تسجيل زيارة الصفحة الرئيسية
-        // ==========================================
-
-        async function recordHomePageVisit() {
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
 
 
-            const {
+    if (error || !user) {
 
-                data: { user },
+        window.location.href = "login.html";
 
-                error: userError
+        return;
 
-            } = await supabaseClient.auth.getUser();
-
-
-
-            if (userError || !user) {
-
-                return;
-
-            }
+    }
 
 
+    currentUser = user;
 
-            const {
 
-                data: visit,
+    const name =
+        user.user_metadata?.name ||
+        user.email?.split("@")[0] ||
+        "مستخدم";
 
-                error: visitError
 
-            } = await supabaseClient
+    document.getElementById(
+        "welcomeText"
+    ).textContent =
+        "مرحباً " + name + " 👋";
 
-                .from("home_page_visits")
 
-                .select("visit_count")
+    document.getElementById(
+        "userAvatar"
+    ).textContent =
+        name.charAt(0).toUpperCase();
 
-                .eq(
-                    "user_id",
-                    user.id
+}
+
+
+/* ==================================================
+   تسجيل زيارة الصفحة
+================================================== */
+
+async function recordHomePageVisit() {
+
+    if (!currentUser) return;
+
+
+    const {
+        data: visit,
+        error
+    } = await supabaseClient
+
+        .from("home_page_visits")
+
+        .select("visit_count")
+
+        .eq(
+            "user_id",
+            currentUser.id
+        )
+
+        .maybeSingle();
+
+
+    if (error) {
+
+        console.error(
+            "خطأ في الزيارات:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    const username =
+        currentUser.user_metadata?.name ||
+        currentUser.email?.split("@")[0] ||
+        "مستخدم";
+
+
+    if (visit) {
+
+        await supabaseClient
+
+            .from("home_page_visits")
+
+            .update({
+
+                username: username,
+
+                visit_count:
+                    (visit.visit_count || 0) + 1,
+
+                last_visit_at:
+                    new Date().toISOString()
+
+            })
+
+            .eq(
+                "user_id",
+                currentUser.id
+            );
+
+    } else {
+
+        await supabaseClient
+
+            .from("home_page_visits")
+
+            .insert({
+
+                user_id:
+                    currentUser.id,
+
+                username:
+                    username,
+
+                visit_count:
+                    1,
+
+                last_visit_at:
+                    new Date().toISOString()
+
+            });
+
+    }
+
+}
+
+
+/* ==================================================
+   تحميل الإحصائيات
+================================================== */
+
+async function loadStatistics() {
+
+    if (!currentUser) return;
+
+
+    /* الكلمات المتعلمة */
+
+    const {
+        count: learnedCount,
+        error: learnedError
+    } = await supabaseClient
+
+        .from("learned_words")
+
+        .select("*", {
+            count: "exact",
+            head: true
+        })
+
+        .eq(
+            "user_id",
+            currentUser.id
+        );
+
+
+    if (!learnedError) {
+
+        document.getElementById(
+            "learnedNumber"
+        ).textContent =
+            learnedCount || 0;
+
+    }
+
+
+    /* إجمالي الكلمات */
+
+    const {
+        count: totalCount,
+        error: totalError
+    } = await supabaseClient
+
+        .from("words")
+
+        .select("*", {
+            count: "exact",
+            head: true
+        });
+
+
+    if (!totalError && totalCount) {
+
+        const learned =
+            learnedCount || 0;
+
+        const percentage =
+            Math.min(
+                100,
+                Math.round(
+                    (learned / totalCount) * 100
                 )
+            );
 
-                .maybeSingle();
 
+        document.getElementById(
+            "progressNumber"
+        ).textContent =
+            percentage + "%";
 
+    }
 
-            if (visitError) {
 
+    /* كلمات اليوم */
 
-                console.error(
+    const today =
+        new Date();
 
-                    "خطأ في قراءة الزيارات:",
+    today.setHours(
+        0, 0, 0, 0
+    );
 
-                    visitError
 
-                );
+    const {
+        count: todayCount,
+        error: todayError
+    } = await supabaseClient
 
+        .from("learned_words")
 
-                return;
+        .select("*", {
+            count: "exact",
+            head: true
+        })
 
-            }
+        .eq(
+            "user_id",
+            currentUser.id
+        )
 
+        .gte(
+            "created_at",
+            today.toISOString()
+        );
 
 
-            // المستخدم دخل من قبل
+    if (!todayError) {
 
-            if (visit) {
+        const count =
+            Math.min(
+                todayCount || 0,
+                15
+            );
 
 
-                const newCount =
+        const percent =
+            (count / 15) * 100;
 
-                    (visit.visit_count || 0) + 1;
 
+        document.getElementById(
+            "challengeFill"
+        ).style.width =
+            percent + "%";
 
 
-                const {
+        document.getElementById(
+            "challengeCount"
+        ).textContent =
+            count + " / 15";
 
-                    error: updateError
+    }
 
-                } = await supabaseClient
 
-                    .from("home_page_visits")
+    /* عدد الزيارات كمؤشر للأيام */
 
-                    .update({
+    const {
+        data: visitData
+    } = await supabaseClient
 
-                        username:
+        .from("home_page_visits")
 
-                            user.user_metadata?.name ||
+        .select("visit_count")
 
-                            user.email?.split("@")[0] ||
+        .eq(
+            "user_id",
+            currentUser.id
+        )
 
-                            "مستخدم",
+        .maybeSingle();
 
 
-                        visit_count:
+    document.getElementById(
+        "streakNumber"
+    ).textContent =
+        visitData?.visit_count || 0;
 
-                            newCount,
+}
 
 
-                        last_visit_at:
+/* ==================================================
+   تحميل الكلمات المحفوظة
+================================================== */
 
-                            new Date().toISOString()
+async function loadSavedWords() {
 
-                    })
+    if (!currentUser) return;
 
-                    .eq(
-                        "user_id",
-                        user.id
-                    );
 
+    const {
+        data,
+        error
+    } = await supabaseClient
 
+        .from("favorites")
 
-                if (updateError) {
+        .select(`
+            id,
+            word_id,
+            words (
+                english,
+                arabic,
+                image
+            )
+        `)
 
+        .eq(
+            "user_id",
+            currentUser.id
+        )
 
-                    console.error(
+        .limit(10);
 
-                        "خطأ في تحديث عدد الزيارات:",
 
-                        updateError
+    if (error) {
 
-                    );
+        console.error(
+            "خطأ في المفضلة:",
+            error
+        );
 
+        return;
 
-                }
+    }
 
 
-            }
+    const container =
+        document.getElementById(
+            "savedWords"
+        );
 
 
-            // أول زيارة
+    container.innerHTML = "";
 
-            else {
 
+    if (!data || data.length === 0) {
 
-                const {
+        container.innerHTML = `
 
-                    error: insertError
+            <div class="saved-word">
 
-                } = await supabaseClient
+                <div class="saved-image">
+                    ⭐
+                </div>
 
-                    .from("home_page_visits")
+                <strong>
+                    لا توجد
+                </strong>
 
-                    .insert({
+                <small>
+                    كلمات بعد
+                </small>
 
-                        user_id:
+            </div>
 
-                            user.id,
+        `;
 
+        return;
 
-                        username:
+    }
 
-                            user.user_metadata?.name ||
 
-                            user.email?.split("@")[0] ||
+    data.forEach(item => {
 
-                            "مستخدم",
+        const word =
+            item.words;
 
 
-                        visit_count:
+        if (!word) return;
 
-                            1,
 
+        const card =
+            document.createElement("div");
 
-                        last_visit_at:
 
-                            new Date().toISOString()
+        card.className =
+            "saved-word";
 
-                    });
 
+        let imageHTML =
+            "📚";
 
 
-                if (insertError) {
+        if (word.image) {
 
+            imageHTML = `
 
-                    console.error(
+                <img
+                    src="${word.image}"
+                    alt=""
+                >
 
-                        "خطأ في تسجيل الزيارة:",
-
-                        insertError
-
-                    );
-
-
-                }
-
-
-            }
-
+            `;
 
         }
 
 
+        card.innerHTML = `
 
-        // ==========================================
-        // تحميل المستخدم
-        // ==========================================
+            <span class="star">
+                ⭐
+            </span>
 
-        async function loadUser() {
+            <div class="saved-image">
+                ${imageHTML}
+            </div>
 
+            <strong>
+                ${escapeHtml(word.english)}
+            </strong>
 
-            const {
+            <small>
+                ${escapeHtml(word.arabic)}
+            </small>
 
-                data: { user },
+        `;
 
-                error
 
-            } = await supabaseClient.auth.getUser();
+        container.appendChild(card);
 
+    });
 
+}
 
-            if (error || !user) {
 
-
-                window.location.href =
-
-                    "login.html";
-
-
-                return;
-
-            }
-
-
-
-            currentUser = user;
-
-
-
-            const name =
-
-                user.user_metadata?.name ||
-
-                user.email?.split("@")[0] ||
-
-                "مستخدم";
-
-
-
-            const email =
-
-                user.email || "";
-
-
-
-            document.getElementById(
-
-                "welcomeText"
-
-            ).textContent =
-
-                "مرحباً " + name + " 👋";
-
-
-
-            document.getElementById(
-
-                "userEmail"
-
-            ).textContent =
-
-                email;
-
-
-
-            document.getElementById(
-
-                "userAvatar"
-
-            ).textContent =
-
-                name.charAt(0).toUpperCase();
-
-
-        }
-
-
-
-        // ==========================================
-        // زر الدردشة
-        // ==========================================
-
-        async function openChat() {
-
-
-            // إذا لم يتم تحميل المستخدم بعد
-
-            if (!currentUser) {
-
-                await loadUser();
-
-            }
-
-
-
-            if (!currentUser) {
-
-                return;
-
-            }
-
-
-
-            // قراءة الخصوصية
-
-            const {
-
-                data: profile,
-
-                error
-
-            } = await supabaseClient
-
-                .from("profiles")
-
-                .select("is_public")
-
-                .eq(
-                    "id",
-                    currentUser.id
-                )
-
-                .maybeSingle();
-
-
-
-            if (error) {
-
-
-                console.error(
-
-                    "خطأ في قراءة الخصوصية:",
-
-                    error
-
-                );
-
-
-                alert(
-
-                    "حدث خطأ، حاول مرة أخرى."
-
-                );
-
-
-                return;
-
-            }
-
-
-
-            // ==========================================
-            // الحساب خاص
-            // ==========================================
-
-            if (
-
-                !profile ||
-
-                profile.is_public !== true
-
-            ) {
-
-
-                document.getElementById(
-
-                    "privacyOverlay"
-
-                ).style.display =
-
-                    "flex";
-
-
-                return;
-
-            }
-
-
-
-            // ==========================================
-            // الحساب عام
-            // ==========================================
-
-            window.location.href =
-
-                "chat.html";
-
-
-        }
-
-
-
-        // ==========================================
-        // تغيير الاسم
-        // ==========================================
-
-        function goToProfile() {
-
-
-            window.location.href =
-
-                "profile.html";
-
-
-        }
-
-
-
-        // ==========================================
-        // تحويل إلى عام
-        // ==========================================
-
-        function goToPublicProfile() {
-
-
-            window.location.href =
-
-                "profile.html";
-
-
-        }
-
-
-
-        // ==========================================
-        // إغلاق النافذة
-        // ==========================================
-
-        function closePrivacyMessage() {
-
-
-            document.getElementById(
-
-                "privacyOverlay"
-
-            ).style.display =
-
-                "none";
-
-
-        }
-
-
-
-        // ==========================================
-        // تسجيل الخروج
-        // ==========================================
-
-        async function logout() {
-
-
-            const {
-
-                error
-
-            } = await supabaseClient.auth.signOut();
-
-
-
-            if (error) {
-
-
-                alert(
-
-                    "حدث خطأ أثناء تسجيل الخروج"
-
-                );
-
-
-                return;
-
-            }
-
-
-
-            window.location.href =
-
-                "login.html";
-
-
-        }
-
-
-// ==========================================
-// تحميل رسالة الأدمن للمستخدم
-// ==========================================
+/* ==================================================
+   رسالة الأدمن
+================================================== */
 
 async function loadAdminMessage() {
 
-    const now = new Date().toISOString();
+    const now =
+        new Date().toISOString();
+
 
     const {
         data,
@@ -1392,15 +2148,27 @@ async function loadAdminMessage() {
 
         .select("*")
 
-        .eq("is_active", true)
+        .eq(
+            "is_active",
+            true
+        )
 
-        .lte("starts_at", now)
+        .lte(
+            "starts_at",
+            now
+        )
 
-        .gt("ends_at", now)
+        .gt(
+            "ends_at",
+            now
+        )
 
-        .order("created_at", {
-            ascending: false
-        })
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        )
 
         .limit(1);
 
@@ -1413,18 +2181,23 @@ async function loadAdminMessage() {
         );
 
         return;
+
     }
 
-
-    // لا توجد رسالة فعالة
 
     if (!data || data.length === 0) {
 
         return;
+
     }
 
 
-    const message = data[0];
+    const message =
+        data[0];
+
+
+    currentAdminMessage =
+        message;
 
 
     document.getElementById(
@@ -1440,6 +2213,12 @@ async function loadAdminMessage() {
 
 
     document.getElementById(
+        "notificationNumber"
+    ).style.display =
+        "flex";
+
+
+    document.getElementById(
         "adminMessageOverlay"
     ).style.display =
         "flex";
@@ -1447,31 +2226,219 @@ async function loadAdminMessage() {
 }
 
 
-            // ==========================================
-        // إغلاق رسالة الأدمن
-        // ==========================================
+/* ==================================================
+   إعادة فتح رسالة الأدمن
+================================================== */
 
-        function closeAdminMessage() {
+function showAdminMessageAgain() {
 
-         document.getElementById(
+    if (!currentAdminMessage) {
+
+        loadAdminMessage();
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "adminMessageTitle"
+    ).textContent =
+        currentAdminMessage.title;
+
+
+    document.getElementById(
+        "adminMessageText"
+    ).textContent =
+        currentAdminMessage.message;
+
+
+    document.getElementById(
         "adminMessageOverlay"
-             ).style.display =
-            "none";
+    ).style.display =
+        "flex";
 
-        }
-
-
+}
 
 
-// ==========================================
-// تشغيل
-// ==========================================
+/* ==================================================
+   إغلاق الرسالة
+================================================== */
+
+function closeAdminMessage() {
+
+    document.getElementById(
+        "adminMessageOverlay"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "notificationNumber"
+    ).style.display =
+        "none";
+
+}
+
+
+/* ==================================================
+   الدردشة
+================================================== */
+
+async function openChat() {
+
+    if (!currentUser) {
+
+        await loadUser();
+
+    }
+
+
+    if (!currentUser) return;
+
+
+    const {
+        data: profile,
+        error
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select("is_public")
+
+        .eq(
+            "id",
+            currentUser.id
+        )
+
+        .maybeSingle();
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "حدث خطأ، حاول مرة أخرى."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !profile ||
+        profile.is_public !== true
+    ) {
+
+        document.getElementById(
+            "privacyOverlay"
+        ).style.display =
+            "flex";
+
+        return;
+
+    }
+
+
+    window.location.href =
+        "chat.html";
+
+}
+
+
+/* ==================================================
+   الخصوصية
+================================================== */
+
+function goToProfile() {
+
+    window.location.href =
+        "profile.html";
+
+}
+
+
+function goToPublicProfile() {
+
+    window.location.href =
+        "profile.html";
+
+}
+
+
+function closePrivacyMessage() {
+
+    document.getElementById(
+        "privacyOverlay"
+    ).style.display =
+        "none";
+
+}
+
+
+/* ==================================================
+   تسجيل الخروج
+================================================== */
+
+async function logout() {
+
+    const {
+        error
+    } = await supabaseClient.auth.signOut();
+
+
+    if (error) {
+
+        alert(
+            "حدث خطأ أثناء تسجيل الخروج"
+        );
+
+        return;
+
+    }
+
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* ==================================================
+   حماية النص
+================================================== */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text || "";
+
+    return div.innerHTML;
+
+}
+
+
+/* ==================================================
+   تشغيل الصفحة
+================================================== */
 
 async function startHomePage() {
 
     await loadUser();
 
+    if (!currentUser) return;
+
+
     await recordHomePageVisit();
+
+    await loadStatistics();
+
+    await loadSavedWords();
 
     await loadAdminMessage();
 
@@ -1479,10 +2446,9 @@ async function startHomePage() {
 
 
 startHomePage();
-    </script>
+
+</script>
 
 
 </body>
-
 </html>
-
