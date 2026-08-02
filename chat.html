@@ -12,753 +12,425 @@
 <title>الدردشة - EnglishWords</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="supabase.js"></script>
 
-
 <style>
-
-/* ==========================================
-   الأساس
-========================================== */
 
 * {
     box-sizing: border-box;
 }
 
 body {
-
     margin: 0;
-
-    font-family:
-        Arial,
-        Tahoma,
-        sans-serif;
-
+    font-family: Arial, Tahoma, sans-serif;
     background: #f5f7fb;
-
     color: #171827;
 }
 
 button,
 input {
-
     font-family: inherit;
 }
 
-
 .chat-container {
-
     max-width: 900px;
-
     height: 100vh;
-
     margin: auto;
-
     background: white;
-
     display: flex;
-
     flex-direction: column;
-
     overflow: hidden;
 }
-
 
 /* ==========================================
    الهيدر
 ========================================== */
 
 .topbar {
-
     padding: 15px 18px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6254eb,
-            #8374ed
-        );
-
+    background: linear-gradient(135deg, #6254eb, #8374ed);
     color: white;
-
     display: flex;
-
     align-items: center;
-
     gap: 12px;
 }
 
-
 .back {
-
     border: none;
-
-    background:
-        rgba(255,255,255,.18);
-
+    background: rgba(255,255,255,.18);
     color: white;
-
     width: 42px;
-
     height: 42px;
-
     border-radius: 13px;
-
     cursor: pointer;
-
     font-size: 20px;
 }
-
 
 .topbar h2 {
-
     margin: 0;
-
     font-size: 20px;
 }
-
 
 /* ==========================================
    قائمة المستخدمين
 ========================================== */
 
 .conversations-section {
-
     flex: 1;
-
     overflow-y: auto;
 }
 
-
 .search-box {
-
     padding: 15px;
-
     border-bottom: 1px solid #eee;
-
     background: white;
-
     position: sticky;
-
     top: 0;
-
     z-index: 10;
 }
 
-
 .search-box input {
-
     width: 100%;
-
     border: none;
-
     outline: none;
-
     background: #f5f6fa;
-
     border-radius: 14px;
-
     padding: 13px 15px;
-
     font-size: 14px;
 }
 
-
 #usersContainer {
-
     width: 100%;
 }
 
-
-/* ==========================================
-   المستخدم
-========================================== */
-
 .user {
-
     width: 100%;
-
     padding: 14px 17px;
-
     border: none;
-
-    border-bottom:
-        1px solid #f0f0f3;
-
+    border-bottom: 1px solid #f0f0f3;
     background: white;
-
     display: flex;
-
     align-items: center;
-
     gap: 12px;
-
     cursor: pointer;
-
     text-align: right;
-
     transition: .15s;
 }
 
-
 .user:hover {
-
     background: #f8f8ff;
 }
 
-
 .user:active {
-
     transform: scale(.99);
 }
 
-
 .avatar-wrap {
-
     position: relative;
-
     flex-shrink: 0;
 }
 
-
 .avatar {
-
     width: 52px;
-
     height: 52px;
-
     border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6254eb,
-            #8374ed
-        );
-
+    background: linear-gradient(135deg, #6254eb, #8374ed);
     color: white;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     font-size: 19px;
-
     font-weight: bold;
 }
 
-
 .user-info {
-
     flex: 1;
-
     min-width: 0;
 }
 
-
 .user-top {
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     gap: 10px;
 }
 
-
 .user-name {
-
     font-weight: bold;
-
     font-size: 15px;
-
     white-space: nowrap;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
 }
-
 
 .last-time {
-
     color: #999;
-
     font-size: 10px;
-
     white-space: nowrap;
 }
 
-
 .last-message {
-
     margin-top: 5px;
-
     color: #888;
-
     font-size: 12px;
-
     white-space: nowrap;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
 }
 
-
-/* ==========================================
-   الحالة
-========================================== */
-
 .user-status {
-
     margin-top: 4px;
-
     color: #999;
-
     font-size: 10px;
 }
 
-
-/* ==========================================
-   الحالة الفارغة
-========================================== */
-
 .empty {
-
     text-align: center;
-
     color: #888;
-
     padding: 50px 20px;
-
     font-size: 13px;
 }
-
 
 /* ==========================================
    شاشة المحادثة
 ========================================== */
 
 .chat-screen {
-
     position: fixed;
-
     inset: 0;
-
     background: #f5f7fb;
-
     z-index: 3000;
-
     display: none;
-
     flex-direction: column;
 }
 
-
 .chat-screen.show {
-
     display: flex;
 }
-
 
 /* ==========================================
    هيدر المحادثة
 ========================================== */
 
 .chat-header {
-
     min-height: 70px;
-
     padding: 10px 15px;
-
     background: white;
-
-    border-bottom:
-        1px solid #eee;
-
+    border-bottom: 1px solid #eee;
     display: flex;
-
     align-items: center;
-
     gap: 10px;
 }
 
-
 .chat-back {
-
     border: none;
-
     background: #f2f3f7;
-
     width: 42px;
-
     height: 42px;
-
     border-radius: 13px;
-
     cursor: pointer;
-
     font-size: 20px;
 }
 
-
 .chat-avatar {
-
     width: 45px;
-
     height: 45px;
-
     border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6254eb,
-            #8374ed
-        );
-
+    background: linear-gradient(135deg, #6254eb, #8374ed);
     color: white;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     font-weight: bold;
 }
 
-
 .chat-user-info {
-
     flex: 1;
 }
 
-
 .chat-user-name {
-
     font-weight: bold;
-
     font-size: 15px;
 }
 
-
 .chat-status {
-
     color: #999;
-
     font-size: 11px;
-
     margin-top: 4px;
 }
 
-
 .call-btn {
-
     border: none;
-
     background: #16a34a;
-
     color: white;
-
     width: 43px;
-
     height: 43px;
-
     border-radius: 50%;
-
     cursor: pointer;
-
     font-size: 19px;
 }
-
 
 /* ==========================================
    الرسائل
 ========================================== */
 
 .messages {
-
     flex: 1;
-
     overflow-y: auto;
-
     padding: 18px;
-
     display: flex;
-
     flex-direction: column;
-
     gap: 8px;
 }
 
-
 .message {
-
     max-width: 75%;
-
     padding: 10px 14px;
-
     border-radius: 17px;
-
     word-break: break-word;
-
     font-size: 14px;
-
     line-height: 1.5;
 }
 
-
 .mine {
-
     align-self: flex-start;
-
     background: #6254eb;
-
     color: white;
-
     border-bottom-left-radius: 5px;
 }
 
-
 .theirs {
-
     align-self: flex-end;
-
     background: white;
-
     color: #171827;
-
     border-bottom-right-radius: 5px;
-
-    box-shadow:
-        0 2px 8px rgba(0,0,0,.04);
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
 }
-
 
 .message-time {
-
     display: block;
-
     font-size: 9px;
-
     margin-top: 4px;
-
     opacity: .7;
 }
-
 
 /* ==========================================
    يكتب الآن
 ========================================== */
 
 .typing {
-
     display: none;
-
-    padding:
-        0
-        18px
-        7px;
-
+    padding: 0 18px 7px;
     color: #777;
-
     font-size: 11px;
 }
 
-
 .typing.show {
-
     display: block;
 }
-
 
 /* ==========================================
    الإرسال
 ========================================== */
 
 .send-box {
-
     display: flex;
-
     gap: 8px;
-
     padding: 10px;
-
     background: white;
-
-    border-top:
-        1px solid #eee;
+    border-top: 1px solid #eee;
 }
 
-
 .send-box input {
-
     flex: 1;
-
-    padding:
-        13px
-        15px;
-
+    padding: 13px 15px;
     border: none;
-
     outline: none;
-
     background: #f5f6fa;
-
     border-radius: 15px;
-
     font-size: 14px;
 }
 
-
 .send-box button {
-
     width: 48px;
-
     border: none;
-
     background: #6254eb;
-
     color: white;
-
     border-radius: 15px;
-
     cursor: pointer;
-
     font-size: 18px;
 }
 
-
 /* ==========================================
-   المكالمة الواردة
+   المكالمة
 ========================================== */
 
 .call-overlay {
-
     position: fixed;
-
     inset: 0;
-
-    background:
-        rgba(0,0,0,.55);
-
+    background: rgba(0,0,0,.55);
     display: none;
-
     align-items: center;
-
     justify-content: center;
-
     z-index: 9999;
-
     padding: 20px;
 }
 
-
 .call-box {
-
     width: 100%;
-
     max-width: 350px;
-
     background: white;
-
     border-radius: 22px;
-
     padding: 30px 20px;
-
     text-align: center;
 }
 
-
 .call-avatar {
-
     width: 80px;
-
     height: 80px;
-
     border-radius: 50%;
-
     background: #6254eb;
-
     color: white;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     margin: auto;
-
     font-size: 30px;
-
     font-weight: bold;
 }
 
-
 .call-box h2 {
-
-    margin:
-        15px
-        0
-        8px;
+    margin: 15px 0 8px;
 }
 
-
 .call-box p {
-
     color: #666;
 }
 
-
 .call-actions {
-
     display: flex;
-
     justify-content: center;
-
     gap: 20px;
-
     margin-top: 25px;
 }
 
-
 .call-action {
-
     border: none;
-
     width: 58px;
-
     height: 58px;
-
     border-radius: 50%;
-
     color: white;
-
     font-size: 24px;
-
     cursor: pointer;
 }
 
-
 .accept-call {
-
     background: #16a34a;
 }
 
-
 .reject-call {
-
     background: #dc2626;
 }
-
 
 /* ==========================================
    الجوال
@@ -767,13 +439,10 @@ input {
 @media (max-width: 600px) {
 
     .chat-container {
-
         width: 100%;
     }
 
-
     .message {
-
         max-width: 82%;
     }
 
@@ -783,12 +452,9 @@ input {
 
 </head>
 
-
 <body>
 
-
 <div class="chat-container">
-
 
 <header class="topbar">
 
@@ -800,17 +466,11 @@ input {
 
     </button>
 
-
-    <h2>
-        💬 الدردشة
-    </h2>
+    <h2>💬 الدردشة</h2>
 
 </header>
 
-
-<section
-    class="conversations-section">
-
+<section class="conversations-section">
 
     <div class="search-box">
 
@@ -822,36 +482,26 @@ input {
 
     </div>
 
-
     <div id="usersContainer">
 
         <div class="empty">
-
             جاري تحميل المستخدمين...
-
         </div>
 
     </div>
 
-
 </section>
 
-
 </div>
-
 
 
 <!-- ==========================================
      شاشة المحادثة
 ========================================== -->
 
-<div
-    id="chatScreen"
-    class="chat-screen">
-
+<div id="chatScreen" class="chat-screen">
 
 <header class="chat-header">
-
 
     <button
         class="chat-back"
@@ -861,7 +511,6 @@ input {
 
     </button>
 
-
     <div
         class="chat-avatar"
         id="chatAvatar">
@@ -869,7 +518,6 @@ input {
         ؟
 
     </div>
-
 
     <div class="chat-user-info">
 
@@ -881,7 +529,6 @@ input {
 
         </div>
 
-
         <div
             class="chat-status"
             id="chatStatus">
@@ -892,7 +539,6 @@ input {
 
     </div>
 
-
     <button
         class="call-btn"
         onclick="startCall()"
@@ -902,9 +548,7 @@ input {
 
     </button>
 
-
 </header>
-
 
 
 <div
@@ -912,13 +556,10 @@ input {
     id="messages">
 
     <div class="empty">
-
         لا توجد رسائل بعد 👋
-
     </div>
 
 </div>
-
 
 
 <div
@@ -930,16 +571,13 @@ input {
 </div>
 
 
-
 <div class="send-box">
-
 
     <input
         type="text"
         id="messageInput"
         placeholder="اكتب رسالتك..."
         autocomplete="off">
-
 
     <button
         onclick="sendMessage()">
@@ -948,12 +586,9 @@ input {
 
     </button>
 
-
 </div>
 
-
 </div>
-
 
 
 <!-- ==========================================
@@ -964,9 +599,7 @@ input {
     id="callOverlay"
     class="call-overlay">
 
-
 <div class="call-box">
-
 
     <div
         id="callAvatar"
@@ -976,21 +609,13 @@ input {
 
     </div>
 
-
-    <h2>
-        📞 مكالمة واردة
-    </h2>
-
+    <h2>📞 مكالمة واردة</h2>
 
     <p id="callerName">
-
         مستخدم يتصل بك...
-
     </p>
 
-
     <div class="call-actions">
-
 
         <button
             class="call-action reject-call"
@@ -1000,7 +625,6 @@ input {
 
         </button>
 
-
         <button
             class="call-action accept-call"
             onclick="acceptCall()">
@@ -1009,15 +633,11 @@ input {
 
         </button>
 
-
     </div>
 
-
 </div>
 
-
 </div>
-
 
 
 <script>
@@ -1033,6 +653,8 @@ let selectedUser = null;
 let currentConversation = null;
 
 let realtimeChannel = null;
+
+let globalMessagesChannel = null;
 
 let callsChannel = null;
 
@@ -1081,8 +703,7 @@ async function loadCurrentUser() {
 
     if (error || !user) {
 
-        window.location.href =
-            "login.html";
+        window.location.href = "login.html";
 
         return;
 
@@ -1093,6 +714,15 @@ async function loadCurrentUser() {
 
 
     await loadUsers();
+
+
+    /*
+       مهم جدًا:
+       نشترك في الرسائل من بداية فتح الصفحة
+       وليس فقط عند فتح محادثة
+    */
+
+    subscribeToAllMessages();
 
 
     subscribeToCalls();
@@ -1142,7 +772,6 @@ async function loadUsers() {
         document.getElementById(
             "usersContainer"
         ).innerHTML =
-
             '<div class="empty">' +
             'حدث خطأ في تحميل المستخدمين ❌' +
             '</div>';
@@ -1184,10 +813,7 @@ async function loadLastMessages() {
     const results = [];
 
 
-    for (
-        const user
-        of allUsers
-    ) {
+    for (const user of allUsers) {
 
         let lastMessage = null;
 
@@ -1352,7 +978,6 @@ function renderUsers(results) {
     ) {
 
         container.innerHTML =
-
             '<div class="empty">' +
             'لا يوجد مستخدم بهذا الاسم 🔎' +
             '</div>';
@@ -1378,8 +1003,7 @@ function renderUsers(results) {
             );
 
 
-        button.className =
-            "user";
+        button.className = "user";
 
 
         const avatarWrap =
@@ -1510,25 +1134,16 @@ function renderUsers(results) {
             "متاح للدردشة";
 
 
-        info.appendChild(
-            top
-        );
+        info.appendChild(top);
 
+        info.appendChild(lastText);
 
-        info.appendChild(
-            lastText
-        );
-
-
-        info.appendChild(
-            status
-        );
+        info.appendChild(status);
 
 
         button.appendChild(
             avatarWrap
         );
-
 
         button.appendChild(
             info
@@ -1538,9 +1153,7 @@ function renderUsers(results) {
         button.onclick =
             () => {
 
-                openConversation(
-                    user
-                );
+                openConversation(user);
 
             };
 
@@ -1602,25 +1215,19 @@ function filterUsers() {
                     ).toLowerCase();
 
 
-                return name.includes(
-                    search
-                );
+                return name.includes(search);
 
             }
         );
 
 
-    renderUsers(
-        filtered
-    );
+    renderUsers(filtered);
 
 }
 
 
 document
-    .getElementById(
-        "searchInput"
-    )
+    .getElementById("searchInput")
     .addEventListener(
         "input",
         filterUsers
@@ -1664,9 +1271,7 @@ async function openConversation(user) {
 
     document.getElementById(
         "chatScreen"
-    ).classList.add(
-        "show"
-    );
+    ).classList.add("show");
 
 
     const {
@@ -1743,8 +1348,10 @@ async function openConversation(user) {
     await loadMessages();
 
 
-    subscribeToMessages();
-
+    /*
+       هذا الاشتراك فقط للـ typing
+       والرسائل العامة تعمل من بداية الصفحة
+    */
 
     subscribeToTyping();
 
@@ -1758,24 +1365,8 @@ async function openConversation(user) {
 function closeChat() {
 
     document
-        .getElementById(
-            "chatScreen"
-        )
-        .classList.remove(
-            "show"
-        );
-
-
-    if (realtimeChannel) {
-
-        supabaseClient.removeChannel(
-            realtimeChannel
-        );
-
-        realtimeChannel =
-            null;
-
-    }
+        .getElementById("chatScreen")
+        .classList.remove("show");
 
 
     if (typingChannel) {
@@ -1784,14 +1375,25 @@ function closeChat() {
             typingChannel
         );
 
-        typingChannel =
-            null;
+        typingChannel = null;
 
     }
 
 
-    selectedUser =
-        null;
+    if (realtimeChannel) {
+
+        supabaseClient.removeChannel(
+            realtimeChannel
+        );
+
+        realtimeChannel = null;
+
+    }
+
+
+    currentConversation = null;
+
+    selectedUser = null;
 
 }
 
@@ -1843,8 +1445,7 @@ async function loadMessages() {
         );
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
     if (
@@ -1853,7 +1454,6 @@ async function loadMessages() {
     ) {
 
         container.innerHTML =
-
             '<div class="empty">' +
             'لا توجد رسائل بعد 👋' +
             '</div>';
@@ -1863,15 +1463,11 @@ async function loadMessages() {
     }
 
 
-    data.forEach(
-        message => {
+    data.forEach(message => {
 
-            displayMessage(
-                message
-            );
+        displayMessage(message);
 
-        }
-    );
+    });
 
 
     container.scrollTop =
@@ -1893,8 +1489,7 @@ function displayMessage(message) {
 
 
     /*
-       إذا كانت الشاشة تعرض رسالة
-       "لا توجد رسائل"، نحذفها
+       إزالة رسالة لا توجد رسائل
     */
 
     const empty =
@@ -1906,6 +1501,22 @@ function displayMessage(message) {
     if (empty) {
 
         empty.remove();
+
+    }
+
+
+    /*
+       منع تكرار الرسالة
+    */
+
+    if (
+        message.id &&
+        container.querySelector(
+            `[data-message-id="${message.id}"]`
+        )
+    ) {
+
+        return;
 
     }
 
@@ -1925,17 +1536,21 @@ function displayMessage(message) {
         currentUser.id
     ) {
 
-        div.classList.add(
-            "mine"
-        );
+        div.classList.add("mine");
 
     }
 
     else {
 
-        div.classList.add(
-            "theirs"
-        );
+        div.classList.add("theirs");
+
+    }
+
+
+    if (message.id) {
+
+        div.dataset.messageId =
+            message.id;
 
     }
 
@@ -1960,14 +1575,10 @@ function displayMessage(message) {
         );
 
 
-    div.appendChild(
-        time
-    );
+    div.appendChild(time);
 
 
-    container.appendChild(
-        div
-    );
+    container.appendChild(div);
 
 
     container.scrollTop =
@@ -2007,11 +1618,6 @@ async function sendMessage() {
         return;
 
 
-    /*
-       نرسل الرسالة إلى Supabase
-       ونطلب البيانات التي تم إنشاؤها
-    */
-
     const {
         data,
         error
@@ -2050,32 +1656,334 @@ async function sendMessage() {
     }
 
 
-    /*
-       نفرغ مربع الكتابة
-    */
-
-    input.value =
-        "";
+    input.value = "";
 
 
     /*
-       نعرض الرسالة عندنا فورًا
+       تظهر عند المرسل فورًا
     */
 
     if (data) {
 
-        displayMessage(
-            data
-        );
+        displayMessage(data);
 
     }
 
 
     /*
-       نحدث آخر رسالة في القائمة
+       تحديث القائمة
     */
 
-    loadLastMessages();
+    updateLastMessageInList(
+        currentConversation.id,
+        data
+    );
+
+}
+
+
+/* ==========================================
+   تحديث آخر رسالة في القائمة مباشرة
+========================================== */
+
+function updateLastMessageInList(
+    conversationId,
+    message
+) {
+
+    if (!message)
+        return;
+
+
+    const item =
+        userResults.find(
+            x =>
+                x.conversationId ===
+                conversationId
+        );
+
+
+    if (item) {
+
+        item.lastMessage = {
+
+            message:
+                message.message,
+
+            created_at:
+                message.created_at
+
+        };
+
+    }
+
+
+    /*
+       نعيد ترتيب القائمة
+    */
+
+    userResults.sort(
+        (a, b) => {
+
+            const aTime =
+                a.lastMessage
+                    ? new Date(
+                        a.lastMessage.created_at
+                    ).getTime()
+                    : 0;
+
+
+            const bTime =
+                b.lastMessage
+                    ? new Date(
+                        b.lastMessage.created_at
+                    ).getTime()
+                    : 0;
+
+
+            return bTime - aTime;
+
+        }
+    );
+
+
+    filterUsers();
+
+}
+
+
+/* ==========================================
+   استقبال كل الرسائل من بداية الصفحة
+========================================== */
+
+function subscribeToAllMessages() {
+
+    if (!currentUser)
+        return;
+
+
+    if (globalMessagesChannel) {
+
+        supabaseClient.removeChannel(
+            globalMessagesChannel
+        );
+
+    }
+
+
+    globalMessagesChannel =
+        supabaseClient
+            .channel(
+                "all-messages-" +
+                currentUser.id
+            )
+            .on(
+
+                "postgres_changes",
+
+                {
+
+                    event: "INSERT",
+
+                    schema: "public",
+
+                    table: "messages"
+
+                },
+
+                async payload => {
+
+                    const message =
+                        payload.new;
+
+
+                    /*
+                       نحتاج نعرف المحادثة
+                       التي وصلت إليها الرسالة
+                    */
+
+                    if (!message.conversation_id)
+                        return;
+
+
+                    const {
+                        data: conversation,
+                        error
+                    } =
+                        await supabaseClient
+                            .from("conversations")
+                            .select(
+                                "id, user1_id, user2_id"
+                            )
+                            .eq(
+                                "id",
+                                message.conversation_id
+                            )
+                            .maybeSingle();
+
+
+                    if (
+                        error ||
+                        !conversation
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    /*
+                       نتأكد أن المحادثة تخص المستخدم الحالي
+                    */
+
+                    const isMyConversation =
+                        conversation.user1_id ===
+                            currentUser.id
+                        ||
+                        conversation.user2_id ===
+                            currentUser.id;
+
+
+                    if (!isMyConversation)
+                        return;
+
+
+                    /*
+                       إذا الرسالة رسالتنا
+                       لا نعرضها مرة ثانية
+                    */
+
+                    if (
+                        message.sender_id ===
+                        currentUser.id
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    /*
+                       إذا كان داخل نفس المحادثة
+                       نعرض الرسالة فورًا
+                    */
+
+                    if (
+                        currentConversation &&
+                        currentConversation.id ===
+                            message.conversation_id
+                    ) {
+
+                        displayMessage(message);
+
+                    }
+
+
+                    /*
+                       نحدث آخر رسالة في القائمة
+                    */
+
+                    let item =
+                        userResults.find(
+                            x =>
+                                x.conversationId ===
+                                message.conversation_id
+                        );
+
+
+                    /*
+                       إذا المحادثة ليست موجودة
+                       في userResults نبحث عن صاحب الرسالة
+                    */
+
+                    if (!item) {
+
+                        const sender =
+                            allUsers.find(
+                                u =>
+                                    u.id ===
+                                    message.sender_id
+                            );
+
+
+                        if (sender) {
+
+                            item = {
+
+                                user:
+                                    sender,
+
+                                lastMessage:
+                                    null,
+
+                                conversationId:
+                                    message.conversation_id
+
+                            };
+
+
+                            userResults.push(item);
+
+                        }
+
+                    }
+
+
+                    if (item) {
+
+                        item.lastMessage = {
+
+                            message:
+                                message.message,
+
+                            created_at:
+                                message.created_at
+
+                        };
+
+
+                        userResults.sort(
+                            (a, b) => {
+
+                                const aTime =
+                                    a.lastMessage
+                                        ? new Date(
+                                            a.lastMessage.created_at
+                                        ).getTime()
+                                        : 0;
+
+
+                                const bTime =
+                                    b.lastMessage
+                                        ? new Date(
+                                            b.lastMessage.created_at
+                                        ).getTime()
+                                        : 0;
+
+
+                                return bTime - aTime;
+
+                            }
+                        );
+
+
+                        filterUsers();
+
+                    }
+
+                }
+
+            )
+            .subscribe(
+                status => {
+
+                    console.log(
+                        "Global messages realtime:",
+                        status
+                    );
+
+                }
+            );
 
 }
 
@@ -2085,9 +1993,7 @@ async function sendMessage() {
 ========================================== */
 
 document
-    .getElementById(
-        "messageInput"
-    )
+    .getElementById("messageInput")
     .addEventListener(
         "keydown",
         function(event) {
@@ -2104,76 +2010,6 @@ document
 
         }
     );
-
-
-/* ==========================================
-   Realtime الرسائل
-========================================== */
-
-function subscribeToMessages() {
-
-    if (!currentConversation)
-        return;
-
-
-    if (realtimeChannel) {
-
-        supabaseClient.removeChannel(
-            realtimeChannel
-        );
-
-    }
-
-
-    realtimeChannel =
-        supabaseClient
-            .channel(
-                "chat-" +
-                currentConversation.id
-            )
-            .on(
-
-                "postgres_changes",
-
-                {
-
-                    event: "INSERT",
-
-                    schema: "public",
-
-                    table: "messages",
-
-                    filter:
-                        "conversation_id=eq." +
-                        currentConversation.id
-
-                },
-
-                payload => {
-
-                    /*
-                       رسائل الطرف الآخر فقط
-                       لأن رسالتنا نعرضها مباشرة
-                       داخل sendMessage()
-                    */
-
-                    if (
-                        payload.new.sender_id !==
-                        currentUser.id
-                    ) {
-
-                        displayMessage(
-                            payload.new
-                        );
-
-                    }
-
-                }
-
-            )
-            .subscribe();
-
-}
 
 
 /* ==========================================
@@ -2214,7 +2050,7 @@ function subscribeToTyping() {
                     if (
                         payload.payload &&
                         payload.payload.userId !==
-                        currentUser.id
+                            currentUser.id
                     ) {
 
                         const indicator =
@@ -2260,9 +2096,7 @@ function subscribeToTyping() {
 ========================================== */
 
 document
-    .getElementById(
-        "messageInput"
-    )
+    .getElementById("messageInput")
     .addEventListener(
         "input",
         function() {
@@ -2548,9 +2382,7 @@ async function acceptCall() {
 
     if (error) {
 
-        console.error(
-            error
-        );
+        console.error(error);
 
 
         alert(
@@ -2608,9 +2440,7 @@ async function rejectCall() {
 
     if (error) {
 
-        console.error(
-            error
-        );
+        console.error(error);
 
         return;
 
