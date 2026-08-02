@@ -16,6 +16,35 @@
 <script src="supabase.js"></script>
 
 
+<script>
+    // ==========================================
+    // التحقق من تسجيل الدخول قبل عرض الصفحة
+    // ==========================================
+
+    (async function checkLogin() {
+
+        const {
+            data: { user },
+            error
+        } = await supabaseClient.auth.getUser();
+
+        // إذا ما فيه مستخدم مسجل دخول
+        if (error || !user) {
+
+            window.location.replace("login.html");
+
+            return;
+        }
+
+        // المستخدم مسجل دخول
+        // الصفحة تكمل بشكل طبيعي
+
+    })();
+</script>
+
+
+
+
 <style>
 
 /* ==================================================
