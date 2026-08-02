@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>الدردشة - EnglishWords</title>
 
@@ -12,31 +14,52 @@
 
 <script src="supabase.js"></script>
 
+
 <style>
+
+/* ==========================================
+   الأساس
+========================================== */
 
 * {
     box-sizing: border-box;
 }
 
 body {
+
     margin: 0;
-    font-family: Arial, Tahoma, sans-serif;
+
+    font-family:
+        Arial,
+        Tahoma,
+        sans-serif;
+
     background: #f5f7fb;
+
     color: #171827;
 }
 
 button,
 input {
+
     font-family: inherit;
 }
 
+
 .chat-container {
+
     max-width: 900px;
+
     height: 100vh;
+
     margin: auto;
+
     background: white;
+
     display: flex;
+
     flex-direction: column;
+
     overflow: hidden;
 }
 
@@ -46,54 +69,104 @@ input {
 ========================================== */
 
 .topbar {
+
     padding: 15px 18px;
-    background: linear-gradient(135deg, #6254eb, #8374ed);
+
+    background:
+        linear-gradient(
+            135deg,
+            #6254eb,
+            #8374ed
+        );
+
     color: white;
+
     display: flex;
+
     align-items: center;
+
     gap: 12px;
 }
 
+
 .back {
+
     border: none;
-    background: rgba(255,255,255,.18);
+
+    background:
+        rgba(255,255,255,.18);
+
     color: white;
+
     width: 42px;
+
     height: 42px;
+
     border-radius: 13px;
+
     cursor: pointer;
+
     font-size: 20px;
 }
 
+
 .topbar h2 {
+
     margin: 0;
+
     font-size: 20px;
 }
 
 
 /* ==========================================
-   قائمة المحادثات
+   قائمة المستخدمين
 ========================================== */
 
 .conversations-section {
+
     flex: 1;
+
     overflow-y: auto;
 }
 
+
 .search-box {
+
     padding: 15px;
+
     border-bottom: 1px solid #eee;
+
     background: white;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 10;
 }
 
+
 .search-box input {
+
     width: 100%;
+
     border: none;
+
     outline: none;
+
     background: #f5f6fa;
+
     border-radius: 14px;
+
     padding: 13px 15px;
+
     font-size: 14px;
+}
+
+
+#usersContainer {
+
+    width: 100%;
 }
 
 
@@ -102,113 +175,173 @@ input {
 ========================================== */
 
 .user {
+
     width: 100%;
+
     padding: 14px 17px;
+
     border: none;
-    border-bottom: 1px solid #f0f0f3;
+
+    border-bottom:
+        1px solid #f0f0f3;
+
     background: white;
+
     display: flex;
+
     align-items: center;
+
     gap: 12px;
+
     cursor: pointer;
+
     text-align: right;
+
     transition: .15s;
 }
 
+
 .user:hover {
+
     background: #f8f8ff;
 }
 
+
 .user:active {
+
     transform: scale(.99);
 }
 
+
 .avatar-wrap {
+
     position: relative;
+
     flex-shrink: 0;
 }
 
+
 .avatar {
+
     width: 52px;
+
     height: 52px;
+
     border-radius: 50%;
-    background: linear-gradient(135deg, #6254eb, #8374ed);
+
+    background:
+        linear-gradient(
+            135deg,
+            #6254eb,
+            #8374ed
+        );
+
     color: white;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     font-size: 19px;
+
     font-weight: bold;
 }
 
-.online-dot {
-    position: absolute;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: #22c55e;
-    border: 2px solid white;
-    bottom: 1px;
-    right: 1px;
-}
+
+/*
+   لا نضع نقطة اتصال هنا
+   لأننا لا نملك Presence حقيقي حاليًا
+*/
+
 
 .user-info {
+
     flex: 1;
+
     min-width: 0;
 }
 
+
 .user-top {
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
     gap: 10px;
 }
 
+
 .user-name {
+
     font-weight: bold;
+
     font-size: 15px;
+
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
 }
+
 
 .last-time {
+
     color: #999;
+
     font-size: 10px;
+
     white-space: nowrap;
 }
+
 
 .last-message {
-    margin-top: 5px;
-    color: #888;
-    font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
-.unread {
-    min-width: 20px;
-    height: 20px;
-    padding: 0 6px;
-    border-radius: 20px;
-    background: #6254eb;
-    color: white;
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-top: 5px;
+
+    color: #888;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
 
 /* ==========================================
-   حالة فارغة
+   الحالة
+========================================== */
+
+.user-status {
+
+    margin-top: 4px;
+
+    color: #999;
+
+    font-size: 10px;
+}
+
+
+/* ==========================================
+   الحالة الفارغة
 ========================================== */
 
 .empty {
+
     text-align: center;
+
     color: #888;
+
     padding: 50px 20px;
+
     font-size: 13px;
 }
 
@@ -218,73 +351,135 @@ input {
 ========================================== */
 
 .chat-screen {
+
     position: fixed;
+
     inset: 0;
+
     background: #f5f7fb;
+
     z-index: 3000;
+
     display: none;
+
     flex-direction: column;
 }
 
+
 .chat-screen.show {
+
     display: flex;
 }
 
+
+/* ==========================================
+   هيدر المحادثة
+========================================== */
+
 .chat-header {
+
     min-height: 70px;
+
     padding: 10px 15px;
+
     background: white;
-    border-bottom: 1px solid #eee;
+
+    border-bottom:
+        1px solid #eee;
+
     display: flex;
+
     align-items: center;
+
     gap: 10px;
 }
 
+
 .chat-back {
+
     border: none;
+
     background: #f2f3f7;
+
     width: 42px;
+
     height: 42px;
+
     border-radius: 13px;
+
     cursor: pointer;
+
     font-size: 20px;
 }
 
+
 .chat-avatar {
+
     width: 45px;
+
     height: 45px;
+
     border-radius: 50%;
-    background: linear-gradient(135deg, #6254eb, #8374ed);
+
+    background:
+        linear-gradient(
+            135deg,
+            #6254eb,
+            #8374ed
+        );
+
     color: white;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     font-weight: bold;
 }
 
+
 .chat-user-info {
+
     flex: 1;
 }
 
+
 .chat-user-name {
+
     font-weight: bold;
+
     font-size: 15px;
 }
 
+
 .chat-status {
-    color: #22a35a;
+
+    color: #999;
+
     font-size: 11px;
+
     margin-top: 4px;
 }
 
+
 .call-btn {
+
     border: none;
+
     background: #16a34a;
+
     color: white;
+
     width: 43px;
+
     height: 43px;
+
     border-radius: 50%;
+
     cursor: pointer;
+
     font-size: 19px;
 }
 
@@ -294,91 +489,154 @@ input {
 ========================================== */
 
 .messages {
+
     flex: 1;
+
     overflow-y: auto;
+
     padding: 18px;
+
     display: flex;
+
     flex-direction: column;
+
     gap: 8px;
 }
 
+
 .message {
+
     max-width: 75%;
+
     padding: 10px 14px;
+
     border-radius: 17px;
+
     word-break: break-word;
+
     font-size: 14px;
+
     line-height: 1.5;
 }
 
+
 .mine {
+
     align-self: flex-start;
+
     background: #6254eb;
+
     color: white;
+
     border-bottom-left-radius: 5px;
 }
 
+
 .theirs {
+
     align-self: flex-end;
+
     background: white;
+
     color: #171827;
+
     border-bottom-right-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.04);
 }
 
+
 .message-time {
+
     display: block;
+
     font-size: 9px;
+
     margin-top: 4px;
+
     opacity: .7;
 }
 
 
 /* ==========================================
-   الكتابة
+   يكتب الآن
 ========================================== */
 
 .typing {
+
     display: none;
-    padding: 0 18px 7px;
+
+    padding:
+        0
+        18px
+        7px;
+
     color: #777;
+
     font-size: 11px;
 }
 
+
 .typing.show {
+
     display: block;
 }
 
 
 /* ==========================================
-   إرسال
+   الإرسال
 ========================================== */
 
 .send-box {
+
     display: flex;
+
     gap: 8px;
+
     padding: 10px;
+
     background: white;
-    border-top: 1px solid #eee;
+
+    border-top:
+        1px solid #eee;
 }
 
+
 .send-box input {
+
     flex: 1;
-    padding: 13px 15px;
+
+    padding:
+        13px
+        15px;
+
     border: none;
+
     outline: none;
+
     background: #f5f6fa;
+
     border-radius: 15px;
+
     font-size: 14px;
 }
 
+
 .send-box button {
+
     width: 48px;
+
     border: none;
+
     background: #6254eb;
+
     color: white;
+
     border-radius: 15px;
+
     cursor: pointer;
+
     font-size: 18px;
 }
 
@@ -388,69 +646,121 @@ input {
 ========================================== */
 
 .call-overlay {
+
     position: fixed;
+
     inset: 0;
-    background: rgba(0,0,0,.55);
+
+    background:
+        rgba(0,0,0,.55);
+
     display: none;
+
     align-items: center;
+
     justify-content: center;
+
     z-index: 9999;
+
     padding: 20px;
 }
 
+
 .call-box {
+
     width: 100%;
+
     max-width: 350px;
+
     background: white;
+
     border-radius: 22px;
+
     padding: 30px 20px;
+
     text-align: center;
 }
 
+
 .call-avatar {
+
     width: 80px;
+
     height: 80px;
+
     border-radius: 50%;
+
     background: #6254eb;
+
     color: white;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     margin: auto;
+
     font-size: 30px;
+
     font-weight: bold;
 }
 
+
 .call-box h2 {
-    margin: 15px 0 8px;
+
+    margin:
+        15px
+        0
+        8px;
 }
 
+
 .call-box p {
+
     color: #666;
 }
 
+
 .call-actions {
+
     display: flex;
+
     justify-content: center;
+
     gap: 20px;
+
     margin-top: 25px;
 }
 
+
 .call-action {
+
     border: none;
+
     width: 58px;
+
     height: 58px;
+
     border-radius: 50%;
+
     color: white;
+
     font-size: 24px;
+
     cursor: pointer;
 }
 
+
 .accept-call {
+
     background: #16a34a;
 }
 
+
 .reject-call {
+
     background: #dc2626;
 }
 
@@ -462,10 +772,13 @@ input {
 @media (max-width: 600px) {
 
     .chat-container {
+
         width: 100%;
     }
 
+
     .message {
+
         max-width: 82%;
     }
 
@@ -475,11 +788,13 @@ input {
 
 </head>
 
+
 <body>
+
 
 <div class="chat-container">
 
-```
+
 <header class="topbar">
 
     <button
@@ -490,6 +805,7 @@ input {
 
     </button>
 
+
     <h2>
         💬 الدردشة
     </h2>
@@ -498,8 +814,10 @@ input {
 
 
 <section
-    class="conversations-section"
-    id="usersList">
+    class="conversations-section">
+
+
+    <!-- البحث -->
 
     <div class="search-box">
 
@@ -512,18 +830,25 @@ input {
     </div>
 
 
+    <!-- المستخدمين -->
+
     <div id="usersContainer">
 
         <div class="empty">
+
             جاري تحميل المستخدمين...
+
         </div>
 
     </div>
 
+
 </section>
-```
+
 
 </div>
+
+
 
 <!-- ==========================================
      شاشة المحادثة
@@ -533,8 +858,9 @@ input {
     id="chatScreen"
     class="chat-screen">
 
-```
+
 <header class="chat-header">
+
 
     <button
         class="chat-back"
@@ -564,11 +890,12 @@ input {
 
         </div>
 
+
         <div
             class="chat-status"
             id="chatStatus">
 
-            متصل الآن
+            متاح للدردشة
 
         </div>
 
@@ -584,7 +911,9 @@ input {
 
     </button>
 
+
 </header>
+
 
 
 <div
@@ -592,10 +921,13 @@ input {
     id="messages">
 
     <div class="empty">
+
         لا توجد رسائل بعد 👋
+
     </div>
 
 </div>
+
 
 
 <div
@@ -607,7 +939,9 @@ input {
 </div>
 
 
+
 <div class="send-box">
+
 
     <input
         type="text"
@@ -615,14 +949,21 @@ input {
         placeholder="اكتب رسالتك..."
         autocomplete="off">
 
-    <button onclick="sendMessage()">
+
+    <button
+        onclick="sendMessage()">
+
         ➤
+
     </button>
 
-</div>
-```
 
 </div>
+
+
+</div>
+
+
 
 <!-- ==========================================
      المكالمة الواردة
@@ -632,8 +973,9 @@ input {
     id="callOverlay"
     class="call-overlay">
 
-```
+
 <div class="call-box">
+
 
     <div
         id="callAvatar"
@@ -643,15 +985,21 @@ input {
 
     </div>
 
+
     <h2>
         📞 مكالمة واردة
     </h2>
 
+
     <p id="callerName">
+
         مستخدم يتصل بك...
+
     </p>
 
+
     <div class="call-actions">
+
 
         <button
             class="call-action reject-call"
@@ -661,6 +1009,7 @@ input {
 
         </button>
 
+
         <button
             class="call-action accept-call"
             onclick="acceptCall()">
@@ -669,12 +1018,16 @@ input {
 
         </button>
 
+
     </div>
 
-</div>
-```
 
 </div>
+
+
+</div>
+
+
 
 <script>
 
@@ -696,7 +1049,11 @@ let incomingCall = null;
 
 let allUsers = [];
 
+let userResults = [];
+
 let typingChannel = null;
+
+let typingSendTimer = null;
 
 
 /* ==========================================
@@ -727,19 +1084,25 @@ async function loadCurrentUser() {
     const {
         data: { user },
         error
-    } = await supabaseClient.auth.getUser();
+    } =
+        await supabaseClient.auth.getUser();
+
 
     if (error || !user) {
 
-        window.location.href = "login.html";
+        window.location.href =
+            "login.html";
 
         return;
 
     }
 
+
     currentUser = user;
 
+
     await loadUsers();
+
 
     subscribeToCalls();
 
@@ -755,12 +1118,27 @@ async function loadUsers() {
     const {
         data,
         error
-    } = await supabaseClient
-        .from("profiles")
-        .select("id, display_name, is_public")
-        .neq("id", currentUser.id)
-        .eq("is_public", true)
-        .order("display_name");
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "id, display_name, is_public"
+            )
+            .neq(
+                "id",
+                currentUser.id
+            )
+            .eq(
+                "is_public",
+                true
+            )
+            .order(
+                "display_name",
+                {
+                    ascending: true
+                }
+            );
+
 
     if (error) {
 
@@ -769,116 +1147,218 @@ async function loadUsers() {
             error
         );
 
+
         document.getElementById(
             "usersContainer"
         ).innerHTML =
-            '<div class="empty">حدث خطأ في تحميل المستخدمين ❌</div>';
+
+            '<div class="empty">' +
+            'حدث خطأ في تحميل المستخدمين ❌' +
+            '</div>';
 
         return;
 
     }
 
+
     allUsers = data || [];
 
-    await loadLastMessages();
+
+    /*
+       نعرض المستخدمين مباشرة
+       بدل انتظار البحث
+    */
+
+    userResults =
+        allUsers.map(user => ({
+
+            user: user,
+
+            lastMessage: null,
+
+            conversationId: null
+
+        }));
+
+
+    renderUsers(userResults);
+
+
+    /*
+       بعدها نجيب آخر الرسائل
+    */
+
+    loadLastMessages();
 
 }
 
 
 /* ==========================================
-   آخر رسالة لكل مستخدم
+   تحميل آخر الرسائل
 ========================================== */
 
 async function loadLastMessages() {
 
-    const container =
-        document.getElementById("usersContainer");
-
-    container.innerHTML = "";
-
-    if (!allUsers.length) {
-
-        container.innerHTML =
-            '<div class="empty">لا يوجد مستخدمون متاحون للدردشة حاليًا 🔒</div>';
-
-        return;
-
-    }
-
     const results = [];
 
-    for (const user of allUsers) {
 
-        const {
-            data: conversations
-        } = await supabaseClient
-            .from("conversations")
-            .select("id")
-            .or(
-                `and(user1_id.eq.${currentUser.id},user2_id.eq.${user.id}),and(user1_id.eq.${user.id},user2_id.eq.${currentUser.id})`
-            )
-            .limit(1);
+    /*
+       نخلي المستخدمين يظهرون
+       حتى لو استغرق جلب الرسائل وقت
+    */
+
+    for (
+        const user
+        of allUsers
+    ) {
 
         let lastMessage = null;
 
         let conversationId = null;
 
-        if (conversations && conversations[0]) {
 
-            conversationId =
-                conversations[0].id;
+        try {
 
             const {
-                data: messages
-            } = await supabaseClient
-                .from("messages")
-                .select("message, created_at")
-                .eq(
-                    "conversation_id",
-                    conversationId
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(1);
+                data: conversations
+            } =
+                await supabaseClient
+                    .from("conversations")
+                    .select("id")
+                    .or(
+                        `and(user1_id.eq.${currentUser.id},user2_id.eq.${user.id}),and(user1_id.eq.${user.id},user2_id.eq.${currentUser.id})`
+                    )
+                    .limit(1);
 
-            if (messages && messages[0]) {
 
-                lastMessage =
-                    messages[0];
+            if (
+                conversations &&
+                conversations.length > 0
+            ) {
+
+                conversationId =
+                    conversations[0].id;
+
+
+                const {
+                    data: messages
+                } =
+                    await supabaseClient
+                        .from("messages")
+                        .select(
+                            "message, created_at"
+                        )
+                        .eq(
+                            "conversation_id",
+                            conversationId
+                        )
+                        .order(
+                            "created_at",
+                            {
+                                ascending: false
+                            }
+                        )
+                        .limit(1);
+
+
+                if (
+                    messages &&
+                    messages.length > 0
+                ) {
+
+                    lastMessage =
+                        messages[0];
+
+                }
 
             }
 
         }
 
+        catch (error) {
+
+            console.error(
+                "خطأ في آخر رسالة:",
+                error
+            );
+
+        }
+
+
         results.push({
-            user,
-            lastMessage,
-            conversationId
+
+            user: user,
+
+            lastMessage:
+                lastMessage,
+
+            conversationId:
+                conversationId
+
         });
 
     }
 
-    results.sort((a, b) => {
 
-        const aTime =
-            a.lastMessage
-                ? new Date(a.lastMessage.created_at).getTime()
-                : 0;
+    /*
+       الأحدث أولًا
+    */
 
-        const bTime =
-            b.lastMessage
-                ? new Date(b.lastMessage.created_at).getTime()
-                : 0;
+    results.sort(
+        (a, b) => {
 
-        return bTime - aTime;
+            const aTime =
+                a.lastMessage
+                    ? new Date(
+                        a.lastMessage.created_at
+                    ).getTime()
+                    : 0;
 
-    });
 
-    renderUsers(results);
+            const bTime =
+                b.lastMessage
+                    ? new Date(
+                        b.lastMessage.created_at
+                    ).getTime()
+                    : 0;
+
+
+            return bTime - aTime;
+
+        }
+    );
+
+
+    userResults = results;
+
+
+    /*
+       لا نعرض النتيجة إذا المستخدم
+       بدأ يبحث أثناء التحميل
+    */
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+
+    if (
+        searchInput &&
+        searchInput.value.trim() !== ""
+    ) {
+
+        filterUsers();
+
+    }
+
+    else {
+
+        renderUsers(
+            userResults
+        );
+
+    }
 
 }
 
@@ -894,90 +1374,159 @@ function renderUsers(results) {
             "usersContainer"
         );
 
+
     container.innerHTML = "";
+
+
+    if (
+        !results ||
+        results.length === 0
+    ) {
+
+        container.innerHTML =
+
+            '<div class="empty">' +
+            'لا يوجد مستخدم بهذا الاسم 🔎' +
+            '</div>';
+
+        return;
+
+    }
+
 
     results.forEach(item => {
 
-        const user = item.user;
+        const user =
+            item.user;
 
-        const last = item.lastMessage;
+
+        const last =
+            item.lastMessage;
+
 
         const button =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
 
-        button.className = "user";
+
+        button.className =
+            "user";
+
+
+        /* الصورة */
 
         const avatarWrap =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         avatarWrap.className =
             "avatar-wrap";
 
+
         const avatar =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         avatar.className =
             "avatar";
 
+
         const name =
-            user.display_name || "مستخدم";
+            user.display_name ||
+            "مستخدم";
+
 
         avatar.textContent =
-            name.charAt(0).toUpperCase();
+            name
+                .charAt(0)
+                .toUpperCase();
 
-        const dot =
-            document.createElement("div");
 
-        dot.className =
-            "online-dot";
+        avatarWrap.appendChild(
+            avatar
+        );
 
-        avatarWrap.appendChild(avatar);
 
-        avatarWrap.appendChild(dot);
-
+        /* المعلومات */
 
         const info =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         info.className =
             "user-info";
 
+
         const top =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         top.className =
             "user-top";
 
+
         const nameElement =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         nameElement.className =
             "user-name";
 
+
         nameElement.textContent =
             name;
 
+
         const time =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         time.className =
             "last-time";
 
+
         time.textContent =
             last
-                ? formatTime(last.created_at)
+                ? formatTime(
+                    last.created_at
+                )
                 : "";
 
-        top.appendChild(nameElement);
 
-        top.appendChild(time);
+        top.appendChild(
+            nameElement
+        );
 
+
+        top.appendChild(
+            time
+        );
+
+
+        /* آخر رسالة */
 
         const lastText =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         lastText.className =
             "last-message";
+
 
         lastText.textContent =
             last
@@ -985,24 +1534,60 @@ function renderUsers(results) {
                 : "ابدأ محادثة جديدة 💬";
 
 
-        info.appendChild(top);
+        /* الحالة */
 
-        info.appendChild(lastText);
-
-
-        button.appendChild(avatarWrap);
-
-        button.appendChild(info);
+        const status =
+            document.createElement(
+                "div"
+            );
 
 
-        button.onclick = () => {
-
-            openConversation(user);
-
-        };
+        status.className =
+            "user-status";
 
 
-        container.appendChild(button);
+        status.textContent =
+            "متاح للدردشة";
+
+
+        info.appendChild(
+            top
+        );
+
+
+        info.appendChild(
+            lastText
+        );
+
+
+        info.appendChild(
+            status
+        );
+
+
+        button.appendChild(
+            avatarWrap
+        );
+
+
+        button.appendChild(
+            info
+        );
+
+
+        button.onclick =
+            () => {
+
+                openConversation(
+                    user
+                );
+
+            };
+
+
+        container.appendChild(
+            button
+        );
 
     });
 
@@ -1013,38 +1598,77 @@ function renderUsers(results) {
    البحث
 ========================================== */
 
+function filterUsers() {
+
+    const input =
+        document.getElementById(
+            "searchInput"
+        );
+
+
+    const search =
+        input.value
+            .trim()
+            .toLowerCase();
+
+
+    /*
+       إذا البحث فارغ
+       رجع القائمة كاملة
+    */
+
+    if (!search) {
+
+        renderUsers(
+            userResults.length
+                ? userResults
+                : allUsers.map(
+                    user => ({
+                        user,
+                        lastMessage: null,
+                        conversationId: null
+                    })
+                )
+        );
+
+        return;
+
+    }
+
+
+    const filtered =
+        userResults.filter(
+            item => {
+
+                const name =
+                    (
+                        item.user.display_name ||
+                        ""
+                    ).toLowerCase();
+
+
+                return name.includes(
+                    search
+                );
+
+            }
+        );
+
+
+    renderUsers(
+        filtered
+    );
+
+}
+
+
 document
-    .getElementById("searchInput")
+    .getElementById(
+        "searchInput"
+    )
     .addEventListener(
         "input",
-        function() {
-
-            const search =
-                this.value
-                    .trim()
-                    .toLowerCase();
-
-            const filtered =
-                allUsers
-                    .filter(user => {
-
-                        const name =
-                            (
-                                user.display_name ||
-                                ""
-                            ).toLowerCase();
-
-                        return name.includes(search);
-
-                    })
-                    .map(user => ({
-                        user,
-                        lastMessage: null
-                    }));
-
-            renderUsers(filtered);
-
-        }
+        filterUsers
     );
 
 
@@ -1054,52 +1678,75 @@ document
 
 async function openConversation(user) {
 
-    selectedUser = user;
+    selectedUser =
+        user;
+
+
+    const name =
+        user.display_name ||
+        "مستخدم";
+
 
     document.getElementById(
         "chatTitle"
     ).textContent =
-        user.display_name || "مستخدم";
+        name;
+
 
     document.getElementById(
         "chatAvatar"
     ).textContent =
-        (
-            user.display_name ||
-            "مستخدم"
-        )
-        .charAt(0)
-        .toUpperCase();
+        name
+            .charAt(0)
+            .toUpperCase();
+
+
+    document.getElementById(
+        "chatStatus"
+    ).textContent =
+        "متاح للدردشة";
+
 
     document.getElementById(
         "chatScreen"
-    ).classList.add("show");
+    ).classList.add(
+        "show"
+    );
 
 
     const {
         data,
         error
-    } = await supabaseClient
-        .from("conversations")
-        .select("*")
-        .or(
-            `and(user1_id.eq.${currentUser.id},user2_id.eq.${user.id}),and(user1_id.eq.${user.id},user2_id.eq.${currentUser.id})`
-        )
-        .maybeSingle();
+    } =
+        await supabaseClient
+            .from("conversations")
+            .select("*")
+            .or(
+                `and(user1_id.eq.${currentUser.id},user2_id.eq.${user.id}),and(user1_id.eq.${user.id},user2_id.eq.${currentUser.id})`
+            )
+            .maybeSingle();
+
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            "Conversation error:",
+            error
+        );
 
         return;
 
     }
 
+
     if (data) {
 
-        currentConversation = data;
+        currentConversation =
+            data;
 
-    } else {
+    }
+
+    else {
 
         const {
             data: newConversation,
@@ -1108,30 +1755,41 @@ async function openConversation(user) {
             await supabaseClient
                 .from("conversations")
                 .insert({
+
                     user1_id:
                         currentUser.id,
+
                     user2_id:
                         user.id
+
                 })
                 .select()
                 .single();
 
+
         if (createError) {
 
-            console.error(createError);
+            console.error(
+                "Create conversation error:",
+                createError
+            );
 
             return;
 
         }
+
 
         currentConversation =
             newConversation;
 
     }
 
-    loadMessages();
+
+    await loadMessages();
+
 
     subscribeToMessages();
+
 
     subscribeToTyping();
 
@@ -1145,8 +1803,13 @@ async function openConversation(user) {
 function closeChat() {
 
     document
-        .getElementById("chatScreen")
-        .classList.remove("show");
+        .getElementById(
+            "chatScreen"
+        )
+        .classList.remove(
+            "show"
+        );
+
 
     if (realtimeChannel) {
 
@@ -1154,9 +1817,11 @@ function closeChat() {
             realtimeChannel
         );
 
-        realtimeChannel = null;
+        realtimeChannel =
+            null;
 
     }
+
 
     if (typingChannel) {
 
@@ -1164,9 +1829,14 @@ function closeChat() {
             typingChannel
         );
 
-        typingChannel = null;
+        typingChannel =
+            null;
 
     }
+
+
+    selectedUser =
+        null;
 
 }
 
@@ -1177,52 +1847,77 @@ function closeChat() {
 
 async function loadMessages() {
 
-    if (!currentConversation) return;
+    if (!currentConversation)
+        return;
+
 
     const {
         data,
         error
-    } = await supabaseClient
-        .from("messages")
-        .select("*")
-        .eq(
-            "conversation_id",
-            currentConversation.id
-        )
-        .order(
-            "created_at",
-            {
-                ascending: true
-            }
-        );
+    } =
+        await supabaseClient
+            .from("messages")
+            .select("*")
+            .eq(
+                "conversation_id",
+                currentConversation.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            "Messages error:",
+            error
+        );
 
         return;
 
     }
+
 
     const container =
-        document.getElementById("messages");
+        document.getElementById(
+            "messages"
+        );
 
-    container.innerHTML = "";
 
-    if (!data || data.length === 0) {
+    container.innerHTML =
+        "";
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
         container.innerHTML =
-            '<div class="empty">لا توجد رسائل بعد 👋</div>';
+
+            '<div class="empty">' +
+            'لا توجد رسائل بعد 👋' +
+            '</div>';
 
         return;
 
     }
 
-    data.forEach(message => {
 
-        displayMessage(message);
+    data.forEach(
+        message => {
 
-    });
+            displayMessage(
+                message
+            );
+
+        }
+    );
+
 
     container.scrollTop =
         container.scrollHeight;
@@ -1237,42 +1932,70 @@ async function loadMessages() {
 function displayMessage(message) {
 
     const container =
-        document.getElementById("messages");
+        document.getElementById(
+            "messages"
+        );
+
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     div.className =
         "message";
+
 
     if (
         message.sender_id ===
         currentUser.id
     ) {
 
-        div.classList.add("mine");
-
-    } else {
-
-        div.classList.add("theirs");
+        div.classList.add(
+            "mine"
+        );
 
     }
+
+    else {
+
+        div.classList.add(
+            "theirs"
+        );
+
+    }
+
 
     div.textContent =
         message.message;
 
+
     const time =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
+
 
     time.className =
         "message-time";
 
+
     time.textContent =
-        formatTime(message.created_at);
+        formatTime(
+            message.created_at
+        );
 
-    div.appendChild(time);
 
-    container.appendChild(div);
+    div.appendChild(
+        time
+    );
+
+
+    container.appendChild(
+        div
+    );
+
 
     container.scrollTop =
         container.scrollHeight;
@@ -1288,40 +2011,54 @@ async function sendMessage() {
 
     if (!currentConversation) {
 
+        alert(
+            "اختر مستخدمًا أولًا"
+        );
+
         return;
 
     }
+
 
     const input =
         document.getElementById(
             "messageInput"
         );
 
+
     const text =
         input.value.trim();
 
-    if (!text) return;
+
+    if (!text)
+        return;
+
 
     const {
         error
-    } = await supabaseClient
-        .from("messages")
-        .insert({
+    } =
+        await supabaseClient
+            .from("messages")
+            .insert({
 
-            conversation_id:
-                currentConversation.id,
+                conversation_id:
+                    currentConversation.id,
 
-            sender_id:
-                currentUser.id,
+                sender_id:
+                    currentUser.id,
 
-            message:
-                text
+                message:
+                    text
 
-        });
+            });
+
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            "Send message error:",
+            error
+        );
 
         alert(
             "حدث خطأ أثناء إرسال الرسالة"
@@ -1331,7 +2068,24 @@ async function sendMessage() {
 
     }
 
-    input.value = "";
+
+    input.value =
+        "";
+
+
+    /*
+       نحدث القائمة حتى تظهر
+       آخر رسالة مباشرة
+    */
+
+    setTimeout(
+        () => {
+
+            loadLastMessages();
+
+        },
+        300
+    );
 
 }
 
@@ -1341,7 +2095,9 @@ async function sendMessage() {
 ========================================== */
 
 document
-    .getElementById("messageInput")
+    .getElementById(
+        "messageInput"
+    )
     .addEventListener(
         "keydown",
         function(event) {
@@ -1366,6 +2122,10 @@ document
 
 function subscribeToMessages() {
 
+    if (!currentConversation)
+        return;
+
+
     if (realtimeChannel) {
 
         supabaseClient.removeChannel(
@@ -1374,6 +2134,7 @@ function subscribeToMessages() {
 
     }
 
+
     realtimeChannel =
         supabaseClient
             .channel(
@@ -1381,22 +2142,44 @@ function subscribeToMessages() {
                 currentConversation.id
             )
             .on(
+
                 "postgres_changes",
+
                 {
+
                     event: "INSERT",
+
                     schema: "public",
+
                     table: "messages",
+
                     filter:
                         "conversation_id=eq." +
                         currentConversation.id
+
                 },
+
                 payload => {
 
-                    displayMessage(
-                        payload.new
-                    );
+                    /*
+                       لا نعرض رسالتنا مرتين
+                       لأن Realtime سيرسلها
+                       لنا أيضًا
+                    */
+
+                    if (
+                        payload.new.sender_id !==
+                        currentUser.id
+                    ) {
+
+                        displayMessage(
+                            payload.new
+                        );
+
+                    }
 
                 }
+
             )
             .subscribe();
 
@@ -1409,7 +2192,9 @@ function subscribeToMessages() {
 
 function subscribeToTyping() {
 
-    if (!currentConversation) return;
+    if (!currentConversation)
+        return;
+
 
     if (typingChannel) {
 
@@ -1419,6 +2204,7 @@ function subscribeToTyping() {
 
     }
 
+
     typingChannel =
         supabaseClient
             .channel(
@@ -1426,10 +2212,13 @@ function subscribeToTyping() {
                 currentConversation.id
             )
             .on(
+
                 "broadcast",
+
                 {
                     event: "typing"
                 },
+
                 payload => {
 
                     if (
@@ -1443,26 +2232,33 @@ function subscribeToTyping() {
                                 "typingIndicator"
                             );
 
+
                         indicator.classList.add(
                             "show"
                         );
+
 
                         clearTimeout(
                             window.typingTimer
                         );
 
+
                         window.typingTimer =
-                            setTimeout(() => {
+                            setTimeout(
+                                () => {
 
-                                indicator.classList.remove(
-                                    "show"
-                                );
+                                    indicator.classList.remove(
+                                        "show"
+                                    );
 
-                            }, 1500);
+                                },
+                                1500
+                            );
 
                     }
 
                 }
+
             )
             .subscribe();
 
@@ -1473,13 +2269,13 @@ function subscribeToTyping() {
    إرسال حالة الكتابة
 ========================================== */
 
-let typingSendTimer = null;
-
 document
-    .getElementById("messageInput")
+    .getElementById(
+        "messageInput"
+    )
     .addEventListener(
         "input",
-        async function() {
+        function() {
 
             if (
                 !currentConversation ||
@@ -1490,15 +2286,19 @@ document
 
             }
 
+
             clearTimeout(
                 typingSendTimer
             );
 
+
             typingChannel.send({
 
-                type: "broadcast",
+                type:
+                    "broadcast",
 
-                event: "typing",
+                event:
+                    "typing",
 
                 payload: {
 
@@ -1509,46 +2309,55 @@ document
 
             });
 
+
             typingSendTimer =
-                setTimeout(() => {}, 700);
+                setTimeout(
+                    () => {},
+                    700
+                );
 
         }
     );
 
 
 /* ==========================================
-   المكالمات
+   بدء المكالمة
 ========================================== */
 
 async function startCall() {
 
     if (!selectedUser) {
 
-        alert("اختر مستخدمًا أولًا");
+        alert(
+            "اختر مستخدمًا أولًا"
+        );
 
         return;
 
     }
 
+
     const {
         data,
         error
-    } = await supabaseClient
-        .from("calls")
-        .insert({
+    } =
+        await supabaseClient
+            .from("calls")
+            .insert({
 
-            caller_id:
-                currentUser.id,
+                caller_id:
+                    currentUser.id,
 
-            receiver_id:
-                selectedUser.id,
+                receiver_id:
+                    selectedUser.id,
 
-            status:
-                "ringing"
+                status:
+                    "ringing"
 
-        })
-        .select()
-        .single();
+            })
+            .select()
+            .single();
+
 
     if (error) {
 
@@ -1556,6 +2365,7 @@ async function startCall() {
             "Call error:",
             error
         );
+
 
         alert(
             "❌ حدث خطأ أثناء إرسال طلب المكالمة:\n" +
@@ -1565,6 +2375,7 @@ async function startCall() {
         return;
 
     }
+
 
     alert(
         "📞 تم إرسال طلب المكالمة إلى " +
@@ -1591,6 +2402,7 @@ function subscribeToCalls() {
 
     }
 
+
     callsChannel =
         supabaseClient
             .channel(
@@ -1598,16 +2410,27 @@ function subscribeToCalls() {
                 currentUser.id
             )
             .on(
+
                 "postgres_changes",
+
                 {
-                    event: "INSERT",
-                    schema: "public",
-                    table: "calls"
+
+                    event:
+                        "INSERT",
+
+                    schema:
+                        "public",
+
+                    table:
+                        "calls"
+
                 },
+
                 async payload => {
 
                     const call =
                         payload.new;
+
 
                     if (
                         call.receiver_id !==
@@ -1618,6 +2441,7 @@ function subscribeToCalls() {
 
                     }
 
+
                     if (
                         call.status !==
                         "ringing"
@@ -1627,14 +2451,17 @@ function subscribeToCalls() {
 
                     }
 
+
                     incomingCall =
                         call;
+
 
                     await showIncomingCall(
                         call
                     );
 
                 }
+
             )
             .subscribe();
 
@@ -1650,19 +2477,27 @@ async function showIncomingCall(call) {
     let callerName =
         "مستخدم";
 
+
     const {
         data,
         error
-    } = await supabaseClient
-        .from("profiles")
-        .select("display_name")
-        .eq(
-            "id",
-            call.caller_id
-        )
-        .maybeSingle();
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "display_name"
+            )
+            .eq(
+                "id",
+                call.caller_id
+            )
+            .maybeSingle();
 
-    if (!error && data) {
+
+    if (
+        !error &&
+        data
+    ) {
 
         callerName =
             data.display_name ||
@@ -1670,11 +2505,13 @@ async function showIncomingCall(call) {
 
     }
 
+
     document.getElementById(
         "callerName"
     ).textContent =
         callerName +
         " يتصل بك";
+
 
     document.getElementById(
         "callAvatar"
@@ -1682,6 +2519,7 @@ async function showIncomingCall(call) {
         callerName
             .charAt(0)
             .toUpperCase();
+
 
     document.getElementById(
         "callOverlay"
@@ -1692,29 +2530,38 @@ async function showIncomingCall(call) {
 
 
 /* ==========================================
-   قبول
+   قبول المكالمة
 ========================================== */
 
 async function acceptCall() {
 
-    if (!incomingCall) return;
+    if (!incomingCall)
+        return;
+
 
     const {
         error
-    } = await supabaseClient
-        .from("calls")
-        .update({
-            status:
-                "accepted"
-        })
-        .eq(
-            "id",
-            incomingCall.id
-        );
+    } =
+        await supabaseClient
+            .from("calls")
+            .update({
+
+                status:
+                    "accepted"
+
+            })
+            .eq(
+                "id",
+                incomingCall.id
+            );
+
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         alert(
             "❌ حدث خطأ أثناء قبول المكالمة"
@@ -1724,61 +2571,76 @@ async function acceptCall() {
 
     }
 
+
     document.getElementById(
         "callOverlay"
     ).style.display =
         "none";
+
 
     alert(
         "✅ تم قبول المكالمة.\n\nالصوت بين الطرفين نضيفه في الخطوة التالية."
     );
 
-    incomingCall = null;
+
+    incomingCall =
+        null;
 
 }
 
 
 /* ==========================================
-   رفض
+   رفض المكالمة
 ========================================== */
 
 async function rejectCall() {
 
-    if (!incomingCall) return;
+    if (!incomingCall)
+        return;
+
 
     const {
         error
-    } = await supabaseClient
-        .from("calls")
-        .update({
-            status:
-                "rejected"
-        })
-        .eq(
-            "id",
-            incomingCall.id
-        );
+    } =
+        await supabaseClient
+            .from("calls")
+            .update({
+
+                status:
+                    "rejected"
+
+            })
+            .eq(
+                "id",
+                incomingCall.id
+            );
+
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
         return;
 
     }
+
 
     document.getElementById(
         "callOverlay"
     ).style.display =
         "none";
 
-    incomingCall = null;
+
+    incomingCall =
+        null;
 
 }
 
 
 /* ==========================================
-   التشغيل
+   تشغيل الصفحة
 ========================================== */
 
 loadCurrentUser();
@@ -1786,4 +2648,5 @@ loadCurrentUser();
 </script>
 
 </body>
+
 </html>
