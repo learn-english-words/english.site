@@ -1,14 +1,17 @@
-
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>تعلم الكلمات</title>
 
     <link rel="stylesheet" href="words.css">
+
 </head>
 
 <body>
@@ -37,12 +40,22 @@
         <div class="progress-area">
 
             <div class="progress-info">
-                <span>تقدمك</span>
-                <strong id="progressText">1 / 10</strong>
+
+                <span>
+                    تقدمك
+                </span>
+
+                <strong id="progressText">
+                    1 / 10
+                </strong>
+
             </div>
 
+
             <div class="progress-bar">
+
                 <div id="progressFill"></div>
+
             </div>
 
         </div>
@@ -63,27 +76,61 @@
 
             <div class="word-content">
 
-                <div class="english-word" id="englishWord">
+                <div
+                    class="english-word"
+                    id="englishWord">
+
                     Apple
+
                 </div>
 
-                <div class="arabic-word" id="arabicWord">
+
+                <div
+                    class="arabic-word"
+                    id="arabicWord">
+
                     تفاحة
+
                 </div>
 
 
-                <button class="sound-btn" onclick="speakWord()">
-                    🔊 اسمع النطق
-                </button>
+                <!-- أزرار النطق -->
 
+                <div class="sound-buttons">
+
+                    <button
+                        class="sound-btn"
+                        onclick="speakWord()">
+
+                        🔊 اسمع الكلمة
+
+                    </button>
+
+
+                    <button
+                        class="sound-btn"
+                        onclick="speakExample()">
+
+                        🔊 اسمع الجملة
+
+                    </button>
+
+                </div>
+
+
+                <!-- المثال -->
 
                 <div class="example">
 
-                    <span>💡 مثال</span>
+                    <span>
+                        💡 مثال
+                    </span>
+
 
                     <p id="exampleText">
                         I eat an apple.
                     </p>
+
 
                     <small id="exampleArabic">
                         أنا آكل تفاحة.
@@ -100,12 +147,21 @@
 
         <div class="knowledge-buttons">
 
-            <button class="dont-know" onclick="answer(false)">
+            <button
+                class="dont-know"
+                onclick="answer(false)">
+
                 ❌ لا أعرفها
+
             </button>
 
-            <button class="know" onclick="answer(true)">
+
+            <button
+                class="know"
+                onclick="answer(true)">
+
                 ✅ أعرفها
+
             </button>
 
         </div>
@@ -115,25 +171,42 @@
 
         <div class="actions">
 
-            <button id="favoriteBtn" onclick="toggleFavorite()">
+            <button
+                id="favoriteBtn"
+                onclick="toggleFavorite()">
+
                 ☆
-                <span>حفظ</span>
+
+                <span>
+                    حفظ
+                </span>
+
             </button>
 
-            <button class="next-btn" onclick="nextWord()">
+
+            <button
+                class="next-btn"
+                onclick="nextWord()">
+
                 الكلمة التالية
                 ←
+
             </button>
 
         </div>
 
     </main>
 
+
+    <!-- Supabase -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="supabase.js"></script>
+
     <script src="words.js"></script>
 
 </body>
-</html>
 
+</html>
+```
