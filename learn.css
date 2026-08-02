@@ -1,381 +1,429 @@
+/* ==========================================
+   الأساسيات
+========================================== */
+
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
+
+
+html {
+    scroll-behavior: smooth;
+}
+
 
 body {
-    font-family: Arial, sans-serif;
+
+    margin: 0;
 
     background:
-        radial-gradient(
-            circle at 80% 20%,
-            rgba(91, 45, 190, 0.35),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 20% 80%,
-            rgba(35, 75, 190, 0.25),
-            transparent 35%
-        ),
-        #050817;
+        linear-gradient(
+            180deg,
+            #f8f9ff 0%,
+            #ffffff 100%
+        );
 
-    color: white;
+    color: #171827;
+
+    font-family:
+        Arial,
+        Tahoma,
+        sans-serif;
+
     min-height: 100vh;
+
 }
 
 
-/* =========================
-   الهيدر
-========================= */
+button {
+    font-family: inherit;
+}
+
+
+/* ==========================================
+   الشريط العلوي
+========================================== */
 
 .topbar {
-    height: 70px;
 
-    background: rgba(10, 17, 40, 0.88);
+    height: 72px;
 
-    border-bottom: 1px solid rgba(130, 120, 255, 0.18);
+    width: 100%;
+
+    max-width: 680px;
+
+    margin: auto;
+
+    padding: 0 18px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    padding: 0 6%;
+    position: sticky;
 
-    backdrop-filter: blur(18px);
-}
+    top: 0;
 
-.page-title {
-    font-size: 22px;
-    font-weight: bold;
-}
+    z-index: 100;
 
-.back-btn {
-    border: 1px solid rgba(130, 120, 255, 0.18);
-
-    background:
-        rgba(24, 31, 58, 0.85);
-
-    color: #9b8cff;
-
-    padding: 11px 17px;
-
-    border-radius: 10px;
-
-    font-size: 15px;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-.back-btn:hover {
-    background:
-        linear-gradient(
-            135deg,
-            #4267ff,
-            #8b3dff
-        );
-
-    color: white;
-}
-
-
-/* =========================
-   المحتوى
-========================= */
-
-.container {
-    width: min(1050px, 90%);
-    margin: 40px auto;
-}
-
-
-/* =========================
-   المقدمة
-========================= */
-
-.intro {
-    background:
-        linear-gradient(
-            135deg,
-            #4267ff,
-            #823cff
-        );
-
-    color: white;
-
-    border-radius: 22px;
-
-    padding: 30px;
-
-    margin-bottom: 35px;
-
-    box-shadow:
-        0 20px 55px rgba(70, 55, 220, 0.25);
-}
-
-.intro span {
-    font-size: 14px;
-    opacity: 0.9;
-}
-
-.intro h1 {
-    font-size: 32px;
-    margin: 10px 0;
-}
-
-.intro p {
-    line-height: 1.7;
-    opacity: 0.9;
-}
-
-
-/* =========================
-   العناوين
-========================= */
-
-h2 {
-    font-size: 22px;
-    margin: 28px 0 15px;
-    color: white;
-}
-
-
-/* =========================
-   المستويات
-========================= */
-
-.levels {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 16px;
-}
-
-
-/* بطاقة المستوى */
-
-.level-card {
-
-    border: 1px solid rgba(130, 120, 255, 0.20);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(30, 52, 125, 0.88),
-            rgba(48, 25, 95, 0.88)
-        );
-
-    color: white;
-
-    border-radius: 18px;
-
-    padding: 20px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 16px;
-
-    text-align: right;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.25);
-
-    transition:
-        transform 0.2s,
-        border-color 0.2s,
-        box-shadow 0.2s;
+    background: rgba(248,249,255,.92);
 
     backdrop-filter: blur(15px);
+
+    border-bottom:
+        1px solid rgba(0,0,0,.04);
+
 }
 
 
-.level-card:hover {
+.back-btn {
 
-    transform: translateY(-4px);
+    border: none;
 
-    border-color:
-        rgba(112, 85, 255, 0.65);
+    background: white;
 
-    box-shadow:
-        0 15px 40px rgba(65, 45, 180, 0.30);
-}
+    color: #5b50dc;
 
+    height: 43px;
 
-/* المستوى المحدد */
+    padding: 0 15px;
 
-.level-card.selected {
-
-    border-color:
-        #7055ff;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(55, 86, 190, 0.95),
-            rgba(91, 45, 190, 0.95)
-        );
-
-    box-shadow:
-        0 0 0 2px rgba(112, 85, 255, 0.15),
-        0 15px 45px rgba(75, 55, 220, 0.30);
-}
-
-
-/* مربع A1 / A2 / A3 */
-
-.level-card strong {
-
-    width: 58px;
-    height: 58px;
-
-    flex-shrink: 0;
-
-    border-radius: 15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #4965ff,
-            #823cff
-        );
-
-    color: white;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 19px;
-
-    box-shadow:
-        0 8px 25px rgba(80, 60, 230, 0.30);
-}
-
-.level-card h3 {
-    margin-bottom: 6px;
-    color: white;
-}
-
-.level-card p {
-
-    color: #b7bfd4;
+    border-radius: 14px;
 
     font-size: 13px;
 
-    line-height: 1.5;
-}
+    font-weight: bold;
 
+    cursor: pointer;
 
-/* =========================
-   التصنيفات
-========================= */
-
-.categories {
-
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 16px;
-}
-
-
-/* بطاقة التصنيف */
-
-.category-card {
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(30, 52, 125, 0.88),
-            rgba(48, 25, 95, 0.88)
-        );
-
-    color: white;
-
-    border:
-        1px solid rgba(130, 120, 255, 0.20);
-
-    border-radius: 18px;
-
-    padding: 22px;
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.06);
 
     display: flex;
-
-    flex-direction: column;
 
     align-items: center;
 
     gap: 7px;
 
-    cursor: pointer;
+    transition: .2s;
 
-    box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.25);
-
-    transition:
-        transform 0.2s,
-        border-color 0.2s,
-        box-shadow 0.2s;
-
-    backdrop-filter: blur(15px);
 }
 
 
-.category-card:hover {
+.back-btn span {
 
-    transform: translateY(-4px);
+    font-size: 18px;
 
-    border-color:
-        rgba(112, 85, 255, 0.65);
-
-    box-shadow:
-        0 15px 40px rgba(65, 45, 180, 0.30);
 }
 
 
-/* التصنيف المحدد */
+.back-btn:active {
 
-.category-card.selected {
+    transform: scale(.95);
 
-    border-color:
-        #7055ff;
+}
+
+
+.page-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+}
+
+
+.title-icon {
+
+    font-size: 23px;
+
+}
+
+
+/* ==========================================
+   المحتوى
+========================================== */
+
+.container {
+
+    width: 100%;
+
+    max-width: 620px;
+
+    margin: auto;
+
+    padding:
+        20px 18px 55px;
+
+}
+
+
+/* ==========================================
+   المقدمة
+========================================== */
+
+.intro {
+
+    min-height: 205px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 28px;
+
+    padding: 27px 25px;
+
+    margin-bottom: 30px;
+
+    color: white;
 
     background:
         linear-gradient(
             135deg,
-            rgba(55, 86, 190, 0.95),
-            rgba(91, 45, 190, 0.95)
+            #6254eb 0%,
+            #796ced 55%,
+            #9387f4 100%
         );
 
     box-shadow:
-        0 0 0 2px rgba(112, 85, 255, 0.15),
-        0 15px 45px rgba(75, 55, 220, 0.30);
+        0 14px 35px
+        rgba(98,84,235,.22);
+
 }
 
 
-.category-card span {
+.intro::before {
 
-    width: 58px;
-    height: 58px;
+    content: "";
 
-    border-radius: 15px;
+    position: absolute;
+
+    width: 210px;
+    height: 210px;
+
+    border-radius: 50%;
 
     background:
-        linear-gradient(
-            135deg,
-            rgba(73, 101, 255, 0.85),
-            rgba(130, 60, 255, 0.85)
+        rgba(255,255,255,.08);
+
+    left: -75px;
+    bottom: -100px;
+
+}
+
+
+.intro::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 160px;
+    height: 160px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.06);
+
+    right: -70px;
+    top: -70px;
+
+}
+
+
+.intro-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 360px;
+
+}
+
+
+.intro-label {
+
+    display: inline-flex;
+
+    padding:
+        7px 11px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.16);
+
+    font-size: 12px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.intro h1 {
+
+    margin: 0 0 12px;
+
+    font-size: 28px;
+
+    line-height: 1.35;
+
+}
+
+
+.intro h1 span {
+
+    color: #fff;
+
+}
+
+
+.intro p {
+
+    margin: 0;
+
+    line-height: 1.8;
+
+    font-size: 13px;
+
+    color:
+        rgba(255,255,255,.86);
+
+}
+
+
+.intro-decoration {
+
+    position: absolute;
+
+    left: 20px;
+
+    bottom: 17px;
+
+    width: 120px;
+
+    height: 120px;
+
+    z-index: 2;
+
+}
+
+
+.floating-book {
+
+    position: absolute;
+
+    left: 20px;
+
+    bottom: 5px;
+
+    font-size: 65px;
+
+    transform: rotate(-8deg);
+
+    filter:
+        drop-shadow(
+            0 8px 8px
+            rgba(0,0,0,.15)
         );
+
+    animation:
+        floating 3s ease-in-out infinite;
+
+}
+
+
+.floating-star {
+
+    position: absolute;
+
+    font-size: 18px;
+
+}
+
+
+.star-one {
+
+    top: 8px;
+
+    right: 15px;
+
+}
+
+
+.star-two {
+
+    bottom: 20px;
+
+    right: 2px;
+
+    font-size: 12px;
+
+}
+
+
+@keyframes floating {
+
+    0%, 100% {
+        transform:
+            translateY(0)
+            rotate(-8deg);
+    }
+
+    50% {
+        transform:
+            translateY(-8px)
+            rotate(-4deg);
+    }
+
+}
+
+
+/* ==========================================
+   عناوين الأقسام
+========================================== */
+
+.section-heading {
+
+    margin:
+        0 2px 14px;
+
+}
+
+
+.section-heading > div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+}
+
+
+.section-number {
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 12px;
+
+    background: #eeecff;
+
+    color: #6055dd;
 
     display: flex;
 
@@ -383,131 +431,702 @@ h2 {
 
     justify-content: center;
 
-    font-size: 32px;
+    font-size: 11px;
 
-    box-shadow:
-        0 8px 25px rgba(80, 60, 230, 0.25);
+    font-weight: bold;
+
 }
 
 
-.category-card strong {
+.section-heading h2 {
+
+    margin: 0 0 3px;
+
+    font-size: 18px;
+
+}
+
+
+.section-heading p {
+
+    margin: 0;
+
+    color: #92929d;
+
+    font-size: 11px;
+
+}
+
+
+.category-heading {
+
+    margin-top: 34px;
+
+}
+
+
+/* ==========================================
+   المستويات
+========================================== */
+
+.levels {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 11px;
+
+}
+
+
+.level-card {
+
+    width: 100%;
+
+    border: 2px solid transparent;
+
+    border-radius: 19px;
+
+    background: white;
+
+    padding: 13px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    text-align: right;
+
+    cursor: pointer;
+
+    position: relative;
+
+    box-shadow:
+        0 4px 18px
+        rgba(20,20,50,.055);
+
+    transition:
+        transform .18s,
+        border .18s,
+        box-shadow .18s;
+
+}
+
+
+.level-card:hover {
+
+    transform: translateY(-2px);
+
+}
+
+
+.level-card:active {
+
+    transform: scale(.985);
+
+}
+
+
+.level-card.selected {
+
+    border-color: #6659e8;
+
+    background:
+        linear-gradient(
+            135deg,
+            #faf9ff,
+            #f3f1ff
+        );
+
+    box-shadow:
+        0 7px 22px
+        rgba(102,89,232,.13);
+
+}
+
+
+.level-badge {
+
+    width: 58px;
+
+    height: 58px;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #7669f3,
+            #5b4ee8
+        );
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     font-size: 17px;
 
-    color: white;
+    font-weight: bold;
+
+    flex-shrink: 0;
+
+    box-shadow:
+        0 5px 13px
+        rgba(91,78,232,.2);
+
 }
 
 
-.category-card small {
+.level-content {
 
-    color: #b7bfd4;
+    flex: 1;
+
+}
+
+
+.level-content h3 {
+
+    margin:
+        0 0 5px;
+
+    font-size: 16px;
+
+}
+
+
+.level-content p {
+
+    margin: 0;
+
+    color: #8b8b96;
+
+    font-size: 12px;
+
+}
+
+
+.select-circle {
+
+    width: 25px;
+
+    height: 25px;
+
+    border:
+        2px solid #dedee6;
+
+    color: transparent;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     font-size: 13px;
+
+    font-weight: bold;
+
+    flex-shrink: 0;
+
+    transition: .2s;
+
 }
 
 
-/* =========================
-   زر البداية
-========================= */
+.level-card.selected .select-circle {
+
+    background: #6659e8;
+
+    border-color: #6659e8;
+
+    color: white;
+
+}
+
+
+/* ==========================================
+   التصنيفات
+========================================== */
+
+.categories {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 11px;
+
+}
+
+
+.category-card {
+
+    border: 2px solid transparent;
+
+    background: white;
+
+    min-height: 115px;
+
+    border-radius: 20px;
+
+    padding: 14px;
+
+    text-align: right;
+
+    cursor: pointer;
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    transition:
+        transform .18s,
+        border .18s,
+        box-shadow .18s;
+
+    box-shadow:
+        0 4px 18px
+        rgba(20,20,50,.055);
+
+}
+
+
+.category-card:hover {
+
+    transform: translateY(-2px);
+
+}
+
+
+.category-card:active {
+
+    transform: scale(.97);
+
+}
+
+
+.category-card.selected {
+
+    border-color: #6659e8;
+
+    background:
+        linear-gradient(
+            145deg,
+            #faf9ff,
+            #f4f2ff
+        );
+
+    box-shadow:
+        0 7px 20px
+        rgba(102,89,232,.13);
+
+}
+
+
+.category-icon {
+
+    width: 47px;
+
+    height: 47px;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 25px;
+
+    margin-bottom: 9px;
+
+}
+
+
+.home-icon {
+    background: #eaf9f0;
+}
+
+.food-icon {
+    background: #fff1e7;
+}
+
+.cars-icon {
+    background: #eaf3ff;
+}
+
+.clothes-icon {
+    background: #fff0f6;
+}
+
+.family-icon {
+    background: #f1edff;
+}
+
+.nature-icon {
+    background: #eaf8e7;
+}
+
+
+.category-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+}
+
+
+.category-info strong {
+
+    font-size: 14px;
+
+}
+
+
+.category-info small {
+
+    color: #9999a3;
+
+    font-size: 10px;
+
+}
+
+
+.category-check {
+
+    position: absolute;
+
+    top: 10px;
+
+    left: 10px;
+
+    width: 23px;
+
+    height: 23px;
+
+    border-radius: 50%;
+
+    border:
+        2px solid #dedee6;
+
+    color: transparent;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+.category-card.selected
+.category-check {
+
+    background: #6659e8;
+
+    border-color: #6659e8;
+
+    color: white;
+
+}
+
+
+/* ==========================================
+   منطقة زر البداية
+========================================== */
+
+.start-area {
+
+    margin-top: 28px;
+
+    position: sticky;
+
+    bottom: 12px;
+
+    z-index: 20;
+
+}
+
+
+.selection-message {
+
+    text-align: center;
+
+    color: #92929d;
+
+    font-size: 11px;
+
+    margin-bottom: 8px;
+
+}
+
 
 .start-btn {
 
     width: 100%;
 
+    height: 58px;
+
     border: none;
 
-    border-radius: 16px;
-
-    padding: 17px;
-
-    margin-top: 35px;
+    border-radius: 19px;
 
     background:
         linear-gradient(
             135deg,
-            #4965ff,
-            #823cff
+            #7669f3,
+            #5b4ee8
         );
 
     color: white;
 
-    font-size: 18px;
+    font-size: 16px;
 
     font-weight: bold;
 
     cursor: pointer;
 
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 15px;
+
     box-shadow:
-        0 12px 30px rgba(92, 65, 255, 0.30);
+        0 9px 25px
+        rgba(91,78,232,.25);
 
     transition:
-        transform 0.2s,
-        box-shadow 0.2s;
+        transform .18s,
+        opacity .18s,
+        box-shadow .18s;
+
+}
+
+
+.start-btn:not(:disabled):active {
+
+    transform: scale(.98);
+
 }
 
 
 .start-btn:disabled {
 
-    background:
-        rgba(70, 78, 105, 0.65);
+    background: #d9d9e2;
 
-    color: #8e97b2;
+    color: #9696a0;
 
     cursor: not-allowed;
 
     box-shadow: none;
+
 }
 
 
-.start-btn:not(:disabled):hover {
+.start-arrow {
 
-    transform: translateY(-3px);
+    font-size: 21px;
 
-    box-shadow:
-        0 16px 38px rgba(92, 65, 255, 0.40);
+    transition: .2s;
+
 }
 
 
-/* =========================
+.start-btn:not(:disabled):hover
+.start-arrow {
+
+    transform:
+        translateX(-5px);
+
+}
+
+
+/* ==========================================
    الجوال
-========================= */
+========================================== */
 
-@media (max-width: 700px) {
+@media (max-width: 420px) {
 
     .topbar {
-        padding: 0 4%;
+
+        height: 66px;
+
+        padding:
+            0 13px;
+
     }
+
 
     .page-title {
-        font-size: 18px;
+
+        font-size: 14px;
+
     }
+
+
+    .back-btn {
+
+        height: 40px;
+
+        padding: 0 12px;
+
+    }
+
 
     .container {
-        width: 92%;
-        margin: 25px auto;
+
+        padding:
+            16px 14px 40px;
+
     }
+
 
     .intro {
-        padding: 24px;
+
+        min-height: 195px;
+
+        padding: 23px 20px;
+
+        border-radius: 24px;
+
     }
+
 
     .intro h1 {
-        font-size: 26px;
+
+        font-size: 24px;
+
     }
 
-    .levels {
-        grid-template-columns: 1fr;
+
+    .intro p {
+
+        max-width: 230px;
+
+        font-size: 12px;
+
     }
 
-    .categories {
-        grid-template-columns: repeat(2, 1fr);
+
+    .intro-decoration {
+
+        left: 8px;
+
+        transform:
+            scale(.85);
+
+        transform-origin:
+            bottom left;
+
     }
 
-    .category-card {
-        padding: 18px 10px;
-    }
 
     .level-card {
-        padding: 18px;
+
+        padding: 11px;
+
     }
+
+
+    .level-badge {
+
+        width: 53px;
+
+        height: 53px;
+
+    }
+
+
+    .level-content h3 {
+
+        font-size: 15px;
+
+    }
+
+
+    .level-content p {
+
+        font-size: 11px;
+
+    }
+
+
+    .categories {
+
+        gap: 9px;
+
+    }
+
+
+    .category-card {
+
+        min-height: 108px;
+
+        padding: 12px;
+
+    }
+
+
+    .start-btn {
+
+        height: 55px;
+
+    }
+
+}
+
+
+/* ==========================================
+   الشاشات الكبيرة
+========================================== */
+
+@media (min-width: 700px) {
+
+    .container {
+
+        padding-top: 28px;
+
+    }
+
+
+    .categories {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+
+    .category-card {
+
+        min-height: 125px;
+
+    }
+
 }

@@ -1,136 +1,513 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>تعلم الكلمات</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>تعلم الكلمات | EnglishWords</title>
 
     <link rel="stylesheet" href="learn.css">
+
 </head>
+
 
 <body>
 
-    <header class="topbar">
 
-        <button class="back-btn" onclick="goHome()">
-            ← الرئيسية
-        </button>
+<!-- ==========================================
+     الشريط العلوي
+========================================== -->
 
-        <div class="page-title">
-            📚 تعلم الكلمات
+<header class="topbar">
+
+    <button
+        class="back-btn"
+        onclick="goHome()">
+
+        <span>→</span>
+        الرئيسية
+
+    </button>
+
+
+    <div class="page-title">
+
+        <span class="title-icon">
+            📚
+        </span>
+
+        <span>
+            تعلم الكلمات
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<!-- ==========================================
+     المحتوى
+========================================== -->
+
+<main class="container">
+
+
+    <!-- ==========================================
+         المقدمة
+    ========================================== -->
+
+    <section class="intro">
+
+        <div class="intro-content">
+
+            <div class="intro-label">
+                ✨ ابدأ رحلتك
+            </div>
+
+
+            <h1>
+                تعلم الإنجليزية
+                <br>
+                <span>بطريقة أسهل 🚀</span>
+            </h1>
+
+
+            <p>
+                اختر مستواك أولًا، ثم اختر التصنيف
+                الذي تريد تعلم كلماته.
+            </p>
+
         </div>
 
-    </header>
 
+        <div class="intro-decoration">
 
-    <main class="container">
-
-        <section class="intro">
-            <div>
-                <span>ابدأ رحلتك 🚀</span>
-                <h1>اختر مستواك</h1>
-                <p>
-                    اختر المستوى المناسب لك، وبعدها اختر التصنيف
-                    الذي تريد تعلم كلماته.
-                </p>
+            <div class="floating-book">
+                📚
             </div>
-        </section>
+
+            <div class="floating-star star-one">
+                ✦
+            </div>
+
+            <div class="floating-star star-two">
+                ✦
+            </div>
+
+        </div>
+
+    </section>
 
 
-        <!-- المستويات -->
 
-        <h2>📊 المستوى</h2>
+    <!-- ==========================================
+         اختيار المستوى
+    ========================================== -->
 
-        <section class="levels">
+    <div class="section-heading">
 
-            <button class="level-card" onclick="selectLevel(this, 'A1')">
-                <strong>A1</strong>
-                <div>
-                    <h3>مبتدئ</h3>
-                    <p>كلمات إنجليزية أساسية وسهلة</p>
-                </div>
-            </button>
+        <div>
 
+            <span class="section-number">
+                01
+            </span>
 
-            <button class="level-card" onclick="selectLevel(this, 'A2')">
-                <strong>A2</strong>
-                <div>
-                    <h3>متوسط</h3>
-                    <p>كلمات أكثر تنوعًا واستخدامًا</p>
-                </div>
-            </button>
+            <div>
 
+                <h2>
+                    اختر مستواك
+                </h2>
 
-            <button class="level-card" onclick="selectLevel(this, 'B1')">
-                <strong>B1</strong>
-                <div>
-                    <h3>متقدم</h3>
-                    <p>كلمات أصعب ومفيدة للمحادثة</p>
-                </div>
-            </button>
+                <p>
+                    اختر المستوى المناسب لك
+                </p>
 
-        </section>
+            </div>
+
+        </div>
+
+    </div>
 
 
-        <!-- التصنيفات -->
 
-        <h2>🗂️ اختر التصنيف</h2>
-
-        <section class="categories">
-
-            <button class="category-card" onclick="selectCategory(this, 'home')">
-                <span>🏠</span>
-                <strong>المنزل</strong>
-                <small>Home</small>
-            </button>
-
-            <button class="category-card" onclick="selectCategory(this, 'food')">
-                <span>🍔</span>
-                <strong>الطعام</strong>
-                <small>Food</small>
-            </button>
-
-            <button class="category-card" onclick="selectCategory(this, 'cars')">
-                <span>🚗</span>
-                <strong>السيارات</strong>
-                <small>Cars</small>
-            </button>
-
-            <button class="category-card" onclick="selectCategory(this, 'clothes')">
-                <span>👕</span>
-                <strong>الملابس</strong>
-                <small>Clothes</small>
-            </button>
-
-            <button class="category-card" onclick="selectCategory(this, 'family')">
-                <span>👨‍👩‍👧</span>
-                <strong>العائلة</strong>
-                <small>Family</small>
-            </button>
-
-            <button class="category-card" onclick="selectCategory(this, 'nature')">
-                <span>🌳</span>
-                <strong>الطبيعة</strong>
-                <small>Nature</small>
-            </button>
-
-        </section>
+    <section class="levels">
 
 
-        <button id="startBtn" class="start-btn" onclick="startLearning()" disabled>
-            ابدأ التعلم 🚀
+        <!-- A1 -->
+
+        <button
+            class="level-card"
+            onclick="selectLevel(this, 'A1')">
+
+
+            <div class="level-badge">
+                A1
+            </div>
+
+
+            <div class="level-content">
+
+                <h3>
+                    مبتدئ
+                </h3>
+
+                <p>
+                    كلمات إنجليزية أساسية وسهلة
+                </p>
+
+            </div>
+
+
+            <div class="select-circle">
+                ✓
+            </div>
+
+
         </button>
 
-    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js"></script>
-    <script src="learn.js"></script>
+        <!-- A2 -->
+
+        <button
+            class="level-card"
+            onclick="selectLevel(this, 'A2')">
+
+
+            <div class="level-badge">
+                A2
+            </div>
+
+
+            <div class="level-content">
+
+                <h3>
+                    متوسط
+                </h3>
+
+                <p>
+                    كلمات أكثر تنوعًا واستخدامًا
+                </p>
+
+            </div>
+
+
+            <div class="select-circle">
+                ✓
+            </div>
+
+
+        </button>
+
+
+
+        <!-- B1 -->
+
+        <button
+            class="level-card"
+            onclick="selectLevel(this, 'B1')">
+
+
+            <div class="level-badge">
+                B1
+            </div>
+
+
+            <div class="level-content">
+
+                <h3>
+                    متقدم
+                </h3>
+
+                <p>
+                    كلمات أصعب ومفيدة للمحادثة
+                </p>
+
+            </div>
+
+
+            <div class="select-circle">
+                ✓
+            </div>
+
+
+        </button>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         اختيار التصنيف
+    ========================================== -->
+
+    <div class="section-heading category-heading">
+
+        <div>
+
+            <span class="section-number">
+                02
+            </span>
+
+            <div>
+
+                <h2>
+                    اختر التصنيف
+                </h2>
+
+                <p>
+                    ماذا تريد أن تتعلم اليوم؟
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <section class="categories">
+
+
+        <!-- المنزل -->
+
+        <button
+            class="category-card"
+            onclick="selectCategory(this, 'home')">
+
+            <div class="category-icon home-icon">
+                🏠
+            </div>
+
+            <div class="category-info">
+
+                <strong>
+                    المنزل
+                </strong>
+
+                <small>
+                    Home
+                </small>
+
+            </div>
+
+            <span class="category-check">
+                ✓
+            </span>
+
+        </button>
+
+
+
+        <!-- الطعام -->
+
+        <button
+            class="category-card"
+            onclick="selectCategory(this, 'food')">
+
+            <div class="category-icon food-icon">
+                🍔
+            </div>
+
+            <div class="category-info">
+
+                <strong>
+                    الطعام
+                </strong>
+
+                <small>
+                    Food
+                </small>
+
+            </div>
+
+            <span class="category-check">
+                ✓
+            </span>
+
+        </button>
+
+
+
+        <!-- السيارات -->
+
+        <button
+            class="category-card"
+            onclick="selectCategory(this, 'cars')">
+
+            <div class="category-icon cars-icon">
+                🚗
+            </div>
+
+            <div class="category-info">
+
+                <strong>
+                    السيارات
+                </strong>
+
+                <small>
+                    Cars
+                </small>
+
+            </div>
+
+            <span class="category-check">
+                ✓
+            </span>
+
+        </button>
+
+
+
+        <!-- الملابس -->
+
+        <button
+            class="category-card"
+            onclick="selectCategory(this, 'clothes')">
+
+            <div class="category-icon clothes-icon">
+                👕
+            </div>
+
+            <div class="category-info">
+
+                <strong>
+                    الملابس
+                </strong>
+
+                <small>
+                    Clothes
+                </small>
+
+            </div>
+
+            <span class="category-check">
+                ✓
+            </span>
+
+        </button>
+
+
+
+        <!-- العائلة -->
+
+        <button
+            class="category-card"
+            onclick="selectCategory(this, 'family')">
+
+            <div class="category-icon family-icon">
+                👨‍👩‍👧
+            </div>
+
+            <div class="category-info">
+
+                <strong>
+                    العائلة
+                </strong>
+
+                <small>
+                    Family
+                </small>
+
+            </div>
+
+            <span class="category-check">
+                ✓
+            </span>
+
+        </button>
+
+
+
+        <!-- الطبيعة -->
+
+        <button
+            class="category-card"
+            onclick="selectCategory(this, 'nature')">
+
+            <div class="category-icon nature-icon">
+                🌳
+            </div>
+
+            <div class="category-info">
+
+                <strong>
+                    الطبيعة
+                </strong>
+
+                <small>
+                    Nature
+                </small>
+
+            </div>
+
+            <span class="category-check">
+                ✓
+            </span>
+
+        </button>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         زر البداية
+    ========================================== -->
+
+    <div class="start-area">
+
+        <div
+            id="selectionMessage"
+            class="selection-message">
+
+            اختر المستوى والتصنيف للبدء 👆
+
+        </div>
+
+
+        <button
+            id="startBtn"
+            class="start-btn"
+            onclick="startLearning()"
+            disabled>
+
+            <span>
+                ابدأ التعلم
+            </span>
+
+            <span class="start-arrow">
+                ←
+            </span>
+
+        </button>
+
+    </div>
+
+
+</main>
+
+
+
+<!-- ==========================================
+     Supabase
+========================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="learn.js"></script>
+
 
 </body>
-</html>
 
+</html>
