@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 
 <head>
@@ -6,17 +7,21 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width,
-               initial-scale=1,
-               maximum-scale=1,
-               user-scalable=no,
-               viewport-fit=cover">
+   content="width=device-width,
+            initial-scale=1,
+            maximum-scale=1,
+            user-scalable=no,
+            viewport-fit=cover">
 
 <title>الدردشة - EnglishWords</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="supabase.js"></script>
+
+<!-- مهم: بعد supabase.js -->
+
+<script src="notifications.js"></script>
 
 <style>
 
@@ -279,7 +284,7 @@ input {
 
 
 /* ==========================================
-   🔴 عداد الرسائل غير المقروءة
+   عداد الرسائل غير المقروءة
 ========================================== */
 
 .unread-badge {
@@ -391,11 +396,6 @@ input {
 
     font-size: 10px;
 }
-
-
-/* ==========================================
-   حالة وجود رسائل غير مقروءة
-========================================== */
 
 .user.has-unread .user-name {
 
@@ -774,129 +774,6 @@ input {
 
 
 /* ==========================================
-   إشعار داخل الصفحة
-========================================== */
-
-.message-notification {
-
-    position: fixed;
-
-    top:
-        max(15px, env(safe-area-inset-top));
-
-    left: 15px;
-
-    right: 15px;
-
-    max-width: 420px;
-
-    margin: auto;
-
-    background: white;
-
-    border-radius: 16px;
-
-    padding:
-        13px 15px;
-
-    box-shadow:
-        0 8px 30px rgba(0,0,0,.18);
-
-    z-index: 15000;
-
-    display: none;
-
-    align-items: center;
-
-    gap: 12px;
-
-    cursor: pointer;
-}
-
-.message-notification.show {
-
-    display: flex;
-
-    animation:
-        notificationIn .25s ease;
-}
-
-@keyframes notificationIn {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(-15px);
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0);
-    }
-}
-
-.notification-avatar {
-
-    width: 43px;
-    height: 43px;
-
-    min-width: 43px;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6254eb,
-            #8374ed
-        );
-
-    color: white;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    font-weight: bold;
-}
-
-.notification-info {
-
-    min-width: 0;
-
-    flex: 1;
-}
-
-.notification-name {
-
-    font-weight: bold;
-
-    font-size: 14px;
-}
-
-.notification-message {
-
-    color: #777;
-
-    font-size: 12px;
-
-    margin-top: 3px;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-
-/* ==========================================
    المكالمة الواردة
 ========================================== */
 
@@ -1054,61 +931,56 @@ body.chat-open {
 
 </head>
 
-
 <body>
-
 
 <div class="chat-container">
 
-
 <header class="topbar">
 
-    <button
-        class="back"
-        onclick="window.location.href='index.html'">
+```
+<button
+    class="back"
+    onclick="window.location.href='index.html'">
 
-        ←
+    ←
 
-    </button>
+</button>
 
-    <h2>
-        💬 الدردشة
-    </h2>
+<h2>
+    💬 الدردشة
+</h2>
+```
 
 </header>
 
-
 <section class="conversations-section">
 
+```
+<div class="search-box">
 
-    <div class="search-box">
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="🔎 ابحث عن مستخدم..."
-            autocomplete="off">
-
-    </div>
-
-
-    <div id="usersContainer">
-
-        <div class="empty">
-
-            جاري تحميل المستخدمين...
-
-        </div>
-
-    </div>
-
-
-</section>
-
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="🔎 ابحث عن مستخدم..."
+        autocomplete="off">
 
 </div>
 
 
+<div id="usersContainer">
+
+    <div class="empty">
+
+        جاري تحميل المستخدمين...
+
+    </div>
+
+</div>
+```
+
+</section>
+
+</div>
 
 <!-- ==========================================
      شاشة المحادثة
@@ -1118,117 +990,112 @@ body.chat-open {
     id="chatScreen"
     class="chat-screen">
 
-
 <header class="chat-header">
 
+```
+<button
+    class="chat-back"
+    onclick="closeChat()">
 
-    <button
-        class="chat-back"
-        onclick="closeChat()">
+    →
 
-        →
+</button>
 
-    </button>
+
+<div
+    class="chat-avatar"
+    id="chatAvatar">
+
+    ؟
+
+</div>
+
+
+<div class="chat-user-info">
+
+    <div
+        class="chat-user-name"
+        id="chatTitle">
+
+        مستخدم
+
+    </div>
 
 
     <div
-        class="chat-avatar"
-        id="chatAvatar">
+        class="chat-status"
+        id="chatStatus">
 
-        ؟
-
-    </div>
-
-
-    <div class="chat-user-info">
-
-        <div
-            class="chat-user-name"
-            id="chatTitle">
-
-            مستخدم
-
-        </div>
-
-
-        <div
-            class="chat-status"
-            id="chatStatus">
-
-            متاح للدردشة
-
-        </div>
+        متاح للدردشة
 
     </div>
 
+</div>
 
-    <button
-        class="call-btn"
-        onclick="startCall()"
-        title="اتصال صوتي">
 
-        📞
+<button
+    class="call-btn"
+    onclick="startCall()"
+    title="اتصال صوتي">
 
-    </button>
+    📞
 
+</button>
+```
 
 </header>
-
-
 
 <div
     class="messages"
     id="messages">
 
-    <div class="empty">
+```
+<div class="empty">
 
-        لا توجد رسائل بعد 👋
-
-    </div>
+    لا توجد رسائل بعد 👋
 
 </div>
+```
 
-
+</div>
 
 <div
     id="typingIndicator"
     class="typing">
 
-    يكتب الآن...
+```
+يكتب الآن...
+```
 
 </div>
-
-
 
 <div class="send-box">
 
-
-    <input
-        type="text"
-        id="messageInput"
-        placeholder="اكتب رسالتك..."
-        autocomplete="off"
-        enterkeyhint="send">
-
-
-    <button
-        id="sendButton"
-        onclick="sendMessage()">
-
-        ➤
-
-    </button>
+```
+<input
+    type="text"
+    id="messageInput"
+    placeholder="اكتب رسالتك..."
+    autocomplete="off"
+    enterkeyhint="send">
 
 
-</div>
+<button
+    id="sendButton"
+    onclick="sendMessage()">
 
+    ➤
+
+</button>
+```
 
 </div>
 
-
+</div>
 
 <!-- ==========================================
      إشعار الرسالة
+     notifications.js يستخدمه
 ========================================== -->
 
 <div
@@ -1236,41 +1103,39 @@ body.chat-open {
     class="message-notification"
     onclick="openNotificationChat()">
 
+```
+<div
+    id="notificationAvatar"
+    class="notification-avatar">
 
-    <div
-        id="notificationAvatar"
-        class="notification-avatar">
-
-        ؟
-
-    </div>
-
-
-    <div class="notification-info">
-
-        <div
-            id="notificationName"
-            class="notification-name">
-
-            رسالة جديدة
-
-        </div>
-
-
-        <div
-            id="notificationMessage"
-            class="notification-message">
-
-            لديك رسالة جديدة
-
-        </div>
-
-    </div>
-
+    ؟
 
 </div>
 
 
+<div class="notification-info">
+
+    <div
+        id="notificationName"
+        class="notification-name">
+
+        رسالة جديدة
+
+    </div>
+
+
+    <div
+        id="notificationMessage"
+        class="notification-message">
+
+        لديك رسالة جديدة
+
+    </div>
+
+</div>
+```
+
+</div>
 
 <!-- ==========================================
      المكالمة الواردة
@@ -1280,61 +1145,57 @@ body.chat-open {
     id="callOverlay"
     class="call-overlay">
 
-
 <div class="call-box">
 
+```
+<div
+    id="callAvatar"
+    class="call-avatar">
 
-    <div
-        id="callAvatar"
-        class="call-avatar">
-
-        ؟
-
-    </div>
-
-
-    <h2>
-        📞 مكالمة واردة
-    </h2>
-
-
-    <p id="callerName">
-
-        مستخدم يتصل بك...
-
-    </p>
-
-
-    <div class="call-actions">
-
-
-        <button
-            class="call-action reject-call"
-            onclick="rejectCall()">
-
-            ❌
-
-        </button>
-
-
-        <button
-            class="call-action accept-call"
-            onclick="acceptCall()">
-
-            📞
-
-        </button>
-
-
-    </div>
-
+    ؟
 
 </div>
 
 
+<h2>
+    📞 مكالمة واردة
+</h2>
+
+
+<p id="callerName">
+
+    مستخدم يتصل بك...
+
+</p>
+
+
+<div class="call-actions">
+
+
+    <button
+        class="call-action reject-call"
+        onclick="rejectCall()">
+
+        ❌
+
+    </button>
+
+
+    <button
+        class="call-action accept-call"
+        onclick="acceptCall()">
+
+        📞
+
+    </button>
+
+
+</div>
+```
+
 </div>
 
-
+</div>
 
 <script>
 
@@ -1362,10 +1223,6 @@ let typingChannel = null;
 
 let typingSendTimer = null;
 
-let notificationTimer = null;
-
-let notificationUser = null;
-
 let allMessagesChannel = null;
 
 
@@ -1390,7 +1247,6 @@ function getLastReadTime(conversationId) {
     if (!currentUser || !conversationId)
         return null;
 
-
     return localStorage.getItem(
         getReadKey(conversationId)
     );
@@ -1413,7 +1269,6 @@ function saveLastReadTime(
 
     }
 
-
     localStorage.setItem(
         getReadKey(conversationId),
         time
@@ -1433,7 +1288,6 @@ function markConversationAsRead(
 
     if (!conversationId)
         return;
-
 
     if (latestMessageTime) {
 
@@ -1456,211 +1310,12 @@ function formatTime(date) {
     if (!date)
         return "";
 
-
     return new Date(date).toLocaleTimeString(
         "ar-SA",
         {
             hour: "numeric",
             minute: "2-digit"
         }
-    );
-
-}
-
-
-/* ==========================================
-   طلب إذن الإشعارات
-========================================== */
-
-async function requestNotificationPermission() {
-
-    if (
-        "Notification" in window &&
-        Notification.permission === "default"
-    ) {
-
-        try {
-
-            await Notification.requestPermission();
-
-        }
-
-        catch (error) {
-
-            console.log(
-                "Notification permission error:",
-                error
-            );
-
-        }
-
-    }
-
-}
-
-
-/* ==========================================
-   إشعار المتصفح
-========================================== */
-
-function sendBrowserNotification(
-    senderName,
-    message
-) {
-
-    if (
-        !("Notification" in window)
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        Notification.permission !==
-        "granted"
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const notification =
-            new Notification(
-                "💬 " +
-                senderName,
-                {
-                    body: message,
-                    icon: "icon.png",
-                    tag:
-                        "englishwords-message"
-                }
-            );
-
-
-        notification.onclick =
-            function() {
-
-                window.focus();
-
-                if (notificationUser) {
-
-                    openConversation(
-                        notificationUser
-                    );
-
-                }
-
-                notification.close();
-
-            };
-
-    }
-
-    catch (error) {
-
-        console.log(
-            "Browser notification error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* ==========================================
-   إشعار داخل الصفحة
-========================================== */
-
-function showMessageNotification(
-    user,
-    message
-) {
-
-    notificationUser =
-        user;
-
-
-    const name =
-        user.display_name ||
-        "مستخدم";
-
-
-    document.getElementById(
-        "notificationName"
-    ).textContent =
-        name;
-
-
-    document.getElementById(
-        "notificationMessage"
-    ).textContent =
-        message;
-
-
-    document.getElementById(
-        "notificationAvatar"
-    ).textContent =
-        name
-            .charAt(0)
-            .toUpperCase();
-
-
-    const notification =
-        document.getElementById(
-            "messageNotification"
-        );
-
-
-    notification.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        notificationTimer
-    );
-
-
-    notificationTimer =
-        setTimeout(
-            () => {
-
-                notification.classList.remove(
-                    "show"
-                );
-
-            },
-            5000
-        );
-
-}
-
-
-/* ==========================================
-   فتح المحادثة من الإشعار
-========================================== */
-
-function openNotificationChat() {
-
-    if (!notificationUser)
-        return;
-
-
-    document.getElementById(
-        "messageNotification"
-    ).classList.remove(
-        "show"
-    );
-
-
-    openConversation(
-        notificationUser
     );
 
 }
@@ -1698,19 +1353,23 @@ async function loadCurrentUser() {
         user;
 
 
-    await requestNotificationPermission();
+    /*
+       طلب إذن الإشعارات من notifications.js
+    */
+
+    if (
+        typeof requestNotificationPermission ===
+        "function"
+    ) {
+
+        await requestNotificationPermission();
+
+    }
 
 
     await loadUsers();
 
-
     subscribeToCalls();
-
-
-    /*
-       نستمع لكل الرسائل حتى
-       يظهر العداد مباشرة
-    */
 
     subscribeToAllMessages();
 
@@ -1934,10 +1593,6 @@ async function loadLastMessages() {
         results;
 
 
-    /*
-       نحسب الرسائل غير المقروءة
-    */
-
     await loadUnreadCounts();
 
 
@@ -1996,12 +1651,6 @@ async function loadUnreadCounts() {
                 conversationId
             );
 
-
-        /*
-           إذا هذه أول مرة نعرف
-           المحادثة، نعتبر الرسائل
-           القديمة مقروءة.
-        */
 
         if (
             !lastRead &&
@@ -2196,10 +1845,6 @@ function renderUsers(results) {
                 avatar
             );
 
-
-            /*
-               🔴 إضافة العداد
-            */
 
             if (unreadCount > 0) {
 
@@ -2564,10 +2209,6 @@ async function openConversation(
     }
 
 
-    /*
-       🔴 نصفر العداد عند فتح المحادثة
-    */
-
     setUnreadCount(
         user.id,
         0
@@ -2576,14 +2217,7 @@ async function openConversation(
 
     await loadMessages();
 
-
-    /*
-       بعد تحميل الرسائل نعتبر
-       آخر رسالة مقروءة
-    */
-
     await markCurrentConversationRead();
-
 
     subscribeToMessages();
 
@@ -3143,11 +2777,6 @@ async function sendMessage() {
     );
 
 
-    /*
-       نحن داخل المحادثة،
-       لذلك تعتبر الرسالة الحالية مقروءة.
-    */
-
     if (data) {
 
         markConversationAsRead(
@@ -3321,11 +2950,6 @@ function subscribeToMessages() {
                         );
 
 
-                        /*
-                           نحن داخل نفس المحادثة،
-                           لذلك نعتبر الرسالة مقروءة.
-                        */
-
                         markConversationAsRead(
                             currentConversation.id,
                             payload.new.created_at
@@ -3462,19 +3086,13 @@ function subscribeToAllMessages() {
                         currentConversation.id
                     ) {
 
-                        /*
-                           المحادثة المفتوحة
-                           تعرض الرسالة من قناة
-                           المحادثة نفسها.
-                        */
-
                         return;
 
                     }
 
 
                     /*
-                       🔴 زيادة العداد فورًا
+                       🔴 زيادة العداد
                     */
 
                     increaseUnreadCount(
@@ -3483,24 +3101,40 @@ function subscribeToAllMessages() {
 
 
                     /*
-                       إشعار داخل الموقع
+                       🔔 إشعار داخل الموقع
+                       من notifications.js
                     */
 
-                    showMessageNotification(
-                        sender,
-                        message.message
-                    );
+                    if (
+                        typeof showMessageNotification ===
+                        "function"
+                    ) {
+
+                        showMessageNotification(
+                            sender,
+                            message.message
+                        );
+
+                    }
 
 
                     /*
-                       إشعار المتصفح
+                       🔔 إشعار المتصفح
+                       من notifications.js
                     */
 
-                    sendBrowserNotification(
-                        sender.display_name ||
-                        "مستخدم",
-                        message.message
-                    );
+                    if (
+                        typeof sendBrowserNotification ===
+                        "function"
+                    ) {
+
+                        sendBrowserNotification(
+                            sender.display_name ||
+                            "مستخدم",
+                            message.message
+                        );
+
+                    }
 
 
                     /*
@@ -3523,6 +3157,12 @@ function subscribeToAllMessages() {
                             existingIndex
                         ].lastMessage =
                             message;
+
+
+                        userResults[
+                            existingIndex
+                        ].conversationId =
+                            message.conversation_id;
 
 
                         const item =
@@ -3556,12 +3196,6 @@ function subscribeToAllMessages() {
                     }
 
                     else {
-
-                        /*
-                           لو المستخدم غير موجود
-                           في القائمة الحالية،
-                           نعيد تحميل البيانات.
-                        */
 
                         await loadUsers();
 
