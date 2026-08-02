@@ -834,3 +834,59 @@ body {
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
 }
+
+
+/* ==========================================
+   أزرار نطق المثال
+========================================== */
+
+.example-sound-buttons {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+}
+
+
+.example-sound-btn {
+
+    border: none;
+
+    background: #eef2ff;
+
+    color: #2563eb;
+
+    padding: 10px 14px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+.example-sound-btn:hover {
+
+    background: #dbeafe;
+
+}
+
+
+.example-sound-btn:active {
+
+    transform: scale(0.96);
+
+}
+

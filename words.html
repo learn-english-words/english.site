@@ -6,7 +6,10 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>تعلم الكلمات</title>
 
@@ -14,28 +17,50 @@
 
 </head>
 
+
 <body>
+
+
+    <!-- ==========================================
+         الشريط العلوي
+    ========================================== -->
 
     <header class="topbar">
 
-        <button class="back-btn" onclick="goBack()">
+        <button
+            class="back-btn"
+            onclick="goBack()"
+        >
             ← رجوع
         </button>
+
 
         <div class="title">
             📚 تعلم الكلمات
         </div>
 
-        <button class="home-btn" onclick="goHome()">
+
+        <button
+            class="home-btn"
+            onclick="goHome()"
+        >
             🏠
         </button>
 
     </header>
 
 
+
+    <!-- ==========================================
+         المحتوى
+    ========================================== -->
+
     <main class="container">
 
-        <!-- التقدم -->
+
+        <!-- ==========================================
+             التقدم
+        ========================================== -->
 
         <div class="progress-area">
 
@@ -61,66 +86,74 @@
         </div>
 
 
-        <!-- بطاقة الكلمة -->
+
+        <!-- ==========================================
+             بطاقة الكلمة
+        ========================================== -->
 
         <section class="word-card">
 
+
+            <!-- الصورة -->
+
             <div class="image-container">
 
-                <div id="wordEmoji" class="word-image">
+                <div
+                    id="wordEmoji"
+                    class="word-image"
+                >
                     🍎
                 </div>
 
             </div>
 
 
+
+            <!-- محتوى الكلمة -->
+
             <div class="word-content">
+
+
+                <!-- الإنجليزية -->
 
                 <div
                     class="english-word"
-                    id="englishWord">
-
+                    id="englishWord"
+                >
                     Apple
-
                 </div>
 
+
+
+                <!-- العربية -->
 
                 <div
                     class="arabic-word"
-                    id="arabicWord">
-
+                    id="arabicWord"
+                >
                     تفاحة
-
                 </div>
 
 
-                <!-- أزرار النطق -->
 
-                <div class="sound-buttons">
+                <!-- نطق الكلمة -->
 
-                    <button
-                        class="sound-btn"
-                        onclick="speakWord()">
-
-                        🔊 اسمع الكلمة
-
-                    </button>
-
-
-                    <button
-                        class="sound-btn"
-                        onclick="speakExample()">
-
-                        🔊 اسمع الجملة
-
-                    </button>
-
-                </div>
+                <button
+                    type="button"
+                    class="sound-btn"
+                    onclick="speakWord()"
+                >
+                    🔊 اسمع الكلمة
+                </button>
 
 
-                <!-- المثال -->
+
+                <!-- ======================================
+                     المثال
+                ======================================= -->
 
                 <div class="example">
+
 
                     <span>
                         💡 مثال
@@ -136,75 +169,114 @@
                         أنا آكل تفاحة.
                     </small>
 
+
+
+                    <!-- أزرار نطق الجملة -->
+
+                    <div class="example-sound-buttons">
+
+
+                        <button
+                            type="button"
+                            class="example-sound-btn"
+                            onclick="speakExample()"
+                        >
+                            🔊 اسمع الجملة
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="example-sound-btn"
+                            onclick="speakExampleSlow()"
+                        >
+                            🐢 نطق بطيء
+                        </button>
+
+
+                    </div>
+
+
                 </div>
 
+
             </div>
+
 
         </section>
 
 
-        <!-- أزرار المعرفة -->
+
+        <!-- ==========================================
+             أزرار المعرفة
+        ========================================== -->
 
         <div class="knowledge-buttons">
 
+
             <button
                 class="dont-know"
-                onclick="answer(false)">
-
+                onclick="answer(false)"
+            >
                 ❌ لا أعرفها
-
             </button>
 
 
             <button
                 class="know"
-                onclick="answer(true)">
-
+                onclick="answer(true)"
+            >
                 ✅ أعرفها
-
             </button>
+
 
         </div>
 
 
-        <!-- الإجراءات -->
+
+        <!-- ==========================================
+             الإجراءات
+        ========================================== -->
 
         <div class="actions">
 
+
             <button
                 id="favoriteBtn"
-                onclick="toggleFavorite()">
-
+                onclick="toggleFavorite()"
+            >
                 ☆
-
                 <span>
                     حفظ
                 </span>
-
             </button>
 
 
             <button
                 class="next-btn"
-                onclick="nextWord()">
-
+                onclick="nextWord()"
+            >
                 الكلمة التالية
                 ←
-
             </button>
+
 
         </div>
 
+
     </main>
+
 
 
     <!-- Supabase -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
     <script src="supabase.js"></script>
 
     <script src="words.js"></script>
+
 
 </body>
 
