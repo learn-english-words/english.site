@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -248,12 +249,6 @@ input {
 
     font-weight: bold;
 }
-
-
-/*
-   لا نضع نقطة اتصال هنا
-   لأننا لا نملك Presence حقيقي حاليًا
-*/
 
 
 .user-info {
@@ -817,8 +812,6 @@ input {
     class="conversations-section">
 
 
-    <!-- البحث -->
-
     <div class="search-box">
 
         <input
@@ -829,8 +822,6 @@ input {
 
     </div>
 
-
-    <!-- المستخدمين -->
 
     <div id="usersContainer">
 
@@ -1164,11 +1155,6 @@ async function loadUsers() {
     allUsers = data || [];
 
 
-    /*
-       نعرض المستخدمين مباشرة
-       بدل انتظار البحث
-    */
-
     userResults =
         allUsers.map(user => ({
 
@@ -1184,10 +1170,6 @@ async function loadUsers() {
     renderUsers(userResults);
 
 
-    /*
-       بعدها نجيب آخر الرسائل
-    */
-
     loadLastMessages();
 
 }
@@ -1201,11 +1183,6 @@ async function loadLastMessages() {
 
     const results = [];
 
-
-    /*
-       نخلي المستخدمين يظهرون
-       حتى لو استغرق جلب الرسائل وقت
-    */
 
     for (
         const user
@@ -1300,10 +1277,6 @@ async function loadLastMessages() {
     }
 
 
-    /*
-       الأحدث أولًا
-    */
-
     results.sort(
         (a, b) => {
 
@@ -1331,11 +1304,6 @@ async function loadLastMessages() {
 
     userResults = results;
 
-
-    /*
-       لا نعرض النتيجة إذا المستخدم
-       بدأ يبحث أثناء التحميل
-    */
 
     const searchInput =
         document.getElementById(
@@ -1414,8 +1382,6 @@ function renderUsers(results) {
             "user";
 
 
-        /* الصورة */
-
         const avatarWrap =
             document.createElement(
                 "div"
@@ -1451,8 +1417,6 @@ function renderUsers(results) {
             avatar
         );
 
-
-        /* المعلومات */
 
         const info =
             document.createElement(
@@ -1516,8 +1480,6 @@ function renderUsers(results) {
         );
 
 
-        /* آخر رسالة */
-
         const lastText =
             document.createElement(
                 "div"
@@ -1533,8 +1495,6 @@ function renderUsers(results) {
                 ? last.message
                 : "ابدأ محادثة جديدة 💬";
 
-
-        /* الحالة */
 
         const status =
             document.createElement(
@@ -1611,11 +1571,6 @@ function filterUsers() {
             .trim()
             .toLowerCase();
 
-
-    /*
-       إذا البحث فارغ
-       رجع القائمة كاملة
-    */
 
     if (!search) {
 
@@ -1937,6 +1892,24 @@ function displayMessage(message) {
         );
 
 
+    /*
+       إذا كانت الشاشة تعرض رسالة
+       "لا توجد رسائل"، نحذفها
+    */
+
+    const empty =
+        container.querySelector(
+            ".empty"
+        );
+
+
+    if (empty) {
+
+        empty.remove();
+
+    }
+
+
     const div =
         document.createElement(
             "div"
@@ -2034,7 +2007,13 @@ async function sendMessage() {
         return;
 
 
+    /*
+       نرسل الرسالة إلى Supabase
+       ونطلب البيانات التي تم إنشاؤها
+    */
+
     const {
+        data,
         error
     } =
         await supabaseClient
@@ -2050,7 +2029,9 @@ async function sendMessage() {
                 message:
                     text
 
-            });
+            })
+            .select()
+            .single();
 
 
     if (error) {
@@ -2069,23 +2050,32 @@ async function sendMessage() {
     }
 
 
+    /*
+       نفرغ مربع الكتابة
+    */
+
     input.value =
         "";
 
 
     /*
-       نحدث القائمة حتى تظهر
-       آخر رسالة مباشرة
+       نعرض الرسالة عندنا فورًا
     */
 
-    setTimeout(
-        () => {
+    if (data) {
 
-            loadLastMessages();
+        displayMessage(
+            data
+        );
 
-        },
-        300
-    );
+    }
+
+
+    /*
+       نحدث آخر رسالة في القائمة
+    */
+
+    loadLastMessages();
 
 }
 
@@ -2162,9 +2152,9 @@ function subscribeToMessages() {
                 payload => {
 
                     /*
-                       لا نعرض رسالتنا مرتين
-                       لأن Realtime سيرسلها
-                       لنا أيضًا
+                       رسائل الطرف الآخر فقط
+                       لأن رسالتنا نعرضها مباشرة
+                       داخل sendMessage()
                     */
 
                     if (
@@ -2650,3 +2640,4 @@ loadCurrentUser();
 </body>
 
 </html>
+
