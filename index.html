@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -28,7 +29,6 @@
             error
         } = await supabaseClient.auth.getUser();
 
-        // إذا ما فيه مستخدم مسجل دخول
         if (error || !user) {
 
             window.location.replace("login.html");
@@ -36,13 +36,8 @@
             return;
         }
 
-        // المستخدم مسجل دخول
-        // الصفحة تكمل بشكل طبيعي
-
     })();
 </script>
-
-
 
 
 <style>
@@ -361,7 +356,6 @@ button {
     text-align: center;
 
     border-left: 1px solid #eeeeee;
-
 }
 
 
@@ -625,6 +619,22 @@ button {
 .card-chat .icon {
 
     background: #e1dcff;
+}
+
+
+/* ==================================================
+   القراءة Reading
+================================================== */
+
+.card-reading {
+
+    background: #fff4df;
+}
+
+
+.card-reading .icon {
+
+    background: #ffe5b3;
 }
 
 
@@ -1032,6 +1042,48 @@ button {
 
 }
 
+
+/* ==================================================
+   الجوال الصغير
+================================================== */
+
+@media (max-width: 360px) {
+
+    .main-grid {
+
+        gap: 8px;
+    }
+
+    .main-card-new {
+
+        padding: 10px;
+
+        min-height: 95px;
+
+        gap: 7px;
+    }
+
+    .main-card-new .icon {
+
+        width: 42px;
+        height: 42px;
+
+        font-size: 21px;
+    }
+
+    .main-card-new h3 {
+
+        font-size: 13px;
+    }
+
+    .main-card-new p {
+
+        font-size: 9px;
+    }
+
+}
+
+
 </style>
 
 </head>
@@ -1049,9 +1101,7 @@ button {
 
     <header class="new-header">
 
-
         <div class="user-area">
-
 
             <div
                 class="avatar-new"
@@ -1060,7 +1110,6 @@ button {
                 ?
 
             </div>
-
 
             <div class="user-info">
 
@@ -1074,12 +1123,10 @@ button {
 
             </div>
 
-
         </div>
 
 
         <div class="header-actions">
-
 
             <button
                 class="header-icon"
@@ -1107,6 +1154,7 @@ button {
 
             </button>
 
+
             <button
                 class="header-icon"
                 onclick="logout()">
@@ -1116,7 +1164,6 @@ button {
             </button>
 
         </div>
-
 
     </header>
 
@@ -1128,18 +1175,15 @@ button {
 
     <section class="learning-banner">
 
-
         <h1>
             ابدأ التعلم 📚
         </h1>
-
 
         <p>
             تعلم كلمات جديدة
             <br>
             وطوّر مستواك في الإنجليزية
         </p>
-
 
         <button
             class="start-learning-btn"
@@ -1150,11 +1194,9 @@ button {
 
         </button>
 
-
         <div class="books-decoration">
             📚
         </div>
-
 
     </section>
 
@@ -1169,7 +1211,6 @@ button {
         <h2>
             تقدمك اليوم
         </h2>
-
 
         <button
             onclick="window.location.href='progress.html'">
@@ -1245,7 +1286,6 @@ button {
             </span>
 
         </div>
-
 
     </section>
 
@@ -1332,11 +1372,9 @@ button {
             class="main-card-new card-learning"
             onclick="startLearning()">
 
-
             <div class="icon">
                 📚
             </div>
-
 
             <div>
 
@@ -1350,7 +1388,6 @@ button {
 
             </div>
 
-
         </button>
 
 
@@ -1361,11 +1398,9 @@ button {
             class="main-card-new card-quiz"
             onclick="window.location.href='quiz.html'">
 
-
             <div class="icon">
                 🏆
             </div>
-
 
             <div>
 
@@ -1379,7 +1414,6 @@ button {
 
             </div>
 
-
         </button>
 
 
@@ -1390,11 +1424,9 @@ button {
             class="main-card-new card-review"
             onclick="window.location.href='review.html'">
 
-
             <div class="icon">
                 🧠
             </div>
-
 
             <div>
 
@@ -1408,7 +1440,6 @@ button {
 
             </div>
 
-
         </button>
 
 
@@ -1419,11 +1450,9 @@ button {
             class="main-card-new card-chat"
             onclick="openChat()">
 
-
             <div class="icon">
                 💬
             </div>
-
 
             <div>
 
@@ -1437,6 +1466,31 @@ button {
 
             </div>
 
+        </button>
+
+
+
+        <!-- القراءة -->
+
+        <button
+            class="main-card-new card-reading"
+            onclick="window.location.href='reading.html'">
+
+            <div class="icon">
+                📖
+            </div>
+
+            <div>
+
+                <h3>
+                    القراءة
+                </h3>
+
+                <p>
+                    اقرأ نصوصًا وقصصًا بالإنجليزية
+                </p>
+
+            </div>
 
         </button>
 
@@ -1470,7 +1524,6 @@ button {
         id="savedWords"
         class="saved-list">
 
-
         <div class="saved-word">
 
             <div class="saved-image">
@@ -1487,9 +1540,7 @@ button {
 
         </div>
 
-
     </div>
-
 
 
 </main>
@@ -2618,3 +2669,4 @@ startHomePage();
 
 </body>
 </html>
+

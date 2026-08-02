@@ -1,0 +1,1154 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Reading - EnglishWords</title>
+
+
+<style>
+
+/* ==================================================
+   الأساس
+================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    background: #f8f9fc;
+
+    color: #171827;
+
+    font-family:
+        Arial,
+        Tahoma,
+        sans-serif;
+}
+
+
+button {
+
+    font-family: inherit;
+}
+
+
+/* ==================================================
+   الصفحة
+================================================== */
+
+.reading-page {
+
+    width: 100%;
+
+    max-width: 600px;
+
+    min-height: 100vh;
+
+    margin: auto;
+
+    padding:
+        18px
+        16px
+        110px;
+}
+
+
+/* ==================================================
+   الهيدر
+================================================== */
+
+.reading-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+
+.back-button {
+
+    width: 44px;
+
+    height: 44px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+        0 3px 12px rgba(0,0,0,.07);
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.reading-header-text {
+
+    flex: 1;
+}
+
+
+.reading-header-text h1 {
+
+    margin: 0 0 4px;
+
+    font-size: 25px;
+}
+
+
+.reading-header-text p {
+
+    margin: 0;
+
+    color: #888;
+
+    font-size: 13px;
+}
+
+
+/* ==================================================
+   البانر
+================================================== */
+
+.reading-banner {
+
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 155px;
+
+    padding: 22px;
+
+    border-radius: 25px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6254eb,
+            #8374ed
+        );
+
+    box-shadow:
+        0 10px 25px rgba(98,84,235,.20);
+
+    margin-bottom: 22px;
+}
+
+
+.reading-banner h2 {
+
+    margin: 0 0 9px;
+
+    font-size: 23px;
+}
+
+
+.reading-banner p {
+
+    margin: 0;
+
+    max-width: 280px;
+
+    line-height: 1.7;
+
+    font-size: 13px;
+
+    opacity: .92;
+}
+
+
+.reading-banner-icon {
+
+    position: absolute;
+
+    left: 18px;
+
+    bottom: 8px;
+
+    font-size: 72px;
+
+    transform:
+        rotate(-6deg);
+}
+
+
+/* ==================================================
+   اختيار المستوى
+================================================== */
+
+.section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin: 0 4px 12px;
+}
+
+
+.section-title h2 {
+
+    margin: 0;
+
+    font-size: 18px;
+}
+
+
+.levels {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 9px;
+
+    margin-bottom: 25px;
+}
+
+
+.level-btn {
+
+    border: none;
+
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 13px 8px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 3px 12px rgba(0,0,0,.05);
+
+    transition:
+        transform .15s,
+        background .15s,
+        color .15s;
+}
+
+
+.level-btn:active {
+
+    transform: scale(.96);
+}
+
+
+.level-btn strong {
+
+    display: block;
+
+    font-size: 16px;
+
+    margin-bottom: 4px;
+}
+
+
+.level-btn span {
+
+    color: #888;
+
+    font-size: 10px;
+}
+
+
+.level-btn.active {
+
+    background:
+        linear-gradient(
+            135deg,
+            #6254eb,
+            #8374ed
+        );
+
+    color: white;
+
+    box-shadow:
+        0 7px 18px rgba(98,84,235,.22);
+}
+
+
+.level-btn.active span {
+
+    color: rgba(255,255,255,.85);
+}
+
+
+/* ==================================================
+   القصص
+================================================== */
+
+.stories {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.story-card {
+
+    width: 100%;
+
+    border: none;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    text-align: right;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 3px 15px rgba(0,0,0,.05);
+
+    transition:
+        transform .15s;
+}
+
+
+.story-card:active {
+
+    transform: scale(.98);
+}
+
+
+.story-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    flex-shrink: 0;
+
+    border-radius: 17px;
+
+    background: #eeeaff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 30px;
+}
+
+
+.story-info {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.story-info h3 {
+
+    margin: 0 0 7px;
+
+    font-size: 16px;
+}
+
+
+.story-info p {
+
+    margin: 0;
+
+    color: #888;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.story-meta {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 8px;
+}
+
+
+.story-level {
+
+    padding: 4px 8px;
+
+    border-radius: 20px;
+
+    background: #f0edff;
+
+    color: #5c51dc;
+
+    font-size: 10px;
+
+    font-weight: bold;
+}
+
+
+.story-time {
+
+    color: #999;
+
+    font-size: 10px;
+}
+
+
+.story-arrow {
+
+    color: #aaa;
+
+    font-size: 19px;
+}
+
+
+/* ==================================================
+   لا توجد قصص
+================================================== */
+
+.empty-reading {
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 35px 20px;
+
+    text-align: center;
+
+    box-shadow:
+        0 3px 15px rgba(0,0,0,.04);
+}
+
+
+.empty-reading .icon {
+
+    font-size: 45px;
+
+    margin-bottom: 10px;
+}
+
+
+.empty-reading strong {
+
+    display: block;
+
+    font-size: 16px;
+
+    margin-bottom: 6px;
+}
+
+
+.empty-reading p {
+
+    margin: 0;
+
+    color: #888;
+
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   الشريط السفلي
+================================================== */
+
+.bottom-nav {
+
+    position: fixed;
+
+    z-index: 5000;
+
+    bottom: 10px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    width:
+        calc(100% - 24px);
+
+    max-width: 570px;
+
+    height: 74px;
+
+    background:
+        rgba(255,255,255,.96);
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.12);
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    align-items: center;
+
+    padding: 6px;
+}
+
+
+.bottom-nav button {
+
+    height: 62px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #9696a0;
+
+    cursor: pointer;
+
+    border-radius: 22px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 3px;
+
+    font-size: 21px;
+}
+
+
+.bottom-nav button span {
+
+    font-size: 10px;
+}
+
+
+.bottom-nav .active {
+
+    background:
+        linear-gradient(
+            145deg,
+            #7669f3,
+            #5b4ee8
+        );
+
+    color: white;
+
+    width: 65px;
+
+    height: 65px;
+
+    justify-self: center;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 7px 18px rgba(92,80,230,.3);
+}
+
+
+/* ==================================================
+   الجوال
+================================================== */
+
+@media (max-width: 420px) {
+
+    .reading-page {
+
+        padding-left: 14px;
+
+        padding-right: 14px;
+    }
+
+
+    .reading-banner {
+
+        min-height: 145px;
+
+        padding: 19px;
+    }
+
+
+    .reading-banner h2 {
+
+        font-size: 21px;
+    }
+
+
+    .reading-banner-icon {
+
+        font-size: 60px;
+
+        left: 5px;
+    }
+
+
+    .level-btn {
+
+        padding:
+            11px
+            6px;
+    }
+
+
+    .story-card {
+
+        padding: 13px;
+
+        gap: 11px;
+    }
+
+
+    .story-icon {
+
+        width: 52px;
+
+        height: 52px;
+
+        font-size: 27px;
+    }
+
+
+    .story-info h3 {
+
+        font-size: 14px;
+    }
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<main class="reading-page">
+
+
+    <!-- ==========================================
+         الهيدر
+    ========================================== -->
+
+    <header class="reading-header">
+
+
+        <button
+            class="back-button"
+            onclick="window.location.href='index.html'">
+
+            →
+            
+        </button>
+
+
+        <div class="reading-header-text">
+
+            <h1>
+                Reading 📖
+            </h1>
+
+            <p>
+                طوّر مهارة القراءة باللغة الإنجليزية
+            </p>
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- ==========================================
+         البانر
+    ========================================== -->
+
+    <section class="reading-banner">
+
+
+        <h2>
+            اقرأ وتعلّم 📚
+        </h2>
+
+
+        <p>
+            اختر مستواك واقرأ قصصًا قصيرة
+            باللغة الإنجليزية بطريقة ممتعة.
+        </p>
+
+
+        <div class="reading-banner-icon">
+            📖
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         المستوى
+    ========================================== -->
+
+    <div class="section-title">
+
+        <h2>
+            اختر مستواك
+        </h2>
+
+    </div>
+
+
+    <div class="levels">
+
+
+        <button
+            class="level-btn active"
+            data-level="A1">
+
+            <strong>
+                A1
+            </strong>
+
+            <span>
+                مبتدئ
+            </span>
+
+        </button>
+
+
+        <button
+            class="level-btn"
+            data-level="A2">
+
+            <strong>
+                A2
+            </strong>
+
+            <span>
+                أساسي
+            </span>
+
+        </button>
+
+
+        <button
+            class="level-btn"
+            data-level="B1">
+
+            <strong>
+                B1
+            </strong>
+
+            <span>
+                متوسط
+            </span>
+
+        </button>
+
+
+    </div>
+
+
+
+    <!-- ==========================================
+         القصص
+    ========================================== -->
+
+    <div class="section-title">
+
+        <h2>
+            القصص
+        </h2>
+
+    </div>
+
+
+    <section
+        id="stories"
+        class="stories">
+
+
+        <!-- قصة تجريبية -->
+
+        <button
+            class="story-card"
+            onclick="openStory(1)">
+
+
+            <div class="story-icon">
+                ☀️
+            </div>
+
+
+            <div class="story-info">
+
+
+                <h3>
+                    A New Morning
+                </h3>
+
+
+                <p>
+                    قصة قصيرة عن بداية يوم جديد
+                    وروتين الصباح.
+                </p>
+
+
+                <div class="story-meta">
+
+
+                    <span class="story-level">
+                        A1
+                    </span>
+
+
+                    <span class="story-time">
+                        ⏱ 3 دقائق
+                    </span>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="story-arrow">
+                ←
+            </div>
+
+
+        </button>
+
+
+
+        <button
+            class="story-card"
+            onclick="openStory(2)">
+
+
+            <div
+                class="story-icon"
+                style="background:#e8f7ff;">
+
+                🏠
+
+            </div>
+
+
+            <div class="story-info">
+
+
+                <h3>
+                    My Home
+                </h3>
+
+
+                <p>
+                    تعرّف على منزل بسيط
+                    وأفراد العائلة.
+                </p>
+
+
+                <div class="story-meta">
+
+
+                    <span class="story-level">
+                        A1
+                    </span>
+
+
+                    <span class="story-time">
+                        ⏱ 4 دقائق
+                    </span>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="story-arrow">
+                ←
+            </div>
+
+
+        </button>
+
+
+
+        <button
+            class="story-card"
+            onclick="openStory(3)">
+
+
+            <div
+                class="story-icon"
+                style="background:#fff3df;">
+
+                🛒
+
+            </div>
+
+
+            <div class="story-info">
+
+
+                <h3>
+                    At the Store
+                </h3>
+
+
+                <p>
+                    قصة بسيطة عن التسوق
+                    وشراء بعض الأشياء.
+                </p>
+
+
+                <div class="story-meta">
+
+
+                    <span class="story-level">
+                        A1
+                    </span>
+
+
+                    <span class="story-time">
+                        ⏱ 4 دقائق
+                    </span>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="story-arrow">
+                ←
+            </div>
+
+
+        </button>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ==================================================
+     الشريط السفلي
+================================================== -->
+
+<nav class="bottom-nav">
+
+
+    <button
+        class="active"
+        onclick="window.location.href='reading.html'">
+
+        📖
+
+        <span>
+            القراءة
+        </span>
+
+    </button>
+
+
+    <button
+        onclick="window.location.href='review.html'">
+
+        🔄
+
+        <span>
+            المراجعة
+        </span>
+
+    </button>
+
+
+    <button
+        onclick="window.location.href='index.html'">
+
+        🏠
+
+        <span>
+            الرئيسية
+        </span>
+
+    </button>
+
+
+    <button
+        onclick="window.location.href='favorites.html'">
+
+        🔖
+
+        <span>
+            المحفوظة
+        </span>
+
+    </button>
+
+
+    <button
+        onclick="window.location.href='profile.html'">
+
+        ⋯
+
+        <span>
+            المزيد
+        </span>
+
+    </button>
+
+
+</nav>
+
+
+
+<script>
+
+/* ==================================================
+   اختيار المستوى
+================================================== */
+
+const levelButtons =
+    document.querySelectorAll(".level-btn");
+
+
+const storyCards =
+    document.querySelectorAll(".story-card");
+
+
+levelButtons.forEach(button => {
+
+
+    button.addEventListener(
+        "click",
+        function() {
+
+
+            levelButtons.forEach(btn => {
+
+                btn.classList.remove("active");
+
+            });
+
+
+            this.classList.add("active");
+
+
+            const selectedLevel =
+                this.dataset.level;
+
+
+            storyCards.forEach(card => {
+
+
+                const cardLevel =
+                    card.querySelector(
+                        ".story-level"
+                    ).textContent.trim();
+
+
+                if (
+                    cardLevel ===
+                    selectedLevel
+                ) {
+
+                    card.style.display =
+                        "flex";
+
+                } else {
+
+                    card.style.display =
+                        "none";
+
+                }
+
+            });
+
+        }
+    );
+
+});
+
+
+/* ==================================================
+   فتح القصة
+================================================== */
+
+function openStory(id) {
+
+    window.location.href =
+        "story.html?id=" + id;
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

@@ -676,4 +676,10 @@ footer {
         padding: 13px;
     }
 
+}.card-reading {
+    background: #fff4df;
+}
+
+.card-reading .icon {
+    background: #ffe5b3;
 }
