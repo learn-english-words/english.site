@@ -1,28 +1,23 @@
 /* =========================================================
-   EnglishWords - تصميم صفحة تعلم الكلمات
-   لا يحتاج أي تعديل في words.html أو words.js
-========================================================= */
+   Words Page - Modern Responsive Design
+   ========================================================= */
 
 * {
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
 }
 
-html {
-    scroll-behavior: smooth;
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
 }
 
 body {
-    margin: 0;
-    min-height: 100vh;
-
     background:
-        radial-gradient(
-            circle at 50% -10%,
-            #eeeaff 0,
-            #f7f7fb 34%,
-            #f8f9fc 70%
-        );
+        radial-gradient(circle at 10% 0%, rgba(118, 103, 245, 0.08), transparent 30%),
+        #f7f8fc;
 
     color: #171827;
 
@@ -36,143 +31,122 @@ body {
 
 
 /* =========================================================
-   الشريط العلوي
-========================================================= */
+   الأزرار
+   ========================================================= */
 
-.topbar {
-
-    position: sticky;
-    top: 0;
-
-    z-index: 100;
-
-    width: 100%;
-
-    min-height: 82px;
-
-    padding:
-        14px
-        max(18px, calc((100% - 720px) / 2));
-
-    display: grid;
-
-    grid-template-columns:
-        1fr
-        auto
-        1fr;
-
-    align-items: center;
-
-    gap: 12px;
-
-    background: rgba(255,255,255,.90);
-
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-
-    border-bottom:
-        1px solid rgba(35,35,70,.07);
-
-    box-shadow:
-        0 5px 20px rgba(35,30,80,.04);
+button {
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
 /* =========================================================
-   الأزرار العلوية
-========================================================= */
+   الشريط العلوي
+   ========================================================= */
+
+.topbar {
+
+    width: 100%;
+
+    height: 76px;
+
+    padding: 12px 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: rgba(255, 255, 255, 0.92);
+
+    border-bottom: 1px solid #eeeeF3;
+
+    box-shadow:
+        0 3px 18px rgba(20, 20, 50, 0.05);
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
+}
+
 
 .back-btn,
 .home-btn {
 
-    border: 1px solid #e6e3f5;
+    border: none;
 
-    background: #ffffff;
+    background: #f3f2ff;
 
-    color: #5146c9;
+    color: #5c51dc;
 
     cursor: pointer;
 
-    box-shadow:
-        0 4px 14px rgba(55,45,130,.07);
-
     transition:
         transform .15s ease,
-        box-shadow .15s ease,
         background .15s ease;
+
 }
 
 
 .back-btn {
 
-    justify-self: start;
-
-    min-width: 105px;
-
-    height: 46px;
+    min-height: 44px;
 
     padding: 0 17px;
 
-    border-radius: 16px;
+    border-radius: 14px;
 
-    font-size: 15px;
+    font-size: 14px;
 
-    font-weight: 700;
+    font-weight: bold;
 }
 
 
 .home-btn {
 
-    justify-self: end;
+    width: 44px;
 
-    width: 46px;
-    height: 46px;
+    height: 44px;
 
-    border-radius: 15px;
+    border-radius: 14px;
 
-    font-size: 21px;
+    font-size: 20px;
 }
 
 
 .back-btn:active,
 .home-btn:active {
 
-    transform: scale(.95);
+    transform: scale(.94);
 
-    box-shadow:
-        0 2px 7px rgba(55,45,130,.08);
 }
 
 
 .back-btn:hover,
 .home-btn:hover {
 
-    background: #f8f6ff;
+    background: #e9e7ff;
 
 }
 
-
-/* =========================================================
-   العنوان
-========================================================= */
 
 .title {
 
-    text-align: center;
-
-    font-size: 22px;
+    font-size: 20px;
 
     font-weight: 800;
 
-    color: #202039;
+    color: #202134;
 
-    white-space: nowrap;
 }
 
 
 /* =========================================================
-   الصفحة
-========================================================= */
+   الحاوية الرئيسية
+   ========================================================= */
 
 .container {
 
@@ -182,21 +156,28 @@ body {
 
     margin: 0 auto;
 
-    padding:
-        24px 18px
-        125px;
+    padding: 22px 18px 28px;
 }
 
 
 /* =========================================================
-   التقدم
-========================================================= */
+   منطقة التقدم
+   ========================================================= */
 
 .progress-area {
 
-    margin-bottom: 20px;
+    background: white;
 
-    padding: 0 3px;
+    border-radius: 18px;
+
+    padding: 14px 16px;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 5px 20px rgba(20, 20, 50, 0.06);
+
+    border: 1px solid #eeeeF3;
 }
 
 
@@ -210,19 +191,17 @@ body {
 
     margin-bottom: 9px;
 
-    color: #8a8898;
+    font-size: 13px;
 
-    font-size: 14px;
+    color: #858594;
 }
 
 
 .progress-info strong {
 
-    color: #6957e8;
+    color: #5b50dc;
 
-    font-size: 16px;
-
-    direction: ltr;
+    font-size: 14px;
 }
 
 
@@ -232,19 +211,17 @@ body {
 
     height: 9px;
 
-    padding: 0;
-
-    overflow: hidden;
+    background: #eeeef5;
 
     border-radius: 20px;
 
-    background: #e9e8ef;
+    overflow: hidden;
 }
 
 
 #progressFill {
 
-    width: 10%;
+    width: 0%;
 
     height: 100%;
 
@@ -253,37 +230,30 @@ body {
     background:
         linear-gradient(
             90deg,
-            #6b5cff,
-            #8a5cf6
+            #7669f3,
+            #5b4ee8
         );
 
-    box-shadow:
-        0 2px 8px rgba(105,87,232,.25);
-
-    transition:
-        width .35s ease;
+    transition: width .35s ease;
 }
 
 
 /* =========================================================
-   بطاقة الكلمة الرئيسية
-========================================================= */
+   بطاقة الكلمة
+   ========================================================= */
 
 .word-card {
 
-    width: 100%;
+    background: white;
+
+    border-radius: 27px;
 
     padding: 20px;
 
-    background: #ffffff;
-
-    border:
-        1px solid #ebeaf2;
-
-    border-radius: 30px;
+    border: 1px solid #eeeeF3;
 
     box-shadow:
-        0 10px 35px rgba(39,35,85,.07);
+        0 10px 30px rgba(20, 20, 50, 0.07);
 
     overflow: hidden;
 }
@@ -291,66 +261,62 @@ body {
 
 /* =========================================================
    الصورة
-========================================================= */
+   ========================================================= */
 
 .image-container {
 
     width: 100%;
 
-    aspect-ratio: 16 / 10;
+    height: 235px;
 
-    min-height: 250px;
-
-    border-radius: 23px;
-
-    overflow: hidden;
+    border-radius: 21px;
 
     background:
         linear-gradient(
             145deg,
-            #f1efff,
-            #f8f7fc
+            #f2f1ff,
+            #f8f8fd
         );
-
-    border:
-        1px solid #e8e5f5;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
-    box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.7);
+    overflow: hidden;
+
+    margin-bottom: 18px;
+
+    border: 1px solid #ecebf7;
 }
 
 
 .word-image {
 
     width: 100%;
+
     height: 100%;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
+    font-size: 100px;
+
     overflow: hidden;
-
-    font-size: 90px;
-
-    color: #6455dc;
 }
 
-
-/* لو الصورة يتم وضعها داخل العنصر */
 
 .word-image img {
 
     width: 100%;
+
     height: 100%;
 
-    object-fit: cover;
+    object-fit: contain;
 
     display: block;
 }
@@ -358,133 +324,104 @@ body {
 
 /* =========================================================
    محتوى الكلمة
-========================================================= */
+   ========================================================= */
 
 .word-content {
-
-    padding:
-        25px
-        5px
-        5px;
 
     text-align: center;
 }
 
 
-/* =========================================================
-   الكلمة الإنجليزية
-========================================================= */
-
 .english-word {
 
-    margin: 0;
+    font-size: 36px;
 
-    color: #171827;
-
-    font-size: clamp(38px, 8vw, 58px);
-
-    line-height: 1.05;
+    line-height: 1.15;
 
     font-weight: 800;
 
+    color: #191a2b;
+
+    margin-bottom: 7px;
+
     direction: ltr;
-
-    letter-spacing: -.8px;
-
-    word-break: break-word;
 }
 
-
-/* =========================================================
-   الترجمة
-========================================================= */
 
 .arabic-word {
 
-    margin-top: 10px;
+    font-size: 21px;
 
-    color: #8c8b99;
+    font-weight: 600;
 
-    font-size: 23px;
+    color: #777787;
 
-    font-weight: 500;
-
-    line-height: 1.5;
+    margin-bottom: 13px;
 }
 
 
 /* =========================================================
-   زر اسمع الكلمة
-========================================================= */
+   زر سماع الكلمة
+   ========================================================= */
 
 .sound-btn {
 
-    width: 100%;
-
-    min-height: 58px;
-
-    margin-top: 21px;
-
-    border:
-        1px solid #ddd9ff;
-
-    border-radius: 18px;
+    border: none;
 
     background:
         linear-gradient(
             135deg,
-            #f4f1ff,
-            #faf9ff
+            #7669f3,
+            #5b4ee8
         );
 
-    color: #6957df;
+    color: white;
 
-    font-size: 17px;
+    border-radius: 15px;
 
-    font-weight: 700;
+    padding: 11px 19px;
+
+    font-size: 14px;
+
+    font-weight: bold;
 
     cursor: pointer;
 
     box-shadow:
-        0 4px 12px rgba(92,78,190,.05);
+        0 6px 15px rgba(92, 80, 230, .20);
 
     transition:
         transform .15s ease,
-        background .15s ease;
+        box-shadow .15s ease;
 }
 
 
 .sound-btn:active {
 
-    transform: scale(.98);
+    transform: scale(.96);
 
-    background: #eeebff;
+    box-shadow:
+        0 3px 9px rgba(92, 80, 230, .15);
 }
 
 
 /* =========================================================
    المثال
-========================================================= */
+   ========================================================= */
 
 .example {
 
-    margin-top: 18px;
+    margin-top: 17px;
 
-    padding: 21px;
+    padding: 15px 17px;
+
+    background: #f8f8fc;
+
+    border: 1px solid #eeeeF4;
+
+    border-radius: 18px;
 
     text-align: right;
-
-    border-radius: 21px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #faf9ff,
-            #f7f7fc
-        );
-
-    border:
-        1px solid #e9e7f3;
 }
 
 
@@ -492,25 +429,25 @@ body {
 
     display: block;
 
-    margin-bottom: 15px;
+    color: #5c51dc;
 
-    color: #7655d9;
+    font-size: 13px;
 
-    font-size: 18px;
+    font-weight: bold;
 
-    font-weight: 800;
+    margin-bottom: 8px;
 }
 
 
 .example p {
 
-    margin: 0 0 9px;
+    margin: 0 0 5px;
 
-    color: #242333;
+    color: #252638;
 
-    font-size: 21px;
+    font-size: 15px;
 
-    line-height: 1.55;
+    font-weight: 600;
 
     direction: ltr;
 
@@ -522,53 +459,47 @@ body {
 
     display: block;
 
-    color: #858493;
+    color: #888895;
 
-    font-size: 15px;
+    font-size: 12px;
 
-    line-height: 1.7;
+    line-height: 1.6;
 }
 
 
 /* =========================================================
    أزرار نطق المثال
-========================================================= */
+   ========================================================= */
 
 .example-sound-buttons {
 
-    display: grid;
+    display: flex;
 
-    grid-template-columns:
-        repeat(2, 1fr);
+    gap: 8px;
 
-    gap: 10px;
-
-    margin-top: 18px;
+    margin-top: 12px;
 }
 
 
 .example-sound-btn {
 
-    min-height: 48px;
+    flex: 1;
 
-    padding: 9px 12px;
+    min-height: 38px;
 
-    border: none;
+    border: 1px solid #e2e1ed;
 
-    border-radius: 15px;
+    background: white;
 
-    background: #ffffff;
+    color: #555566;
 
-    color: #426ed1;
+    border-radius: 11px;
 
-    font-size: 14px;
+    font-size: 12px;
 
-    font-weight: 700;
+    font-weight: 600;
 
     cursor: pointer;
-
-    box-shadow:
-        0 4px 12px rgba(45,60,120,.07);
 
     transition:
         transform .15s ease,
@@ -580,22 +511,27 @@ body {
 
     transform: scale(.97);
 
-    background: #f3f5ff;
+}
+
+
+.example-sound-btn:hover {
+
+    background: #f5f4ff;
+
 }
 
 
 /* =========================================================
-   أزرار أعرفها / لا أعرفها
-========================================================= */
+   أزرار أعرف / لا أعرف
+   ========================================================= */
 
 .knowledge-buttons {
 
     display: grid;
 
-    grid-template-columns:
-        repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
 
-    gap: 12px;
+    gap: 11px;
 
     margin-top: 15px;
 }
@@ -603,11 +539,13 @@ body {
 
 .knowledge-buttons button {
 
-    min-height: 67px;
+    min-height: 55px;
 
-    border-radius: 20px;
+    border: none;
 
-    font-size: 17px;
+    border-radius: 17px;
+
+    font-size: 15px;
 
     font-weight: 800;
 
@@ -625,138 +563,55 @@ body {
 }
 
 
-/* أعرفها */
+.dont-know {
 
-.know {
+    background: #fff0f3;
 
-    border:
-        1px solid #c9eee0;
-
-    background:
-        linear-gradient(
-            145deg,
-            #effcf7,
-            #f7fffb
-        );
-
-    color: #27a978;
+    color: #e04762;
 
     box-shadow:
-        0 5px 15px rgba(40,170,120,.07);
+        0 5px 15px rgba(224, 71, 98, .08);
 }
 
 
-/* لا أعرفها */
+.know {
 
-.dont-know {
+    background: #e6f8ef;
 
-    border:
-        1px solid #f4d9df;
-
-    background:
-        linear-gradient(
-            145deg,
-            #fff5f7,
-            #fffafb
-        );
-
-    color: #e35a70;
+    color: #23925e;
 
     box-shadow:
-        0 5px 15px rgba(220,80,105,.06);
+        0 5px 15px rgba(35, 146, 94, .08);
 }
 
 
 /* =========================================================
-   الإجراءات السفلية
-========================================================= */
+   الإجراءات
+   ========================================================= */
 
 .actions {
 
     display: grid;
 
-    grid-template-columns:
-        1fr 2fr;
+    grid-template-columns: 90px 1fr;
 
-    gap: 12px;
+    gap: 10px;
 
-    margin-top: 13px;
+    margin-top: 12px;
 }
 
 
-/* =========================================================
-   زر الحفظ
-========================================================= */
+.actions button {
 
-#favoriteBtn {
+    min-height: 54px;
 
-    min-height: 67px;
-
-    border:
-        1px solid #e5e2f4;
-
-    border-radius: 20px;
-
-    background: #ffffff;
-
-    color: #8d7427;
-
-    font-size: 17px;
-
-    font-weight: 700;
+    border-radius: 17px;
 
     cursor: pointer;
 
-    box-shadow:
-        0 5px 18px rgba(40,35,80,.06);
+    font-size: 14px;
 
-    transition:
-        transform .15s ease,
-        background .15s ease;
-}
-
-
-#favoriteBtn:active {
-
-    transform: scale(.97);
-}
-
-
-#favoriteBtn span {
-
-    margin-right: 4px;
-}
-
-
-/* =========================================================
-   زر الكلمة التالية
-========================================================= */
-
-.next-btn {
-
-    min-height: 67px;
-
-    border: none;
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6658f4,
-            #7950ed
-        );
-
-    color: #ffffff;
-
-    font-size: 19px;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 9px 22px rgba(102,88,244,.24);
+    font-weight: bold;
 
     transition:
         transform .15s ease,
@@ -764,275 +619,611 @@ body {
 }
 
 
-.next-btn:active {
+.actions button:active {
 
-    transform: scale(.98);
+    transform: scale(.97);
+}
+
+
+/* حفظ */
+
+#favoriteBtn {
+
+    border: 1px solid #e6e4ef;
+
+    background: white;
+
+    color: #f0a51b;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 1px;
+
+    font-size: 22px;
+}
+
+
+#favoriteBtn span {
+
+    font-size: 10px;
+
+    color: #777783;
+}
+
+
+/* الكلمة التالية */
+
+.next-btn {
+
+    border: none;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7669f3,
+            #5b4ee8
+        );
 
     box-shadow:
-        0 5px 13px rgba(102,88,244,.18);
+        0 7px 18px rgba(92, 80, 230, .20);
+}
+
+
+/* =========================================================
+   شاشات الكمبيوتر الكبيرة
+   ========================================================= */
+
+@media (min-width: 800px) {
+
+    .container {
+
+        padding-top: 28px;
+
+    }
+
+    .word-card {
+
+        padding: 24px;
+
+    }
+
+    .image-container {
+
+        height: 285px;
+
+    }
+
+    .english-word {
+
+        font-size: 42px;
+
+    }
+
 }
 
 
 /* =========================================================
    الجوال
-========================================================= */
+   مهم: نخلي كل الصفحة أقرب ما يمكن لشاشة واحدة
+   ========================================================= */
 
 @media (max-width: 600px) {
 
+    body {
+
+        min-height: 100vh;
+
+        overflow-x: hidden;
+
+    }
+
+
     .topbar {
 
-        min-height: 74px;
+        height: 62px;
 
-        padding:
-            11px 14px;
-    }
+        padding: 8px 12px;
 
-
-    .back-btn {
-
-        min-width: 92px;
-
-        height: 44px;
-
-        padding: 0 13px;
-
-        font-size: 14px;
-
-        border-radius: 15px;
-    }
-
-
-    .home-btn {
-
-        width: 44px;
-        height: 44px;
-
-        border-radius: 15px;
-
-        font-size: 19px;
     }
 
 
     .title {
 
-        font-size: 19px;
+        font-size: 16px;
+
+    }
+
+
+    .back-btn {
+
+        min-height: 39px;
+
+        padding: 0 12px;
+
+        border-radius: 12px;
+
+        font-size: 12px;
+
+    }
+
+
+    .home-btn {
+
+        width: 39px;
+
+        height: 39px;
+
+        border-radius: 12px;
+
+        font-size: 17px;
+
     }
 
 
     .container {
 
+        max-width: 500px;
+
         padding:
-            18px 13px
-            105px;
+
+            10px
+
+            11px
+
+            14px;
+
     }
 
 
     .progress-area {
 
-        margin-bottom: 15px;
+        padding: 10px 13px;
+
+        margin-bottom: 9px;
+
+        border-radius: 15px;
+
+    }
+
+
+    .progress-info {
+
+        margin-bottom: 6px;
+
+        font-size: 11px;
+
+    }
+
+
+    .progress-info strong {
+
+        font-size: 12px;
+
+    }
+
+
+    .progress-bar {
+
+        height: 7px;
+
     }
 
 
     .word-card {
 
-        padding: 13px;
+        padding: 11px;
 
-        border-radius: 25px;
+        border-radius: 21px;
+
     }
 
 
     .image-container {
 
-        aspect-ratio: 4 / 3;
+        height: 150px;
 
-        min-height: 210px;
+        border-radius: 16px;
 
-        border-radius: 19px;
+        margin-bottom: 9px;
+
     }
 
 
-    .word-content {
+    .word-image {
 
-        padding-top: 22px;
+        font-size: 65px;
+
     }
 
 
     .english-word {
 
-        font-size: clamp(
-            36px,
-            11vw,
-            52px
-        );
+        font-size: 28px;
+
+        margin-bottom: 3px;
+
     }
 
 
     .arabic-word {
 
-        font-size: 21px;
+        font-size: 17px;
+
+        margin-bottom: 7px;
+
     }
 
 
     .sound-btn {
 
-        min-height: 56px;
+        padding: 8px 15px;
 
-        border-radius: 17px;
+        border-radius: 12px;
 
-        font-size: 16px;
+        font-size: 12px;
+
     }
 
 
     .example {
 
-        padding: 18px;
+        margin-top: 9px;
 
-        border-radius: 19px;
+        padding: 9px 11px;
+
+        border-radius: 14px;
+
+    }
+
+
+    .example > span {
+
+        font-size: 11px;
+
+        margin-bottom: 4px;
+
     }
 
 
     .example p {
 
-        font-size: 19px;
+        font-size: 12px;
+
+        margin-bottom: 2px;
+
+    }
+
+
+    .example small {
+
+        font-size: 10px;
+
     }
 
 
     .example-sound-buttons {
 
-        gap: 8px;
+        margin-top: 7px;
+
+        gap: 6px;
+
     }
 
 
     .example-sound-btn {
 
-        min-height: 47px;
+        min-height: 31px;
 
-        font-size: 13px;
+        border-radius: 9px;
 
-        padding: 8px 7px;
+        font-size: 10px;
+
     }
 
 
     .knowledge-buttons {
 
-        gap: 9px;
+        gap: 7px;
+
+        margin-top: 8px;
+
     }
 
 
     .knowledge-buttons button {
 
-        min-height: 62px;
+        min-height: 43px;
 
-        font-size: 15px;
+        border-radius: 13px;
+
+        font-size: 12px;
+
     }
 
 
     .actions {
 
-        gap: 9px;
+        grid-template-columns: 72px 1fr;
+
+        gap: 7px;
+
+        margin-top: 7px;
+
     }
 
 
-    #favoriteBtn,
-    .next-btn {
+    .actions button {
 
-        min-height: 62px;
+        min-height: 43px;
 
-        border-radius: 18px;
-    }
+        border-radius: 13px;
 
+        font-size: 12px;
 
-    .next-btn {
-
-        font-size: 17px;
     }
 
 
     #favoriteBtn {
 
-        font-size: 15px;
+        font-size: 18px;
+
+    }
+
+
+    #favoriteBtn span {
+
+        font-size: 8px;
+
     }
 
 }
 
 
 /* =========================================================
-   الجوال الصغير جدًا
-========================================================= */
+   الجوالات الصغيرة جدًا
+   ========================================================= */
 
 @media (max-width: 380px) {
 
-    .title {
-
-        font-size: 17px;
-    }
-
-
-    .back-btn {
-
-        min-width: 82px;
-
-        font-size: 13px;
-    }
-
-
-    .home-btn {
-
-        width: 42px;
-        height: 42px;
-    }
-
-
     .container {
 
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-left: 8px;
+
+        padding-right: 8px;
+
     }
 
 
-    .word-card {
+    .topbar {
 
-        padding: 10px;
+        padding-left: 8px;
+
+        padding-right: 8px;
+
     }
 
 
     .image-container {
 
-        min-height: 190px;
+        height: 132px;
+
     }
 
 
-    .example-sound-buttons {
+    .english-word {
 
-        grid-template-columns: 1fr;
+        font-size: 25px;
+
+    }
+
+
+    .arabic-word {
+
+        font-size: 15px;
+
+    }
+
+
+    .example {
+
+        padding: 7px 9px;
+
+    }
+
+
+    .example-sound-btn {
+
+        font-size: 9px;
+
     }
 
 
     .knowledge-buttons button {
 
-        font-size: 14px;
+        min-height: 40px;
+
     }
 
 
-    .next-btn {
+    .actions button {
 
-        font-size: 15px;
+        min-height: 40px;
+
     }
 
 }
 
 
 /* =========================================================
-   تقليل الحركة لمن يفضل ذلك
-========================================================= */
+   منع تحديد النص بالضغط المطول على الأزرار
+   ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+button {
 
-    * {
+    user-select: none;
 
-        scroll-behavior: auto !important;
+}
 
-        transition: none !important;
+
+/* =========================================================
+   تحسين الصور
+   ========================================================= */
+
+img {
+
+    max-width: 100%;
+
+}
+
+
+/* =========================================================
+   إذا كانت الشاشة قصيرة جدًا
+   نقلل الارتفاعات أكثر
+   ========================================================= */
+
+@media (max-width: 600px) and (max-height: 700px) {
+
+    .image-container {
+
+        height: 125px;
+
+    }
+
+
+    .word-card {
+
+        padding: 9px;
+
+    }
+
+
+    .example {
+
+        margin-top: 7px;
+
+        padding: 7px 9px;
+
+    }
+
+
+    .knowledge-buttons {
+
+        margin-top: 6px;
+
+    }
+
+
+    .actions {
+
+        margin-top: 6px;
+
+    }
+
+}
+
+
+/* =========================================================
+   شاشة جوال قصيرة جدًا
+   ========================================================= */
+
+@media (max-width: 600px) and (max-height: 620px) {
+
+    .topbar {
+
+        height: 56px;
+
+    }
+
+
+    .container {
+
+        padding-top: 7px;
+
+    }
+
+
+    .progress-area {
+
+        padding: 7px 10px;
+
+        margin-bottom: 6px;
+
+    }
+
+
+    .image-container {
+
+        height: 105px;
+
+        margin-bottom: 6px;
+
+    }
+
+
+    .english-word {
+
+        font-size: 23px;
+
+    }
+
+
+    .arabic-word {
+
+        font-size: 14px;
+
+        margin-bottom: 5px;
+
+    }
+
+
+    .sound-btn {
+
+        padding: 6px 12px;
+
+    }
+
+
+    .example {
+
+        margin-top: 6px;
+
+        padding: 6px 8px;
+
+    }
+
+
+    .example-sound-buttons {
+
+        margin-top: 5px;
+
+    }
+
+
+    .example-sound-btn {
+
+        min-height: 27px;
+
+    }
+
+
+    .knowledge-buttons button {
+
+        min-height: 37px;
+
+    }
+
+
+    .actions button {
+
+        min-height: 37px;
 
     }
 
