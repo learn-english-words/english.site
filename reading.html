@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -10,6 +10,15 @@
       content="width=device-width, initial-scale=1.0">
 
 <title>Reading - EnglishWords</title>
+
+
+<!-- ==================================================
+     Supabase
+================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
 
 
 <style>
@@ -667,7 +676,6 @@ button {
 
 }
 
-
 </style>
 
 </head>
@@ -691,7 +699,7 @@ button {
             onclick="window.location.href='index.html'">
 
             →
-            
+
         </button>
 
 
@@ -821,171 +829,21 @@ button {
         id="stories"
         class="stories">
 
+        <div class="empty-reading">
 
-        <!-- قصة تجريبية -->
-
-        <button
-            class="story-card"
-            onclick="openStory(1)">
-
-
-            <div class="story-icon">
-                ☀️
+            <div class="icon">
+                ⏳
             </div>
 
-
-            <div class="story-info">
-
-
-                <h3>
-                    A New Morning
-                </h3>
-
-
-                <p>
-                    قصة قصيرة عن بداية يوم جديد
-                    وروتين الصباح.
-                </p>
-
-
-                <div class="story-meta">
-
-
-                    <span class="story-level">
-                        A1
-                    </span>
-
-
-                    <span class="story-time">
-                        ⏱ 3 دقائق
-                    </span>
-
-
-                </div>
-
-
-            </div>
-
-
-            <div class="story-arrow">
-                ←
-            </div>
-
-
-        </button>
-
-
-
-        <button
-            class="story-card"
-            onclick="openStory(2)">
-
-
-            <div
-                class="story-icon"
-                style="background:#e8f7ff;">
-
-                🏠
-
-            </div>
-
-
-            <div class="story-info">
-
-
-                <h3>
-                    My Home
-                </h3>
-
-
-                <p>
-                    تعرّف على منزل بسيط
-                    وأفراد العائلة.
-                </p>
-
-
-                <div class="story-meta">
-
-
-                    <span class="story-level">
-                        A1
-                    </span>
-
-
-                    <span class="story-time">
-                        ⏱ 4 دقائق
-                    </span>
-
-
-                </div>
-
-
-            </div>
-
-
-            <div class="story-arrow">
-                ←
-            </div>
-
-
-        </button>
-
-
-
-        <button
-            class="story-card"
-            onclick="openStory(3)">
-
-
-            <div
-                class="story-icon"
-                style="background:#fff3df;">
-
-                🛒
-
-            </div>
-
-
-            <div class="story-info">
-
-
-                <h3>
-                    At the Store
-                </h3>
-
-
-                <p>
-                    قصة بسيطة عن التسوق
-                    وشراء بعض الأشياء.
-                </p>
-
-
-                <div class="story-meta">
-
-
-                    <span class="story-level">
-                        A1
-                    </span>
-
-
-                    <span class="story-time">
-                        ⏱ 4 دقائق
-                    </span>
-
-
-                </div>
-
-
-            </div>
-
-
-            <div class="story-arrow">
-                ←
-            </div>
-
-
-        </button>
-
+            <strong>
+                جاري تحميل القصص...
+            </strong>
+
+            <p>
+                انتظر قليلًا
+            </p>
+
+        </div>
 
     </section>
 
@@ -1069,24 +927,53 @@ button {
 <script>
 
 /* ==================================================
-   اختيار المستوى
+   المتغيرات
+================================================== */
+
+let allStories = [];
+
+let selectedLevel = "A1";
+
+
+/* ==================================================
+   التحقق من تسجيل الدخول
+================================================== */
+
+async function checkLogin() {
+
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
+
+
+    if (error || !user) {
+
+        window.location.replace("login.html");
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* ==================================================
+   أزرار المستويات
 ================================================== */
 
 const levelButtons =
     document.querySelectorAll(".level-btn");
 
 
-const storyCards =
-    document.querySelectorAll(".story-card");
-
-
 levelButtons.forEach(button => {
-
 
     button.addEventListener(
         "click",
         function() {
-
 
             levelButtons.forEach(btn => {
 
@@ -1098,40 +985,291 @@ levelButtons.forEach(button => {
             this.classList.add("active");
 
 
-            const selectedLevel =
+            selectedLevel =
                 this.dataset.level;
 
 
-            storyCards.forEach(card => {
-
-
-                const cardLevel =
-                    card.querySelector(
-                        ".story-level"
-                    ).textContent.trim();
-
-
-                if (
-                    cardLevel ===
-                    selectedLevel
-                ) {
-
-                    card.style.display =
-                        "flex";
-
-                } else {
-
-                    card.style.display =
-                        "none";
-
-                }
-
-            });
+            renderStories();
 
         }
     );
 
 });
+
+
+/* ==================================================
+   تحميل القصص من Supabase
+================================================== */
+
+async function loadReadingStories() {
+
+    const storiesContainer =
+        document.getElementById("stories");
+
+
+    storiesContainer.innerHTML = `
+
+        <div class="empty-reading">
+
+            <div class="icon">
+                ⏳
+            </div>
+
+            <strong>
+                جاري تحميل القصص...
+            </strong>
+
+            <p>
+                انتظر قليلًا
+            </p>
+
+        </div>
+
+    `;
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("reading_stories")
+
+        .select(`
+            id,
+            title,
+            description,
+            level,
+            icon,
+            reading_time
+        `)
+
+        .eq(
+            "is_published",
+            true
+        )
+
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Load reading stories error:",
+            error
+        );
+
+
+        storiesContainer.innerHTML = `
+
+            <div class="empty-reading">
+
+                <div class="icon">
+                    ❌
+                </div>
+
+                <strong>
+                    حدث خطأ أثناء تحميل القصص
+                </strong>
+
+                <p>
+                    حاول تحديث الصفحة مرة أخرى
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    allStories =
+        data || [];
+
+
+    renderStories();
+
+}
+
+
+/* ==================================================
+   عرض القصص حسب المستوى
+================================================== */
+
+function renderStories() {
+
+    const storiesContainer =
+        document.getElementById("stories");
+
+
+    const filteredStories =
+        allStories.filter(story => {
+
+            return story.level ===
+                selectedLevel;
+
+        });
+
+
+    storiesContainer.innerHTML = "";
+
+
+    /* لا توجد قصص */
+
+    if (
+        filteredStories.length === 0
+    ) {
+
+        storiesContainer.innerHTML = `
+
+            <div class="empty-reading">
+
+                <div class="icon">
+                    📖
+                </div>
+
+                <strong>
+                    لا توجد قصص لهذا المستوى
+                </strong>
+
+                <p>
+                    سيتم إضافة قصص جديدة قريبًا 🚀
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* إنشاء بطاقات القصص */
+
+    filteredStories.forEach(story => {
+
+
+        const card =
+            document.createElement("button");
+
+
+        card.className =
+            "story-card";
+
+
+        card.onclick = function() {
+
+            openStory(
+                story.id
+            );
+
+        };
+
+
+        const icon =
+            story.icon ||
+            "📖";
+
+
+        const title =
+            escapeHtml(
+                story.title ||
+                "بدون عنوان"
+            );
+
+
+        const description =
+            escapeHtml(
+                story.description ||
+                "اقرأ هذه القصة باللغة الإنجليزية"
+            );
+
+
+        const level =
+            escapeHtml(
+                story.level ||
+                ""
+            );
+
+
+        const readingTime =
+            story.reading_time ||
+            0;
+
+
+        card.innerHTML = `
+
+            <div class="story-icon">
+
+                ${icon}
+
+            </div>
+
+
+            <div class="story-info">
+
+
+                <h3>
+
+                    ${title}
+
+                </h3>
+
+
+                <p>
+
+                    ${description}
+
+                </p>
+
+
+                <div class="story-meta">
+
+
+                    <span class="story-level">
+
+                        ${level}
+
+                    </span>
+
+
+                    <span class="story-time">
+
+                        ⏱ ${readingTime} دقائق
+
+                    </span>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="story-arrow">
+
+                ←
+
+            </div>
+
+        `;
+
+
+        storiesContainer.appendChild(
+            card
+        );
+
+    });
+
+}
 
 
 /* ==================================================
@@ -1141,10 +1279,52 @@ levelButtons.forEach(button => {
 function openStory(id) {
 
     window.location.href =
-        "story.html?id=" + id;
+        "story.html?id=" +
+        encodeURIComponent(id);
 
 }
 
+
+/* ==================================================
+   حماية النص
+================================================== */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text || "";
+
+    return div.innerHTML;
+
+}
+
+
+/* ==================================================
+   تشغيل الصفحة
+================================================== */
+
+async function startReadingPage() {
+
+    const loggedIn =
+        await checkLogin();
+
+
+    if (!loggedIn) {
+
+        return;
+
+    }
+
+
+    await loadReadingStories();
+
+}
+
+
+startReadingPage();
 
 </script>
 
@@ -1152,3 +1332,4 @@ function openStory(id) {
 </body>
 
 </html>
+
