@@ -1,6 +1,6 @@
 /* =========================================================
-   EnglishWords — صفحة تعلم الكلمات
-   تصميم قريب من الصورة المرفقة
+   EnglishWords — صفحة اختيار المستوى والتصنيف
+   تصميم حديث + مناسب للجوال
 ========================================================= */
 
 * {
@@ -14,7 +14,7 @@ html {
 body {
     margin: 0;
     min-height: 100vh;
-    background: #fbfbfe;
+    background: #f8f9fc;
     color: #171827;
     font-family: Arial, Tahoma, sans-serif;
 }
@@ -24,6 +24,7 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 
+
 /* =========================================================
    الشريط العلوي
 ========================================================= */
@@ -32,37 +33,45 @@ button {
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
-    min-height: 82px;
-    padding: 16px 24px;
+
+    min-height: 70px;
+    padding: 12px 20px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 15px;
+    gap: 12px;
 
-    background: rgba(255,255,255,.96);
+    background: rgba(255,255,255,.97);
+
     border-bottom: 1px solid #eeeeF5;
+
+    position: relative;
+    z-index: 10;
 }
 
 .back-btn {
     border: 1px solid #e4e4ee;
-    background: #fff;
+
+    background: white;
     color: #5c50df;
 
-    padding: 12px 18px;
-    border-radius: 18px;
+    padding: 10px 16px;
 
-    font-size: 15px;
+    border-radius: 15px;
+
+    font-size: 14px;
     font-weight: bold;
+
     cursor: pointer;
 
-    box-shadow: 0 3px 12px rgba(40,35,100,.04);
+    box-shadow: 0 3px 12px rgba(40,35,100,.05);
+
     transition: .18s ease;
 }
 
 .back-btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(40,35,100,.08);
 }
 
 .back-btn:active {
@@ -71,12 +80,13 @@ button {
 
 .page-title {
     flex: 1;
+
     text-align: center;
 
-    font-size: 25px;
+    font-size: 22px;
     font-weight: 800;
-    color: #181927;
 }
+
 
 /* =========================================================
    الحاوية
@@ -85,41 +95,40 @@ button {
 .container {
     width: 100%;
     max-width: 850px;
+
     margin: 0 auto;
 
-    padding: 25px 22px 120px;
+    padding: 22px 22px 90px;
 }
 
+
 /* =========================================================
-   البانر الرئيسي
+   البانر
 ========================================================= */
 
 .intro {
     position: relative;
+
     overflow: hidden;
 
-    min-height: 225px;
-    padding: 32px;
+    min-height: 175px;
 
-    margin-bottom: 32px;
+    padding: 25px 28px;
+
+    margin-bottom: 22px;
 
     display: flex;
     align-items: center;
 
-    border-radius: 28px;
+    border-radius: 25px;
 
-    color: #fff;
+    color: white;
 
     background:
         radial-gradient(
             circle at 92% 15%,
-            rgba(255,255,255,.13) 0 85px,
-            transparent 86px
-        ),
-        radial-gradient(
-            circle at 5% 95%,
-            rgba(255,255,255,.08) 0 100px,
-            transparent 101px
+            rgba(255,255,255,.13) 0 75px,
+            transparent 76px
         ),
         linear-gradient(
             125deg,
@@ -129,21 +138,27 @@ button {
         );
 
     box-shadow:
-        0 16px 35px rgba(96,78,226,.22);
+        0 12px 30px rgba(96,78,226,.20);
 }
 
 .intro::after {
     content: "📚";
+
     position: absolute;
 
-    left: 35px;
-    bottom: 12px;
+    left: 28px;
+    bottom: 8px;
 
-    font-size: 90px;
+    font-size: 72px;
+
     line-height: 1;
 
     transform: rotate(-7deg);
-    filter: drop-shadow(0 10px 8px rgba(0,0,0,.16));
+
+    filter:
+        drop-shadow(
+            0 8px 7px rgba(0,0,0,.15)
+        );
 }
 
 .intro > div {
@@ -156,22 +171,25 @@ button {
 .intro span {
     display: inline-block;
 
-    padding: 8px 15px;
-    margin-bottom: 12px;
+    padding: 7px 13px;
 
-    border-radius: 20px;
+    margin-bottom: 8px;
+
+    border-radius: 18px;
 
     background: rgba(255,255,255,.14);
+
     border: 1px solid rgba(255,255,255,.12);
 
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
 }
 
 .intro h1 {
-    margin: 0 0 10px;
+    margin: 0 0 7px;
 
-    font-size: 35px;
+    font-size: 30px;
+
     line-height: 1.25;
 }
 
@@ -181,20 +199,22 @@ button {
     max-width: 470px;
 
     color: rgba(255,255,255,.92);
-    font-size: 15px;
-    line-height: 1.9;
+
+    font-size: 13px;
+
+    line-height: 1.7;
 }
+
 
 /* =========================================================
    عناوين الأقسام
 ========================================================= */
 
 .container > h2 {
-    position: relative;
+    margin: 19px 3px 10px;
 
-    margin: 30px 3px 14px;
+    font-size: 19px;
 
-    font-size: 22px;
     font-weight: 800;
 }
 
@@ -203,14 +223,16 @@ button {
 
     display: block;
 
-    width: 42px;
-    height: 4px;
+    width: 35px;
+    height: 3px;
 
-    margin-top: 8px;
+    margin-top: 6px;
 
     border-radius: 10px;
+
     background: #6756eb;
 }
+
 
 /* =========================================================
    المستويات
@@ -218,29 +240,35 @@ button {
 
 .levels {
     display: grid;
-    gap: 13px;
+
+    gap: 9px;
 }
 
 .level-card {
     width: 100%;
-    min-height: 105px;
+
+    min-height: 78px;
 
     display: flex;
-    align-items: center;
-    gap: 22px;
 
-    padding: 17px 20px;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 9px 12px;
 
     border: 1px solid #e9e9f1;
-    border-radius: 21px;
 
-    background: #fff;
+    border-radius: 17px;
+
+    background: white;
 
     text-align: right;
+
     cursor: pointer;
 
     box-shadow:
-        0 4px 15px rgba(25,25,60,.055);
+        0 3px 12px rgba(25,25,60,.045);
 
     transition:
         transform .18s ease,
@@ -251,8 +279,9 @@ button {
 
 .level-card:hover {
     transform: translateY(-2px);
+
     box-shadow:
-        0 9px 22px rgba(50,45,100,.09);
+        0 7px 18px rgba(50,45,100,.08);
 }
 
 .level-card:active {
@@ -260,51 +289,49 @@ button {
 }
 
 .level-card > strong {
-    width: 118px;
-    min-width: 118px;
-    height: 72px;
+    width: 70px;
+    min-width: 70px;
+
+    height: 55px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    border-radius: 17px;
+    border-radius: 14px;
 
-    color: #fff;
+    color: white;
 
-    background: linear-gradient(
-        145deg,
-        #6b58ef,
-        #5846db
-    );
+    background:
+        linear-gradient(
+            145deg,
+            #6b58ef,
+            #5846db
+        );
 
-    font-size: 29px;
-    letter-spacing: .5px;
+    font-size: 22px;
 
     box-shadow:
-        0 7px 15px rgba(94,76,225,.18);
+        0 5px 12px rgba(94,76,225,.16);
 }
 
 .level-card:nth-child(2) > strong {
-    background: linear-gradient(
-        145deg,
-        #4e8ced,
-        #356ed1
-    );
-
-    box-shadow:
-        0 7px 15px rgba(53,110,209,.16);
+    background:
+        linear-gradient(
+            145deg,
+            #4e8ced,
+            #356ed1
+        );
 }
 
 .level-card:nth-child(3) > strong {
-    background: linear-gradient(
-        145deg,
-        #3cc485,
-        #22a968
-    );
-
-    box-shadow:
-        0 7px 15px rgba(34,169,104,.15);
+    background:
+        linear-gradient(
+            145deg,
+            #3cc485,
+            #22a968
+        );
 }
 
 .level-card > div {
@@ -312,26 +339,33 @@ button {
 }
 
 .level-card h3 {
-    margin: 0 0 6px;
+    margin: 0 0 3px;
 
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .level-card p {
     margin: 0;
 
     color: #7d7e8e;
-    font-size: 13px;
-    line-height: 1.6;
+
+    font-size: 11px;
+
+    line-height: 1.4;
 }
 
-/* الحالة المحددة */
+
+/* =========================================================
+   المستوى المحدد
+========================================================= */
+
 .level-card.selected {
     border-color: #6a58eb;
+
     background: #faf9ff;
 
     box-shadow:
-        0 7px 22px rgba(98,80,230,.13);
+        0 6px 18px rgba(98,80,230,.11);
 }
 
 .level-card.selected > strong {
@@ -341,20 +375,25 @@ button {
 .level-card.selected::after {
     content: "✓";
 
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     border: 2px solid #6a58eb;
+
     border-radius: 50%;
 
     color: #6a58eb;
-    font-size: 16px;
+
+    font-size: 14px;
+
     font-weight: bold;
 }
+
 
 /* =========================================================
    التصنيفات
@@ -363,32 +402,36 @@ button {
 .categories {
     display: grid;
 
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns:
+        repeat(3, 1fr);
 
-    gap: 13px;
+    gap: 9px;
 }
 
 .category-card {
     position: relative;
 
-    min-height: 160px;
+    min-height: 112px;
 
-    padding: 18px 10px;
+    padding: 10px 6px;
 
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
     justify-content: center;
 
     border: 1px solid #e9e9f1;
-    border-radius: 21px;
 
-    background: #fff;
+    border-radius: 17px;
+
+    background: white;
 
     cursor: pointer;
 
     box-shadow:
-        0 4px 15px rgba(25,25,60,.055);
+        0 3px 12px rgba(25,25,60,.045);
 
     transition:
         transform .18s ease,
@@ -398,10 +441,10 @@ button {
 }
 
 .category-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 
     box-shadow:
-        0 10px 24px rgba(40,35,90,.09);
+        0 8px 18px rgba(40,35,90,.08);
 }
 
 .category-card:active {
@@ -409,20 +452,21 @@ button {
 }
 
 .category-card > span {
-    width: 70px;
-    height: 70px;
+    width: 47px;
+    height: 47px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 
-    border-radius: 18px;
+    border-radius: 14px;
 
     background: #e8f9f1;
 
-    font-size: 39px;
+    font-size: 27px;
 }
 
 .category-card:nth-child(2) > span {
@@ -448,16 +492,23 @@ button {
 .category-card strong {
     display: block;
 
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 
     color: #202031;
-    font-size: 16px;
+
+    font-size: 14px;
 }
 
 .category-card small {
     color: #858596;
-    font-size: 12px;
+
+    font-size: 10px;
 }
+
+
+/* =========================================================
+   التصنيف المحدد
+========================================================= */
 
 .category-card.selected {
     border: 2px solid #6655e9;
@@ -465,7 +516,7 @@ button {
     background: #faf9ff;
 
     box-shadow:
-        0 8px 22px rgba(99,82,229,.13);
+        0 7px 18px rgba(99,82,229,.12);
 }
 
 .category-card.selected::before {
@@ -473,24 +524,28 @@ button {
 
     position: absolute;
 
-    top: 10px;
-    right: 10px;
+    top: 6px;
+    right: 6px;
 
-    width: 27px;
-    height: 27px;
+    width: 22px;
+    height: 22px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     border-radius: 50%;
 
     background: #6755e8;
-    color: #fff;
 
-    font-size: 14px;
+    color: white;
+
+    font-size: 12px;
+
     font-weight: bold;
 }
+
 
 /* =========================================================
    زر ابدأ التعلم
@@ -498,14 +553,16 @@ button {
 
 .start-btn {
     width: 100%;
-    min-height: 60px;
 
-    margin-top: 25px;
+    min-height: 54px;
+
+    margin-top: 15px;
 
     border: none;
-    border-radius: 19px;
 
-    color: #fff;
+    border-radius: 17px;
+
+    color: white;
 
     background:
         linear-gradient(
@@ -514,13 +571,14 @@ button {
             #5a48df
         );
 
-    font-size: 18px;
+    font-size: 17px;
+
     font-weight: 800;
 
     cursor: pointer;
 
     box-shadow:
-        0 9px 22px rgba(92,73,225,.22);
+        0 8px 20px rgba(92,73,225,.20);
 
     transition:
         transform .18s ease,
@@ -532,7 +590,7 @@ button {
     transform: translateY(-2px);
 
     box-shadow:
-        0 13px 27px rgba(92,73,225,.28);
+        0 11px 24px rgba(92,73,225,.25);
 }
 
 .start-btn:not(:disabled):active {
@@ -540,10 +598,13 @@ button {
 }
 
 .start-btn:disabled {
-    opacity: .48;
+    opacity: .45;
+
     cursor: not-allowed;
+
     box-shadow: none;
 }
+
 
 /* =========================================================
    الجوال
@@ -551,152 +612,302 @@ button {
 
 @media (max-width: 650px) {
 
+    body {
+        overflow-x: hidden;
+    }
+
     .topbar {
-        min-height: 70px;
-        padding: 12px 15px;
+        min-height: 60px;
+
+        padding: 8px 12px;
+
+        gap: 8px;
     }
-
-    .page-title {
-        font-size: 20px;
-    }
-
-    .back-btn {
-        padding: 10px 13px;
-        border-radius: 15px;
-        font-size: 13px;
-    }
-
-    .container {
-        padding: 18px 14px 105px;
-    }
-
-    .intro {
-        min-height: 215px;
-        padding: 25px 22px;
-        border-radius: 24px;
-    }
-
-    .intro h1 {
-        font-size: 28px;
-    }
-
-    .intro p {
-        max-width: 270px;
-        font-size: 13px;
-        line-height: 1.8;
-    }
-
-    .intro::after {
-        left: 5px;
-        bottom: 7px;
-        font-size: 65px;
-    }
-
-    .container > h2 {
-        margin-top: 25px;
-        font-size: 19px;
-    }
-
-    .level-card {
-        min-height: 92px;
-        padding: 13px;
-        gap: 14px;
-        border-radius: 18px;
-    }
-
-    .level-card > strong {
-        width: 78px;
-        min-width: 78px;
-        height: 62px;
-        border-radius: 15px;
-        font-size: 24px;
-    }
-
-    .level-card h3 {
-        font-size: 16px;
-    }
-
-    .level-card p {
-        font-size: 11px;
-    }
-
-    .level-card.selected::after {
-        width: 25px;
-        height: 25px;
-    }
-
-    .categories {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 11px;
-    }
-
-    .category-card {
-        min-height: 145px;
-        border-radius: 18px;
-    }
-
-    .category-card > span {
-        width: 62px;
-        height: 62px;
-        font-size: 34px;
-    }
-
-    .category-card strong {
-        font-size: 15px;
-    }
-
-    .start-btn {
-        min-height: 57px;
-        border-radius: 17px;
-        font-size: 17px;
-    }
-}
-
-/* =========================================================
-   الجوال الصغير جدًا
-========================================================= */
-
-@media (max-width: 380px) {
 
     .page-title {
         font-size: 18px;
     }
 
     .back-btn {
+        padding: 8px 11px;
+
+        border-radius: 13px;
+
         font-size: 12px;
-        padding: 9px 10px;
     }
+
+
+    .container {
+        padding: 12px 12px 75px;
+    }
+
+
+    /* البانر أصغر */
 
     .intro {
-        min-height: 205px;
-        padding: 21px 18px;
-    }
+        min-height: 125px;
 
-    .intro h1 {
-        font-size: 25px;
+        padding: 16px 18px;
+
+        margin-bottom: 12px;
+
+        border-radius: 20px;
     }
 
     .intro span {
-        font-size: 12px;
-    }
+        padding: 5px 10px;
 
-    .level-card > strong {
-        width: 70px;
-        min-width: 70px;
-        height: 58px;
-    }
+        margin-bottom: 5px;
 
-    .level-card p {
         font-size: 10px;
     }
 
+    .intro h1 {
+        margin-bottom: 4px;
+
+        font-size: 23px;
+    }
+
+    .intro p {
+        max-width: 240px;
+
+        font-size: 10px;
+
+        line-height: 1.55;
+    }
+
+    .intro::after {
+        left: 4px;
+
+        bottom: 5px;
+
+        font-size: 50px;
+    }
+
+
+    /* عناوين */
+
+    .container > h2 {
+        margin: 11px 2px 7px;
+
+        font-size: 16px;
+    }
+
+    .container > h2::after {
+        width: 28px;
+
+        height: 2px;
+
+        margin-top: 4px;
+    }
+
+
+    /* المستويات */
+
+    .levels {
+        gap: 6px;
+    }
+
+    .level-card {
+        min-height: 61px;
+
+        padding: 6px 8px;
+
+        gap: 9px;
+
+        border-radius: 14px;
+    }
+
+    .level-card > strong {
+        width: 55px;
+        min-width: 55px;
+
+        height: 43px;
+
+        border-radius: 11px;
+
+        font-size: 18px;
+    }
+
+    .level-card h3 {
+        margin-bottom: 1px;
+
+        font-size: 13px;
+    }
+
+    .level-card p {
+        font-size: 9px;
+
+        line-height: 1.25;
+    }
+
+    .level-card.selected::after {
+        width: 21px;
+        height: 21px;
+
+        font-size: 11px;
+    }
+
+
+    /* التصنيفات */
+
+    .categories {
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 6px;
+    }
+
     .category-card {
-        min-height: 137px;
+        min-height: 88px;
+
+        padding: 6px 3px;
+
+        border-radius: 14px;
     }
 
     .category-card > span {
-        width: 56px;
-        height: 56px;
-        font-size: 30px;
+        width: 39px;
+        height: 39px;
+
+        margin-bottom: 4px;
+
+        border-radius: 11px;
+
+        font-size: 23px;
+    }
+
+    .category-card strong {
+        font-size: 11px;
+
+        margin-bottom: 1px;
+    }
+
+    .category-card small {
+        font-size: 8px;
+    }
+
+    .category-card.selected::before {
+        top: 4px;
+        right: 4px;
+
+        width: 19px;
+        height: 19px;
+
+        font-size: 10px;
+    }
+
+
+    /* زر البداية */
+
+    .start-btn {
+        min-height: 49px;
+
+        margin-top: 10px;
+
+        border-radius: 14px;
+
+        font-size: 15px;
+    }
+
+}
+
+
+/* =========================================================
+   الجوالات الصغيرة جدًا
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .topbar {
+        min-height: 56px;
+
+        padding: 7px 10px;
+    }
+
+    .page-title {
+        font-size: 16px;
+    }
+
+    .back-btn {
+        padding: 7px 9px;
+
+        font-size: 11px;
+    }
+
+    .container {
+        padding: 10px 10px 65px;
+    }
+
+    .intro {
+        min-height: 115px;
+
+        padding: 14px 15px;
+    }
+
+    .intro h1 {
+        font-size: 21px;
+    }
+
+    .intro p {
+        max-width: 215px;
+
+        font-size: 9px;
+    }
+
+    .intro::after {
+        font-size: 43px;
+    }
+
+    .container > h2 {
+        font-size: 15px;
+
+        margin-top: 9px;
+    }
+
+    .level-card {
+        min-height: 57px;
+    }
+
+    .level-card > strong {
+        width: 51px;
+        min-width: 51px;
+
+        height: 40px;
+
+        font-size: 17px;
+    }
+
+    .level-card h3 {
+        font-size: 12px;
+    }
+
+    .level-card p {
+        font-size: 8px;
+    }
+
+    .category-card {
+        min-height: 82px;
+    }
+
+    .category-card > span {
+        width: 36px;
+        height: 36px;
+
+        font-size: 21px;
+    }
+
+    .category-card strong {
+        font-size: 10px;
+    }
+
+    .category-card small {
+        font-size: 7px;
+    }
+
+    .start-btn {
+        min-height: 46px;
+
+        font-size: 14px;
     }
 }
