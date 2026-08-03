@@ -8,7 +8,7 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>AI English Chat</title>
+<title>AI English Conversation</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
@@ -23,62 +23,41 @@ body {
     margin: 0;
     font-family: Arial, Tahoma, sans-serif;
     background: #f5f7fb;
-    color: #171827;
 }
 
 .ai-container {
     max-width: 700px;
     height: 100vh;
-    height: 100dvh;
     margin: auto;
     background: white;
     display: flex;
     flex-direction: column;
 }
 
-
-/* ==============================
+/* =========================
    الهيدر
-============================== */
+========================= */
 
 .header {
-
-    position: relative;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6254eb,
-            #8374ed
-        );
+    background: linear-gradient(
+        135deg,
+        #6254eb,
+        #8374ed
+    );
 
     color: white;
 
-    padding: 18px 20px;
+    padding: 18px;
 
-    min-height: 72px;
+    font-size: 20px;
+    font-weight: bold;
 
     display: flex;
-
     align-items: center;
-
-    justify-content: center;
-
-    font-size: 19px;
-
-    font-weight: bold;
+    justify-content: space-between;
 }
 
-
-/* زر الرئيسية */
-
 .home-btn {
-
-    position: absolute;
-
-    left: 12px;
-
-    top: 14px;
 
     border: none;
 
@@ -88,28 +67,23 @@ body {
 
     padding: 9px 13px;
 
-    border-radius: 13px;
+    border-radius: 12px;
 
     font-size: 13px;
 
     font-weight: bold;
 
     cursor: pointer;
-
-    box-shadow:
-        0 4px 15px rgba(0,0,0,.12);
 }
 
 .home-btn:active {
-
     transform: scale(.95);
-
 }
 
 
-/* ==============================
+/* =========================
    الرسائل
-============================== */
+========================= */
 
 .messages {
 
@@ -118,10 +92,6 @@ body {
     overflow-y: auto;
 
     padding: 20px;
-
-    display: flex;
-
-    flex-direction: column;
 }
 
 .message {
@@ -130,17 +100,13 @@ body {
 
     padding: 12px 15px;
 
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 
     border-radius: 17px;
 
     line-height: 1.6;
 
     white-space: pre-wrap;
-
-    word-break: break-word;
-
-    font-size: 15px;
 }
 
 .user {
@@ -149,9 +115,7 @@ body {
 
     color: white;
 
-    margin-left: auto;
-
-    border-bottom-right-radius: 5px;
+    margin-right: auto;
 }
 
 .ai {
@@ -160,39 +124,50 @@ body {
 
     color: #171827;
 
-    margin-right: auto;
-
-    border-bottom-left-radius: 5px;
+    margin-left: auto;
 }
 
 
-/* ==============================
+/* =========================
+   حالة الاستماع
+========================= */
+
+.listening-box {
+
+    display: none;
+
+    text-align: center;
+
+    padding: 8px;
+
+    color: #6254eb;
+
+    font-size: 13px;
+
+    background: #f3f1ff;
+}
+
+
+/* =========================
    منطقة الإدخال
-============================== */
+========================= */
 
 .input-box {
 
     display: flex;
 
-    align-items: center;
-
     gap: 8px;
 
-    padding: 10px;
+    padding: 12px;
 
     border-top: 1px solid #eee;
 
     background: white;
 }
 
-
-/* حقل الكتابة */
-
 #messageInput {
 
     flex: 1;
-
-    min-width: 0;
 
     border: none;
 
@@ -210,72 +185,72 @@ body {
 }
 
 
-/* الأزرار */
+/* =========================
+   زر المايك
+========================= */
 
-.voice-button,
-.send-button,
-.stop-button {
+#micButton {
 
     width: 50px;
 
     height: 50px;
 
-    flex-shrink: 0;
+    border: none;
+
+    border-radius: 14px;
+
+    background: #eeeaff;
+
+    color: #6254eb;
+
+    font-size: 21px;
+
+    cursor: pointer;
+}
+
+#micButton.listening {
+
+    background: #6254eb;
+
+    color: white;
+
+    animation: pulse 1s infinite;
+}
+
+
+/* =========================
+   زر الإرسال
+========================= */
+
+#sendButton {
+
+    width: 50px;
+
+    height: 50px;
 
     border: none;
 
     border-radius: 14px;
 
+    background: #6254eb;
+
     color: white;
 
-    font-size: 20px;
+    font-size: 18px;
 
     cursor: pointer;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
 }
 
-
-.voice-button {
-
-    background: #6254eb;
-}
-
-
-.voice-button.listening {
-
-    background: #ef3f58;
-
-    animation:
-        pulse 1s infinite;
-}
-
-
-.send-button {
-
-    background: #6254eb;
-}
-
-
-.stop-button {
-
-    background: #777;
-
-}
-
-
-.voice-button:disabled,
-.send-button:disabled {
+#sendButton:disabled {
 
     opacity: .5;
 
-    cursor: not-allowed;
 }
 
+
+/* =========================
+   الحركة
+========================= */
 
 @keyframes pulse {
 
@@ -293,75 +268,6 @@ body {
 
 }
 
-
-/* ==============================
-   حالة المايك
-============================== */
-
-.voice-status {
-
-    text-align: center;
-
-    color: #777;
-
-    font-size: 12px;
-
-    min-height: 20px;
-
-    padding:
-        3px 10px 7px;
-
-    background: white;
-}
-
-
-/* ==============================
-   الجوال
-============================== */
-
-@media (max-width: 500px) {
-
-    .header {
-
-        font-size: 17px;
-
-        padding-right: 10px;
-
-        padding-left: 10px;
-    }
-
-    .home-btn {
-
-        left: 8px;
-
-        font-size: 11px;
-
-        padding: 8px 10px;
-    }
-
-    .message {
-
-        max-width: 88%;
-
-        font-size: 14px;
-    }
-
-    #messageInput {
-
-        font-size: 15px;
-    }
-
-    .voice-button,
-    .send-button,
-    .stop-button {
-
-        width: 47px;
-
-        height: 47px;
-    }
-
-}
-
 </style>
 
 </head>
@@ -373,30 +279,31 @@ body {
 <div class="ai-container">
 
 
-    <!-- ==============================
+    <!-- =========================
          الهيدر
-    ============================== -->
+    ========================== -->
 
     <div class="header">
 
+        <span>
+            🤖 English Conversation
+        </span>
+
         <button
             class="home-btn"
-            onclick="goHome()">
+            onclick="window.location.href='index.html'">
 
             🏠 الرئيسية
 
         </button>
 
-
-        🤖 English Conversation
-
     </div>
 
 
 
-    <!-- ==============================
+    <!-- =========================
          الرسائل
-    ============================== -->
+    ========================== -->
 
     <div
         id="messages"
@@ -406,9 +313,8 @@ body {
         <div class="message ai">
 
             Hi! 👋
-            Let's practice English together.
 
-            <br>
+            Let's practice English together.
 
             What did you do today?
 
@@ -419,37 +325,26 @@ body {
 
 
 
-    <!-- حالة المايك -->
+    <!-- =========================
+         حالة المايك
+    ========================== -->
 
     <div
-        id="voiceStatus"
-        class="voice-status">
+        id="listeningBox"
+        class="listening-box">
+
+        🎤 Listening...
 
     </div>
 
 
 
-    <!-- ==============================
+    <!-- =========================
          الإدخال
-    ============================== -->
+    ========================== -->
 
     <div class="input-box">
 
-
-        <!-- زر المايك -->
-
-        <button
-            id="voiceButton"
-            class="voice-button"
-            onclick="toggleVoice()"
-            title="تحدث">
-
-            🎤
-
-        </button>
-
-
-        <!-- الكتابة -->
 
         <input
             id="messageInput"
@@ -459,28 +354,20 @@ body {
         >
 
 
-        <!-- الإرسال -->
-
         <button
-            id="sendButton"
-            class="send-button"
-            onclick="sendMessage()"
-            title="إرسال">
+            id="micButton"
+            onclick="toggleMicrophone()">
 
-            ➤
+            🎤
 
         </button>
 
 
-        <!-- إيقاف الصوت -->
-
         <button
-            id="stopButton"
-            class="stop-button"
-            onclick="stopSpeaking()"
-            title="إيقاف الصوت">
+            id="sendButton"
+            onclick="sendMessage()">
 
-            🔇
+            ➤
 
         </button>
 
@@ -494,9 +381,10 @@ body {
 
 <script>
 
-/* ==========================================
+
+/* =====================================================
    العناصر
-========================================== */
+===================================================== */
 
 const messagesBox =
     document.getElementById("messages");
@@ -507,64 +395,172 @@ const input =
 const sendButton =
     document.getElementById("sendButton");
 
-const voiceButton =
-    document.getElementById("voiceButton");
+const micButton =
+    document.getElementById("micButton");
 
-const stopButton =
-    document.getElementById("stopButton");
-
-const voiceStatus =
-    document.getElementById("voiceStatus");
+const listeningBox =
+    document.getElementById("listeningBox");
 
 
-/* ==========================================
-   الرجوع للرئيسية
-========================================== */
+/* =====================================================
+   Speech Recognition
+===================================================== */
 
-function goHome() {
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-    stopSpeaking();
 
-    window.location.href =
-        "index.html";
+let recognition = null;
+
+let isListening = false;
+
+
+if (SpeechRecognition) {
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.lang =
+        "en-US";
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
+
+    recognition.onstart =
+        function() {
+
+            isListening = true;
+
+            micButton.classList.add(
+                "listening"
+            );
+
+            listeningBox.style.display =
+                "block";
+
+            listeningBox.textContent =
+                "🎤 Listening...";
+
+        };
+
+
+    recognition.onresult =
+        function(event) {
+
+            const transcript =
+                event.results[0][0].transcript;
+
+            input.value =
+                transcript;
+
+            listeningBox.textContent =
+                "✅ تم التعرف على الكلام";
+
+
+            /* إرسال الكلام تلقائيًا */
+
+            setTimeout(
+                function() {
+
+                    sendMessage();
+
+                },
+                300
+            );
+
+        };
+
+
+    recognition.onerror =
+        function(event) {
+
+            console.error(
+                "Speech recognition error:",
+                event.error
+            );
+
+            listeningBox.textContent =
+                "❌ لم أستطع فهم الصوت";
+
+        };
+
+
+    recognition.onend =
+        function() {
+
+            isListening = false;
+
+            micButton.classList.remove(
+                "listening"
+            );
+
+            setTimeout(
+                function() {
+
+                    listeningBox.style.display =
+                        "none";
+
+                },
+                700
+            );
+
+        };
 
 }
 
 
-/* ==========================================
-   إضافة رسالة
-========================================== */
+/* =====================================================
+   تشغيل / إيقاف المايك
+===================================================== */
 
-function addMessage(text, type) {
+function toggleMicrophone() {
 
-    const div =
-        document.createElement("div");
+    if (!recognition) {
 
-    div.className =
-        "message " + type;
+        alert(
+            "المتصفح لا يدعم التعرف على الصوت. جرّب Chrome أو Safari."
+        );
 
-    div.textContent =
-        text;
+        return;
 
-    messagesBox.appendChild(div);
+    }
 
-    messagesBox.scrollTop =
-        messagesBox.scrollHeight;
 
-    return div;
+    if (isListening) {
+
+        recognition.stop();
+
+        return;
+
+    }
+
+
+    try {
+
+        recognition.start();
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
 }
 
 
-/* ==========================================
-   إرسال الرسالة
-========================================== */
+/* =====================================================
+   إرسال الرسالة إلى Gemini
+===================================================== */
 
-async function sendMessage(customMessage = null) {
+async function sendMessage() {
 
     const message =
-        customMessage !== null
-            ? customMessage.trim()
-            : input.value.trim();
+        input.value.trim();
 
 
     if (!message)
@@ -581,7 +577,7 @@ async function sendMessage(customMessage = null) {
 
     sendButton.disabled = true;
 
-    voiceButton.disabled = true;
+    micButton.disabled = true;
 
 
     const loading =
@@ -617,13 +613,13 @@ async function sendMessage(customMessage = null) {
                 error
             );
 
-
             addMessage(
                 "حدث خطأ في الاتصال بالذكاء الاصطناعي ❌",
                 "ai"
             );
 
             return;
+
         }
 
 
@@ -638,10 +634,13 @@ async function sendMessage(customMessage = null) {
             );
 
             return;
+
         }
 
 
-        /* الرد الكتابي */
+        /* ==========================
+           عرض رد Gemini
+        ========================== */
 
         addMessage(
             data.reply,
@@ -649,7 +648,9 @@ async function sendMessage(customMessage = null) {
         );
 
 
-        /* الرد الصوتي */
+        /* ==========================
+           نطق رد Gemini تلقائيًا
+        ========================== */
 
         speakText(
             data.reply
@@ -677,18 +678,51 @@ async function sendMessage(customMessage = null) {
 
         sendButton.disabled = false;
 
-        voiceButton.disabled = false;
-
-        input.focus();
+        micButton.disabled = false;
 
     }
 
 }
 
 
-/* ==========================================
-   تحويل رد AI إلى صوت
-========================================== */
+/* =====================================================
+   إضافة رسالة
+===================================================== */
+
+function addMessage(
+    text,
+    type
+) {
+
+    const div =
+        document.createElement("div");
+
+
+    div.className =
+        "message " + type;
+
+
+    div.textContent =
+        text;
+
+
+    messagesBox.appendChild(
+        div
+    );
+
+
+    messagesBox.scrollTop =
+        messagesBox.scrollHeight;
+
+
+    return div;
+
+}
+
+
+/* =====================================================
+   تحويل نص Gemini إلى صوت
+===================================================== */
 
 function speakText(text) {
 
@@ -697,14 +731,15 @@ function speakText(text) {
     ) {
 
         console.log(
-            "Speech synthesis غير مدعوم"
+            "Speech synthesis not supported"
         );
 
         return;
+
     }
 
 
-    /* إيقاف أي كلام سابق */
+    /* إيقاف أي صوت سابق */
 
     window.speechSynthesis.cancel();
 
@@ -715,89 +750,28 @@ function speakText(text) {
         );
 
 
-    /*
-       نخلي الصوت إنجليزي
-    */
+    /* اللغة الإنجليزية */
 
     speech.lang =
         "en-US";
 
 
-    /*
-       سرعة الكلام
-       أبطأ قليلًا للمبتدئين
-    */
+    /* سرعة الكلام */
 
     speech.rate =
-        0.88;
+        0.9;
 
 
-    /*
-       درجة الصوت
-    */
+    /* نبرة الصوت */
 
     speech.pitch =
         1;
 
 
+    /* مستوى الصوت */
+
     speech.volume =
         1;
-
-
-    /*
-       اختيار صوت إنجليزي
-       إذا كان متوفرًا
-    */
-
-    const voices =
-        window.speechSynthesis.getVoices();
-
-
-    const englishVoice =
-        voices.find(
-            voice =>
-                voice.lang &&
-                voice.lang
-                    .toLowerCase()
-                    .startsWith("en")
-        );
-
-
-    if (englishVoice) {
-
-        speech.voice =
-            englishVoice;
-
-    }
-
-
-    speech.onstart =
-        function() {
-
-            stopButton.style.opacity =
-                "1";
-
-        };
-
-
-    speech.onend =
-        function() {
-
-            stopButton.style.opacity =
-                ".7";
-
-        };
-
-
-    speech.onerror =
-        function(error) {
-
-            console.error(
-                "Speech error:",
-                error
-            );
-
-        };
 
 
     window.speechSynthesis.speak(
@@ -807,251 +781,9 @@ function speakText(text) {
 }
 
 
-/* ==========================================
-   إيقاف صوت AI
-========================================== */
-
-function stopSpeaking() {
-
-    if (
-        "speechSynthesis" in window
-    ) {
-
-        window.speechSynthesis.cancel();
-
-    }
-
-}
-
-
-/* ==========================================
-   Speech Recognition
-========================================== */
-
-const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-
-let recognition = null;
-
-let isListening = false;
-
-
-if (SpeechRecognition) {
-
-    recognition =
-        new SpeechRecognition();
-
-
-    /*
-       اللغة الإنجليزية
-    */
-
-    recognition.lang =
-        "en-US";
-
-
-    /*
-       لا نحتاج نتائج كثيرة
-    */
-
-    recognition.continuous =
-        false;
-
-
-    recognition.interimResults =
-        false;
-
-
-    recognition.onstart =
-        function() {
-
-            isListening = true;
-
-
-            voiceButton.classList.add(
-                "listening"
-            );
-
-
-            voiceButton.textContent =
-                "⏹️";
-
-
-            voiceStatus.textContent =
-                "🎤 Listening... Speak English";
-
-        };
-
-
-    recognition.onresult =
-        function(event) {
-
-            const transcript =
-                event
-                    .results[0][0]
-                    .transcript
-                    .trim();
-
-
-            if (!transcript)
-                return;
-
-
-            /*
-               نعرض النص في مربع الكتابة
-               أولًا
-            */
-
-            input.value =
-                transcript;
-
-
-            voiceStatus.textContent =
-                "تم التعرف على كلامك، جاري الإرسال...";
-
-
-            /*
-               نرسل الكلام للـ AI
-            */
-
-            sendMessage(
-                transcript
-            );
-
-        };
-
-
-    recognition.onerror =
-        function(event) {
-
-            console.error(
-                "Speech recognition error:",
-                event.error
-            );
-
-
-            if (
-                event.error ===
-                "not-allowed"
-            ) {
-
-                voiceStatus.textContent =
-                    "❌ اسمح للموقع باستخدام المايك";
-
-            } else if (
-                event.error ===
-                "no-speech"
-            ) {
-
-                voiceStatus.textContent =
-                    "لم أسمع صوتًا، حاول مرة أخرى 🎤";
-
-            } else {
-
-                voiceStatus.textContent =
-                    "حدث خطأ في المايك ❌";
-
-            }
-
-        };
-
-
-    recognition.onend =
-        function() {
-
-            isListening = false;
-
-
-            voiceButton.classList.remove(
-                "listening"
-            );
-
-
-            voiceButton.textContent =
-                "🎤";
-
-
-            /*
-               نمسح الحالة بعد قليل
-            */
-
-            setTimeout(
-                function() {
-
-                    voiceStatus.textContent =
-                        "";
-
-                },
-                1500
-            );
-
-        };
-
-} else {
-
-    voiceButton.disabled =
-        true;
-
-
-    voiceStatus.textContent =
-        "المتصفح لا يدعم التعرف على الصوت";
-
-}
-
-
-/* ==========================================
-   تشغيل / إيقاف المايك
-========================================== */
-
-function toggleVoice() {
-
-    if (!recognition) {
-
-        alert(
-            "المتصفح لا يدعم التحدث بالمايك."
-        );
-
-        return;
-    }
-
-
-    if (isListening) {
-
-        recognition.stop();
-
-        return;
-
-    }
-
-
-    /*
-       إيقاف صوت AI قبل الاستماع
-    */
-
-    stopSpeaking();
-
-
-    try {
-
-        recognition.start();
-
-    } catch (error) {
-
-        console.error(
-            "Microphone error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* ==========================================
-   زر Enter
-========================================== */
+/* =====================================================
+   Enter للإرسال
+===================================================== */
 
 input.addEventListener(
     "keydown",
@@ -1071,25 +803,8 @@ input.addEventListener(
 );
 
 
-/* ==========================================
-   تحميل أصوات الجهاز
-========================================== */
-
-if (
-    "speechSynthesis" in window
-) {
-
-    window.speechSynthesis.onvoiceschanged =
-        function() {
-
-            window.speechSynthesis
-                .getVoices();
-
-        };
-
-}
-
 </script>
+
 
 </body>
 
