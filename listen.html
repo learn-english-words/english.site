@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🎧 اسمع واختر - EnglishWords</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #f8f9fc;
+    color: #171827;
+    font-family: Arial, Tahoma, sans-serif;
+}
+
+.page {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px 18px 40px;
+}
+
+/* الهيدر */
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.back-btn {
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 3px 12px rgba(0,0,0,.07);
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.header-title {
+    flex: 1;
+}
+
+.header-title h1 {
+    margin: 0 0 5px;
+    font-size: 23px;
+}
+
+.header-title p {
+    margin: 0;
+    color: #888;
+    font-size: 13px;
+}
+
+/* التقدم */
+
+.progress-box {
+    background: white;
+    border-radius: 18px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 3px 15px rgba(0,0,0,.05);
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 9px;
+    font-size: 13px;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #eeeeF5;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg,#7669f3,#5b4ee8);
+    border-radius: 20px;
+    transition: .3s;
+}
+
+/* بطاقة السؤال */
+
+.question-card {
+    background: white;
+    border-radius: 25px;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+}
+
+.listen-label {
+    color: #7669f3;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.listen-button {
+    width: 105px;
+    height: 105px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(145deg,#7669f3,#5b4ee8);
+    color: white;
+    font-size: 43px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(92,80,230,.3);
+    transition: .15s;
+}
+
+.listen-button:active {
+    transform: scale(.94);
+}
+
+.listen-hint {
+    margin: 17px 0 0;
+    color: #888;
+    font-size: 13px;
+}
+
+/* الاختيارات */
+
+.answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.answer-btn {
+    min-height: 70px;
+    border: 2px solid #eeeeF4;
+    background: #fff;
+    border-radius: 17px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #252536;
+    cursor: pointer;
+    transition: .15s;
+    padding: 10px;
+}
+
+.answer-btn:hover {
+    border-color: #7669f3;
+}
+
+.answer-btn:disabled {
+    cursor: default;
+}
+
+.answer-btn.correct {
+    background: #e4f9ef;
+    border-color: #35b879;
+    color: #188653;
+}
+
+.answer-btn.wrong {
+    background: #fff0f3;
+    border-color: #ef5268;
+    color: #d52e47;
+}
+
+.feedback {
+    min-height: 25px;
+    margin-top: 17px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* النتيجة */
+
+.result {
+    display: none;
+    background: white;
+    border-radius: 25px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+}
+
+.result-icon {
+    font-size: 65px;
+    margin-bottom: 10px;
+}
+
+.result h2 {
+    margin: 0 0 10px;
+}
+
+.result p {
+    color: #777;
+    line-height: 1.8;
+}
+
+.restart-btn,
+.home-btn {
+    width: 100%;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.restart-btn {
+    background: #7669f3;
+    color: white;
+}
+
+.home-btn {
+    background: #eeeeF5;
+    color: #333;
+}
+
+/* تحميل */
+
+.loading {
+    text-align: center;
+    padding: 50px 20px;
+    color: #777;
+}
+
+/* الجوال */
+
+@media (max-width: 400px) {
+
+    .page {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+    .answers {
+        gap: 9px;
+    }
+
+    .answer-btn {
+        font-size: 15px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main class="page">
+
+```
+<header class="header">
+
+    <button
+        class="back-btn"
+        onclick="window.location.href='index.html'">
+
+        ←
+
+    </button>
+
+    <div class="header-title">
+
+        <h1>🎧 اسمع واختر</h1>
+
+        <p>استمع للكلمة واختر معناها الصحيح</p>
+
+    </div>
+
+</header>
+
+
+<!-- التقدم -->
+
+<div
+    id="progressBox"
+    class="progress-box"
+    style="display:none">
+
+    <div class="progress-top">
+
+        <span>
+            السؤال
+        </span>
+
+        <strong id="questionNumber">
+            1 / 10
+        </strong>
+
+    </div>
+
+    <div class="progress-bar">
+
+        <div
+            id="progressFill"
+            class="progress-fill">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- التحميل -->
+
+<div
+    id="loading"
+    class="loading">
+
+    جاري تجهيز الأسئلة... ⏳
+
+</div>
+
+
+<!-- السؤال -->
+
+<section
+    id="questionCard"
+    class="question-card"
+    style="display:none">
+
+    <div class="listen-label">
+        🎧 استمع جيدًا
+    </div>
+
+
+    <button
+        id="listenButton"
+        class="listen-button"
+        onclick="playWord()">
+
+        🔊
+
+    </button>
+
+
+    <p class="listen-hint">
+        اضغط على السماعة لسماع الكلمة
+    </p>
+
+
+    <div
+        id="answers"
+        class="answers">
+    </div>
+
+
+    <div
+        id="feedback"
+        class="feedback">
+    </div>
+
+</section>
+
+
+<!-- النتيجة -->
+
+<section
+    id="result"
+    class="result">
+
+    <div class="result-icon">
+        🎉
+    </div>
+
+    <h2>
+        انتهى الاختبار!
+    </h2>
+
+    <p id="resultText">
+        أحسنت!
+    </p>
+
+    <button
+        class="restart-btn"
+        onclick="startQuiz()">
+
+        🔄 حاول مرة أخرى
+
+    </button>
+
+    <button
+        class="home-btn"
+        onclick="window.location.href='index.html'">
+
+        🏠 العودة للرئيسية
+
+    </button>
+
+</section>
+```
+
+</main>
+
+<script>
+
+/* ==================================================
+   المتغيرات
+================================================== */
+
+let words = [];
+
+let questions = [];
+
+let currentQuestion = 0;
+
+let score = 0;
+
+const TOTAL_QUESTIONS = 10;
+
+
+/* ==================================================
+   حماية الصفحة
+================================================== */
+
+async function checkUser() {
+
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
+
+    if (error || !user) {
+
+        window.location.href = "login.html";
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+/* ==================================================
+   تحميل الكلمات من Supabase
+================================================== */
+
+async function loadWords() {
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("words")
+
+        .select("id, english, arabic")
+
+        .not("english", "is", null)
+
+        .not("arabic", "is", null);
+
+
+    if (error) {
+
+        console.error(
+            "خطأ في تحميل الكلمات:",
+            error
+        );
+
+        document.getElementById(
+            "loading"
+        ).textContent =
+            "حدث خطأ أثناء تحميل الكلمات ❌";
+
+        return false;
+
+    }
+
+
+    if (!data || data.length < 4) {
+
+        document.getElementById(
+            "loading"
+        ).textContent =
+            "لا توجد كلمات كافية لإنشاء الاختبار.";
+
+        return false;
+
+    }
+
+
+    words = data.filter(word =>
+
+        word.english &&
+        word.arabic
+
+    );
+
+
+    return words.length >= 4;
+
+}
+
+
+/* ==================================================
+   خلط العناصر
+================================================== */
+
+function shuffle(array) {
+
+    const arr = [...array];
+
+    for (
+        let i = arr.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+        [
+            arr[i],
+            arr[j]
+        ] =
+        [
+            arr[j],
+            arr[i]
+        ];
+
+    }
+
+    return arr;
+
+}
+
+
+/* ==================================================
+   إنشاء الأسئلة
+================================================== */
+
+function createQuestions() {
+
+    const selected =
+        shuffle(words)
+        .slice(
+            0,
+            Math.min(
+                TOTAL_QUESTIONS,
+                words.length
+            )
+        );
+
+
+    questions =
+        selected.map(word => {
+
+            const wrongAnswers =
+                shuffle(
+
+                    words.filter(
+                        item =>
+                            item.id !== word.id
+                    )
+
+                )
+                .slice(0, 3)
+                .map(item => item.arabic);
+
+
+            const answers =
+                shuffle([
+                    word.arabic,
+                    ...wrongAnswers
+                ]);
+
+
+            return {
+
+                word: word,
+                answers: answers
+
+            };
+
+        });
+
+}
+
+
+/* ==================================================
+   تشغيل الصوت
+================================================== */
+
+function playWord() {
+
+    if (!questions[currentQuestion]) return;
+
+
+    const word =
+        questions[currentQuestion].word.english;
+
+
+    window.speechSynthesis.cancel();
+
+
+    const speech =
+        new SpeechSynthesisUtterance(word);
+
+
+    speech.lang = "en-US";
+
+    speech.rate = 0.85;
+
+    speech.pitch = 1;
+
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+/* ==================================================
+   عرض السؤال
+================================================== */
+
+function showQuestion() {
+
+    const question =
+        questions[currentQuestion];
+
+
+    if (!question) {
+
+        finishQuiz();
+
+        return;
+
+    }
+
+
+    const questionNumber =
+        currentQuestion + 1;
+
+
+    document.getElementById(
+        "questionNumber"
+    ).textContent =
+
+        questionNumber +
+        " / " +
+        questions.length;
+
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+
+        (
+            questionNumber /
+            questions.length *
+            100
+        ) +
+        "%";
+
+
+    const answersContainer =
+        document.getElementById(
+            "answers"
+        );
+
+
+    const feedback =
+        document.getElementById(
+            "feedback"
+        );
+
+
+    answersContainer.innerHTML = "";
+
+    feedback.textContent = "";
+
+    feedback.style.color = "";
+
+
+    question.answers.forEach(
+        answer => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "answer-btn";
+
+
+            button.textContent =
+                answer;
+
+
+            button.onclick =
+                () =>
+                    checkAnswer(
+                        answer,
+                        button
+                    );
+
+
+            answersContainer.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    /*
+       تشغيل الكلمة تلقائيًا
+       بعد ظهور السؤال
+    */
+
+    setTimeout(
+        () => playWord(),
+        400
+    );
+
+}
+
+
+/* ==================================================
+   التحقق من الإجابة
+================================================== */
+
+function checkAnswer(
+    selectedAnswer,
+    clickedButton
+) {
+
+    const question =
+        questions[currentQuestion];
+
+
+    const correctAnswer =
+        question.word.arabic;
+
+
+    const buttons =
+        document.querySelectorAll(
+            ".answer-btn"
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.disabled = true;
+
+            if (
+                button.textContent ===
+                correctAnswer
+            ) {
+
+                button.classList.add(
+                    "correct"
+                );
+
+            }
+
+        }
+    );
+
+
+    const feedback =
+        document.getElementById(
+            "feedback"
+        );
+
+
+    if (
+        selectedAnswer ===
+        correctAnswer
+    ) {
+
+        score++;
+
+
+        clickedButton.classList.add(
+            "correct"
+        );
+
+
+        feedback.textContent =
+            "✅ إجابة صحيحة! أحسنت";
+
+
+        feedback.style.color =
+            "#188653";
+
+    } else {
+
+        clickedButton.classList.add(
+            "wrong"
+        );
+
+
+        feedback.textContent =
+            "❌ الإجابة الصحيحة: " +
+            correctAnswer;
+
+
+        feedback.style.color =
+            "#d52e47";
+
+    }
+
+
+    setTimeout(
+        () => {
+
+            currentQuestion++;
+
+            showQuestion();
+
+        },
+        1200
+    );
+
+}
+
+
+/* ==================================================
+   نهاية الاختبار
+================================================== */
+
+function finishQuiz() {
+
+    window.speechSynthesis.cancel();
+
+
+    document.getElementById(
+        "questionCard"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "progressBox"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "resultText"
+    ).textContent =
+
+        "نتيجتك: " +
+        score +
+        " من " +
+        questions.length;
+
+
+}
+
+
+/* ==================================================
+   بدء الاختبار
+================================================== */
+
+async function startQuiz() {
+
+    score = 0;
+
+    currentQuestion = 0;
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "questionCard"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "progressBox"
+    ).style.display =
+        "block";
+
+
+    createQuestions();
+
+    showQuestion();
+
+}
+
+
+/* ==================================================
+   تشغيل الصفحة
+================================================== */
+
+async function init() {
+
+    const loggedIn =
+        await checkUser();
+
+
+    if (!loggedIn) return;
+
+
+    const loaded =
+        await loadWords();
+
+
+    if (!loaded) return;
+
+
+    document.getElementById(
+        "loading"
+    ).style.display =
+        "none";
+
+
+    await startQuiz();
+
+}
+
+
+init();
+
+</script>
+
+</body>
+
+</html>
