@@ -13,11 +13,12 @@ let selectedCategory = null;
 
 // =========================================================
 // التصنيفات القديمة
-// مهم: لا نحذفها ولا نعتمد على جدول categories
-// لأن كلماتك في words مرتبطة بهذه القيم
+// مهم جدًا:
+// لا نحذفها لأن الكلمات القديمة في words تستخدم هذه القيم
 // =========================================================
 
-const categories = [
+const oldCategories = [
+
     {
         key: "home",
         name_ar: "المنزل",
@@ -73,6 +74,17 @@ const categories = [
         name_en: "Colors",
         icon: "🎨"
     }
+
+];
+
+
+// =========================================================
+// التصنيفات النهائية
+// سيتم دمج القديمة مع القادمة من Supabase
+// =========================================================
+
+let categories = [
+    ...oldCategories
 ];
 
 
@@ -82,9 +94,9 @@ const categories = [
 
 document.addEventListener(
     "DOMContentLoaded",
-    function () {
+    async function () {
 
-        loadCategories();
+        await loadCategories();
 
         restoreSelections();
 
@@ -95,11 +107,10 @@ document.addEventListener(
 // =========================================================
 // تحميل التصنيفات
 // =========================================================
-// لا نستخدم جدول categories هنا.
-// نستخدم نفس قيم category الموجودة أصلًا في words.
+// القديمة + الجديدة من Supabase
 // =========================================================
 
-function loadCategories() {
+async function loadCategories() {
 
     const container =
         document.getElementById(
@@ -117,7 +128,220 @@ function loadCategories() {
     }
 
 
+    // نبدأ بالتصنيفات القديمة
+    categories = [
+        ...oldCategories
+    ];
+
+
+    container.innerHTML = `
+
+        <div class="loading-categories">
+
+            <span>⏳</span>
+
+            جاري تحميل التصنيفات...
+
+        </div>
+
+    `;
+
+
+    try {
+
+        // =================================================
+        // جلب التصنيفات من Supabase
+        // =================================================
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+
+                .from("categories")
+
+                .select(
+                    "id, name_ar, name_en, icon, created_at"
+                )
+
+                .order(
+                    "created_at",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+        if (error) {
+
+            console.error(
+                "❌ خطأ في تحميل التصنيفات من Supabase:",
+                error
+            );
+
+
+            // إذا فشل Supabase
+            // نعرض التصنيفات القديمة بدل ترك الصفحة فارغة
+
+            renderCategories();
+
+            return;
+        }
+
+
+        // =================================================
+        // إضافة التصنيفات الجديدة
+        // =================================================
+
+        if (
+            data &&
+            Array.isArray(data)
+        ) {
+
+            data.forEach(
+                function (category) {
+
+                    const nameEn =
+                        String(
+                            category.name_en || ""
+                        )
+                            .trim()
+                            .toLowerCase();
+
+
+                    const nameAr =
+                        String(
+                            category.name_ar || ""
+                        )
+                            .trim();
+
+
+                    if (!nameEn) {
+
+                        return;
+
+                    }
+
+
+                    // =================================================
+                    // منع تكرار التصنيف
+                    // =================================================
+
+                    const alreadyExists =
+                        categories.some(
+                            function (item) {
+
+                                return (
+                                    String(
+                                        item.key
+                                    )
+                                        .toLowerCase() ===
+                                    nameEn
+                                );
+
+                            }
+                        );
+
+
+                    if (alreadyExists) {
+
+                        return;
+
+                    }
+
+
+                    categories.push({
+
+                        key:
+                            nameEn,
+
+                        name_ar:
+                            nameAr,
+
+                        name_en:
+                            nameEn,
+
+                        icon:
+                            category.icon ||
+                            "📚",
+
+                        id:
+                            category.id
+
+                    });
+
+                }
+            );
+
+        }
+
+
+        // =================================================
+        // عرض التصنيفات
+        // =================================================
+
+        renderCategories();
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ خطأ غير متوقع أثناء تحميل التصنيفات:",
+            error
+        );
+
+
+        // نعرض القديمة حتى لو صار خطأ
+
+        renderCategories();
+
+    }
+
+}
+
+
+// =========================================================
+// عرض التصنيفات على الصفحة
+// =========================================================
+
+function renderCategories() {
+
+    const container =
+        document.getElementById(
+            "categoriesContainer"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
     container.innerHTML = "";
+
+
+    if (
+        !categories ||
+        categories.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="loading-categories">
+
+                📂 لا توجد تصنيفات حاليًا.
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
 
 
     categories.forEach(
@@ -129,15 +353,18 @@ function loadCategories() {
                 );
 
 
-            button.type = "button";
+            button.type =
+                "button";
 
 
             button.className =
                 "category-card";
 
 
+            // =================================================
             // مهم جدًا
-            // هذه هي القيمة الموجودة في جدول words
+            // هذه القيمة هي التي ستذهب إلى words.category
+            // =================================================
 
             button.dataset.category =
                 category.key;
@@ -325,15 +552,19 @@ function selectCategory(
     );
 
 
-    // مثال:
-    // food
-    // home
-    // cars
-    // animals
-
     selectedCategory =
         category;
 
+
+    // =================================================
+    // مثال:
+    // home
+    // food
+    // cars
+    // travel
+    // sports
+    // technology
+    // =================================================
 
     localStorage.setItem(
         "selectedCategory",
@@ -341,8 +572,8 @@ function selectCategory(
     );
 
 
-    // نحذف ID القديم إن وجد
-    // حتى لا يسبب تعارضًا
+    // لا نستخدم ID
+    // لأن words.category تعتمد على الاسم الإنجليزي
 
     localStorage.removeItem(
         "selectedCategoryId"
@@ -461,8 +692,12 @@ function getCategoryName(
         categories.find(
             function (item) {
 
-                return item.key ===
-                    categoryKey;
+                return (
+                    String(item.key)
+                        .toLowerCase() ===
+                    String(categoryKey)
+                        .toLowerCase()
+                );
 
             }
         );
@@ -475,7 +710,10 @@ function getCategoryName(
     }
 
 
-    return category.name_ar;
+    return (
+        category.name_ar ||
+        categoryKey
+    );
 
 }
 
@@ -562,8 +800,10 @@ function restoreSelections() {
 
 
                 if (
-                    cardCategory ===
-                    savedCategory
+                    String(cardCategory)
+                        .toLowerCase() ===
+                    String(savedCategory)
+                        .toLowerCase()
                 ) {
 
                     card.classList.add(
@@ -614,7 +854,7 @@ function startLearning() {
 
 
     // =====================================================
-    // حفظ التصنيف بنفس الطريقة القديمة
+    // حفظ التصنيف
     // =====================================================
 
     localStorage.setItem(
@@ -623,11 +863,9 @@ function startLearning() {
     );
 
 
-    // =====================================================
-    // مهم:
-    // لا نرسل category ID
-    // لأن words تستخدم category مثل food/home/cars
-    // =====================================================
+    // لا نرسل ID
+    // words تستخدم category مثل:
+    // home / food / cars / travel
 
     localStorage.removeItem(
         "selectedCategoryId"
