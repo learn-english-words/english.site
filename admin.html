@@ -265,6 +265,116 @@
 </section>
 
 
+<!-- ==========================================
+     إدارة التصنيفات
+========================================== -->
+
+<section class="categories-admin-section">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                🗂️ إدارة التصنيفات
+            </h2>
+
+            <p>
+                أضف تصنيفات جديدة تظهر تلقائيًا للمتعلمين.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <div class="form-grid">
+
+
+            <!-- الاسم بالعربي -->
+
+            <div class="field">
+
+                <label>
+                    🇸🇦 اسم التصنيف بالعربي
+                </label>
+
+                <input
+                    type="text"
+                    id="categoryNameAr"
+                    placeholder="مثال: السفر"
+                >
+
+            </div>
+
+
+            <!-- الاسم بالإنجليزي -->
+
+            <div class="field">
+
+                <label>
+                    🇬🇧 اسم التصنيف بالإنجليزي
+                </label>
+
+                <input
+                    type="text"
+                    id="categoryNameEn"
+                    placeholder="مثال: travel"
+                >
+
+            </div>
+
+
+            <!-- الأيقونة -->
+
+            <div class="field">
+
+                <label>
+                    🖼️ أيقونة التصنيف
+                </label>
+
+                <input
+                    type="text"
+                    id="categoryIcon"
+                    value="📚"
+                    placeholder="مثال: ✈️"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="save-btn"
+            onclick="saveCategory()"
+        >
+
+            ➕ إضافة التصنيف
+
+        </button>
+
+    </div>
+
+
+    <!-- التصنيفات الموجودة -->
+
+    <div
+        id="adminCategoriesList"
+        class="words-list"
+        style="margin-top:20px;"
+    >
+
+        جاري تحميل التصنيفات...
+
+    </div>
+
+</section>
+
+
 
 <!-- ==========================================
      الكلمات

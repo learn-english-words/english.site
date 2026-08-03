@@ -417,3 +417,128 @@ body {
     border-radius: 9px;
     cursor: pointer;
 }
+
+/* =========================================================
+   إدارة التصنيفات
+========================================================= */
+
+.categories-admin-section {
+    margin-top: 25px;
+}
+
+.admin-category-item {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 14px;
+
+    margin-bottom: 10px;
+
+    background: white;
+
+    border: 1px solid #e9e9f1;
+
+    border-radius: 14px;
+
+    box-shadow: 0 3px 12px rgba(25,25,60,.045);
+}
+
+.admin-category-icon {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: #eeeaff;
+
+    font-size: 28px;
+}
+
+.admin-category-info {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.admin-category-info strong {
+    color: #202031;
+
+    font-size: 15px;
+}
+
+.admin-category-info small {
+    color: #858596;
+
+    font-size: 12px;
+
+    direction: ltr;
+
+    text-align: right;
+}
+
+.delete-category-btn {
+    border: none;
+
+    padding: 9px 12px;
+
+    border-radius: 10px;
+
+    background: #fff0f0;
+
+    color: #d93636;
+
+    font-family: inherit;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.delete-category-btn:hover {
+    background: #ffe0e0;
+}
+
+
+@media (max-width: 600px) {
+
+    .admin-category-item {
+        gap: 9px;
+
+        padding: 10px;
+    }
+
+    .admin-category-icon {
+        width: 43px;
+        height: 43px;
+
+        font-size: 23px;
+    }
+
+    .admin-category-info strong {
+        font-size: 13px;
+    }
+
+    .admin-category-info small {
+        font-size: 10px;
+    }
+
+    .delete-category-btn {
+        padding: 7px 8px;
+
+        font-size: 11px;
+    }
+
+}
