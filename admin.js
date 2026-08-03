@@ -1,4 +1,9 @@
 // ==========================================
+// EnglishWords — ADMIN.JS
+// ==========================================
+
+
+// ==========================================
 // متغيرات
 // ==========================================
 
@@ -7,7 +12,6 @@ let words = [];
 let selectedImage = "";
 
 let editingWordId = null;
-
 
 
 // ==========================================
@@ -62,7 +66,7 @@ async function checkAdmin() {
 // تحميل التصنيفات
 // ==========================================
 
-function loadAdminCategories() {
+async function loadAdminCategories() {
 
     const categorySelect =
         document.getElementById(
@@ -70,72 +74,368 @@ function loadAdminCategories() {
         );
 
 
-    if (!categorySelect) return;
-
-
-    categorySelect.innerHTML = "";
-
-
-    if (
-        typeof categories === "undefined" ||
-        !Array.isArray(categories)
-    ) {
-
-        categorySelect.innerHTML = `
-
-            <option value="">
-                حدث خطأ في تحميل التصنيفات
-            </option>
-
-        `;
-
-        console.error(
-            "categories.js لم يتم تحميله."
+    const container =
+        document.getElementById(
+            "adminCategoriesList"
         );
 
-        return;
+
+    // ==========================================
+    // جلب التصنيفات من Supabase
+    // ==========================================
+
+    let databaseCategories = [];
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+
+                .from("categories")
+
+                .select(
+                    "id, name_ar, name_en, icon, created_at"
+                )
+
+                .order(
+                    "created_at",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Load categories error:",
+                error
+            );
+
+        } else {
+
+            databaseCategories =
+                data || [];
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected load categories error:",
+            error
+        );
+
     }
 
 
-    const firstOption =
-        document.createElement(
-            "option"
-        );
+    // ==========================================
+    // التصنيفات القديمة من categories.js
+    // ==========================================
+
+    const oldCategories =
+
+        typeof categories !== "undefined" &&
+
+        Array.isArray(categories)
+
+            ? categories
+
+            : [];
 
 
-    firstOption.value = "";
+    // ==========================================
+    // دمج التصنيفات
+    // ==========================================
+
+    const allCategories = [];
 
 
-    firstOption.textContent =
-        "اختر التصنيف...";
+    // التصنيفات القديمة أولًا
 
+    oldCategories.forEach(
+        category => {
 
-    categorySelect.appendChild(
-        firstOption
+            allCategories.push({
+
+                id:
+                    category.id,
+
+                name_ar:
+                    category.name,
+
+                name_en:
+                    (
+                        category.english ||
+                        category.id ||
+                        ""
+                    )
+                    .toLowerCase(),
+
+                icon:
+                    category.icon ||
+                    "📚"
+
+            });
+
+        }
     );
 
 
-    categories.forEach(category => {
+    // التصنيفات الجديدة من Supabase
 
-        const option =
+    databaseCategories.forEach(
+        category => {
+
+            const exists =
+                allCategories.some(
+                    item =>
+
+                        String(item.id) ===
+                        String(category.id)
+
+                        ||
+
+                        (
+                            item.name_en &&
+                            category.name_en &&
+                            item.name_en.toLowerCase() ===
+                            category.name_en.toLowerCase()
+                        )
+                );
+
+
+            if (!exists) {
+
+                allCategories.push({
+
+                    id:
+                        category.id,
+
+                    name_ar:
+                        category.name_ar,
+
+                    name_en:
+                        (
+                            category.name_en ||
+                            ""
+                        )
+                        .toLowerCase(),
+
+                    icon:
+                        category.icon ||
+                        "📚"
+
+                });
+
+            }
+
+        }
+    );
+
+
+    // ==========================================
+    // تحديث قائمة اختيار التصنيف
+    // ==========================================
+
+    if (categorySelect) {
+
+        categorySelect.innerHTML =
+            "";
+
+
+        const firstOption =
             document.createElement(
                 "option"
             );
 
 
-        option.value =
-            category.id;
+        firstOption.value =
+            "";
 
 
-        option.textContent =
-            `${category.icon} ${category.name}`;
+        firstOption.textContent =
+            "اختر التصنيف...";
 
 
         categorySelect.appendChild(
-            option
+            firstOption
         );
 
-    });
+
+        allCategories.forEach(
+            category => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    category.id;
+
+
+                option.textContent =
+                    `${category.icon} ${category.name_ar}`;
+
+
+                categorySelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    }
+
+
+    // ==========================================
+    // إذا ما فيه قائمة تصنيفات في الأدمن
+    // ==========================================
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    // ==========================================
+    // لا توجد تصنيفات
+    // ==========================================
+
+    if (
+        allCategories.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="categories-error">
+
+                📂 لا توجد تصنيفات حاليًا
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    // ==========================================
+    // عرض التصنيفات
+    // ==========================================
+
+    allCategories.forEach(
+        category => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "admin-category-item";
+
+
+            const isOldCategory =
+                oldCategories.some(
+                    oldCategory =>
+
+                        String(oldCategory.id) ===
+                        String(category.id)
+                );
+
+
+            item.innerHTML = `
+
+                <div class="admin-category-icon">
+
+                    ${escapeHtmlAdmin(
+                        category.icon ||
+                        "📚"
+                    )}
+
+                </div>
+
+
+                <div class="admin-category-info">
+
+                    <strong>
+
+                        ${escapeHtmlAdmin(
+                            category.name_ar ||
+                            ""
+                        )}
+
+                    </strong>
+
+
+                    <small>
+
+                        ${escapeHtmlAdmin(
+                            category.name_en ||
+                            ""
+                        )}
+
+                    </small>
+
+                </div>
+
+
+                ${
+                    isOldCategory
+
+                        ? `
+
+                            <span
+                                style="
+                                    font-size:12px;
+                                    color:#777;
+                                    padding:6px 9px;
+                                    background:#f3f3f3;
+                                    border-radius:8px;
+                                "
+                            >
+
+                                أساسي
+
+                            </span>
+
+                        `
+
+                        : `
+
+                            <button
+                                type="button"
+                                class="delete-category-btn"
+                                onclick="deleteCategory('${category.id}')"
+                            >
+
+                                🗑️ حذف
+
+                            </button>
+
+                        `
+                }
+
+            `;
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
 
 }
 
@@ -213,8 +513,11 @@ async function uploadImage(file) {
         error
     } =
         await supabaseClient
+
             .storage
+
             .from("word-images")
+
             .upload(
                 fileName,
                 file
@@ -239,8 +542,11 @@ async function uploadImage(file) {
         data
     } =
         supabaseClient
+
             .storage
+
             .from("word-images")
+
             .getPublicUrl(
                 fileName
             );
@@ -363,8 +669,12 @@ function editWord(id) {
         );
 
 
-    saveButton.textContent =
-        "✏️ حفظ التعديلات";
+    if (saveButton) {
+
+        saveButton.textContent =
+            "✏️ حفظ التعديلات";
+
+    }
 
 
     const title =
@@ -381,15 +691,23 @@ function editWord(id) {
     }
 
 
-    document.querySelector(
-        ".form-card"
-    ).scrollIntoView({
+    const formCard =
+        document.querySelector(
+            ".form-card"
+        );
 
-        behavior: "smooth",
 
-        block: "start"
+    if (formCard) {
 
-    });
+        formCard.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+        });
+
+    }
 
 }
 
@@ -454,7 +772,10 @@ async function saveWord() {
         imageInput.files[0];
 
 
-    if (!english || !arabic) {
+    if (
+        !english ||
+        !arabic
+    ) {
 
         alert(
             "⚠️ اكتب الكلمة الإنجليزية والمعنى بالعربي."
@@ -494,14 +815,20 @@ async function saveWord() {
         );
 
 
-    saveButton.disabled =
-        true;
+    if (saveButton) {
+
+        saveButton.disabled =
+            true;
 
 
-    saveButton.textContent =
-        editingWordId
-            ? "⏳ جاري تعديل الكلمة..."
-            : "⏳ جاري الحفظ...";
+        saveButton.textContent =
+            editingWordId
+
+                ? "⏳ جاري تعديل الكلمة..."
+
+                : "⏳ جاري الحفظ...";
+
+    }
 
 
     let imageUrl =
@@ -511,19 +838,27 @@ async function saveWord() {
     if (file) {
 
         imageUrl =
-            await uploadImage(file);
+            await uploadImage(
+                file
+            );
 
 
         if (!imageUrl) {
 
-            saveButton.disabled =
-                false;
+            if (saveButton) {
+
+                saveButton.disabled =
+                    false;
 
 
-            saveButton.textContent =
-                editingWordId
-                    ? "✏️ حفظ التعديلات"
-                    : "💾 حفظ الكلمة";
+                saveButton.textContent =
+                    editingWordId
+
+                        ? "✏️ حفظ التعديلات"
+
+                        : "💾 حفظ الكلمة";
+
+            }
 
 
             return;
@@ -558,10 +893,9 @@ async function saveWord() {
     };
 
 
-
-    // ======================================
+    // ==========================================
     // تعديل كلمة
-    // ======================================
+    // ==========================================
 
     if (editingWordId) {
 
@@ -597,12 +931,16 @@ async function saveWord() {
             );
 
 
-            saveButton.disabled =
-                false;
+            if (saveButton) {
+
+                saveButton.disabled =
+                    false;
 
 
-            saveButton.textContent =
-                "✏️ حفظ التعديلات";
+                saveButton.textContent =
+                    "✏️ حفظ التعديلات";
+
+            }
 
 
             return;
@@ -630,10 +968,9 @@ async function saveWord() {
     }
 
 
-
-    // ======================================
+    // ==========================================
     // إضافة كلمة جديدة
-    // ======================================
+    // ==========================================
 
     const {
         data,
@@ -662,12 +999,16 @@ async function saveWord() {
         );
 
 
-        saveButton.disabled =
-            false;
+        if (saveButton) {
+
+            saveButton.disabled =
+                false;
 
 
-        saveButton.textContent =
-            "💾 حفظ الكلمة";
+            saveButton.textContent =
+                "💾 حفظ الكلمة";
+
+        }
 
 
         return;
@@ -766,12 +1107,16 @@ function resetForm() {
         );
 
 
-    saveButton.disabled =
-        false;
+    if (saveButton) {
+
+        saveButton.disabled =
+            false;
 
 
-    saveButton.textContent =
-        "💾 حفظ الكلمة";
+        saveButton.textContent =
+            "💾 حفظ الكلمة";
+
+    }
 
 
     const title =
@@ -870,9 +1215,13 @@ function renderWords(
     if (!wordsList) return;
 
 
-    count.textContent =
-        words.length +
-        " كلمة";
+    if (count) {
+
+        count.textContent =
+            words.length +
+            " كلمة";
+
+    }
 
 
     if (
@@ -882,7 +1231,9 @@ function renderWords(
         wordsList.innerHTML = `
 
             <div class="word-item">
+
                 لا توجد كلمات.
+
             </div>
 
         `;
@@ -930,30 +1281,40 @@ function renderWords(
                 <div class="word-info">
 
                     <h3>
+
                         ${escapeAdminHtml(
                             word.english || ""
                         )}
+
                     </h3>
 
+
                     <p>
+
                         ${escapeAdminHtml(
                             word.arabic || ""
                         )}
+
                     </p>
 
 
                     <div class="word-tags">
 
                         <span class="tag">
+
                             ${escapeAdminHtml(
                                 word.level || ""
                             )}
+
                         </span>
 
+
                         <span class="tag">
+
                             ${escapeAdminHtml(
                                 categoryName
                             )}
+
                         </span>
 
                     </div>
@@ -1006,35 +1367,65 @@ function getCategoryName(
     categoryId
 ) {
 
+    // البحث أولًا في categories.js
+
     if (
-        typeof categories === "undefined"
+        typeof categories !== "undefined" &&
+        Array.isArray(categories)
     ) {
 
-        return categoryId || "";
+        const oldCategory =
+            categories.find(
+                item =>
+                    String(item.id) ===
+                    String(categoryId)
+            );
+
+
+        if (oldCategory) {
+
+            return (
+                oldCategory.icon +
+                " " +
+                oldCategory.name
+            );
+
+        }
 
     }
 
 
-    const category =
-        categories.find(
-            item =>
-                item.id ===
-                categoryId
+    // البحث في العناصر الموجودة في DOM
+    // إذا كان التصنيف من Supabase
+
+    const categorySelect =
+        document.getElementById(
+            "category"
         );
 
 
-    if (!category) {
+    if (categorySelect) {
 
-        return categoryId || "";
+        const option =
+            Array.from(
+                categorySelect.options
+            ).find(
+                item =>
+                    String(item.value) ===
+                    String(categoryId)
+            );
+
+
+        if (option) {
+
+            return option.textContent;
+
+        }
 
     }
 
 
-    return (
-        category.icon +
-        " " +
-        category.name
-    );
+    return categoryId || "";
 
 }
 
@@ -1487,6 +1878,7 @@ async function loadAdminMessages() {
                     <h3>
 
                         📢
+
                         ${escapeHtml(
                             msg.title
                         )}
@@ -1508,6 +1900,7 @@ async function loadAdminMessages() {
                         <span class="tag">
 
                             🕐
+
                             ${start}
 
                         </span>
@@ -1516,6 +1909,7 @@ async function loadAdminMessages() {
                         <span class="tag">
 
                             ⏰
+
                             ${end}
 
                         </span>
@@ -2651,6 +3045,7 @@ async function loadReadingQuestions() {
                     ${
                         item.option4
                             ? `
+
                                 <br>
 
                                 4️⃣
@@ -2658,6 +3053,7 @@ async function loadReadingQuestions() {
                                 ${escapeAdminHtml(
                                     item.option4
                                 )}
+
                             `
                             : ""
                     }
@@ -2772,16 +3168,453 @@ async function deleteReadingQuestion(
 
 
 
-// ==================================================
+// =========================================================
+// إضافة تصنيف جديد
+// =========================================================
+
+async function saveCategory() {
+
+    const isAdmin =
+        await checkAdmin();
+
+
+    if (!isAdmin) {
+        return;
+    }
+
+
+    const nameArInput =
+        document.getElementById(
+            "categoryNameAr"
+        );
+
+
+    const nameEnInput =
+        document.getElementById(
+            "categoryNameEn"
+        );
+
+
+    const iconInput =
+        document.getElementById(
+            "categoryIcon"
+        );
+
+
+    if (
+        !nameArInput ||
+        !nameEnInput ||
+        !iconInput
+    ) {
+
+        console.error(
+            "لم يتم العثور على حقول إضافة التصنيف."
+        );
+
+        return;
+    }
+
+
+    const nameAr =
+        nameArInput.value.trim();
+
+
+    const nameEn =
+        nameEnInput.value
+            .trim()
+            .toLowerCase();
+
+
+    const icon =
+        iconInput.value.trim() ||
+        "📚";
+
+
+    // ==========================================
+    // التحقق
+    // ==========================================
+
+    if (!nameAr) {
+
+        alert(
+            "⚠️ اكتب اسم التصنيف بالعربي."
+        );
+
+        nameArInput.focus();
+
+        return;
+    }
+
+
+    if (!nameEn) {
+
+        alert(
+            "⚠️ اكتب اسم التصنيف بالإنجليزي."
+        );
+
+        nameEnInput.focus();
+
+        return;
+    }
+
+
+    if (/\s/.test(nameEn)) {
+
+        alert(
+            "⚠️ اسم التصنيف بالإنجليزي لا يحتوي على مسافات.\n\nمثال: travel"
+        );
+
+        nameEnInput.focus();
+
+        return;
+    }
+
+
+    try {
+
+        // ==========================================
+        // فحص التصنيف في Supabase
+        // ==========================================
+
+        const {
+            data: existingCategory,
+            error: checkError
+        } =
+            await supabaseClient
+
+                .from("categories")
+
+                .select("id")
+
+                .eq(
+                    "name_en",
+                    nameEn
+                )
+
+                .maybeSingle();
+
+
+        if (checkError) {
+
+            console.error(
+                "Category check error:",
+                checkError
+            );
+
+
+            alert(
+                "❌ حدث خطأ أثناء التحقق من التصنيف:\n" +
+                checkError.message
+            );
+
+
+            return;
+        }
+
+
+        // ==========================================
+        // فحص التصنيفات القديمة
+        // ==========================================
+
+        const oldCategoryExists =
+
+            typeof categories !== "undefined" &&
+
+            Array.isArray(categories) &&
+
+            categories.some(
+                category =>
+
+                    (
+                        category.id ||
+                        ""
+                    )
+                    .toLowerCase() ===
+                    nameEn
+
+                    ||
+
+                    (
+                        category.english ||
+                        ""
+                    )
+                    .toLowerCase() ===
+                    nameEn
+            );
+
+
+        if (
+            existingCategory ||
+            oldCategoryExists
+        ) {
+
+            alert(
+                "⚠️ هذا التصنيف موجود بالفعل."
+            );
+
+            return;
+        }
+
+
+        // ==========================================
+        // إضافة التصنيف
+        // ==========================================
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+
+                .from("categories")
+
+                .insert([
+
+                    {
+
+                        name_ar:
+                            nameAr,
+
+                        name_en:
+                            nameEn,
+
+                        icon:
+                            icon
+
+                    }
+
+                ])
+
+                .select()
+
+                .single();
+
+
+        if (error) {
+
+            console.error(
+                "Save category error:",
+                error
+            );
+
+
+            alert(
+                "❌ حدث خطأ أثناء إضافة التصنيف:\n" +
+                error.message
+            );
+
+
+            return;
+        }
+
+
+        console.log(
+            "Category added:",
+            data
+        );
+
+
+        alert(
+            "✅ تمت إضافة التصنيف بنجاح!"
+        );
+
+
+        // ==========================================
+        // تنظيف الحقول
+        // ==========================================
+
+        nameArInput.value =
+            "";
+
+
+        nameEnInput.value =
+            "";
+
+
+        iconInput.value =
+            "📚";
+
+
+        // ==========================================
+        // تحديث التصنيفات
+        // ==========================================
+
+        await loadAdminCategories();
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected save category error:",
+            error
+        );
+
+
+        alert(
+            "❌ حدث خطأ غير متوقع أثناء إضافة التصنيف."
+        );
+
+    }
+
+}
+
+
+
+// =========================================================
+// حذف تصنيف
+// =========================================================
+
+async function deleteCategory(
+    categoryId
+) {
+
+    const isAdmin =
+        await checkAdmin();
+
+
+    if (!isAdmin) {
+        return;
+    }
+
+
+    if (!categoryId) {
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+
+            "هل أنت متأكد من حذف هذا التصنيف؟\n\n" +
+
+            "⚠️ لا تحذف تصنيفًا مستخدمًا مع كلمات."
+
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+
+                .from("categories")
+
+                .delete()
+
+                .eq(
+                    "id",
+                    categoryId
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Delete category error:",
+                error
+            );
+
+
+            alert(
+                "❌ لم يتم حذف التصنيف:\n" +
+                error.message
+            );
+
+
+            return;
+        }
+
+
+        alert(
+            "✅ تم حذف التصنيف."
+        );
+
+
+        await loadAdminCategories();
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected delete category error:",
+            error
+        );
+
+
+        alert(
+            "❌ حدث خطأ أثناء حذف التصنيف."
+        );
+
+    }
+
+}
+
+
+
+// =========================================================
+// حماية النصوص
+// =========================================================
+
+function escapeHtmlAdmin(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+
+// =========================================================
 // تشغيل لوحة الأدمن
-// ==================================================
+// =========================================================
 
 document.addEventListener(
     "DOMContentLoaded",
     async function () {
 
-        // تحميل التصنيفات أولًا
-        loadAdminCategories();
+        // تحميل التصنيفات
+        await loadAdminCategories();
 
 
         // تحميل القصص
@@ -2792,9 +3625,9 @@ document.addEventListener(
 
 
 
-// ==================================================
+// =========================================================
 // تشغيل البيانات الأساسية
-// ==================================================
+// =========================================================
 
 (async function () {
 
