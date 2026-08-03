@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -106,6 +105,8 @@ button {
 .header-actions {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .header-icon {
@@ -306,127 +307,58 @@ button {
 }
 
 /* ==================================================
-   🎧 اسمع واختر
+   🎧 بطاقة اسمع واختر
 ================================================== */
 
-.listen-section {
-    margin-top: 22px;
-}
-
-.listen-card {
-    background: white;
-    border-radius: 24px;
+.listen-page-card {
+    width: 100%;
+    border: none;
+    border-radius: 22px;
     padding: 20px;
-    box-shadow: 0 4px 18px rgba(0,0,0,.06);
-    text-align: center;
+    background: linear-gradient(120deg, #6254eb, #8374ed);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    text-align: right;
+    box-shadow: 0 8px 20px rgba(98,84,235,.18);
+    transition: .15s;
 }
 
-.listen-icon {
-    font-size: 42px;
-    margin-bottom: 8px;
+.listen-page-card:active {
+    transform: scale(.98);
 }
 
-.listen-title {
-    font-size: 19px;
-    font-weight: bold;
+.listen-page-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 31px;
+    flex-shrink: 0;
+}
+
+.listen-page-content {
+    flex: 1;
+}
+
+.listen-page-content strong {
+    display: block;
+    font-size: 17px;
     margin-bottom: 6px;
 }
 
-.listen-description {
-    color: #888;
-    font-size: 13px;
-    margin-bottom: 18px;
+.listen-page-content span {
+    font-size: 12px;
+    opacity: .9;
 }
 
-.listen-sound-btn {
-    width: 72px;
-    height: 72px;
-    border: none;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #7669f3, #5b4ee8);
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-    box-shadow: 0 8px 20px rgba(92,80,230,.25);
-    transition: .15s;
-}
-
-.listen-sound-btn:active {
-    transform: scale(.94);
-}
-
-.listen-sound-btn.playing {
-    animation: soundPulse 1s infinite;
-}
-
-.listen-question {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #555;
-}
-
-.listen-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 16px;
-}
-
-.listen-option {
-    border: 2px solid #eeeeee;
-    background: #fafafa;
-    border-radius: 15px;
-    padding: 14px 8px;
-    font-size: 14px;
-    cursor: pointer;
-    min-height: 52px;
-    transition: .15s;
-}
-
-.listen-option:hover {
-    border-color: #7669f3;
-    background: #f7f5ff;
-}
-
-.listen-option.correct {
-    background: #e4f9ef;
-    border-color: #35b878;
-    color: #16834f;
-}
-
-.listen-option.wrong {
-    background: #fff0f0;
-    border-color: #ef5b5b;
-    color: #d43d3d;
-}
-
-.listen-option:disabled {
-    cursor: default;
-}
-
-.listen-result {
-    min-height: 24px;
-    margin-top: 13px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.listen-next {
-    width: 100%;
-    border: none;
-    background: #6254eb;
-    color: white;
-    padding: 12px;
-    border-radius: 14px;
-    margin-top: 12px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    display: none;
-}
-
-.listen-next:active {
-    transform: scale(.98);
+.listen-page-arrow {
+    font-size: 25px;
 }
 
 /* ==================================================
@@ -728,24 +660,6 @@ button {
 }
 
 /* ==================================================
-   الحركة
-================================================== */
-
-@keyframes soundPulse {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.08);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-/* ==================================================
    الجوال
 ================================================== */
 
@@ -787,6 +701,16 @@ button {
 
     .main-card-new p {
         font-size: 10px;
+    }
+
+    .header-actions {
+        gap: 5px;
+    }
+
+    .header-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 19px;
     }
 
 }
@@ -904,6 +828,7 @@ button {
 
 </header>
 
+
 <!-- ==================================================
      بانر التعلم
 ================================================== -->
@@ -935,6 +860,7 @@ button {
 
 </section>
 
+
 <!-- ==================================================
      تقدمك اليوم
 ================================================== -->
@@ -953,6 +879,7 @@ button {
     </button>
 
 </div>
+
 
 <section class="progress-card">
 
@@ -976,6 +903,7 @@ button {
 
     </div>
 
+
     <div class="stat">
 
         <div class="stat-icon">
@@ -995,6 +923,7 @@ button {
         </span>
 
     </div>
+
 
     <div class="stat">
 
@@ -1018,6 +947,7 @@ button {
 
 </section>
 
+
 <!-- ==================================================
      تحدي اليوم
 ================================================== -->
@@ -1029,6 +959,7 @@ button {
     </h2>
 
 </div>
+
 
 <section class="challenge-card">
 
@@ -1047,7 +978,6 @@ button {
             <div
                 id="challengeFill"
                 class="challenge-fill">
-
             </div>
 
         </div>
@@ -1070,6 +1000,46 @@ button {
 
 
 <!-- ==================================================
+     🎧 اسمع واختر
+================================================== -->
+
+<div class="section-title">
+
+    <h2>
+        🎧 تدريب الاستماع
+    </h2>
+
+</div>
+
+
+<button
+    class="listen-page-card"
+    onclick="window.location.href='listen.html'">
+
+    <div class="listen-page-icon">
+        🎧
+    </div>
+
+    <div class="listen-page-content">
+
+        <strong>
+            اسمع واختر
+        </strong>
+
+        <span>
+            استمع للكلمة واختر معناها الصحيح
+        </span>
+
+    </div>
+
+    <div class="listen-page-arrow">
+        ←
+    </div>
+
+</button>
+
+
+<!-- ==================================================
      الأقسام الرئيسية
 ================================================== -->
 
@@ -1081,7 +1051,9 @@ button {
 
 </div>
 
+
 <section class="main-grid">
+
 
     <button
         class="main-card-new card-learning"
@@ -1105,6 +1077,7 @@ button {
 
     </button>
 
+
     <button
         class="main-card-new card-quiz"
         onclick="window.location.href='quiz.html'">
@@ -1126,6 +1099,7 @@ button {
         </div>
 
     </button>
+
 
     <button
         class="main-card-new card-review"
@@ -1149,6 +1123,7 @@ button {
 
     </button>
 
+
     <button
         class="main-card-new card-chat"
         onclick="openChat()">
@@ -1171,6 +1146,7 @@ button {
 
     </button>
 
+
     <button
         class="main-card-new card-reading"
         onclick="window.location.href='reading.html'">
@@ -1192,6 +1168,7 @@ button {
         </div>
 
     </button>
+
 
     <button
         class="main-card-new card-ai"
@@ -1217,6 +1194,7 @@ button {
 
 </section>
 
+
 <!-- ==================================================
      الكلمات المحفوظة
 ================================================== -->
@@ -1235,6 +1213,7 @@ button {
     </button>
 
 </div>
+
 
 <div
     id="savedWords"
@@ -1260,6 +1239,7 @@ button {
 
 </main>
 
+
 <!-- ==================================================
      الشريط السفلي
 ================================================== -->
@@ -1276,6 +1256,7 @@ button {
 
     </button>
 
+
     <button onclick="window.location.href='review.html'">
 
         🔄
@@ -1285,6 +1266,7 @@ button {
         </span>
 
     </button>
+
 
     <button
         class="active"
@@ -1301,6 +1283,7 @@ button {
 
     </button>
 
+
     <button onclick="window.location.href='favorites.html'">
 
         🔖
@@ -1310,6 +1293,7 @@ button {
         </span>
 
     </button>
+
 
     <button onclick="window.location.href='profile.html'">
 
@@ -1322,6 +1306,7 @@ button {
     </button>
 
 </nav>
+
 
 <!-- ==================================================
      نافذة الحساب الخاص
@@ -1364,6 +1349,7 @@ button {
 
         </p>
 
+
         <div class="privacy-buttons">
 
             <button
@@ -1374,6 +1360,7 @@ button {
 
             </button>
 
+
             <button
                 class="change-name-btn"
                 onclick="goToProfile()">
@@ -1381,6 +1368,7 @@ button {
                 تغيير الاسم 👤
 
             </button>
+
 
             <button
                 class="cancel-privacy-btn"
@@ -1395,6 +1383,7 @@ button {
     </div>
 
 </div>
+
 
 <!-- ==================================================
      نافذة رسالة الأدمن
@@ -1431,7 +1420,9 @@ button {
 
 </div>
 
+
 <script src="script.js"></script>
+
 
 <script>
 
@@ -1442,13 +1433,6 @@ button {
 let currentUser = null;
 let currentAdminMessage = null;
 
-/* ==================================================
-   متغيرات اسمع واختر
-================================================== */
-
-let listenWords = [];
-let currentListenWord = null;
-let listenAnswered = false;
 
 /* ==================================================
    تحميل المستخدم
@@ -1461,6 +1445,7 @@ async function loadUser() {
         error
     } = await supabaseClient.auth.getUser();
 
+
     if (error || !user) {
 
         window.location.href = "login.html";
@@ -1469,17 +1454,21 @@ async function loadUser() {
 
     }
 
+
     currentUser = user;
+
 
     const name =
         user.user_metadata?.name ||
         user.email?.split("@")[0] ||
         "مستخدم";
 
+
     document.getElementById(
         "welcomeText"
     ).textContent =
         "مرحباً " + name + " 👋";
+
 
     document.getElementById(
         "userAvatar"
@@ -1487,6 +1476,7 @@ async function loadUser() {
         name.charAt(0).toUpperCase();
 
 }
+
 
 /* ==================================================
    تسجيل زيارة الصفحة
@@ -1496,6 +1486,7 @@ async function recordHomePageVisit() {
 
     if (!currentUser) return;
 
+
     const {
         data: visit,
         error
@@ -1504,6 +1495,7 @@ async function recordHomePageVisit() {
         .select("visit_count")
         .eq("user_id", currentUser.id)
         .maybeSingle();
+
 
     if (error) {
 
@@ -1516,10 +1508,12 @@ async function recordHomePageVisit() {
 
     }
 
+
     const username =
         currentUser.user_metadata?.name ||
         currentUser.email?.split("@")[0] ||
         "مستخدم";
+
 
     if (visit) {
 
@@ -1565,6 +1559,7 @@ async function recordHomePageVisit() {
 
 }
 
+
 /* ==================================================
    تسجيل النشاط اليومي
 ================================================== */
@@ -1573,11 +1568,13 @@ async function recordDailyActivity() {
 
     if (!currentUser) return;
 
+
     const {
         error
     } = await supabaseClient.rpc(
         "record_daily_activity"
     );
+
 
     if (error) {
 
@@ -1592,6 +1589,7 @@ async function recordDailyActivity() {
 
 }
 
+
 /* ==================================================
    تحميل الأيام المتتالية
 ================================================== */
@@ -1599,6 +1597,7 @@ async function recordDailyActivity() {
 async function loadStreak() {
 
     if (!currentUser) return;
+
 
     const {
         data,
@@ -1614,6 +1613,7 @@ async function loadStreak() {
             }
         );
 
+
     if (error) {
 
         console.error(
@@ -1625,6 +1625,7 @@ async function loadStreak() {
 
     }
 
+
     if (!data || data.length === 0) {
 
         document.getElementById(
@@ -1635,15 +1636,19 @@ async function loadStreak() {
 
     }
 
+
     const dates =
         data.map(item =>
             item.activity_date
         );
 
+
     let streak = 0;
+
 
     const today =
         new Date();
+
 
     today.setHours(
         0,
@@ -1652,8 +1657,10 @@ async function loadStreak() {
         0
     );
 
+
     let checkDate =
         new Date(today);
+
 
     for (const dateString of dates) {
 
@@ -1661,6 +1668,7 @@ async function loadStreak() {
             new Date(
                 dateString + "T00:00:00"
             );
+
 
         const difference =
             Math.round(
@@ -1671,9 +1679,11 @@ async function loadStreak() {
                 (1000 * 60 * 60 * 24)
             );
 
+
         if (difference === 0) {
 
             streak++;
+
 
             checkDate.setDate(
                 checkDate.getDate() - 1
@@ -1687,12 +1697,14 @@ async function loadStreak() {
 
     }
 
+
     document.getElementById(
         "streakNumber"
     ).textContent =
         streak;
 
 }
+
 
 /* ==================================================
    تحميل الإحصائيات
@@ -1701,6 +1713,7 @@ async function loadStreak() {
 async function loadStatistics() {
 
     if (!currentUser) return;
+
 
     const {
         count: learnedCount,
@@ -1716,6 +1729,7 @@ async function loadStatistics() {
             currentUser.id
         );
 
+
     if (!learnedError) {
 
         document.getElementById(
@@ -1724,6 +1738,7 @@ async function loadStatistics() {
             learnedCount || 0;
 
     }
+
 
     const {
         count: totalCount,
@@ -1735,10 +1750,12 @@ async function loadStatistics() {
             head: true
         });
 
+
     if (!totalError && totalCount) {
 
         const learned =
             learnedCount || 0;
+
 
         const percentage =
             Math.min(
@@ -1748,6 +1765,7 @@ async function loadStatistics() {
                 )
             );
 
+
         document.getElementById(
             "progressNumber"
         ).textContent =
@@ -1755,8 +1773,10 @@ async function loadStatistics() {
 
     }
 
+
     const today =
         new Date();
+
 
     today.setHours(
         0,
@@ -1764,6 +1784,7 @@ async function loadStatistics() {
         0,
         0
     );
+
 
     const {
         count: todayCount,
@@ -1783,6 +1804,7 @@ async function loadStatistics() {
             today.toISOString()
         );
 
+
     if (!todayError) {
 
         const count =
@@ -1791,13 +1813,16 @@ async function loadStatistics() {
                 15
             );
 
+
         const percent =
             (count / 15) * 100;
+
 
         document.getElementById(
             "challengeFill"
         ).style.width =
             percent + "%";
+
 
         document.getElementById(
             "challengeCount"
@@ -1806,349 +1831,13 @@ async function loadStatistics() {
 
     }
 
+
     await recordDailyActivity();
 
     await loadStreak();
 
 }
 
-/* ==================================================
-   🎧 تحميل كلمات اسمع واختر
-================================================== */
-
-async function loadListenWords() {
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("words")
-        .select("id, english, arabic")
-        .not("english", "is", null)
-        .not("arabic", "is", null)
-        .limit(1000);
-
-    if (error) {
-
-        console.error(
-            "خطأ في تحميل كلمات اسمع واختر:",
-            error
-        );
-
-        document.getElementById(
-            "listenResult"
-        ).textContent =
-            "تعذر تحميل الكلمات ❌";
-
-        return;
-
-    }
-
-    if (!data || data.length < 4) {
-
-        document.getElementById(
-            "listenResult"
-        ).textContent =
-            "نحتاج إلى 4 كلمات على الأقل في جدول words.";
-
-        return;
-
-    }
-
-    listenWords = data;
-
-    loadListenQuestion();
-
-}
-
-/* ==================================================
-   🎧 اختيار سؤال جديد
-================================================== */
-
-function loadListenQuestion() {
-
-    if (!listenWords || listenWords.length < 4) {
-        return;
-    }
-
-    listenAnswered = false;
-
-    const result =
-        document.getElementById(
-            "listenResult"
-        );
-
-    const optionsBox =
-        document.getElementById(
-            "listenOptions"
-        );
-
-    const nextButton =
-        document.getElementById(
-            "listenNextButton"
-        );
-
-    const soundButton =
-        document.getElementById(
-            "listenSoundButton"
-        );
-
-    result.textContent = "";
-
-    optionsBox.innerHTML = "";
-
-    nextButton.style.display = "none";
-
-    soundButton.classList.remove("playing");
-
-    /* اختيار كلمة عشوائية */
-
-    const randomIndex =
-        Math.floor(
-            Math.random() *
-            listenWords.length
-        );
-
-    currentListenWord =
-        listenWords[randomIndex];
-
-    /* اختيار 3 كلمات خاطئة */
-
-    let wrongWords =
-        listenWords.filter(
-            word =>
-                word.id !==
-                currentListenWord.id
-        );
-
-    wrongWords =
-        shuffleArray(wrongWords)
-        .slice(0, 3);
-
-    /* إضافة الإجابة الصحيحة */
-
-    let answers = [
-        currentListenWord,
-        ...wrongWords
-    ];
-
-    answers =
-        shuffleArray(answers);
-
-    answers.forEach(word => {
-
-        const button =
-            document.createElement("button");
-
-        button.className =
-            "listen-option";
-
-        button.textContent =
-            word.arabic;
-
-        button.dataset.wordId =
-            word.id;
-
-        button.onclick =
-            function() {
-
-                checkListenAnswer(
-                    button,
-                    word
-                );
-
-            };
-
-        optionsBox.appendChild(
-            button
-        );
-
-    });
-
-}
-
-/* ==================================================
-   🎧 تشغيل صوت الكلمة
-================================================== */
-
-function playListenWord() {
-
-    if (!currentListenWord) {
-        return;
-    }
-
-    if (!("speechSynthesis" in window)) {
-
-        alert(
-            "متصفحك لا يدعم تشغيل الصوت."
-        );
-
-        return;
-
-    }
-
-    window.speechSynthesis.cancel();
-
-    const speech =
-        new SpeechSynthesisUtterance(
-            currentListenWord.english
-        );
-
-    speech.lang = "en-US";
-
-    speech.rate = 0.85;
-
-    speech.pitch = 1;
-
-    speech.volume = 1;
-
-    const soundButton =
-        document.getElementById(
-            "listenSoundButton"
-        );
-
-    soundButton.classList.add("playing");
-
-    speech.onend =
-        function() {
-
-            soundButton.classList.remove(
-                "playing"
-            );
-
-        };
-
-    speech.onerror =
-        function() {
-
-            soundButton.classList.remove(
-                "playing"
-            );
-
-        };
-
-    window.speechSynthesis.speak(
-        speech
-    );
-
-}
-
-/* ==================================================
-   🎧 التحقق من الإجابة
-================================================== */
-
-function checkListenAnswer(
-    clickedButton,
-    selectedWord
-) {
-
-    if (listenAnswered) {
-        return;
-    }
-
-    listenAnswered = true;
-
-    const allButtons =
-        document.querySelectorAll(
-            ".listen-option"
-        );
-
-    allButtons.forEach(button => {
-
-        button.disabled = true;
-
-        if (
-            button.dataset.wordId ===
-            String(currentListenWord.id)
-        ) {
-
-            button.classList.add(
-                "correct"
-            );
-
-        }
-
-    });
-
-    const result =
-        document.getElementById(
-            "listenResult"
-        );
-
-    const nextButton =
-        document.getElementById(
-            "listenNextButton"
-        );
-
-    if (
-        selectedWord.id ===
-        currentListenWord.id
-    ) {
-
-        clickedButton.classList.add(
-            "correct"
-        );
-
-        result.textContent =
-            "✅ ممتاز! إجابة صحيحة";
-
-        result.style.color =
-            "#16834f";
-
-    } else {
-
-        clickedButton.classList.add(
-            "wrong"
-        );
-
-        result.textContent =
-            "❌ خطأ — الإجابة الصحيحة: " +
-            currentListenWord.arabic;
-
-        result.style.color =
-            "#d43d3d";
-
-    }
-
-    nextButton.style.display =
-        "block";
-
-}
-
-/* ==================================================
-   خلط المصفوفة
-================================================== */
-
-function shuffleArray(array) {
-
-    const result =
-        [...array];
-
-    for (
-        let i = result.length - 1;
-        i > 0;
-        i--
-    ) {
-
-        const j =
-            Math.floor(
-                Math.random() *
-                (i + 1)
-            );
-
-        [
-            result[i],
-            result[j]
-        ] = [
-            result[j],
-            result[i]
-        ];
-
-    }
-
-    return result;
-
-}
 
 /* ==================================================
    تحميل الكلمات المحفوظة
@@ -2157,6 +1846,7 @@ function shuffleArray(array) {
 async function loadSavedWords() {
 
     if (!currentUser) return;
+
 
     const {
         data,
@@ -2178,6 +1868,7 @@ async function loadSavedWords() {
         )
         .limit(10);
 
+
     if (error) {
 
         console.error(
@@ -2189,12 +1880,15 @@ async function loadSavedWords() {
 
     }
 
+
     const container =
         document.getElementById(
             "savedWords"
         );
 
+
     container.innerHTML = "";
+
 
     if (!data || data.length === 0) {
 
@@ -2222,34 +1916,41 @@ async function loadSavedWords() {
 
     }
 
+
     data.forEach(item => {
 
         const word =
             item.words;
 
+
         if (!word) return;
+
 
         const card =
             document.createElement("div");
 
+
         card.className =
             "saved-word";
 
+
         let imageHTML =
             "📚";
+
 
         if (word.image) {
 
             imageHTML = `
 
                 <img
-                    src="${word.image}"
+                    src="${escapeHtml(word.image)}"
                     alt=""
                 >
 
             `;
 
         }
+
 
         card.innerHTML = `
 
@@ -2271,11 +1972,13 @@ async function loadSavedWords() {
 
         `;
 
+
         container.appendChild(card);
 
     });
 
 }
+
 
 /* ==================================================
    رسالة الأدمن
@@ -2285,6 +1988,7 @@ async function loadAdminMessage() {
 
     const now =
         new Date().toISOString();
+
 
     const {
         data,
@@ -2312,6 +2016,7 @@ async function loadAdminMessage() {
         )
         .limit(1);
 
+
     if (error) {
 
         console.error(
@@ -2323,30 +2028,37 @@ async function loadAdminMessage() {
 
     }
 
+
     if (!data || data.length === 0) {
         return;
     }
 
+
     const message =
         data[0];
 
+
     currentAdminMessage =
         message;
+
 
     document.getElementById(
         "adminMessageTitle"
     ).textContent =
         message.title;
 
+
     document.getElementById(
         "adminMessageText"
     ).textContent =
         message.message;
 
+
     document.getElementById(
         "notificationNumber"
     ).style.display =
         "flex";
+
 
     document.getElementById(
         "adminMessageOverlay"
@@ -2354,6 +2066,7 @@ async function loadAdminMessage() {
         "flex";
 
 }
+
 
 /* ==================================================
    إعادة فتح رسالة الأدمن
@@ -2369,15 +2082,18 @@ function showAdminMessageAgain() {
 
     }
 
+
     document.getElementById(
         "adminMessageTitle"
     ).textContent =
         currentAdminMessage.title;
 
+
     document.getElementById(
         "adminMessageText"
     ).textContent =
         currentAdminMessage.message;
+
 
     document.getElementById(
         "adminMessageOverlay"
@@ -2385,6 +2101,7 @@ function showAdminMessageAgain() {
         "flex";
 
 }
+
 
 /* ==================================================
    إغلاق الرسالة
@@ -2397,12 +2114,14 @@ function closeAdminMessage() {
     ).style.display =
         "none";
 
+
     document.getElementById(
         "notificationNumber"
     ).style.display =
         "none";
 
 }
+
 
 /* ==================================================
    الدردشة
@@ -2416,7 +2135,9 @@ async function openChat() {
 
     }
 
+
     if (!currentUser) return;
+
 
     const {
         data: profile,
@@ -2430,17 +2151,21 @@ async function openChat() {
         )
         .maybeSingle();
 
+
     if (error) {
 
         console.error(error);
+
 
         alert(
             "حدث خطأ، حاول مرة أخرى."
         );
 
+
         return;
 
     }
+
 
     if (
         !profile ||
@@ -2452,14 +2177,17 @@ async function openChat() {
         ).style.display =
             "flex";
 
+
         return;
 
     }
+
 
     window.location.href =
         "chat.html";
 
 }
+
 
 /* ==================================================
    الخصوصية
@@ -2472,12 +2200,14 @@ function goToProfile() {
 
 }
 
+
 function goToPublicProfile() {
 
     window.location.href =
         "profile.html";
 
 }
+
 
 function closePrivacyMessage() {
 
@@ -2487,6 +2217,7 @@ function closePrivacyMessage() {
         "none";
 
 }
+
 
 /* ==================================================
    تسجيل الخروج
@@ -2498,6 +2229,7 @@ async function logout() {
         error
     } = await supabaseClient.auth.signOut();
 
+
     if (error) {
 
         alert(
@@ -2508,10 +2240,12 @@ async function logout() {
 
     }
 
+
     window.location.href =
         "login.html";
 
 }
+
 
 /* ==================================================
    حماية النص
@@ -2522,12 +2256,15 @@ function escapeHtml(text) {
     const div =
         document.createElement("div");
 
+
     div.textContent =
         text || "";
+
 
     return div.innerHTML;
 
 }
+
 
 /* ==================================================
    تشغيل الصفحة
@@ -2537,7 +2274,9 @@ async function startHomePage() {
 
     await loadUser();
 
+
     if (!currentUser) return;
+
 
     await recordHomePageVisit();
 
@@ -2547,18 +2286,25 @@ async function startHomePage() {
 
     await loadAdminMessage();
 
-    /* تشغيل قسم اسمع واختر */
+}
+
+
+/*
+    ملاحظة:
+    لا يوجد هنا:
 
     await loadListenWords();
 
-}
+    لأن اسمع واختر أصبح في listen.html.
+*/
+
 
 startHomePage();
 
 </script>
 
+
 <script src="notifications.js"></script>
 
 </body>
 </html>
-
