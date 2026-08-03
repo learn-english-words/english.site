@@ -13,8 +13,8 @@ let selectedCategory = null;
 
 // =========================================================
 // التصنيفات القديمة
-// مهم جدًا:
-// لا نحذفها لأن الكلمات القديمة في words تستخدم هذه القيم
+// =========================================================
+// هذه التصنيفات مهمة لأن الكلمات القديمة تستخدم هذه القيم
 // =========================================================
 
 const oldCategories = [
@@ -80,7 +80,6 @@ const oldCategories = [
 
 // =========================================================
 // التصنيفات النهائية
-// سيتم دمج القديمة مع القادمة من Supabase
 // =========================================================
 
 let categories = [
@@ -128,12 +127,6 @@ async function loadCategories() {
     }
 
 
-    // نبدأ بالتصنيفات القديمة
-    categories = [
-        ...oldCategories
-    ];
-
-
     container.innerHTML = `
 
         <div class="loading-categories">
@@ -147,11 +140,36 @@ async function loadCategories() {
     `;
 
 
+    // نبدأ بالتصنيفات القديمة
+
+    categories = [
+        ...oldCategories
+    ];
+
+
     try {
 
-        // =================================================
-        // جلب التصنيفات من Supabase
-        // =================================================
+        // =====================================================
+        // التأكد من Supabase
+        // =====================================================
+
+        if (
+            typeof supabaseClient === "undefined"
+        ) {
+
+            console.error(
+                "❌ supabaseClient غير موجود"
+            );
+
+            renderCategories();
+
+            return;
+        }
+
+
+        // =====================================================
+        // جلب جميع التصنيفات من جدول categories
+        // =====================================================
 
         const {
             data,
@@ -173,29 +191,30 @@ async function loadCategories() {
                 );
 
 
+        // =====================================================
+        // في حالة وجود خطأ
+        // =====================================================
+
         if (error) {
 
             console.error(
-                "❌ خطأ في تحميل التصنيفات من Supabase:",
+                "❌ خطأ تحميل categories:",
                 error
             );
 
 
-            // إذا فشل Supabase
-            // نعرض التصنيفات القديمة بدل ترك الصفحة فارغة
-
             renderCategories();
+
 
             return;
         }
 
 
-        // =================================================
-        // إضافة التصنيفات الجديدة
-        // =================================================
+        // =====================================================
+        // إضافة التصنيفات القادمة من Supabase
+        // =====================================================
 
         if (
-            data &&
             Array.isArray(data)
         ) {
 
@@ -217,6 +236,8 @@ async function loadCategories() {
                             .trim();
 
 
+                    // تجاهل أي تصنيف ناقص
+
                     if (!nameEn) {
 
                         return;
@@ -225,16 +246,16 @@ async function loadCategories() {
 
 
                     // =================================================
-                    // منع تكرار التصنيف
+                    // هل التصنيف موجود مسبقًا؟
                     // =================================================
 
-                    const alreadyExists =
+                    const exists =
                         categories.some(
-                            function (item) {
+                            function (oldCategory) {
 
                                 return (
                                     String(
-                                        item.key
+                                        oldCategory.key
                                     )
                                         .toLowerCase() ===
                                     nameEn
@@ -244,32 +265,33 @@ async function loadCategories() {
                         );
 
 
-                    if (alreadyExists) {
+                    // =================================================
+                    // إذا غير موجود نضيفه
+                    // =================================================
 
-                        return;
+                    if (!exists) {
+
+                        categories.push({
+
+                            key:
+                                nameEn,
+
+                            name_ar:
+                                nameAr || nameEn,
+
+                            name_en:
+                                nameEn,
+
+                            icon:
+                                category.icon ||
+                                "📚",
+
+                            id:
+                                category.id
+
+                        });
 
                     }
-
-
-                    categories.push({
-
-                        key:
-                            nameEn,
-
-                        name_ar:
-                            nameAr,
-
-                        name_en:
-                            nameEn,
-
-                        icon:
-                            category.icon ||
-                            "📚",
-
-                        id:
-                            category.id
-
-                    });
 
                 }
             );
@@ -277,9 +299,9 @@ async function loadCategories() {
         }
 
 
-        // =================================================
+        // =====================================================
         // عرض التصنيفات
-        // =================================================
+        // =====================================================
 
         renderCategories();
 
@@ -287,12 +309,12 @@ async function loadCategories() {
     } catch (error) {
 
         console.error(
-            "❌ خطأ غير متوقع أثناء تحميل التصنيفات:",
+            "❌ خطأ غير متوقع:",
             error
         );
 
 
-        // نعرض القديمة حتى لو صار خطأ
+        // إذا حصل خطأ، لا نخلي الصفحة فارغة
 
         renderCategories();
 
@@ -302,7 +324,7 @@ async function loadCategories() {
 
 
 // =========================================================
-// عرض التصنيفات على الصفحة
+// عرض التصنيفات
 // =========================================================
 
 function renderCategories() {
@@ -338,7 +360,6 @@ function renderCategories() {
 
         `;
 
-
         return;
 
     }
@@ -362,8 +383,7 @@ function renderCategories() {
 
 
             // =================================================
-            // مهم جدًا
-            // هذه القيمة هي التي ستذهب إلى words.category
+            // هذه القيمة التي ستذهب إلى words.category
             // =================================================
 
             button.dataset.category =
@@ -556,15 +576,11 @@ function selectCategory(
         category;
 
 
-    // =================================================
     // مثال:
-    // home
+    // body
     // food
     // cars
-    // travel
-    // sports
-    // technology
-    // =================================================
+    // animals
 
     localStorage.setItem(
         "selectedCategory",
@@ -572,8 +588,7 @@ function selectCategory(
     );
 
 
-    // لا نستخدم ID
-    // لأن words.category تعتمد على الاسم الإنجليزي
+    // لا نحتاج ID
 
     localStorage.removeItem(
         "selectedCategoryId"
@@ -693,9 +708,13 @@ function getCategoryName(
             function (item) {
 
                 return (
-                    String(item.key)
+                    String(
+                        item.key
+                    )
                         .toLowerCase() ===
-                    String(categoryKey)
+                    String(
+                        categoryKey
+                    )
                         .toLowerCase()
                 );
 
@@ -800,9 +819,13 @@ function restoreSelections() {
 
 
                 if (
-                    String(cardCategory)
+                    String(
+                        cardCategory
+                    )
                         .toLowerCase() ===
-                    String(savedCategory)
+                    String(
+                        savedCategory
+                    )
                         .toLowerCase()
                 ) {
 
@@ -843,19 +866,11 @@ function startLearning() {
     }
 
 
-    // =====================================================
-    // حفظ المستوى
-    // =====================================================
-
     localStorage.setItem(
         "selectedLevel",
         selectedLevel
     );
 
-
-    // =====================================================
-    // حفظ التصنيف
-    // =====================================================
 
     localStorage.setItem(
         "selectedCategory",
@@ -863,18 +878,10 @@ function startLearning() {
     );
 
 
-    // لا نرسل ID
-    // words تستخدم category مثل:
-    // home / food / cars / travel
-
     localStorage.removeItem(
         "selectedCategoryId"
     );
 
-
-    // =====================================================
-    // الانتقال للكلمات
-    // =====================================================
 
     window.location.href =
         "words.html";
