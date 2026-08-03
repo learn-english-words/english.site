@@ -14,7 +14,6 @@
 
 </head>
 
-
 <body>
 
 
@@ -32,7 +31,6 @@
         الرئيسية
 
     </button>
-
 
     <div class="page-title">
 
@@ -69,13 +67,11 @@
                 ✨ ابدأ رحلتك
             </div>
 
-
             <h1>
                 تعلم الإنجليزية
                 <br>
                 <span>بطريقة أسهل 🚀</span>
             </h1>
-
 
             <p>
                 اختر مستواك أولًا، ثم اختر التصنيف
@@ -83,7 +79,6 @@
             </p>
 
         </div>
-
 
         <div class="intro-decoration">
 
@@ -109,135 +104,132 @@
          اختيار المستوى
     ========================================== -->
 
-    <div class="section-heading">
+    <section class="selection-section">
 
-        <div>
+        <div class="section-heading">
 
-            <span class="section-number">
-                01
-            </span>
+            <div class="heading-inner">
 
-            <div>
+                <span class="section-number">
+                    01
+                </span>
 
-                <h2>
-                    اختر مستواك
-                </h2>
+                <div>
 
-                <p>
-                    اختر المستوى المناسب لك
-                </p>
+                    <h2>
+                        اختر مستواك
+                    </h2>
+
+                    <p>
+                        اختر المستوى المناسب لك
+                    </p>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+
+        <section class="levels">
+
+
+            <!-- A1 -->
+
+            <button
+                type="button"
+                class="level-card"
+                data-level="A1"
+                onclick="selectLevel(this, 'A1')">
+
+                <div class="level-badge">
+                    A1
+                </div>
+
+                <div class="level-content">
+
+                    <h3>
+                        مبتدئ
+                    </h3>
+
+                    <p>
+                        كلمات إنجليزية أساسية وسهلة
+                    </p>
+
+                </div>
+
+                <div class="select-circle">
+                    ✓
+                </div>
+
+            </button>
 
 
 
-    <section class="levels">
+            <!-- A2 -->
 
+            <button
+                type="button"
+                class="level-card"
+                data-level="A2"
+                onclick="selectLevel(this, 'A2')">
 
-        <!-- A1 -->
+                <div class="level-badge">
+                    A2
+                </div>
 
-        <button
-            class="level-card"
-            onclick="selectLevel(this, 'A1')">
+                <div class="level-content">
 
+                    <h3>
+                        متوسط
+                    </h3>
 
-            <div class="level-badge">
-                A1
-            </div>
+                    <p>
+                        كلمات أكثر تنوعًا واستخدامًا
+                    </p>
 
+                </div>
 
-            <div class="level-content">
+                <div class="select-circle">
+                    ✓
+                </div>
 
-                <h3>
-                    مبتدئ
-                </h3>
-
-                <p>
-                    كلمات إنجليزية أساسية وسهلة
-                </p>
-
-            </div>
-
-
-            <div class="select-circle">
-                ✓
-            </div>
-
-
-        </button>
+            </button>
 
 
 
-        <!-- A2 -->
+            <!-- B1 -->
 
-        <button
-            class="level-card"
-            onclick="selectLevel(this, 'A2')">
+            <button
+                type="button"
+                class="level-card"
+                data-level="B1"
+                onclick="selectLevel(this, 'B1')">
 
+                <div class="level-badge">
+                    B1
+                </div>
 
-            <div class="level-badge">
-                A2
-            </div>
+                <div class="level-content">
 
+                    <h3>
+                        متقدم
+                    </h3>
 
-            <div class="level-content">
+                    <p>
+                        كلمات أصعب ومفيدة للمحادثة
+                    </p>
 
-                <h3>
-                    متوسط
-                </h3>
+                </div>
 
-                <p>
-                    كلمات أكثر تنوعًا واستخدامًا
-                </p>
+                <div class="select-circle">
+                    ✓
+                </div>
 
-            </div>
-
-
-            <div class="select-circle">
-                ✓
-            </div>
-
-
-        </button>
+            </button>
 
 
-
-        <!-- B1 -->
-
-        <button
-            class="level-card"
-            onclick="selectLevel(this, 'B1')">
-
-
-            <div class="level-badge">
-                B1
-            </div>
-
-
-            <div class="level-content">
-
-                <h3>
-                    متقدم
-                </h3>
-
-                <p>
-                    كلمات أصعب ومفيدة للمحادثة
-                </p>
-
-            </div>
-
-
-            <div class="select-circle">
-                ✓
-            </div>
-
-
-        </button>
-
+        </section>
 
     </section>
 
@@ -247,278 +239,72 @@
          اختيار التصنيف
     ========================================== -->
 
-    <div class="section-heading category-heading">
+    <section class="selection-section category-section">
 
-        <div>
+        <div class="section-heading">
 
-            <span class="section-number">
-                02
-            </span>
+            <div class="heading-inner">
 
-            <div>
+                <span class="section-number">
+                    02
+                </span>
 
-                <h2>
-                    اختر التصنيف
-                </h2>
+                <div>
 
-                <p>
-                    ماذا تريد أن تتعلم اليوم؟
-                </p>
+                    <h2>
+                        اختر التصنيف
+                    </h2>
+
+                    <p>
+                        ماذا تريد أن تتعلم اليوم؟
+                    </p>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
 
+        <!--
+            سيتم تحميل التصنيفات من Supabase هنا
+        -->
 
+        <section
+            id="categoriesContainer"
+            class="categories">
 
-    <section class="categories">
+            <div class="loading-categories">
 
+                <div class="loading-spinner"></div>
 
-        <!-- المنزل -->
-
-        <button
-            class="category-card"
-            onclick="selectCategory(this, 'home')">
-
-            <div class="category-icon home-icon">
-                🏠
-            </div>
-
-            <div class="category-info">
-
-                <strong>
-                    المنزل
-                </strong>
-
-                <small>
-                    Home
-                </small>
+                <span>
+                    جاري تحميل التصنيفات...
+                </span>
 
             </div>
 
-            <span class="category-check">
-                ✓
-            </span>
+        </section>
 
-        </button>
 
+        <!-- رسالة الخطأ -->
 
+        <div
+            id="categoryError"
+            class="category-error"
+            hidden>
 
-        <!-- الطعام -->
+            حدث خطأ أثناء تحميل التصنيفات.
 
-        <button
-            class="category-card"
-            onclick="selectCategory(this, 'food')">
+            <button
+                type="button"
+                onclick="loadCategories()">
 
-            <div class="category-icon food-icon">
-                🍔
-            </div>
+                إعادة المحاولة
 
-            <div class="category-info">
+            </button>
 
-                <strong>
-                    الطعام
-                </strong>
-
-                <small>
-                    Food
-                </small>
-
-            </div>
-
-            <span class="category-check">
-                ✓
-            </span>
-
-        </button>
-
-
-
-        <!-- السيارات -->
-
-        <button
-            class="category-card"
-            onclick="selectCategory(this, 'cars')">
-
-            <div class="category-icon cars-icon">
-                🚗
-            </div>
-
-            <div class="category-info">
-
-                <strong>
-                    السيارات
-                </strong>
-
-                <small>
-                    Cars
-                </small>
-
-            </div>
-
-            <span class="category-check">
-                ✓
-            </span>
-
-        </button>
-
-
-
-        <!-- الملابس -->
-
-        <button
-            class="category-card"
-            onclick="selectCategory(this, 'clothes')">
-
-            <div class="category-icon clothes-icon">
-                👕
-            </div>
-
-            <div class="category-info">
-
-                <strong>
-                    الملابس
-                </strong>
-
-                <small>
-                    Clothes
-                </small>
-
-            </div>
-
-            <span class="category-check">
-                ✓
-            </span>
-
-        </button>
-
-
-
-        <!-- العائلة -->
-
-        <button
-            class="category-card"
-            onclick="selectCategory(this, 'family')">
-
-            <div class="category-icon family-icon">
-                👨‍👩‍👧
-            </div>
-
-            <div class="category-info">
-
-                <strong>
-                    العائلة
-                </strong>
-
-                <small>
-                    Family
-                </small>
-
-            </div>
-
-            <span class="category-check">
-                ✓
-            </span>
-
-        </button>
-
-
-
-        <!-- الطبيعة -->
-
-        <button
-            class="category-card"
-            onclick="selectCategory(this, 'nature')">
-
-            <div class="category-icon nature-icon">
-                🌳
-            </div>
-
-            <div class="category-info">
-
-                <strong>
-                    الطبيعة
-                </strong>
-
-                <small>
-                    Nature
-                </small>
-
-            </div>
-
-            <span class="category-check">
-                ✓
-            </span>
-
-        </button>
-
-
-
-<!-- الحيوانات -->
-
-<button
-    class="category-card"
-    onclick="selectCategory(this, 'animals')">
-
-    <div class="category-icon animals-icon">
-        🐾
-    </div>
-
-    <div class="category-info">
-
-        <strong>
-            الحيوانات
-        </strong>
-
-        <small>
-            Animals
-        </small>
-
-    </div>
-
-    <span class="category-check">
-        ✓
-    </span>
-
-</button>
-
-
-
-
-
-        <!-- الألوان -->
-
-        <button
-          class="category-card"
-          onclick="selectCategory(this, 'colors')">
-
-         <div class="category-icon colors-icon">
-        🎨
-          </div>
-
-          <div class="category-info">
-
-                <strong>
-                   الألوان
-               </strong>
-
-            <small>
-            Colors
-              </small>
-
-           </div>
-
-             <span class="category-check">
-                ✓
-                    </span>
-
-                </button>
-
-
-
-
+        </div>
 
     </section>
 
@@ -540,6 +326,7 @@
 
 
         <button
+            type="button"
             id="startBtn"
             class="start-btn"
             onclick="startLearning()"
@@ -571,10 +358,6 @@
 <script src="supabase.js"></script>
 
 <script src="learn.js"></script>
-
-
-<script src="supabase.js"></script>
-<script src="notifications.js"></script>
 
 
 </body>
