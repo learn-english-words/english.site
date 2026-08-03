@@ -149,10 +149,6 @@ async function loadCategories() {
 
     try {
 
-        // =====================================================
-        // التأكد من Supabase
-        // =====================================================
-
         if (
             typeof supabaseClient === "undefined"
         ) {
@@ -168,7 +164,7 @@ async function loadCategories() {
 
 
         // =====================================================
-        // جلب جميع التصنيفات من جدول categories
+        // جلب التصنيفات الجديدة
         // =====================================================
 
         const {
@@ -191,10 +187,6 @@ async function loadCategories() {
                 );
 
 
-        // =====================================================
-        // في حالة وجود خطأ
-        // =====================================================
-
         if (error) {
 
             console.error(
@@ -202,16 +194,14 @@ async function loadCategories() {
                 error
             );
 
-
             renderCategories();
-
 
             return;
         }
 
 
         // =====================================================
-        // إضافة التصنيفات القادمة من Supabase
+        // إضافة التصنيفات الجديدة
         // =====================================================
 
         if (
@@ -236,8 +226,6 @@ async function loadCategories() {
                             .trim();
 
 
-                    // تجاهل أي تصنيف ناقص
-
                     if (!nameEn) {
 
                         return;
@@ -245,17 +233,15 @@ async function loadCategories() {
                     }
 
 
-                    // =================================================
-                    // هل التصنيف موجود مسبقًا؟
-                    // =================================================
+                    // منع تكرار التصنيف
 
                     const exists =
                         categories.some(
-                            function (oldCategory) {
+                            function (item) {
 
                                 return (
                                     String(
-                                        oldCategory.key
+                                        item.key
                                     )
                                         .toLowerCase() ===
                                     nameEn
@@ -265,43 +251,42 @@ async function loadCategories() {
                         );
 
 
-                    // =================================================
-                    // إذا غير موجود نضيفه
-                    // =================================================
+                    if (exists) {
 
-                    if (!exists) {
-
-                        categories.push({
-
-                            key:
-                                nameEn,
-
-                            name_ar:
-                                nameAr || nameEn,
-
-                            name_en:
-                                nameEn,
-
-                            icon:
-                                category.icon ||
-                                "📚",
-
-                            id:
-                                category.id
-
-                        });
+                        return;
 
                     }
+
+
+                    categories.push({
+
+                        // مهم جدًا:
+                        // key = name_en
+                        // وليس id
+
+                        key:
+                            nameEn,
+
+                        name_ar:
+                            nameAr || nameEn,
+
+                        name_en:
+                            nameEn,
+
+                        icon:
+                            category.icon ||
+                            "📚",
+
+                        id:
+                            category.id
+
+                    });
 
                 }
             );
 
         }
 
-
-        // =====================================================
-        // عرض التصنيفات
-        // =====================================================
 
         renderCategories();
 
@@ -313,8 +298,6 @@ async function loadCategories() {
             error
         );
 
-
-        // إذا حصل خطأ، لا نخلي الصفحة فارغة
 
         renderCategories();
 
@@ -383,7 +366,9 @@ function renderCategories() {
 
 
             // =================================================
-            // هذه القيمة التي ستذهب إلى words.category
+            // مهم جدًا
+            // القيمة تكون body / food / cars
+            // وليست UUID
             // =================================================
 
             button.dataset.category =
@@ -573,14 +558,10 @@ function selectCategory(
 
 
     selectedCategory =
-        category;
+        String(category)
+            .trim()
+            .toLowerCase();
 
-
-    // مثال:
-    // body
-    // food
-    // cars
-    // animals
 
     localStorage.setItem(
         "selectedCategory",
@@ -588,7 +569,7 @@ function selectCategory(
     );
 
 
-    // لا نحتاج ID
+    // لا نستخدم ID
 
     localStorage.removeItem(
         "selectedCategoryId"
@@ -712,6 +693,7 @@ function getCategoryName(
                         item.key
                     )
                         .toLowerCase() ===
+
                     String(
                         categoryKey
                     )
@@ -823,6 +805,7 @@ function restoreSelections() {
                         cardCategory
                     )
                         .toLowerCase() ===
+
                     String(
                         savedCategory
                     )

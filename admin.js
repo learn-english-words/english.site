@@ -64,6 +64,12 @@ async function checkAdmin() {
 
 // ==========================================
 // تحميل التصنيفات
+// مهم:
+// قيمة التصنيف التي تحفظ في words.category
+// هي name_en مثل:
+// body
+// food
+// cars
 // ==========================================
 
 async function loadAdminCategories() {
@@ -134,7 +140,7 @@ async function loadAdminCategories() {
 
 
     // ==========================================
-    // التصنيفات القديمة من categories.js
+    // التصنيفات القديمة
     // ==========================================
 
     const oldCategories =
@@ -155,26 +161,49 @@ async function loadAdminCategories() {
     const allCategories = [];
 
 
-    // التصنيفات القديمة أولًا
+    // ==========================================
+    // التصنيفات القديمة
+    // ==========================================
 
     oldCategories.forEach(
         category => {
 
+            const oldKey =
+                String(
+                    category.key ||
+                    category.english ||
+                    category.name_en ||
+                    category.id ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            const oldNameAr =
+                String(
+                    category.name_ar ||
+                    category.name ||
+                    ""
+                )
+                .trim();
+
+
+            if (!oldKey) {
+                return;
+            }
+
+
             allCategories.push({
 
                 id:
-                    category.id,
+                    category.id || null,
 
                 name_ar:
-                    category.name,
+                    oldNameAr || oldKey,
 
                 name_en:
-                    (
-                        category.english ||
-                        category.id ||
-                        ""
-                    )
-                    .toLowerCase(),
+                    oldKey,
 
                 icon:
                     category.icon ||
@@ -186,26 +215,44 @@ async function loadAdminCategories() {
     );
 
 
+    // ==========================================
     // التصنيفات الجديدة من Supabase
+    // ==========================================
 
     databaseCategories.forEach(
         category => {
 
+            const categoryNameEn =
+                String(
+                    category.name_en ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            if (!categoryNameEn) {
+                return;
+            }
+
+
             const exists =
                 allCategories.some(
-                    item =>
+                    item => {
 
-                        String(item.id) ===
-                        String(category.id)
+                        return (
 
-                        ||
+                            String(
+                                item.name_en ||
+                                ""
+                            )
+                            .trim()
+                            .toLowerCase() ===
+                            categoryNameEn
 
-                        (
-                            item.name_en &&
-                            category.name_en &&
-                            item.name_en.toLowerCase() ===
-                            category.name_en.toLowerCase()
-                        )
+                        );
+
+                    }
                 );
 
 
@@ -217,14 +264,11 @@ async function loadAdminCategories() {
                         category.id,
 
                     name_ar:
-                        category.name_ar,
+                        category.name_ar ||
+                        categoryNameEn,
 
                     name_en:
-                        (
-                            category.name_en ||
-                            ""
-                        )
-                        .toLowerCase(),
+                        categoryNameEn,
 
                     icon:
                         category.icon ||
@@ -240,6 +284,21 @@ async function loadAdminCategories() {
 
     // ==========================================
     // تحديث قائمة اختيار التصنيف
+    // ==========================================
+    // مهم جدًا:
+    //
+    // value = name_en
+    //
+    // وليس:
+    //
+    // value = id
+    //
+    // لذلك عند اختيار Body
+    // يتم حفظ:
+    //
+    // body
+    //
+    // في words.category
     // ==========================================
 
     if (categorySelect) {
@@ -276,8 +335,16 @@ async function loadAdminCategories() {
                     );
 
 
+                // ==========================================
+                // أهم سطر في التعديل
+                // ==========================================
+
                 option.value =
-                    category.id;
+                    category.name_en;
+
+
+                option.dataset.categoryId =
+                    category.id || "";
 
 
                 option.textContent =
@@ -295,7 +362,7 @@ async function loadAdminCategories() {
 
 
     // ==========================================
-    // إذا ما فيه قائمة تصنيفات في الأدمن
+    // إذا لا توجد قائمة تصنيفات
     // ==========================================
 
     if (!container) {
@@ -306,10 +373,6 @@ async function loadAdminCategories() {
     container.innerHTML =
         "";
 
-
-    // ==========================================
-    // لا توجد تصنيفات
-    // ==========================================
 
     if (
         allCategories.length === 0
@@ -348,10 +411,30 @@ async function loadAdminCategories() {
 
             const isOldCategory =
                 oldCategories.some(
-                    oldCategory =>
+                    oldCategory => {
 
-                        String(oldCategory.id) ===
-                        String(category.id)
+                        const oldKey =
+                            String(
+                                oldCategory.key ||
+                                oldCategory.english ||
+                                oldCategory.name_en ||
+                                oldCategory.id ||
+                                ""
+                            )
+                            .trim()
+                            .toLowerCase();
+
+
+                        return (
+                            oldKey ===
+                            String(
+                                category.name_en
+                            )
+                            .trim()
+                            .toLowerCase()
+                        );
+
+                    }
                 );
 
 
@@ -417,7 +500,9 @@ async function loadAdminCategories() {
                             <button
                                 type="button"
                                 class="delete-category-btn"
-                                onclick="deleteCategory('${category.id}')"
+                                onclick="deleteCategory('${escapeHtmlAdmin(
+                                    category.id
+                                )}')"
                             >
 
                                 🗑️ حذف
@@ -633,7 +718,9 @@ function editWord(id) {
         ).innerHTML = `
 
             <img
-                src="${word.image}"
+                src="${escapeAdminHtml(
+                    word.image
+                )}"
                 style="
                     width:100%;
                     height:100%;
@@ -744,10 +831,16 @@ async function saveWord() {
         ).value;
 
 
+    // ==========================================
+    // التصنيف
+    // ==========================================
+
     const category =
         document.getElementById(
             "category"
-        ).value;
+        ).value
+        .trim()
+        .toLowerCase();
 
 
     const example =
@@ -867,6 +960,10 @@ async function saveWord() {
     }
 
 
+    // ==========================================
+    // البيانات التي ستدخل جدول words
+    // ==========================================
+
     const wordData = {
 
         english:
@@ -877,6 +974,11 @@ async function saveWord() {
 
         level:
             level,
+
+        // ==========================================
+        // مهم:
+        // هنا يتم حفظ body وليس UUID
+        // ==========================================
 
         category:
             category,
@@ -1326,7 +1428,9 @@ function renderWords(
 
                     <button
                         class="edit-btn"
-                        onclick="editWord('${word.id}')"
+                        onclick="editWord('${escapeAdminHtml(
+                            word.id
+                        )}')"
                     >
 
                         ✏️ تعديل
@@ -1336,7 +1440,9 @@ function renderWords(
 
                     <button
                         class="delete-btn"
-                        onclick="deleteWord('${word.id}')"
+                        onclick="deleteWord('${escapeAdminHtml(
+                            word.id
+                        )}')"
                     >
 
                         🗑️ حذف
@@ -1364,10 +1470,25 @@ function renderWords(
 // ==========================================
 
 function getCategoryName(
-    categoryId
+    categoryKey
 ) {
 
-    // البحث أولًا في categories.js
+    if (!categoryKey) {
+        return "";
+    }
+
+
+    const key =
+        String(
+            categoryKey
+        )
+        .trim()
+        .toLowerCase();
+
+
+    // ==========================================
+    // البحث في categories.js
+    // ==========================================
 
     if (
         typeof categories !== "undefined" &&
@@ -1376,27 +1497,54 @@ function getCategoryName(
 
         const oldCategory =
             categories.find(
-                item =>
-                    String(item.id) ===
-                    String(categoryId)
+                item => {
+
+                    const itemKey =
+                        String(
+                            item.key ||
+                            item.english ||
+                            item.name_en ||
+                            item.id ||
+                            ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    return (
+                        itemKey ===
+                        key
+                    );
+
+                }
             );
 
 
         if (oldCategory) {
 
             return (
-                oldCategory.icon +
-                " " +
-                oldCategory.name
-            );
+
+                oldCategory.icon
+                    ? oldCategory.icon + " "
+                    : ""
+
+            ) +
+
+                (
+                    oldCategory.name_ar ||
+                    oldCategory.name ||
+                    oldCategoryKey ||
+                    key
+                );
 
         }
 
     }
 
 
-    // البحث في العناصر الموجودة في DOM
-    // إذا كان التصنيف من Supabase
+    // ==========================================
+    // البحث في قائمة Supabase
+    // ==========================================
 
     const categorySelect =
         document.getElementById(
@@ -1410,9 +1558,18 @@ function getCategoryName(
             Array.from(
                 categorySelect.options
             ).find(
-                item =>
-                    String(item.value) ===
-                    String(categoryId)
+                item => {
+
+                    return (
+                        String(
+                            item.value
+                        )
+                        .trim()
+                        .toLowerCase() ===
+                        key
+                    );
+
+                }
             );
 
 
@@ -1425,7 +1582,11 @@ function getCategoryName(
     }
 
 
-    return categoryId || "";
+    // ==========================================
+    // إذا لم نجد الاسم
+    // ==========================================
+
+    return categoryKey || "";
 
 }
 
@@ -1477,6 +1638,15 @@ function searchWords() {
 
                     (
                         word.arabic ||
+                        ""
+                    )
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    (
+                        word.category ||
                         ""
                     )
                         .toLowerCase()
@@ -2026,7 +2196,7 @@ async function deleteAdminMessage(id) {
 
 
 // ==========================================
-// حماية النص
+// رسائل HTML
 // ==========================================
 
 function escapeHtml(text) {
@@ -2401,7 +2571,6 @@ async function loadReadingStories() {
                     gap:10px;
                     align-items:flex-start;
                 ">
-
 
                     <div>
 
@@ -3323,23 +3492,26 @@ async function saveCategory() {
             Array.isArray(categories) &&
 
             categories.some(
-                category =>
+                category => {
 
-                    (
-                        category.id ||
-                        ""
-                    )
-                    .toLowerCase() ===
-                    nameEn
+                    const categoryKey =
+                        String(
+                            category.key ||
+                            category.id ||
+                            category.english ||
+                            category.name_en ||
+                            ""
+                        )
+                        .trim()
+                        .toLowerCase();
 
-                    ||
 
-                    (
-                        category.english ||
-                        ""
-                    )
-                    .toLowerCase() ===
-                    nameEn
+                    return (
+                        categoryKey ===
+                        nameEn
+                    );
+
+                }
             );
 
 
@@ -3557,55 +3729,6 @@ async function deleteCategory(
 
 
 // =========================================================
-// حماية النصوص
-// =========================================================
-
-function escapeHtmlAdmin(
-    value
-) {
-
-    if (
-        value === null ||
-        value === undefined
-    ) {
-
-        return "";
-
-    }
-
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-
-// =========================================================
 // تشغيل لوحة الأدمن
 // =========================================================
 
@@ -3613,11 +3736,8 @@ document.addEventListener(
     "DOMContentLoaded",
     async function () {
 
-        // تحميل التصنيفات
         await loadAdminCategories();
 
-
-        // تحميل القصص
         await loadReadingStories();
 
     }
