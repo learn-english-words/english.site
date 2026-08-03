@@ -2,6 +2,36 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
+<style>
+.home-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 9999;
+
+    border: none;
+    background: white;
+    color: #5c51dc;
+
+    padding: 10px 16px;
+    border-radius: 14px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,.12);
+}
+
+.home-btn:active {
+    transform: scale(.95);
+}
+</style>
+
+
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -101,7 +131,9 @@ body {
 </head>
 
 <body>
-
+<button class="home-btn" onclick="window.location.href='index.html'">
+    🏠 الرئيسية
+</button>
 <div class="ai-container">
 
     <div class="header">
