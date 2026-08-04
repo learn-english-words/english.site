@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -11,7 +12,6 @@
 <title>EnglishWords - معركة الكلمات</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="supabase.js"></script>
 
 <style>
@@ -39,9 +39,8 @@ button {
     padding: 18px 15px 40px;
 }
 
-/* =========================================
-   الهيدر
-========================================= */
+
+/* الهيدر */
 
 .header {
     display: flex;
@@ -76,9 +75,8 @@ button {
     font-size: 12px;
 }
 
-/* =========================================
-   الانتظار
-========================================= */
+
+/* الانتظار */
 
 .waiting-card {
     background: white;
@@ -116,24 +114,20 @@ button {
 }
 
 @keyframes spin {
-
     to {
         transform: rotate(360deg);
     }
-
 }
 
-/* =========================================
-   شاشة اللعبة
-========================================= */
+
+/* شاشة المباراة */
 
 #gameScreen {
     display: none;
 }
 
-/* =========================================
-   اللاعبين
-========================================= */
+
+/* اللاعبين */
 
 .players {
     display: grid;
@@ -186,9 +180,8 @@ button {
     color: #aaa;
 }
 
-/* =========================================
-   الحالة
-========================================= */
+
+/* الحالة */
 
 .status-card {
     background: linear-gradient(135deg,#6254eb,#8374ed);
@@ -211,9 +204,8 @@ button {
     opacity: .9;
 }
 
-/* =========================================
-   السؤال
-========================================= */
+
+/* السؤال */
 
 .question-card {
     background: white;
@@ -274,9 +266,8 @@ button {
     color: #c83232;
 }
 
-/* =========================================
-   النتيجة
-========================================= */
+
+/* النتيجة */
 
 .result-card {
     display: none;
@@ -318,9 +309,8 @@ button {
     font-weight: bold;
 }
 
-/* =========================================
-   رسالة
-========================================= */
+
+/* الرسالة */
 
 .message {
     position: fixed;
@@ -339,9 +329,8 @@ button {
     font-size: 13px;
 }
 
-/* =========================================
-   خطأ
-========================================= */
+
+/* الخطأ */
 
 .error-card {
     background: white;
@@ -373,6 +362,7 @@ button {
 
 <main class="page">
 
+
 <header class="header">
 
     <button
@@ -398,7 +388,7 @@ button {
 </header>
 
 
-<!-- شاشة الانتظار -->
+<!-- الانتظار -->
 
 <section
     id="waitingScreen"
@@ -421,9 +411,10 @@ button {
 </section>
 
 
-<!-- شاشة اللعبة -->
+<!-- اللعبة -->
 
 <section id="gameScreen">
+
 
     <div class="players">
 
@@ -568,6 +559,7 @@ button {
 
 </main>
 
+
 <div
     id="message"
     class="message">
@@ -576,28 +568,22 @@ button {
 
 <script>
 
-/* =========================================================
+/* =================================================
    المتغيرات
-========================================================= */
+================================================= */
 
 let currentUser = null;
-
 let matchId = null;
-
 let matchData = null;
-
 let profiles = {};
-
 let realtimeChannel = null;
-
 let pollTimer = null;
-
 let answeredThisQuestion = false;
 
 
-/* =========================================================
+/* =================================================
    الأسئلة
-========================================================= */
+================================================= */
 
 const questions = [
 
@@ -714,9 +700,9 @@ const questions = [
 ];
 
 
-/* =========================================================
-   الحصول على ID المباراة
-========================================================= */
+/* =================================================
+   match من الرابط
+================================================= */
 
 function getMatchIdFromUrl() {
 
@@ -730,9 +716,9 @@ function getMatchIdFromUrl() {
 }
 
 
-/* =========================================================
+/* =================================================
    المستخدم الحالي
-========================================================= */
+================================================= */
 
 async function loadCurrentUser() {
 
@@ -740,6 +726,7 @@ async function loadCurrentUser() {
         data,
         error
     } = await supabaseClient.auth.getUser();
+
 
     if (
         error ||
@@ -754,6 +741,7 @@ async function loadCurrentUser() {
 
     }
 
+
     currentUser =
         data.user;
 
@@ -762,9 +750,9 @@ async function loadCurrentUser() {
 }
 
 
-/* =========================================================
+/* =================================================
    رسالة
-========================================================= */
+================================================= */
 
 function showMessage(text) {
 
@@ -779,9 +767,11 @@ function showMessage(text) {
     box.style.display =
         "block";
 
+
     clearTimeout(
         window.messageTimer
     );
+
 
     window.messageTimer =
         setTimeout(() => {
@@ -794,9 +784,9 @@ function showMessage(text) {
 }
 
 
-/* =========================================================
+/* =================================================
    تحميل المباراة
-========================================================= */
+================================================= */
 
 async function loadMatch() {
 
@@ -809,6 +799,7 @@ async function loadMatch() {
         return;
 
     }
+
 
     const {
         data,
@@ -834,12 +825,14 @@ async function loadMatch() {
         )
         .maybeSingle();
 
+
     if (error) {
 
         console.error(
             "Load match error:",
             error
         );
+
 
         document.getElementById(
             "waitingText"
@@ -849,6 +842,7 @@ async function loadMatch() {
         return;
 
     }
+
 
     if (!data) {
 
@@ -860,6 +854,7 @@ async function loadMatch() {
         return;
 
     }
+
 
     if (
         data.player1_id !==
@@ -876,8 +871,10 @@ async function loadMatch() {
 
     }
 
+
     matchData =
         data;
+
 
     await loadProfiles();
 
@@ -888,19 +885,17 @@ async function loadMatch() {
 }
 
 
-/* =========================================================
-   تحميل أسماء اللاعبين
-========================================================= */
+/* =================================================
+   أسماء اللاعبين
+================================================= */
 
 async function loadProfiles() {
 
     const ids = [
-
         matchData.player1_id,
-
         matchData.player2_id
-
     ];
+
 
     const {
         data,
@@ -915,6 +910,7 @@ async function loadProfiles() {
             ids
         );
 
+
     if (error) {
 
         console.error(
@@ -926,7 +922,9 @@ async function loadProfiles() {
 
     }
 
+
     profiles = {};
+
 
     (data || []).forEach(profile => {
 
@@ -939,9 +937,9 @@ async function loadProfiles() {
 }
 
 
-/* =========================================================
+/* =================================================
    تحديث اللاعبين
-========================================================= */
+================================================= */
 
 function updatePlayers() {
 
@@ -955,6 +953,7 @@ function updatePlayers() {
             matchData.player2_id
         ];
 
+
     const name1 =
         player1?.display_name ||
         "اللاعب الأول";
@@ -963,15 +962,18 @@ function updatePlayers() {
         player2?.display_name ||
         "اللاعب الثاني";
 
+
     document.getElementById(
         "player1Name"
     ).textContent =
         name1;
 
+
     document.getElementById(
         "player2Name"
     ).textContent =
         name2;
+
 
     document.getElementById(
         "player1Avatar"
@@ -980,6 +982,7 @@ function updatePlayers() {
             .charAt(0)
             .toUpperCase();
 
+
     document.getElementById(
         "player2Avatar"
     ).textContent =
@@ -987,10 +990,12 @@ function updatePlayers() {
             .charAt(0)
             .toUpperCase();
 
+
     document.getElementById(
         "player1Score"
     ).textContent =
         matchData.player1_score || 0;
+
 
     document.getElementById(
         "player2Score"
@@ -1000,13 +1005,14 @@ function updatePlayers() {
 }
 
 
-/* =========================================================
+/* =================================================
    حالة المباراة
-========================================================= */
+================================================= */
 
 function handleMatchState() {
 
     if (!matchData) return;
+
 
     if (
         matchData.status ===
@@ -1019,6 +1025,7 @@ function handleMatchState() {
 
     }
 
+
     if (
         matchData.status ===
         "waiting"
@@ -1029,11 +1036,13 @@ function handleMatchState() {
             "جاري بدء المعركة..."
         );
 
+
         startMatchIfReady();
 
         return;
 
     }
+
 
     if (
         matchData.status ===
@@ -1051,42 +1060,23 @@ function handleMatchState() {
 }
 
 
-/* =========================================================
+/* =================================================
    بدء المباراة
-========================================================= */
+================================================= */
 
 async function startMatchIfReady() {
 
     if (!matchData) return;
 
-    /*
-       يجب أن يكون اللاعبان موجودين
-    */
-
-    if (
-        !matchData.player1_id ||
-        !matchData.player2_id
-    ) {
-
-        return;
-
-    }
-
-    /*
-       انتظار بسيط حتى يدخل الطرف الآخر
-    */
 
     await new Promise(
         resolve =>
             setTimeout(
                 resolve,
-                1000
+                800
             )
     );
 
-    /*
-       تحويل waiting إلى playing
-    */
 
     const {
         data,
@@ -1113,6 +1103,7 @@ async function startMatchIfReady() {
         .select()
         .maybeSingle();
 
+
     if (error) {
 
         console.error(
@@ -1123,6 +1114,7 @@ async function startMatchIfReady() {
         return;
 
     }
+
 
     if (data) {
 
@@ -1138,9 +1130,9 @@ async function startMatchIfReady() {
 }
 
 
-/* =========================================================
+/* =================================================
    إظهار اللعبة
-========================================================= */
+================================================= */
 
 function showGame() {
 
@@ -1148,6 +1140,7 @@ function showGame() {
         "waitingScreen"
     ).style.display =
         "none";
+
 
     document.getElementById(
         "gameScreen"
@@ -1157,9 +1150,9 @@ function showGame() {
 }
 
 
-/* =========================================================
+/* =================================================
    الحالة
-========================================================= */
+================================================= */
 
 function updateStatus(
     title,
@@ -1171,6 +1164,7 @@ function updateStatus(
     ).textContent =
         title;
 
+
     document.getElementById(
         "gameStatusText"
     ).textContent =
@@ -1179,18 +1173,20 @@ function updateStatus(
 }
 
 
-/* =========================================================
-   عرض السؤال
-========================================================= */
+/* =================================================
+   السؤال
+================================================= */
 
 function renderQuestion() {
 
     if (!matchData) return;
 
+
     const questionIndex =
         Number(
             matchData.current_question || 0
         );
+
 
     if (
         questionIndex >=
@@ -1203,13 +1199,16 @@ function renderQuestion() {
 
     }
 
+
     answeredThisQuestion =
         false;
+
 
     const question =
         questions[
             questionIndex
         ];
+
 
     document.getElementById(
         "questionNumber"
@@ -1219,18 +1218,22 @@ function renderQuestion() {
         " من " +
         questions.length;
 
+
     document.getElementById(
         "questionWord"
     ).textContent =
         question.word;
+
 
     const answersBox =
         document.getElementById(
             "answers"
         );
 
+
     answersBox.innerHTML =
         "";
+
 
     question.answers.forEach(
         (answer, index) => {
@@ -1240,17 +1243,22 @@ function renderQuestion() {
                     "button"
                 );
 
+
             button.className =
                 "answer-btn";
+
 
             button.textContent =
                 answer;
 
+
             button.onclick =
-                () => answerQuestion(
-                    index,
-                    button
-                );
+                () =>
+                    answerQuestion(
+                        index,
+                        button
+                    );
+
 
             answersBox.appendChild(
                 button
@@ -1258,6 +1266,7 @@ function renderQuestion() {
 
         }
     );
+
 
     updateStatus(
         "⚔️ دورك الآن!",
@@ -1267,9 +1276,9 @@ function renderQuestion() {
 }
 
 
-/* =========================================================
+/* =================================================
    الإجابة
-========================================================= */
+================================================= */
 
 async function answerQuestion(
     selectedIndex,
@@ -1280,25 +1289,31 @@ async function answerQuestion(
         answeredThisQuestion
     ) return;
 
+
     if (!matchData) return;
+
 
     answeredThisQuestion =
         true;
+
 
     const questionIndex =
         Number(
             matchData.current_question || 0
         );
 
+
     const question =
         questions[
             questionIndex
         ];
 
+
     const buttons =
         document.querySelectorAll(
             ".answer-btn"
         );
+
 
     buttons.forEach(
         button => {
@@ -1309,9 +1324,11 @@ async function answerQuestion(
         }
     );
 
+
     const correct =
         selectedIndex ===
         question.correct;
+
 
     if (correct) {
 
@@ -1325,21 +1342,15 @@ async function answerQuestion(
             "wrong"
         );
 
-        if (
-            buttons[
-                question.correct
-            ]
-        ) {
 
-            buttons[
-                question.correct
-            ].classList.add(
-                "correct"
-            );
-
-        }
+        buttons[
+            question.correct
+        ].classList.add(
+            "correct"
+        );
 
     }
+
 
     if (correct) {
 
@@ -1364,7 +1375,9 @@ async function answerQuestion(
 
     }
 
+
     updatePlayers();
+
 
     updateStatus(
         correct
@@ -1372,6 +1385,7 @@ async function answerQuestion(
             : "❌ إجابة خاطئة",
         "انتظر السؤال التالي..."
     );
+
 
     await new Promise(
         resolve =>
@@ -1381,26 +1395,26 @@ async function answerQuestion(
             )
     );
 
+
     await advanceQuestion();
 
 }
 
 
-/* =========================================================
-   الانتقال للسؤال التالي
-========================================================= */
+/* =================================================
+   السؤال التالي
+================================================= */
 
 async function advanceQuestion() {
 
     if (!matchData) return;
 
-    const currentQuestion =
-        Number(
-            matchData.current_question || 0
-        );
 
     const nextQuestion =
-        currentQuestion + 1;
+        Number(
+            matchData.current_question || 0
+        ) + 1;
+
 
     const newData = {
 
@@ -1427,6 +1441,7 @@ async function advanceQuestion() {
 
     };
 
+
     const {
         data,
         error
@@ -1441,10 +1456,13 @@ async function advanceQuestion() {
         )
         .eq(
             "current_question",
-            currentQuestion
+            Number(
+                matchData.current_question || 0
+            )
         )
         .select()
         .maybeSingle();
+
 
     if (error) {
 
@@ -1460,12 +1478,15 @@ async function advanceQuestion() {
 
     }
 
+
     if (data) {
 
         matchData =
             data;
 
+
         updatePlayers();
+
 
         if (
             matchData.status ===
@@ -1485,13 +1506,14 @@ async function advanceQuestion() {
 }
 
 
-/* =========================================================
+/* =================================================
    إنهاء المباراة
-========================================================= */
+================================================= */
 
 async function finishMatch() {
 
     if (!matchData) return;
+
 
     if (
         matchData.status !==
@@ -1519,6 +1541,7 @@ async function finishMatch() {
             .select()
             .maybeSingle();
 
+
         if (!error && data) {
 
             matchData =
@@ -1528,14 +1551,15 @@ async function finishMatch() {
 
     }
 
+
     showGameResult();
 
 }
 
 
-/* =========================================================
+/* =================================================
    النتيجة
-========================================================= */
+================================================= */
 
 function showGameResult() {
 
@@ -1544,20 +1568,24 @@ function showGameResult() {
     ).style.display =
         "none";
 
+
     document.getElementById(
         "resultCard"
     ).style.display =
         "block";
+
 
     const score1 =
         Number(
             matchData?.player1_score || 0
         );
 
+
     const score2 =
         Number(
             matchData?.player2_score || 0
         );
+
 
     document.getElementById(
         "resultScore"
@@ -1566,11 +1594,13 @@ function showGameResult() {
         " - " +
         score2;
 
+
     let title =
         "انتهت المعركة!";
 
     let text =
         "أحسنت!";
+
 
     if (
         score1 ===
@@ -1582,8 +1612,10 @@ function showGameResult() {
         ).textContent =
             "🤝";
 
+
         title =
             "تعادل!";
+
 
         text =
             "نتيجة رائعة من الطرفين.";
@@ -1594,15 +1626,18 @@ function showGameResult() {
             matchData.player1_id ===
             currentUser.id;
 
+
         const myScore =
             iAmPlayer1
                 ? score1
                 : score2;
 
+
         const opponentScore =
             iAmPlayer1
                 ? score2
                 : score1;
+
 
         if (
             myScore >
@@ -1614,8 +1649,10 @@ function showGameResult() {
             ).textContent =
                 "🏆";
 
+
             title =
                 "فزت! 🎉";
+
 
             text =
                 "ممتاز! لقد تفوقت على خصمك.";
@@ -1627,8 +1664,10 @@ function showGameResult() {
             ).textContent =
                 "💪";
 
+
             title =
                 "انتهت المعركة";
+
 
             text =
                 "حاول مرة أخرى وحسّن نتيجتك.";
@@ -1637,10 +1676,12 @@ function showGameResult() {
 
     }
 
+
     document.getElementById(
         "resultTitle"
     ).textContent =
         title;
+
 
     document.getElementById(
         "resultText"
@@ -1650,13 +1691,14 @@ function showGameResult() {
 }
 
 
-/* =========================================================
-   Realtime للمباراة
-========================================================= */
+/* =================================================
+   Realtime
+================================================= */
 
 function setupMatchRealtime() {
 
     if (!matchId) return;
+
 
     if (realtimeChannel) {
 
@@ -1666,13 +1708,13 @@ function setupMatchRealtime() {
 
     }
 
+
     realtimeChannel =
         supabaseClient
             .channel(
                 "battle-match-" +
                 matchId
             )
-
             .on(
                 "postgres_changes",
                 {
@@ -1691,7 +1733,6 @@ function setupMatchRealtime() {
                         matchId
 
                 },
-
                 payload => {
 
                     console.log(
@@ -1699,10 +1740,13 @@ function setupMatchRealtime() {
                         payload.new
                     );
 
+
                     matchData =
                         payload.new;
 
+
                     updatePlayers();
+
 
                     if (
                         matchData.status ===
@@ -1715,17 +1759,17 @@ function setupMatchRealtime() {
 
                     }
 
+
                     if (
                         matchData.status ===
                         "playing"
                     ) {
 
-                        showGame();
-
                         const questionIndex =
                             Number(
                                 matchData.current_question || 0
                             );
+
 
                         if (
                             questionIndex <
@@ -1740,7 +1784,6 @@ function setupMatchRealtime() {
 
                 }
             )
-
             .subscribe(
                 status => {
 
@@ -1755,9 +1798,9 @@ function setupMatchRealtime() {
 }
 
 
-/* =========================================================
+/* =================================================
    البحث الدوري
-========================================================= */
+================================================= */
 
 function startMatchPolling() {
 
@@ -1765,29 +1808,34 @@ function startMatchPolling() {
         pollTimer
     );
 
+
     pollTimer =
         setInterval(
             async () => {
 
                 if (!matchId) return;
 
-                /*
-                   نتحقق من المباراة باستمرار.
-                   هذا يساعد في حال تأخر Realtime.
-                */
 
-                await loadMatch();
+                if (
+                    !matchData ||
+                    matchData.status ===
+                    "waiting"
+                ) {
+
+                    await loadMatch();
+
+                }
 
             },
-            3000
+            2000
         );
 
 }
 
 
-/* =========================================================
+/* =================================================
    خطأ
-========================================================= */
+================================================= */
 
 function showError(text) {
 
@@ -1824,21 +1872,28 @@ function showError(text) {
 }
 
 
-/* =========================================================
-   العودة
-========================================================= */
+/* =================================================
+   الرجوع
+================================================= */
 
 function goBack() {
 
-    window.location.href =
-        "games.html";
+    /*
+       نذهب مباشرة إلى games.html
+       ولا نستخدم history.back()
+       حتى لا نرجع إلى battle.html مرة أخرى.
+    */
+
+    window.location.replace(
+        "games.html"
+    );
 
 }
 
 
-/* =========================================================
+/* =================================================
    حماية HTML
-========================================================= */
+================================================= */
 
 function escapeHtml(text) {
 
@@ -1855,14 +1910,15 @@ function escapeHtml(text) {
 }
 
 
-/* =========================================================
+/* =================================================
    تشغيل
-========================================================= */
+================================================= */
 
 async function startBattle() {
 
     matchId =
         getMatchIdFromUrl();
+
 
     if (!matchId) {
 
@@ -1874,23 +1930,28 @@ async function startBattle() {
 
     }
 
+
     const loggedIn =
         await loadCurrentUser();
 
+
     if (!loggedIn) return;
+
 
     await loadMatch();
 
+
     setupMatchRealtime();
+
 
     startMatchPolling();
 
 }
 
 
-/* =========================================================
+/* =================================================
    تنظيف
-========================================================= */
+================================================= */
 
 window.addEventListener(
     "beforeunload",
@@ -1899,6 +1960,7 @@ window.addEventListener(
         clearInterval(
             pollTimer
         );
+
 
         if (realtimeChannel) {
 
@@ -1917,5 +1979,5 @@ startBattle();
 </script>
 
 </body>
-
 </html>
+

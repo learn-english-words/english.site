@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -11,7 +12,6 @@
 <title>لعب مع المستخدمين</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="supabase.js"></script>
 
 <style>
@@ -40,9 +40,7 @@ input {
     padding: 20px 16px 40px;
 }
 
-/* =========================================
-   الهيدر
-========================================= */
+/* الهيدر */
 
 .header {
     display: flex;
@@ -77,9 +75,7 @@ input {
     font-size: 12px;
 }
 
-/* =========================================
-   البانر
-========================================= */
+/* البانر */
 
 .hero {
     background: linear-gradient(135deg, #6254eb, #8374ed);
@@ -107,9 +103,7 @@ input {
     opacity: .92;
 }
 
-/* =========================================
-   الأقسام
-========================================= */
+/* الأقسام */
 
 .section-title {
     display: flex;
@@ -152,9 +146,7 @@ input {
     box-shadow: 0 3px 15px rgba(0,0,0,.05);
 }
 
-/* =========================================
-   الدعوات
-========================================= */
+/* الدعوات */
 
 .invite-card {
     background: white;
@@ -221,9 +213,7 @@ input {
     color: #d43d43;
 }
 
-/* =========================================
-   البحث
-========================================= */
+/* البحث */
 
 .search-box {
     background: white;
@@ -290,9 +280,7 @@ input {
     cursor: default;
 }
 
-/* =========================================
-   نافذة اللعبة
-========================================= */
+/* نافذة اللعبة */
 
 .overlay {
     display: none;
@@ -371,9 +359,7 @@ input {
     font-size: 14px;
 }
 
-/* =========================================
-   الرسالة
-========================================= */
+/* الرسالة */
 
 .message {
     position: fixed;
@@ -404,7 +390,7 @@ input {
 
     <button
         class="back-btn"
-        onclick="history.back()">
+        onclick="goBackToGames()">
 
         ←
 
@@ -497,6 +483,7 @@ input {
 </div>
 
 </main>
+
 
 <!-- نافذة اختيار اللعبة -->
 
@@ -596,10 +583,12 @@ input {
 
 </div>
 
+
 <div
     id="message"
     class="message">
 </div>
+
 
 <script>
 
@@ -608,16 +597,14 @@ input {
 ================================================= */
 
 let currentUser = null;
-
 let selectedReceiver = null;
-
 let realtimeChannel = null;
-
 let acceptedMatchTimer = null;
+let acceptedCheckInterval = null;
 
 
 /* =================================================
-   تحميل المستخدم الحالي
+   المستخدم الحالي
 ================================================= */
 
 async function loadCurrentUser() {
@@ -657,11 +644,23 @@ function showMessage(text) {
 
     clearTimeout(window.messageTimer);
 
-    window.messageTimer = setTimeout(() => {
+    window.messageTimer =
+        setTimeout(() => {
 
-        box.style.display = "none";
+            box.style.display = "none";
 
-    }, 3000);
+        }, 3000);
+
+}
+
+
+/* =================================================
+   الرجوع
+================================================= */
+
+function goBackToGames() {
+
+    window.location.href = "games.html";
 
 }
 
@@ -696,10 +695,11 @@ async function loadUsers(search = "") {
 
     if (search.trim()) {
 
-        query = query.ilike(
-            "display_name",
-            "%" + search.trim() + "%"
-        );
+        query =
+            query.ilike(
+                "display_name",
+                "%" + search.trim() + "%"
+            );
 
     }
 
@@ -791,7 +791,7 @@ async function loadUsers(search = "") {
 
 
 /* =================================================
-   فتح نافذة اللعبة
+   نافذة اللعبة
 ================================================= */
 
 function openGameModal(
@@ -800,11 +800,8 @@ function openGameModal(
 ) {
 
     selectedReceiver = {
-
         id: receiverId,
-
         name: receiverName
-
     };
 
     document.getElementById(
@@ -819,10 +816,6 @@ function openGameModal(
 
 }
 
-
-/* =================================================
-   إغلاق النافذة
-================================================= */
 
 function closeGameModal() {
 
@@ -877,7 +870,6 @@ async function sendGameInvite(gameType) {
 
     }
 
-    /* منع دعوة مكررة */
 
     const {
         data: existing,
@@ -885,22 +877,10 @@ async function sendGameInvite(gameType) {
     } = await supabaseClient
         .from("game_invites")
         .select("id")
-        .eq(
-            "sender_id",
-            currentUser.id
-        )
-        .eq(
-            "receiver_id",
-            receiverId
-        )
-        .eq(
-            "game_type",
-            gameType
-        )
-        .eq(
-            "status",
-            "pending"
-        )
+        .eq("sender_id", currentUser.id)
+        .eq("receiver_id", receiverId)
+        .eq("game_type", gameType)
+        .eq("status", "pending")
         .limit(1);
 
     if (existingError) {
@@ -927,7 +907,6 @@ async function sendGameInvite(gameType) {
 
     }
 
-    /* إنشاء الدعوة */
 
     const {
         error
@@ -1003,7 +982,7 @@ function getGameName(type) {
 
 
 /* =================================================
-   تحميل الدعوات الواردة
+   الدعوات الواردة
 ================================================= */
 
 async function loadIncomingInvites() {
@@ -1051,14 +1030,11 @@ async function loadIncomingInvites() {
     }
 
     const container =
-        document.getElementById(
-            "invitesList"
-        );
+        document.getElementById("invitesList");
 
     const count =
-        document.getElementById(
-            "inviteCount"
-        );
+        document.getElementById("inviteCount");
+
 
     if (!data || data.length === 0) {
 
@@ -1074,11 +1050,12 @@ async function loadIncomingInvites() {
 
     }
 
-    count.textContent = data.length;
 
+    count.textContent = data.length;
     count.style.display = "flex";
 
     container.innerHTML = "";
+
 
     const senderIds = [
         ...new Set(
@@ -1089,7 +1066,9 @@ async function loadIncomingInvites() {
         )
     ];
 
+
     let profiles = [];
+
 
     if (senderIds.length > 0) {
 
@@ -1098,13 +1077,8 @@ async function loadIncomingInvites() {
             error: profileError
         } = await supabaseClient
             .from("profiles")
-            .select(
-                "id, display_name"
-            )
-            .in(
-                "id",
-                senderIds
-            );
+            .select("id, display_name")
+            .in("id", senderIds);
 
         if (!profileError) {
 
@@ -1114,6 +1088,7 @@ async function loadIncomingInvites() {
         }
 
     }
+
 
     data.forEach(invite => {
 
@@ -1128,11 +1103,13 @@ async function loadIncomingInvites() {
             sender?.display_name ||
             "مستخدم";
 
+
         const card =
             document.createElement("div");
 
         card.className =
             "invite-card";
+
 
         card.innerHTML = `
 
@@ -1201,7 +1178,7 @@ async function loadIncomingInvites() {
 
 
 /* =================================================
-   قبول / رفض الدعوة
+   قبول / رفض
 ================================================= */
 
 async function respondToInvite(
@@ -1212,9 +1189,8 @@ async function respondToInvite(
 
     if (!currentUser) return;
 
-    /* ==========================================
-       رفض
-    ========================================== */
+
+    /* الرفض */
 
     if (response === "rejected") {
 
@@ -1231,18 +1207,10 @@ async function respondToInvite(
                     new Date().toISOString()
 
             })
-            .eq(
-                "id",
-                inviteId
-            )
-            .eq(
-                "receiver_id",
-                currentUser.id
-            )
-            .eq(
-                "status",
-                "pending"
-            );
+            .eq("id", inviteId)
+            .eq("receiver_id", currentUser.id)
+            .eq("status", "pending");
+
 
         if (error) {
 
@@ -1259,6 +1227,7 @@ async function respondToInvite(
 
         }
 
+
         showMessage(
             "تم رفض الدعوة."
         );
@@ -1269,9 +1238,8 @@ async function respondToInvite(
 
     }
 
-    /* ==========================================
-       جلب الدعوة
-    ========================================== */
+
+    /* جلب الدعوة */
 
     const {
         data: invite,
@@ -1279,19 +1247,11 @@ async function respondToInvite(
     } = await supabaseClient
         .from("game_invites")
         .select("*")
-        .eq(
-            "id",
-            inviteId
-        )
-        .eq(
-            "receiver_id",
-            currentUser.id
-        )
-        .eq(
-            "status",
-            "pending"
-        )
+        .eq("id", inviteId)
+        .eq("receiver_id", currentUser.id)
+        .eq("status", "pending")
         .maybeSingle();
+
 
     if (inviteError) {
 
@@ -1308,6 +1268,7 @@ async function respondToInvite(
 
     }
 
+
     if (!invite) {
 
         showMessage(
@@ -1320,9 +1281,8 @@ async function respondToInvite(
 
     }
 
-    /* ==========================================
-       قبول الدعوة
-    ========================================== */
+
+    /* قبول الدعوة */
 
     const {
         data: acceptedInvite,
@@ -1338,20 +1298,12 @@ async function respondToInvite(
                 new Date().toISOString()
 
         })
-        .eq(
-            "id",
-            inviteId
-        )
-        .eq(
-            "receiver_id",
-            currentUser.id
-        )
-        .eq(
-            "status",
-            "pending"
-        )
+        .eq("id", inviteId)
+        .eq("receiver_id", currentUser.id)
+        .eq("status", "pending")
         .select()
         .maybeSingle();
+
 
     if (updateError) {
 
@@ -1368,6 +1320,7 @@ async function respondToInvite(
 
     }
 
+
     if (!acceptedInvite) {
 
         showMessage(
@@ -1380,9 +1333,8 @@ async function respondToInvite(
 
     }
 
-    /* ==========================================
-       التأكد هل المباراة موجودة
-    ========================================== */
+
+    /* البحث عن مباراة موجودة */
 
     const {
         data: oldMatch,
@@ -1390,11 +1342,9 @@ async function respondToInvite(
     } = await supabaseClient
         .from("game_matches")
         .select("*")
-        .eq(
-            "invite_id",
-            invite.id
-        )
+        .eq("invite_id", invite.id)
         .maybeSingle();
+
 
     if (oldMatchError) {
 
@@ -1405,11 +1355,11 @@ async function respondToInvite(
 
     }
 
+
     let match = oldMatch;
 
-    /* ==========================================
-       إنشاء المباراة إذا لم تكن موجودة
-    ========================================== */
+
+    /* إنشاء المباراة */
 
     if (!match) {
 
@@ -1448,6 +1398,7 @@ async function respondToInvite(
             .select()
             .single();
 
+
         if (matchError) {
 
             console.error(
@@ -1467,28 +1418,72 @@ async function respondToInvite(
 
     }
 
-    console.log(
-        "Match created/found:",
-        match
-    );
 
     await loadIncomingInvites();
+
 
     showMessage(
         "تم قبول الدعوة ⚔️ جاري الدخول إلى المباراة..."
     );
 
-    /* الطرف الذي ضغط قبول يدخل */
+
+    /* اللاعب الذي قبل يدخل */
 
     setTimeout(() => {
 
-        window.location.href =
-            "battle.html?match=" +
-            encodeURIComponent(
-                match.id
-            );
+        goToMatchOnce(
+            match.id
+        );
 
     }, 500);
+
+}
+
+
+/* =================================================
+   الدخول للمباراة مرة واحدة فقط
+================================================= */
+
+function goToMatchOnce(matchId) {
+
+    if (!matchId) return false;
+
+
+    const key =
+        "entered_battle_match_" +
+        matchId;
+
+
+    /*
+       إذا دخلنا المباراة سابقًا،
+       لا ندخل إليها مرة أخرى.
+    */
+
+    if (
+        sessionStorage.getItem(key) === "1"
+    ) {
+
+        console.log(
+            "تم دخول هذه المباراة سابقًا."
+        );
+
+        return false;
+
+    }
+
+
+    sessionStorage.setItem(
+        key,
+        "1"
+    );
+
+
+    window.location.href =
+        "battle.html?match=" +
+        encodeURIComponent(matchId);
+
+
+    return true;
 
 }
 
@@ -1502,6 +1497,7 @@ async function openAcceptedMatch(inviteId) {
 
     if (!currentUser) return;
 
+
     if (acceptedMatchTimer) {
 
         clearTimeout(
@@ -1512,12 +1508,15 @@ async function openAcceptedMatch(inviteId) {
 
     }
 
+
     const {
         data: match,
         error
     } = await supabaseClient
         .from("game_matches")
-        .select("id, player1_id, player2_id, status")
+        .select(
+            "id, player1_id, player2_id, status"
+        )
         .eq(
             "invite_id",
             inviteId
@@ -1528,6 +1527,7 @@ async function openAcceptedMatch(inviteId) {
         )
         .maybeSingle();
 
+
     if (error) {
 
         console.error(
@@ -1535,39 +1535,73 @@ async function openAcceptedMatch(inviteId) {
             error
         );
 
-        acceptedMatchTimer = setTimeout(() => {
 
-            openAcceptedMatch(inviteId);
+        acceptedMatchTimer =
+            setTimeout(() => {
 
-        }, 1000);
+                openAcceptedMatch(
+                    inviteId
+                );
+
+            }, 1000);
+
 
         return;
 
     }
+
 
     if (!match) {
 
-        acceptedMatchTimer = setTimeout(() => {
+        acceptedMatchTimer =
+            setTimeout(() => {
 
-            openAcceptedMatch(inviteId);
+                openAcceptedMatch(
+                    inviteId
+                );
 
-        }, 700);
+            }, 700);
+
 
         return;
 
     }
+
+
+    const key =
+        "entered_battle_match_" +
+        match.id;
+
+
+    /*
+       مهم:
+       إذا رجعنا إلى games.html بعد المعركة،
+       لا نعيد الدخول.
+    */
+
+    if (
+        sessionStorage.getItem(key) === "1"
+    ) {
+
+        console.log(
+            "المباراة سبق دخولها."
+        );
+
+        return;
+
+    }
+
 
     showMessage(
         "🎮 تم قبول دعوتك! جاري الدخول إلى المعركة..."
     );
 
+
     setTimeout(() => {
 
-        window.location.href =
-            "battle.html?match=" +
-            encodeURIComponent(
-                match.id
-            );
+        goToMatchOnce(
+            match.id
+        );
 
     }, 500);
 
@@ -1575,13 +1609,13 @@ async function openAcceptedMatch(inviteId) {
 
 
 /* =================================================
-   فحص الدعوات التي أرسلناها
-   حتى لو Realtime لم يعمل
+   فحص الدعوات المقبولة
 ================================================= */
 
 async function checkAcceptedInvites() {
 
     if (!currentUser) return;
+
 
     const {
         data,
@@ -1611,6 +1645,7 @@ async function checkAcceptedInvites() {
         )
         .limit(5);
 
+
     if (error) {
 
         console.error(
@@ -1622,9 +1657,17 @@ async function checkAcceptedInvites() {
 
     }
 
-    if (!data || data.length === 0) return;
 
-    for (const invite of data) {
+    if (!data || data.length === 0) {
+
+        return;
+
+    }
+
+
+    for (
+        const invite of data
+    ) {
 
         const {
             data: match
@@ -1641,17 +1684,29 @@ async function checkAcceptedInvites() {
             )
             .maybeSingle();
 
-        if (match) {
 
-            window.location.href =
-                "battle.html?match=" +
-                encodeURIComponent(
-                    match.id
-                );
+        if (!match) continue;
 
-            return;
+
+        const key =
+            "entered_battle_match_" +
+            match.id;
+
+
+        if (
+            sessionStorage.getItem(key) === "1"
+        ) {
+
+            continue;
 
         }
+
+
+        goToMatchOnce(
+            match.id
+        );
+
+        return;
 
     }
 
@@ -1666,6 +1721,7 @@ function setupRealtime() {
 
     if (!currentUser) return;
 
+
     if (realtimeChannel) {
 
         supabaseClient.removeChannel(
@@ -1674,6 +1730,7 @@ function setupRealtime() {
 
     }
 
+
     realtimeChannel =
         supabaseClient
             .channel(
@@ -1681,7 +1738,8 @@ function setupRealtime() {
                 currentUser.id
             )
 
-            /* دعوة جديدة للطرف المستقبل */
+
+            /* دعوة جديدة */
 
             .on(
                 "postgres_changes",
@@ -1709,7 +1767,9 @@ function setupRealtime() {
                         payload.new
                     );
 
+
                     await loadIncomingInvites();
+
 
                     showMessage(
                         "🎮 وصلت دعوة لعبة جديدة!"
@@ -1718,7 +1778,8 @@ function setupRealtime() {
                 }
             )
 
-            /* تحديث الدعوة للطرف المرسل */
+
+            /* تحديث الدعوة للمرسل */
 
             .on(
                 "postgres_changes",
@@ -1746,6 +1807,7 @@ function setupRealtime() {
                         payload.new
                     );
 
+
                     if (
                         payload.new.status ===
                         "accepted"
@@ -1759,6 +1821,7 @@ function setupRealtime() {
 
                 }
             )
+
 
             .subscribe(status => {
 
@@ -1778,6 +1841,7 @@ function setupRealtime() {
 
 let searchTimer = null;
 
+
 document
     .getElementById("searchInput")
     .addEventListener(
@@ -1788,8 +1852,10 @@ document
                 searchTimer
             );
 
+
             const value =
                 this.value;
+
 
             searchTimer =
                 setTimeout(() => {
@@ -1846,23 +1912,25 @@ async function startPage() {
 
     if (!loggedIn) return;
 
+
     await loadUsers();
 
     await loadIncomingInvites();
 
     setupRealtime();
 
+
     /*
-       فحص كل 2.5 ثانية للتأكد أن
-       مرسل الدعوة يدخل حتى لو Realtime
-       لم يصل له.
+       فحص الدعوات المقبولة كل 2.5 ثانية.
+       goToMatchOnce يمنع الدخول المتكرر.
     */
 
-    setInterval(() => {
+    acceptedCheckInterval =
+        setInterval(() => {
 
-        checkAcceptedInvites();
+            checkAcceptedInvites();
 
-    }, 2500);
+        }, 2500);
 
 }
 
@@ -1886,10 +1954,20 @@ window.addEventListener(
 
         }
 
+
         if (acceptedMatchTimer) {
 
             clearTimeout(
                 acceptedMatchTimer
+            );
+
+        }
+
+
+        if (acceptedCheckInterval) {
+
+            clearInterval(
+                acceptedCheckInterval
             );
 
         }
@@ -1900,5 +1978,4 @@ window.addEventListener(
 </script>
 
 </body>
-
 </html>
