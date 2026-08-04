@@ -1019,4 +1019,26 @@ button {
 
 img {
     max-width: 100%;
+}.translation-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e1ed;
+    background: #f8f8fc;
+    color: #5c51dc;
+    border-radius: 12px;
+    padding: 9px 15px;
+    margin-bottom: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.translation-btn:active {
+    transform: scale(.97);
+}
+
+.arabic-word {
+    display: none;
 }
