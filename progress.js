@@ -1,441 +1,170 @@
+// ==========================================
+// EnglishWords — USER PRESENCE
+// تسجيل المستخدم المتصل ومكانه الحالي
+// ==========================================
+
+let presenceTimer = null;
+
 
 // ==========================================
-// تقدمي
+// معرفة الصفحة الحالية
 // ==========================================
 
-async function loadProgress() {
+function getCurrentPresencePage() {
 
-    const {
-        data: { user },
-        error: userError
-    } = await supabaseClient.auth.getUser();
+    const file =
+        window.location.pathname
+            .split("/")
+            .pop()
+            .toLowerCase();
 
 
-    if (userError || !user) {
-
-        window.location.href = "login.html";
-
-        return;
+    if (file === "games.html") {
+        return "games";
     }
 
-
-    // ==========================================
-    // الكلمات المتعلمة
-    // ==========================================
-
-    const {
-        data: learnedWords,
-        error: learnedError
-    } = await supabaseClient
-        .from("learned_words")
-        .select("id")
-        .eq("user_id", user.id);
-
-
-    if (learnedError) {
-
-        console.error(
-            "Learned words error:",
-            learnedError
-        );
-
+    if (file === "battle.html") {
+        return "battle";
     }
 
-
-    const learnedCount =
-        learnedWords
-            ? learnedWords.length
-            : 0;
-
-
-    document.getElementById(
-        "learnedWords"
-    ).textContent =
-        learnedCount;
-
-
-    // ==========================================
-    // الكلمات المحفوظة
-    // ==========================================
-
-    const {
-        data: favorites,
-        error: favoritesError
-    } = await supabaseClient
-        .from("favorites")
-        .select("id")
-        .eq("user_id", user.id);
-
-
-    if (favoritesError) {
-
-        console.error(
-            "Favorites error:",
-            favoritesError
-        );
-
+    if (
+        file === "learn.html" ||
+        file === "learning.html" ||
+        file === "words.html"
+    ) {
+        return "learning";
     }
 
-
-    const favoritesCount =
-        favorites
-            ? favorites.length
-            : 0;
-
-
-    document.getElementById(
-        "favoriteWords"
-    ).textContent =
-        favoritesCount;
-
-
-    // ==========================================
-    // كلمات المراجعة
-    // ==========================================
-
-    const {
-        data: reviews,
-        error: reviewsError
-    } = await supabaseClient
-        .from("review_words")
-        .select("id")
-        .eq("user_id", user.id);
-
-
-    if (reviewsError) {
-
-        console.error(
-            "Review words error:",
-            reviewsError
-        );
-
+    if (
+        file === "reading.html" ||
+        file === "read.html"
+    ) {
+        return "reading";
     }
 
-
-    const reviewsCount =
-        reviews
-            ? reviews.length
-            : 0;
-
-
-    document.getElementById(
-        "reviewWords"
-    ).textContent =
-        reviewsCount;
-
-
-    // ==========================================
-    // الاختبارات المكتملة
-    // ==========================================
-
-    const {
-        data: quizzes,
-        error: quizzesError
-    } = await supabaseClient
-        .from("quiz_results")
-        .select("id, score, total_questions")
-        .eq("user_id", user.id);
-
-
-    if (quizzesError) {
-
-        console.error(
-            "Quiz results error:",
-            quizzesError
-        );
-
+    if (
+        file === "quiz.html"
+    ) {
+        return "quiz";
     }
 
-
-    const quizzesCount =
-        quizzes
-            ? quizzes.length
-            : 0;
-
-
-    const completedQuizzes =
-        document.getElementById(
-            "completedQuizzes"
-        );
-
-
-    if (completedQuizzes) {
-
-        completedQuizzes.textContent =
-            quizzesCount;
-
+    if (
+        file === "chat.html"
+    ) {
+        return "chat";
     }
 
-
-    // ==========================================
-    // تحديات اليوم
-    // ==========================================
-
-    const {
-        data: challenges,
-        error: challengesError
-    } = await supabaseClient
-        .from("daily_challenges")
-        .select("*")
-        .eq("user_id", user.id);
+    return "home";
+}
 
 
-    if (challengesError) {
+// ==========================================
+// تحديث وجود المستخدم
+// ==========================================
 
-        console.error(
-            "Daily challenges error:",
-            challengesError
-        );
+async function updatePresence() {
 
-    }
+    try {
 
-
-    const challengesCount =
-        challenges
-            ? challenges.length
-            : 0;
-
-
-    document.getElementById(
-        "dailyChallenges"
-    ).textContent =
-        challengesCount;
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
 
 
-    // ==========================================
-    // متوسط نتيجة الاختبارات + التحديات
-    // ==========================================
-
-    let totalScore = 0;
-
-    let totalQuestions = 0;
+        // إذا لم يكن مسجل الدخول
+        if (!user) {
+            return;
+        }
 
 
-    if (quizzes) {
-
-        quizzes.forEach(quiz => {
-
-            totalScore +=
-                Number(
-                    quiz.score || 0
-                );
-
-            totalQuestions +=
-                Number(
-                    quiz.total_questions || 0
-                );
-
-        });
-
-    }
+        const page =
+            getCurrentPresencePage();
 
 
-    if (challenges) {
+        const {
+            error
+        } =
+            await supabaseClient
 
-        challenges.forEach(challenge => {
+                .from("user_presence")
 
-            totalScore +=
-                Number(
-                    challenge.score || 0
-                );
+                .upsert({
 
-            totalQuestions +=
-                Number(
-                    challenge.total_questions || 0
-                );
+                    user_id:
+                        user.id,
 
-        });
+                    page:
+                        page,
 
-    }
+                    last_seen:
+                        new Date().toISOString()
+
+                }, {
+
+                    onConflict:
+                        "user_id"
+
+                });
 
 
-    let average = 0;
+        if (error) {
 
-
-    if (totalQuestions > 0) {
-
-        average =
-            Math.round(
-                (
-                    totalScore /
-                    totalQuestions
-                ) * 100
+            console.error(
+                "Presence update error:",
+                error
             );
 
-    }
+        }
 
-
-    document.getElementById(
-        "averageScore"
-    ).textContent =
-        average + "%";
-
-
-    // ==========================================
-    // أفضل نتيجة
-    // ==========================================
-
-    let bestScore = 0;
-
-    let bestTotal = 10;
-
-
-    if (quizzes) {
-
-        quizzes.forEach(quiz => {
-
-            const quizScore =
-                Number(
-                    quiz.score || 0
-                );
-
-
-            const quizTotal =
-                Number(
-                    quiz.total_questions || 10
-                );
-
-
-            if (
-                quizScore >
-                bestScore
-            ) {
-
-                bestScore =
-                    quizScore;
-
-                bestTotal =
-                    quizTotal;
-
-            }
-
-        });
-
-    }
-
-
-    if (challenges) {
-
-        challenges.forEach(challenge => {
-
-            const challengeScore =
-                Number(
-                    challenge.score || 0
-                );
-
-
-            const challengeTotal =
-                Number(
-                    challenge.total_questions || 10
-                );
-
-
-            if (
-                challengeScore >
-                bestScore
-            ) {
-
-                bestScore =
-                    challengeScore;
-
-                bestTotal =
-                    challengeTotal;
-
-            }
-
-        });
-
-    }
-
-
-    document.getElementById(
-        "bestScore"
-    ).textContent =
-        bestScore +
-        " / " +
-        bestTotal;
-
-
-    // ==========================================
-    // التقدم العام
-    // ==========================================
-
-    const {
-        data: allWords,
-        error: allWordsError
-    } = await supabaseClient
-        .from("words")
-        .select("id");
-
-
-    if (allWordsError) {
+    } catch (error) {
 
         console.error(
-            "All words error:",
-            allWordsError
+            "Presence error:",
+            error
         );
 
     }
-
-
-    const totalWords =
-        allWords
-            ? allWords.length
-            : 0;
-
-
-    let progress = 0;
-
-
-    if (totalWords > 0) {
-
-        progress =
-            Math.round(
-                (
-                    learnedCount /
-                    totalWords
-                ) * 100
-            );
-
-    }
-
-
-    if (progress > 100) {
-
-        progress = 100;
-
-    }
-
-
-    document.getElementById(
-        "progressPercent"
-    ).textContent =
-        progress + "%";
-
-
-    document.getElementById(
-        "overallProgressFill"
-    ).style.width =
-        progress + "%";
 
 }
 
 
 // ==========================================
-// العودة للرئيسية
+// تشغيل تسجيل الوجود
 // ==========================================
 
-function goHome() {
+async function startPresence() {
 
-    window.location.href =
-        "index.html";
+    await updatePresence();
+
+
+    // تحديث كل 15 ثانية
+
+    clearInterval(
+        presenceTimer
+    );
+
+
+    presenceTimer =
+        setInterval(
+            updatePresence,
+            15000
+        );
 
 }
 
 
 // ==========================================
-// تشغيل
+// تشغيل بعد تحميل الصفحة
 // ==========================================
 
-loadProgress();
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
+        startPresence();
+
+    }
+);
