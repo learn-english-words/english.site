@@ -4017,6 +4017,93 @@ async function loadAnalyticsUsers() {
 
 async function loadAnalytics() {
 
+    // ==========================================
+// 🔄 تحديث التحليلات يدويًا
+// ==========================================
+
+async function refreshAnalytics() {
+
+    const button =
+        document.getElementById(
+            "refreshAnalyticsBtn"
+        );
+
+
+    const update =
+        document.getElementById(
+            "analyticsLastUpdate"
+        );
+
+
+    // منع الضغط المتكرر أثناء التحديث
+    if (
+        button &&
+        button.disabled
+    ) {
+        return;
+    }
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.dataset.oldText =
+            button.textContent;
+
+        button.textContent =
+            "⏳ جاري التحديث...";
+
+        button.style.opacity =
+            "0.7";
+
+        button.style.cursor =
+            "wait";
+
+    }
+
+
+    if (update) {
+
+        update.textContent =
+            "⏳ جاري التحديث...";
+
+    }
+
+
+    try {
+
+        await loadAnalytics();
+
+    } catch (error) {
+
+        console.error(
+            "Manual analytics refresh error:",
+            error
+        );
+
+    } finally {
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                button.dataset.oldText ||
+                "🔄 تحديث";
+
+            button.style.opacity =
+                "";
+
+            button.style.cursor =
+                "";
+
+        }
+
+    }
+
+}
+
     try {
 
         await Promise.all([
