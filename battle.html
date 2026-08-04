@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 
 <head>
@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+   content="width=device-width, initial-scale=1.0">
 
 <title>EnglishWords - معركة الكلمات</title>
 
@@ -21,8 +21,14 @@
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
     background: #f7f8fc;
     color: #171827;
     font-family: Arial, Tahoma, sans-serif;
@@ -37,7 +43,7 @@ button {
     max-width: 600px;
     margin: auto;
     min-height: 100vh;
-    padding: 18px 15px 40px;
+    padding: 14px 14px 25px;
 }
 
 /* =========================================
@@ -48,33 +54,35 @@ button {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 
 .back-btn {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
     border: none;
     border-radius: 50%;
     background: white;
     box-shadow: 0 3px 12px rgba(0,0,0,.07);
-    font-size: 22px;
+    font-size: 21px;
     cursor: pointer;
 }
 
 .header-info {
     flex: 1;
+    min-width: 0;
 }
 
 .header-info h1 {
-    margin: 0 0 4px;
-    font-size: 21px;
+    margin: 0 0 3px;
+    font-size: 19px;
 }
 
 .header-info p {
     margin: 0;
     color: #888;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 /* =========================================
@@ -83,45 +91,43 @@ button {
 
 .waiting-card {
     background: white;
-    border-radius: 25px;
-    padding: 35px 22px;
+    border-radius: 23px;
+    padding: 30px 20px;
     text-align: center;
     box-shadow: 0 5px 20px rgba(0,0,0,.06);
 }
 
 .waiting-icon {
-    font-size: 55px;
-    margin-bottom: 15px;
+    font-size: 50px;
+    margin-bottom: 12px;
 }
 
 .waiting-card h2 {
-    margin: 0 0 10px;
-    font-size: 22px;
+    margin: 0 0 8px;
+    font-size: 21px;
 }
 
 .waiting-card p {
     color: #888;
-    line-height: 1.8;
-    font-size: 14px;
+    line-height: 1.7;
+    font-size: 13px;
     margin: 0;
 }
 
 .loader {
-    width: 38px;
-    height: 38px;
+    width: 35px;
+    height: 35px;
     border: 4px solid #eee;
     border-top-color: #6254eb;
     border-radius: 50%;
-    margin: 22px auto 0;
+    margin: 20px auto 0;
     animation: spin .8s linear infinite;
 }
 
 @keyframes spin {
-
     to {
         transform: rotate(360deg);
     }
-
 }
 
 /* =========================================
@@ -140,49 +146,49 @@ button {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 18px;
+    gap: 8px;
+    margin-bottom: 10px;
 }
 
 .player-card {
     background: white;
-    border-radius: 20px;
-    padding: 15px 10px;
+    border-radius: 17px;
+    padding: 8px 7px;
     text-align: center;
-    box-shadow: 0 4px 16px rgba(0,0,0,.05);
+    box-shadow: 0 3px 13px rgba(0,0,0,.05);
 }
 
 .player-avatar {
-    width: 52px;
-    height: 52px;
-    margin: auto auto 8px;
+    width: 38px;
+    height: 38px;
+    margin: auto auto 4px;
     border-radius: 50%;
     background: linear-gradient(135deg,#7667f5,#5b4ee8);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: bold;
 }
 
 .player-card strong {
     display: block;
-    font-size: 13px;
+    font-size: 11px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .player-score {
-    margin-top: 7px;
-    font-size: 24px;
+    margin-top: 3px;
+    font-size: 19px;
     font-weight: bold;
     color: #6254eb;
 }
 
 .vs {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
     color: #aaa;
 }
@@ -194,21 +200,21 @@ button {
 .status-card {
     background: linear-gradient(135deg,#6254eb,#8374ed);
     color: white;
-    border-radius: 22px;
-    padding: 18px;
+    border-radius: 17px;
+    padding: 10px;
     text-align: center;
-    margin-bottom: 18px;
-    box-shadow: 0 8px 22px rgba(98,84,235,.2);
+    margin-bottom: 10px;
+    box-shadow: 0 6px 17px rgba(98,84,235,.18);
 }
 
 .status-card strong {
     display: block;
-    font-size: 17px;
-    margin-bottom: 5px;
+    font-size: 14px;
+    margin-bottom: 2px;
 }
 
 .status-card span {
-    font-size: 12px;
+    font-size: 10px;
     opacity: .9;
 }
 
@@ -218,32 +224,32 @@ button {
 
 .question-card {
     background: white;
-    border-radius: 25px;
-    padding: 22px 18px 25px;
+    border-radius: 22px;
+    padding: 13px 13px 15px;
     box-shadow: 0 5px 20px rgba(0,0,0,.06);
 }
 
 .question-number {
     text-align: center;
     color: #888;
-    font-size: 12px;
-    margin-bottom: 16px;
+    font-size: 10px;
+    margin-bottom: 7px;
 }
 
 /* =========================================
-   صورة الكلمة
+   الصورة
 ========================================= */
 
-.question-image-box {
+.question-image-wrap {
     width: 100%;
-    height: 230px;
-    background: #f5f5fa;
-    border-radius: 20px;
+    height: 190px;
+    border-radius: 17px;
+    overflow: hidden;
+    background: #f1f2f7;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    margin-bottom: 22px;
+    margin-bottom: 9px;
 }
 
 .question-image {
@@ -253,9 +259,24 @@ button {
     display: block;
 }
 
-.image-loading {
-    color: #999;
-    font-size: 13px;
+.question-image.error {
+    display: none;
+}
+
+.image-placeholder {
+    font-size: 42px;
+    color: #aaa;
+}
+
+/* =========================================
+   السؤال النصي
+========================================= */
+
+.question-title {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 9px;
 }
 
 /* =========================================
@@ -265,26 +286,21 @@ button {
 .answers {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
 }
 
 .answer-btn {
     width: 100%;
-    min-height: 62px;
+    min-height: 46px;
     border: 2px solid #eeeeee;
     background: #fafafa;
-    border-radius: 15px;
-    padding: 12px 10px;
-    font-size: 16px;
+    border-radius: 13px;
+    padding: 9px 6px;
+    font-size: 14px;
     font-weight: bold;
-    cursor: pointer;
     direction: ltr;
+    cursor: pointer;
     transition: .15s;
-}
-
-.answer-btn:hover {
-    border-color: #7669f3;
-    background: #f7f5ff;
 }
 
 .answer-btn:active {
@@ -314,84 +330,83 @@ button {
 .result-card {
     display: none;
     background: white;
-    border-radius: 25px;
-    padding: 30px 20px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,.06);
-}
-
-.result-icon {
-    font-size: 60px;
-    margin-bottom: 10px;
-}
-
-.result-card h2 {
-    margin: 0 0 10px;
-}
-
-.result-card p {
-    color: #888;
-    line-height: 1.8;
-}
-
-.result-score {
-    font-size: 28px;
-    font-weight: bold;
-    color: #6254eb;
-    margin: 15px 0;
-    direction: ltr;
-}
-
-.back-games-btn {
-    border: none;
-    background: #6254eb;
-    color: white;
-    padding: 13px 22px;
-    border-radius: 14px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-/* =========================================
-   رسالة
-========================================= */
-
-.message {
-    position: fixed;
-    left: 50%;
-    bottom: 20px;
-    transform: translateX(-50%);
-    width: calc(100% - 30px);
-    max-width: 500px;
-    background: #171827;
-    color: white;
-    padding: 14px 17px;
-    border-radius: 15px;
-    text-align: center;
-    z-index: 99999;
-    display: none;
-    font-size: 13px;
-}
-
-/* =========================================
-   الخطأ
-========================================= */
-
-.error-card {
-    background: white;
     border-radius: 23px;
     padding: 30px 20px;
     text-align: center;
     box-shadow: 0 5px 20px rgba(0,0,0,.06);
 }
 
+.result-icon {
+    font-size: 55px;
+    margin-bottom: 8px;
+}
+
+.result-card h2 {
+    margin: 0 0 8px;
+}
+
+.result-card p {
+    color: #888;
+    line-height: 1.7;
+}
+
+.result-score {
+    font-size: 27px;
+    font-weight: bold;
+    color: #6254eb;
+    margin: 14px 0;
+}
+
+.back-games-btn {
+    border: none;
+    background: #6254eb;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 13px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* =========================================
+   الرسالة
+========================================= */
+
+.message {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    width: calc(100% - 30px);
+    max-width: 500px;
+    background: #171827;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 14px;
+    text-align: center;
+    z-index: 99999;
+    display: none;
+    font-size: 12px;
+}
+
+/* =========================================
+   خطأ
+========================================= */
+
+.error-card {
+    background: white;
+    border-radius: 23px;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+}
+
 .error-icon {
-    font-size: 50px;
-    margin-bottom: 12px;
+    font-size: 45px;
+    margin-bottom: 10px;
 }
 
 .error-card h2 {
-    margin: 0 0 10px;
+    margin: 0 0 8px;
 }
 
 .error-card p {
@@ -400,17 +415,123 @@ button {
 }
 
 /* =========================================
-   الجوال
+   للجوال الصغير
 ========================================= */
 
-@media (max-width: 450px) {
+@media (max-height: 700px) {
 
-    .question-image-box {
-        height: 200px;
+    .page {
+        padding-top: 8px;
+    }
+
+    .header {
+        margin-bottom: 7px;
+    }
+
+    .back-btn {
+        width: 37px;
+        height: 37px;
+        font-size: 18px;
+    }
+
+    .header-info h1 {
+        font-size: 17px;
+    }
+
+    .header-info p {
+        font-size: 9px;
+    }
+
+    .players {
+        margin-bottom: 7px;
+    }
+
+    .player-card {
+        padding: 5px;
+    }
+
+    .player-avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .player-score {
+        font-size: 17px;
+    }
+
+    .status-card {
+        padding: 7px;
+        margin-bottom: 7px;
+    }
+
+    .status-card strong {
+        font-size: 12px;
+    }
+
+    .status-card span {
+        font-size: 9px;
+    }
+
+    .question-card {
+        padding: 9px 10px 11px;
+    }
+
+    .question-image-wrap {
+        height: 145px;
+        margin-bottom: 6px;
+    }
+
+    .question-title {
+        font-size: 12px;
+        margin-bottom: 6px;
     }
 
     .answers {
-        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .answer-btn {
+        min-height: 39px;
+        padding: 6px 4px;
+        font-size: 12px;
+    }
+
+}
+
+
+/* =========================================
+   للجوال العادي
+========================================= */
+
+@media (max-width: 420px) {
+
+    .question-image-wrap {
+        height: 175px;
+    }
+
+}
+
+
+/* =========================================
+   جوال قصير جدًا
+========================================= */
+
+@media (max-width: 420px) and (max-height: 700px) {
+
+    .question-image-wrap {
+        height: 125px;
+    }
+
+    .question-card {
+        padding: 8px;
+    }
+
+    .question-number {
+        margin-bottom: 4px;
+    }
+
+    .question-title {
+        margin-bottom: 5px;
     }
 
 }
@@ -425,233 +546,227 @@ button {
 
 <header class="header">
 
-    <button
-        class="back-btn"
-        onclick="goBack()">
+```
+<button
+    class="back-btn"
+    onclick="goBack()">
 
-        ←
+    ←
 
-    </button>
+</button>
 
-    <div class="header-info">
+<div class="header-info">
 
-        <h1>
-            ⚔️ معركة الكلمات
-        </h1>
+    <h1>
+        ⚔️ معركة الكلمات
+    </h1>
 
-        <p>
-            شاهد الصورة واختر الكلمة الإنجليزية الصحيحة
-        </p>
+    <p>
+        تعرف على الكلمة من الصورة
+    </p>
 
-    </div>
+</div>
+```
 
 </header>
 
-
 <!-- =========================================
-     شاشة الانتظار
+     الانتظار
 ========================================= -->
 
 <section
     id="waitingScreen"
     class="waiting-card">
 
-    <div class="waiting-icon">
-        ⚔️
-    </div>
+```
+<div class="waiting-icon">
+    ⚔️
+</div>
 
-    <h2>
-        جاري تجهيز المباراة
-    </h2>
+<h2>
+    جاري تجهيز المباراة
+</h2>
 
-    <p id="waitingText">
-        نبحث عن المباراة الخاصة بك...
-    </p>
+<p id="waitingText">
+    نبحث عن المباراة الخاصة بك...
+</p>
 
-    <div class="loader"></div>
+<div class="loader"></div>
+```
 
 </section>
 
-
 <!-- =========================================
-     شاشة اللعبة
+     اللعبة
 ========================================= -->
 
 <section id="gameScreen">
 
-    <!-- اللاعبين -->
+```
+<div class="players">
 
-    <div class="players">
+    <div class="player-card">
 
-        <div class="player-card">
+        <div
+            id="player1Avatar"
+            class="player-avatar">
 
-            <div
-                id="player1Avatar"
-                class="player-avatar">
-
-                ؟
-
-            </div>
-
-            <strong id="player1Name">
-                اللاعب الأول
-            </strong>
-
-            <div
-                id="player1Score"
-                class="player-score">
-
-                0
-
-            </div>
+            ؟
 
         </div>
 
-
-        <div class="vs">
-            VS
-        </div>
-
-
-        <div class="player-card">
-
-            <div
-                id="player2Avatar"
-                class="player-avatar">
-
-                ؟
-
-            </div>
-
-            <strong id="player2Name">
-                اللاعب الثاني
-            </strong>
-
-            <div
-                id="player2Score"
-                class="player-score">
-
-                0
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- الحالة -->
-
-    <div class="status-card">
-
-        <strong id="gameStatus">
-            ⚔️ بدأت المعركة!
+        <strong id="player1Name">
+            اللاعب الأول
         </strong>
 
-        <span id="gameStatusText">
-            شاهد الصورة واختر الإجابة
-        </span>
+        <div
+            id="player1Score"
+            class="player-score">
+
+            0
+
+        </div>
 
     </div>
 
 
-    <!-- السؤال -->
+    <div class="vs">
+        VS
+    </div>
+
+
+    <div class="player-card">
+
+        <div
+            id="player2Avatar"
+            class="player-avatar">
+
+            ؟
+
+        </div>
+
+        <strong id="player2Name">
+            اللاعب الثاني
+        </strong>
+
+        <div
+            id="player2Score"
+            class="player-score">
+
+            0
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="status-card">
+
+    <strong id="gameStatus">
+        ⚔️ بدأت المعركة!
+    </strong>
+
+    <span id="gameStatusText">
+        اختر الإجابة الصحيحة
+    </span>
+
+</div>
+
+
+<div
+    id="questionCard"
+    class="question-card">
 
     <div
-        id="questionCard"
-        class="question-card">
+        id="questionNumber"
+        class="question-number">
+
+        السؤال 1 من 10
+
+    </div>
+
+
+    <div class="question-image-wrap">
+
+        <img
+            id="questionImage"
+            class="question-image"
+            src=""
+            alt="صورة الكلمة">
 
         <div
-            id="questionNumber"
-            class="question-number">
+            id="imagePlaceholder"
+            class="image-placeholder">
 
-            السؤال 1 من 10
-
-        </div>
-
-
-        <!-- الصورة -->
-
-        <div class="question-image-box">
-
-            <img
-                id="questionImage"
-                class="question-image"
-                src=""
-                alt="صورة الكلمة">
-
-            <div
-                id="imageLoading"
-                class="image-loading">
-
-                جاري تحميل الصورة...
-
-            </div>
-
-        </div>
-
-
-        <!-- الخيارات -->
-
-        <div
-            id="answers"
-            class="answers">
+            🖼️
 
         </div>
 
     </div>
 
 
-    <!-- النتيجة -->
+    <div class="question-title">
+        What is this?
+    </div>
+
 
     <div
-        id="resultCard"
-        class="result-card">
+        id="answers"
+        class="answers">
+    </div>
 
-        <div
-            id="resultIcon"
-            class="result-icon">
+</div>
 
-            🏆
 
-        </div>
+<div
+    id="resultCard"
+    class="result-card">
 
-        <h2 id="resultTitle">
-            انتهت المعركة!
-        </h2>
+    <div
+        id="resultIcon"
+        class="result-icon">
 
-        <p id="resultText">
-            أحسنت!
-        </p>
-
-        <div
-            id="resultScore"
-            class="result-score">
-
-            0 - 0
-
-        </div>
-
-        <button
-            class="back-games-btn"
-            onclick="goBack()">
-
-            العودة للألعاب
-
-        </button>
+        🏆
 
     </div>
+
+    <h2 id="resultTitle">
+        انتهت المعركة!
+    </h2>
+
+    <p id="resultText">
+        أحسنت!
+    </p>
+
+    <div
+        id="resultScore"
+        class="result-score">
+
+        0 - 0
+
+    </div>
+
+    <button
+        class="back-games-btn"
+        onclick="goBack()">
+
+        العودة للألعاب
+
+    </button>
+
+</div>
+```
 
 </section>
 
 </main>
 
-
 <div
     id="message"
     class="message">
 </div>
-
 
 <script>
 
@@ -673,27 +788,13 @@ let pollTimer = null;
 
 let answeredThisQuestion = false;
 
+let words = [];
 
-/*
-   الكلمات التي تحتوي على صور فقط
-*/
-let imageWords = [];
-
-
-/*
-   أسئلة المباراة التي تم اختيارها
-*/
-let battleQuestions = [];
-
-
-/*
-   عدد الأسئلة
-*/
-const TOTAL_QUESTIONS = 10;
+let currentQuestion = null;
 
 
 /* =========================================================
-   الحصول على Match ID
+   الحصول على match من الرابط
 ========================================================= */
 
 function getMatchIdFromUrl() {
@@ -741,7 +842,7 @@ async function loadCurrentUser() {
 
 
 /* =========================================================
-   الرسالة
+   رسالة
 ========================================================= */
 
 function showMessage(text) {
@@ -773,277 +874,6 @@ function showMessage(text) {
 
 
 /* =========================================================
-   تحميل كلمات الصور من Supabase
-========================================================= */
-
-async function loadImageWords() {
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("words")
-        .select(`
-            id,
-            english,
-            image
-        `)
-        .not(
-            "image",
-            "is",
-            null
-        )
-        .limit(1000);
-
-
-    if (error) {
-
-        console.error(
-            "Load image words error:",
-            error
-        );
-
-        throw new Error(
-            "تعذر تحميل كلمات الصور."
-        );
-
-    }
-
-
-    /*
-       نتأكد أن الصورة والكلمة موجودتان
-    */
-
-    imageWords =
-        (data || []).filter(word => {
-
-            return (
-                word.english &&
-                typeof word.english === "string" &&
-                word.english.trim() !== "" &&
-                word.image &&
-                typeof word.image === "string" &&
-                word.image.trim() !== ""
-            );
-
-        });
-
-
-    if (
-        imageWords.length <
-        4
-    ) {
-
-        throw new Error(
-            "نحتاج إلى 4 كلمات على الأقل تحتوي على صور حتى تبدأ اللعبة."
-        );
-
-    }
-
-
-    console.log(
-        "Image words:",
-        imageWords.length
-    );
-
-}
-
-
-/* =========================================================
-   اختيار عناصر عشوائية
-========================================================= */
-
-function shuffleArray(array) {
-
-    const result =
-        [...array];
-
-    for (
-        let i = result.length - 1;
-        i > 0;
-        i--
-    ) {
-
-        const j =
-            Math.floor(
-                Math.random() *
-                (i + 1)
-            );
-
-        [
-            result[i],
-            result[j]
-        ] = [
-            result[j],
-            result[i]
-        ];
-
-    }
-
-    return result;
-
-}
-
-
-/* =========================================================
-   إنشاء أسئلة المباراة
-========================================================= */
-
-function createBattleQuestions() {
-
-    if (
-        imageWords.length <
-        4
-    ) {
-
-        return false;
-
-    }
-
-
-    /*
-       نخلط الكلمات التي عندها صور
-    */
-
-    const shuffled =
-        shuffleArray(
-            imageWords
-        );
-
-
-    /*
-       نختار 10 أسئلة.
-       إذا كانت الكلمات أقل من 10،
-       نسمح بإعادة بعض الكلمات.
-    */
-
-    battleQuestions = [];
-
-
-    for (
-        let i = 0;
-        i < TOTAL_QUESTIONS;
-        i++
-    ) {
-
-        const correctWord =
-            shuffled[
-                i % shuffled.length
-            ];
-
-
-        /*
-           نجيب 3 كلمات مختلفة
-           عن الكلمة الصحيحة
-        */
-
-        const wrongWords =
-            shuffleArray(
-                imageWords.filter(word => {
-
-                    return (
-                        word.id !==
-                        correctWord.id
-                    );
-
-                })
-            )
-            .slice(0, 3);
-
-
-        /*
-           لو ما حصلنا 3 كلمات مختلفة
-        */
-
-        if (
-            wrongWords.length <
-            3
-        ) {
-
-            return false;
-
-        }
-
-
-        /*
-           الأربعة خيارات
-        */
-
-        const answers = [
-
-            {
-                text:
-                    correctWord.english,
-
-                correct:
-                    true
-            },
-
-            ...wrongWords.map(word => {
-
-                return {
-
-                    text:
-                        word.english,
-
-                    correct:
-                        false
-
-                };
-
-            })
-
-        ];
-
-
-        /*
-           نخلط ترتيب الخيارات
-        */
-
-        const shuffledAnswers =
-            shuffleArray(
-                answers
-            );
-
-
-        const correctIndex =
-            shuffledAnswers.findIndex(
-                answer =>
-                    answer.correct
-            );
-
-
-        battleQuestions.push({
-
-            wordId:
-                correctWord.id,
-
-            image:
-                correctWord.image,
-
-            english:
-                correctWord.english,
-
-            answers:
-                shuffledAnswers.map(
-                    answer =>
-                        answer.text
-                ),
-
-            correct:
-                correctIndex
-
-        });
-
-    }
-
-
-    return true;
-
-}
-
-
-/* =========================================================
    تحميل المباراة
 ========================================================= */
 
@@ -1058,7 +888,6 @@ async function loadMatch() {
         return;
 
     }
-
 
     const {
         data,
@@ -1084,7 +913,6 @@ async function loadMatch() {
         )
         .maybeSingle();
 
-
     if (error) {
 
         console.error(
@@ -1101,7 +929,6 @@ async function loadMatch() {
 
     }
 
-
     if (!data) {
 
         document.getElementById(
@@ -1112,11 +939,6 @@ async function loadMatch() {
         return;
 
     }
-
-
-    /*
-       التأكد أن المستخدم أحد اللاعبين
-    */
 
     if (
         data.player1_id !==
@@ -1133,58 +955,8 @@ async function loadMatch() {
 
     }
 
-
     matchData =
         data;
-
-
-    /*
-       تحميل الكلمات التي فيها صور
-    */
-
-    try {
-
-        await loadImageWords();
-
-    } catch (error) {
-
-        console.error(
-            error
-        );
-
-        showError(
-            error.message
-        );
-
-        return;
-
-    }
-
-
-    /*
-       إنشاء أسئلة محلية
-    */
-
-    if (
-        battleQuestions.length ===
-        0
-    ) {
-
-        const created =
-            createBattleQuestions();
-
-        if (!created) {
-
-            showError(
-                "تعذر تجهيز أسئلة اللعبة."
-            );
-
-            return;
-
-        }
-
-    }
-
 
     await loadProfiles();
 
@@ -1196,19 +968,15 @@ async function loadMatch() {
 
 
 /* =========================================================
-   تحميل أسماء اللاعبين
+   تحميل اللاعبين
 ========================================================= */
 
 async function loadProfiles() {
 
     const ids = [
-
         matchData.player1_id,
-
         matchData.player2_id
-
     ];
-
 
     const {
         data,
@@ -1223,7 +991,6 @@ async function loadProfiles() {
             ids
         );
 
-
     if (error) {
 
         console.error(
@@ -1235,9 +1002,7 @@ async function loadProfiles() {
 
     }
 
-
     profiles = {};
-
 
     (data || []).forEach(profile => {
 
@@ -1256,9 +1021,6 @@ async function loadProfiles() {
 
 function updatePlayers() {
 
-    if (!matchData) return;
-
-
     const player1 =
         profiles[
             matchData.player1_id
@@ -1269,7 +1031,6 @@ function updatePlayers() {
             matchData.player2_id
         ];
 
-
     const name1 =
         player1?.display_name ||
         "اللاعب الأول";
@@ -1278,18 +1039,15 @@ function updatePlayers() {
         player2?.display_name ||
         "اللاعب الثاني";
 
-
     document.getElementById(
         "player1Name"
     ).textContent =
         name1;
 
-
     document.getElementById(
         "player2Name"
     ).textContent =
         name2;
-
 
     document.getElementById(
         "player1Avatar"
@@ -1298,7 +1056,6 @@ function updatePlayers() {
             .charAt(0)
             .toUpperCase();
 
-
     document.getElementById(
         "player2Avatar"
     ).textContent =
@@ -1306,17 +1063,251 @@ function updatePlayers() {
             .charAt(0)
             .toUpperCase();
 
-
     document.getElementById(
         "player1Score"
     ).textContent =
-        matchData.player1_score || 0;
-
+        Number(
+            matchData.player1_score || 0
+        );
 
     document.getElementById(
         "player2Score"
     ).textContent =
-        matchData.player2_score || 0;
+        Number(
+            matchData.player2_score || 0
+        );
+
+}
+
+
+/* =========================================================
+   تحميل الكلمات التي لديها صور فقط
+========================================================= */
+
+async function loadWords() {
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("words")
+        .select(`
+            id,
+            english,
+            arabic,
+            image
+        `)
+        .not(
+            "image",
+            "is",
+            null
+        )
+        .neq(
+            "image",
+            ""
+        )
+        .not(
+            "english",
+            "is",
+            null
+        )
+        .neq(
+            "english",
+            ""
+        )
+        .limit(1000);
+
+    if (error) {
+
+        console.error(
+            "Load words error:",
+            error
+        );
+
+        showError(
+            "تعذر تحميل كلمات اللعبة."
+        );
+
+        return false;
+
+    }
+
+    words =
+        (data || []).filter(word => {
+
+            return (
+                word.image &&
+                String(word.image).trim() &&
+                word.english &&
+                String(word.english).trim()
+            );
+
+        });
+
+    if (words.length < 4) {
+
+        showError(
+            "نحتاج إلى 4 كلمات على الأقل تحتوي على صور."
+        );
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+/* =========================================================
+   إنشاء ترتيب ثابت للأسئلة
+========================================================= */
+
+function getQuestionSeed() {
+
+    let seed = 0;
+
+    if (matchData?.invite_id) {
+
+        for (
+            let i = 0;
+            i < matchData.invite_id.length;
+            i++
+        ) {
+
+            seed =
+                (
+                    seed * 31 +
+                    matchData.invite_id.charCodeAt(i)
+                ) >>> 0;
+
+        }
+
+    }
+
+    return seed;
+
+}
+
+
+/* =========================================================
+   خلط ثابت
+========================================================= */
+
+function seededRandom(seed) {
+
+    let value =
+        seed || 1;
+
+    return function() {
+
+        value =
+            (
+                value * 1664525 +
+                1013904223
+            ) >>> 0;
+
+        return value / 4294967296;
+
+    };
+
+}
+
+
+/* =========================================================
+   تجهيز أسئلة المباراة
+========================================================= */
+
+function buildQuestion(questionIndex) {
+
+    if (!words.length) return null;
+
+    const random =
+        seededRandom(
+            getQuestionSeed() +
+            questionIndex * 999
+        );
+
+    const shuffled =
+        [...words].sort(
+            () => random() - 0.5
+        );
+
+    const target =
+        shuffled[0];
+
+    const wrongWords =
+        shuffled
+            .slice(1)
+            .filter(word => {
+
+                return (
+                    String(word.english).toLowerCase() !==
+                    String(target.english).toLowerCase()
+                );
+
+            })
+            .slice(0, 3);
+
+    if (wrongWords.length < 3) {
+
+        return null;
+
+    }
+
+    const options = [
+
+        {
+            english:
+                target.english,
+
+            correct:
+                true
+
+        },
+
+        ...wrongWords.map(word => {
+
+            return {
+
+                english:
+                    word.english,
+
+                correct:
+                    false
+
+            };
+
+        })
+
+    ];
+
+    const finalRandom =
+        seededRandom(
+            getQuestionSeed() +
+            questionIndex * 7777 +
+            55
+        );
+
+    options.sort(
+        () => finalRandom() - 0.5
+    );
+
+    return {
+
+        wordId:
+            target.id,
+
+        image:
+            target.image,
+
+        english:
+            target.english,
+
+        options:
+            options
+
+    };
 
 }
 
@@ -1325,10 +1316,9 @@ function updatePlayers() {
    حالة المباراة
 ========================================================= */
 
-function handleMatchState() {
+async function handleMatchState() {
 
     if (!matchData) return;
-
 
     if (
         matchData.status ===
@@ -1341,40 +1331,54 @@ function handleMatchState() {
 
     }
 
-
     if (
         matchData.status ===
         "waiting"
     ) {
 
         updateStatus(
-
             "⚔️ المباراة جاهزة!",
-
             "جاري بدء المعركة..."
-
         );
 
-
-        startMatchIfReady();
+        await startMatchIfReady();
 
         return;
 
     }
-
 
     if (
         matchData.status ===
         "playing"
     ) {
 
+        const loaded =
+            await ensureWordsLoaded();
+
+        if (!loaded) return;
+
         showGame();
 
         renderQuestion();
 
-        return;
+    }
+
+}
+
+
+/* =========================================================
+   التأكد من الكلمات
+========================================================= */
+
+async function ensureWordsLoaded() {
+
+    if (words.length >= 4) {
+
+        return true;
 
     }
+
+    return await loadWords();
 
 }
 
@@ -1387,7 +1391,6 @@ async function startMatchIfReady() {
 
     if (!matchData) return;
 
-
     await new Promise(
         resolve =>
             setTimeout(
@@ -1395,7 +1398,6 @@ async function startMatchIfReady() {
                 800
             )
     );
-
 
     const {
         data,
@@ -1422,7 +1424,6 @@ async function startMatchIfReady() {
         .select()
         .maybeSingle();
 
-
     if (error) {
 
         console.error(
@@ -1430,19 +1431,34 @@ async function startMatchIfReady() {
             error
         );
 
+        /*
+           إذا كان الطرف الآخر هو الذي بدأ المباراة،
+           نعيد تحميلها.
+        */
+
+        await loadMatch();
+
         return;
 
     }
-
 
     if (data) {
 
         matchData =
             data;
 
+        const loaded =
+            await ensureWordsLoaded();
+
+        if (!loaded) return;
+
         showGame();
 
         renderQuestion();
+
+    } else {
+
+        await loadMatch();
 
     }
 
@@ -1460,7 +1476,6 @@ function showGame() {
     ).style.display =
         "none";
 
-
     document.getElementById(
         "gameScreen"
     ).style.display =
@@ -1470,7 +1485,7 @@ function showGame() {
 
 
 /* =========================================================
-   تحديث الحالة
+   الحالة
 ========================================================= */
 
 function updateStatus(
@@ -1499,53 +1514,41 @@ function renderQuestion() {
 
     if (!matchData) return;
 
-
     const questionIndex =
         Number(
             matchData.current_question || 0
         );
 
-
-    /*
-       انتهت الأسئلة
-    */
+    const totalQuestions = 10;
 
     if (
         questionIndex >=
-        TOTAL_QUESTIONS
+        totalQuestions
     ) {
 
-        finishMatch();
+        showGameResult();
 
         return;
 
     }
 
-
-    /*
-       نجيب السؤال من القائمة المحلية
-    */
-
-    const question =
-        battleQuestions[
+    currentQuestion =
+        buildQuestion(
             questionIndex
-        ];
+        );
 
-
-    if (!question) {
+    if (!currentQuestion) {
 
         showError(
-            "تعذر العثور على سؤال المباراة."
+            "تعذر تجهيز خيارات السؤال."
         );
 
         return;
 
     }
 
-
     answeredThisQuestion =
         false;
-
 
     document.getElementById(
         "questionNumber"
@@ -1553,95 +1556,77 @@ function renderQuestion() {
         "السؤال " +
         (questionIndex + 1) +
         " من " +
-        TOTAL_QUESTIONS;
-
-
-    /*
-       تحميل الصورة
-    */
+        totalQuestions;
 
     const image =
         document.getElementById(
             "questionImage"
         );
 
-    const imageLoading =
+    const placeholder =
         document.getElementById(
-            "imageLoading"
+            "imagePlaceholder"
         );
 
+    image.classList.remove(
+        "error"
+    );
 
-    imageLoading.style.display =
-        "block";
+    image.src =
+        currentQuestion.image;
 
+    image.alt =
+        currentQuestion.english;
 
-    image.style.display =
+    placeholder.style.display =
         "none";
 
+    image.style.display =
+        "block";
 
-    image.onload =
-        () => {
-
-            imageLoading.style.display =
-                "none";
+    image.onerror =
+        function() {
 
             image.style.display =
+                "none";
+
+            placeholder.style.display =
                 "block";
 
         };
-
-
-    image.onerror =
-        () => {
-
-            imageLoading.textContent =
-                "تعذر تحميل الصورة ❌";
-
-        };
-
-
-    image.src =
-        question.image;
-
-
-    /*
-       الخيارات
-    */
 
     const answersBox =
         document.getElementById(
             "answers"
         );
 
-
     answersBox.innerHTML =
         "";
 
-
-    question.answers.forEach(
-        (answer, index) => {
+    currentQuestion.options.forEach(
+        option => {
 
             const button =
                 document.createElement(
                     "button"
                 );
 
-
             button.className =
                 "answer-btn";
 
-
             button.textContent =
-                answer;
+                option.english;
 
+            button.dataset.correct =
+                option.correct
+                    ? "true"
+                    : "false";
 
             button.onclick =
-                () =>
-                    answerQuestion(
-                        index,
-                        button
-                    );
-
+                () => answerQuestion(
+                    option.correct,
+                    button
+                );
 
             answersBox.appendChild(
                 button
@@ -1650,13 +1635,9 @@ function renderQuestion() {
         }
     );
 
-
     updateStatus(
-
         "⚔️ دورك الآن!",
-
-        "شاهد الصورة واختر الكلمة الإنجليزية الصحيحة"
-
+        "اختر الكلمة الإنجليزية الصحيحة"
     );
 
 }
@@ -1667,7 +1648,7 @@ function renderQuestion() {
 ========================================================= */
 
 async function answerQuestion(
-    selectedIndex,
+    correct,
     clickedButton
 ) {
 
@@ -1675,41 +1656,15 @@ async function answerQuestion(
         answeredThisQuestion
     ) return;
 
-
     if (!matchData) return;
-
 
     answeredThisQuestion =
         true;
-
-
-    const questionIndex =
-        Number(
-            matchData.current_question || 0
-        );
-
-
-    const question =
-        battleQuestions[
-            questionIndex
-        ];
-
-
-    if (!question) {
-
-        answeredThisQuestion =
-            false;
-
-        return;
-
-    }
-
 
     const buttons =
         document.querySelectorAll(
             ".answer-btn"
         );
-
 
     buttons.forEach(
         button => {
@@ -1719,12 +1674,6 @@ async function answerQuestion(
 
         }
     );
-
-
-    const correct =
-        selectedIndex ===
-        question.correct;
-
 
     if (correct) {
 
@@ -1738,64 +1687,35 @@ async function answerQuestion(
             "wrong"
         );
 
-        if (
-            buttons[
-                question.correct
-            ]
-        ) {
+        buttons.forEach(
+            button => {
 
-            buttons[
-                question.correct
-            ].classList.add(
-                "correct"
-            );
+                if (
+                    button.dataset.correct ===
+                    "true"
+                ) {
 
-        }
+                    button.classList.add(
+                        "correct"
+                    );
+
+                }
+
+            }
+        );
 
     }
-
 
     /*
-       زيادة نقاط اللاعب الحالي
+       نعرض النتيجة لحظيًا.
     */
 
-    if (correct) {
-
-        if (
-            matchData.player1_id ===
-            currentUser.id
-        ) {
-
-            matchData.player1_score =
-                Number(
-                    matchData.player1_score || 0
-                ) + 1;
-
-        } else {
-
-            matchData.player2_score =
-                Number(
-                    matchData.player2_score || 0
-                ) + 1;
-
-        }
-
-    }
-
-
-    updatePlayers();
-
-
     updateStatus(
-
         correct
             ? "✅ إجابة صحيحة!"
             : "❌ إجابة خاطئة",
-
         "انتظر السؤال التالي..."
-
     );
-
 
     await new Promise(
         resolve =>
@@ -1805,26 +1725,57 @@ async function answerQuestion(
             )
     );
 
-
-    await advanceQuestion();
+    await advanceQuestion(
+        correct
+    );
 
 }
 
 
 /* =========================================================
-   السؤال التالي
+   الانتقال للسؤال التالي
 ========================================================= */
 
-async function advanceQuestion() {
+async function advanceQuestion(
+    wasCorrect
+) {
 
     if (!matchData) return;
 
-
-    const nextQuestion =
+    const currentIndex =
         Number(
             matchData.current_question || 0
-        ) + 1;
+        );
 
+    const nextQuestion =
+        currentIndex + 1;
+
+    let player1Score =
+        Number(
+            matchData.player1_score || 0
+        );
+
+    let player2Score =
+        Number(
+            matchData.player2_score || 0
+        );
+
+    if (wasCorrect) {
+
+        if (
+            matchData.player1_id ===
+            currentUser.id
+        ) {
+
+            player1Score++;
+
+        } else {
+
+            player2Score++;
+
+        }
+
+    }
 
     const newData = {
 
@@ -1832,28 +1783,20 @@ async function advanceQuestion() {
             nextQuestion,
 
         player1_score:
-            Number(
-                matchData.player1_score || 0
-            ),
+            player1Score,
 
         player2_score:
-            Number(
-                matchData.player2_score || 0
-            ),
+            player2Score,
 
         status:
-            nextQuestion >=
-            TOTAL_QUESTIONS
-
+            nextQuestion >= 10
                 ? "finished"
-
                 : "playing",
 
         updated_at:
             new Date().toISOString()
 
     };
-
 
     const {
         data,
@@ -1869,13 +1812,10 @@ async function advanceQuestion() {
         )
         .eq(
             "current_question",
-            Number(
-                matchData.current_question || 0
-            )
+            currentIndex
         )
         .select()
         .maybeSingle();
-
 
     if (error) {
 
@@ -1884,13 +1824,20 @@ async function advanceQuestion() {
             error
         );
 
+        /*
+           إذا حاول اللاعبان الانتقال معًا،
+           قد يفشل أحدهما لأن السؤال تغير.
+           نعيد تحميل المباراة.
+        */
+
         answeredThisQuestion =
             false;
+
+        await loadMatch();
 
         return;
 
     }
-
 
     if (data) {
 
@@ -1898,7 +1845,6 @@ async function advanceQuestion() {
             data;
 
         updatePlayers();
-
 
         if (
             matchData.status ===
@@ -1913,58 +1859,11 @@ async function advanceQuestion() {
 
         }
 
-    }
+    } else {
 
-}
-
-
-/* =========================================================
-   إنهاء المباراة
-========================================================= */
-
-async function finishMatch() {
-
-    if (!matchData) return;
-
-
-    if (
-        matchData.status !==
-        "finished"
-    ) {
-
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from("game_matches")
-            .update({
-
-                status:
-                    "finished",
-
-                updated_at:
-                    new Date().toISOString()
-
-            })
-            .eq(
-                "id",
-                matchData.id
-            )
-            .select()
-            .maybeSingle();
-
-
-        if (!error && data) {
-
-            matchData =
-                data;
-
-        }
+        await loadMatch();
 
     }
-
-
-    showGameResult();
 
 }
 
@@ -1980,24 +1879,20 @@ function showGameResult() {
     ).style.display =
         "none";
 
-
     document.getElementById(
         "resultCard"
     ).style.display =
         "block";
-
 
     const score1 =
         Number(
             matchData?.player1_score || 0
         );
 
-
     const score2 =
         Number(
             matchData?.player2_score || 0
         );
-
 
     document.getElementById(
         "resultScore"
@@ -2006,14 +1901,11 @@ function showGameResult() {
         " - " +
         score2;
 
-
     let title =
         "انتهت المعركة!";
 
-
     let text =
         "أحسنت!";
-
 
     if (
         score1 ===
@@ -2025,10 +1917,8 @@ function showGameResult() {
         ).textContent =
             "🤝";
 
-
         title =
             "تعادل!";
-
 
         text =
             "نتيجة رائعة من الطرفين.";
@@ -2039,18 +1929,15 @@ function showGameResult() {
             matchData.player1_id ===
             currentUser.id;
 
-
         const myScore =
             iAmPlayer1
                 ? score1
                 : score2;
 
-
         const opponentScore =
             iAmPlayer1
                 ? score2
                 : score1;
-
 
         if (
             myScore >
@@ -2062,10 +1949,8 @@ function showGameResult() {
             ).textContent =
                 "🏆";
 
-
             title =
                 "فزت! 🎉";
-
 
             text =
                 "ممتاز! لقد تفوقت على خصمك.";
@@ -2077,10 +1962,8 @@ function showGameResult() {
             ).textContent =
                 "💪";
 
-
             title =
                 "انتهت المعركة";
-
 
             text =
                 "حاول مرة أخرى وحسّن نتيجتك.";
@@ -2089,12 +1972,10 @@ function showGameResult() {
 
     }
 
-
     document.getElementById(
         "resultTitle"
     ).textContent =
         title;
-
 
     document.getElementById(
         "resultText"
@@ -2112,7 +1993,6 @@ function setupMatchRealtime() {
 
     if (!matchId) return;
 
-
     if (realtimeChannel) {
 
         supabaseClient.removeChannel(
@@ -2120,7 +2000,6 @@ function setupMatchRealtime() {
         );
 
     }
-
 
     realtimeChannel =
         supabaseClient
@@ -2146,20 +2025,27 @@ function setupMatchRealtime() {
                         matchId
 
                 },
-                payload => {
+                async payload => {
 
                     console.log(
                         "Match update:",
                         payload.new
                     );
 
+                    const oldQuestion =
+                        Number(
+                            matchData?.current_question || 0
+                        );
+
+                    const newQuestion =
+                        Number(
+                            payload.new.current_question || 0
+                        );
 
                     matchData =
                         payload.new;
 
-
                     updatePlayers();
-
 
                     if (
                         matchData.status ===
@@ -2172,22 +2058,22 @@ function setupMatchRealtime() {
 
                     }
 
-
                     if (
                         matchData.status ===
                         "playing"
                     ) {
 
-                        const questionIndex =
-                            Number(
-                                matchData.current_question || 0
-                            );
-
+                        /*
+                           لا نعيد رسم السؤال إذا كان
+                           اللاعب الحالي ما زال يجاوب.
+                        */
 
                         if (
-                            questionIndex <
-                            TOTAL_QUESTIONS
+                            newQuestion !==
+                            oldQuestion
                         ) {
+
+                            showGame();
 
                             renderQuestion();
 
@@ -2221,13 +2107,11 @@ function startMatchPolling() {
         pollTimer
     );
 
-
     pollTimer =
         setInterval(
             async () => {
 
                 if (!matchId) return;
-
 
                 if (
                     !matchData ||
@@ -2247,7 +2131,7 @@ function startMatchPolling() {
 
 
 /* =========================================================
-   الخطأ
+   خطأ
 ========================================================= */
 
 function showError(text) {
@@ -2274,7 +2158,7 @@ function showError(text) {
                 class="back-games-btn"
                 onclick="goBack()">
 
-                العودة للألعاب
+                العودة
 
             </button>
 
@@ -2286,40 +2170,15 @@ function showError(text) {
 
 
 /* =========================================================
-   العودة
+   الرجوع
 ========================================================= */
 
 function goBack() {
 
     /*
-       نوقف كل شيء قبل الرجوع
-    */
-
-    clearInterval(
-        pollTimer
-    );
-
-
-    pollTimer =
-        null;
-
-
-    if (realtimeChannel) {
-
-        supabaseClient.removeChannel(
-            realtimeChannel
-        );
-
-        realtimeChannel =
-            null;
-
-    }
-
-
-    /*
-       نستخدم games.html مباشرة
+       نذهب مباشرة إلى games.html
        بدل history.back()
-       حتى لا يرجع المستخدم للمعركة مرة ثانية.
+       حتى لا يرجع المتصفح إلى صفحة المعركة مرة أخرى.
     */
 
     window.location.replace(
@@ -2357,7 +2216,6 @@ async function startBattle() {
     matchId =
         getMatchIdFromUrl();
 
-
     if (!matchId) {
 
         showError(
@@ -2368,19 +2226,24 @@ async function startBattle() {
 
     }
 
-
     const loggedIn =
         await loadCurrentUser();
 
-
     if (!loggedIn) return;
 
+    /*
+       نحمل الكلمات ذات الصور
+       قبل بدء المباراة.
+    */
+
+    const wordsLoaded =
+        await loadWords();
+
+    if (!wordsLoaded) return;
 
     await loadMatch();
 
-
     setupMatchRealtime();
-
 
     startMatchPolling();
 
@@ -2398,7 +2261,6 @@ window.addEventListener(
         clearInterval(
             pollTimer
         );
-
 
         if (realtimeChannel) {
 
@@ -2419,4 +2281,3 @@ startBattle();
 </body>
 
 </html>
-
