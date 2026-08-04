@@ -3764,3 +3764,402 @@ document.addEventListener(
     await loadAdminMessages();
 
 })();
+
+
+
+
+
+
+/* =========================================================
+   📊 تحليلات الموقع
+========================================================= */
+
+let analyticsTimer = null;
+
+
+/* -----------------------------------------
+   تحديث رقم
+----------------------------------------- */
+
+function setAnalyticsValue(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(id);
+
+    if (!element) return;
+
+    element.textContent =
+        Number(value || 0).toLocaleString("ar-SA");
+
+}
+
+
+/* -----------------------------------------
+   عدد الصفوف في جدول
+----------------------------------------- */
+
+async function getTableCount(
+    table
+) {
+
+    try {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from(table)
+            .select("*", {
+                count: "exact",
+                head: true
+            });
+
+        if (error) {
+
+            console.error(
+                "Analytics table error:",
+                table,
+                error
+            );
+
+            return 0;
+
+        }
+
+        return count || 0;
+
+    } catch (error) {
+
+        console.error(
+            "Analytics count error:",
+            table,
+            error
+        );
+
+        return 0;
+
+    }
+
+}
+
+
+/* -----------------------------------------
+   المتصلون الآن
+----------------------------------------- */
+
+async function loadOnlineAnalytics() {
+
+    const activeSince =
+        new Date(
+            Date.now() -
+            45 * 1000
+        ).toISOString();
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("user_presence")
+        .select(
+            "user_id,page,last_seen"
+        )
+        .gte(
+            "last_seen",
+            activeSince
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Online analytics error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    const users =
+        data || [];
+
+
+    const uniqueUsers =
+        new Map();
+
+
+    users.forEach(item => {
+
+        uniqueUsers.set(
+            item.user_id,
+            item
+        );
+
+    });
+
+
+    const online =
+        [...uniqueUsers.values()];
+
+
+    setAnalyticsValue(
+        "onlineUsers",
+        online.length
+    );
+
+
+    const countPage = (
+        page
+    ) => {
+
+        return online.filter(
+            user =>
+                user.page === page
+        ).length;
+
+    };
+
+
+    setAnalyticsValue(
+        "onlineHome",
+        countPage("home")
+    );
+
+
+    setAnalyticsValue(
+        "onlineGames",
+        countPage("games")
+    );
+
+
+    setAnalyticsValue(
+        "onlineBattle",
+        countPage("battle")
+    );
+
+
+    setAnalyticsValue(
+        "onlineLearning",
+        countPage("learning")
+    );
+
+
+    setAnalyticsValue(
+        "onlineReading",
+        countPage("reading")
+    );
+
+
+    setAnalyticsValue(
+        "onlineQuiz",
+        countPage("quiz")
+    );
+
+
+    setAnalyticsValue(
+        "onlineChat",
+        countPage("chat")
+    );
+
+}
+
+
+/* -----------------------------------------
+   الإحصائيات العامة
+----------------------------------------- */
+
+async function loadGeneralAnalytics() {
+
+    const results =
+        await Promise.all([
+
+            getTableCount(
+                "profiles"
+            ),
+
+            getTableCount(
+                "home_page_visits"
+            ),
+
+            getTableCount(
+                "learned_words"
+            ),
+
+            getTableCount(
+                "game_matches"
+            ),
+
+            getTableCount(
+                "game_invites"
+            ),
+
+            getTableCount(
+                "quiz_results"
+            ),
+
+            getTableCount(
+                "reading_stories"
+            ),
+
+            getTableCount(
+                "reading_questions"
+            )
+
+        ]);
+
+
+    setAnalyticsValue(
+        "totalUsers",
+        results[0]
+    );
+
+
+    setAnalyticsValue(
+        "totalVisits",
+        results[1]
+    );
+
+
+    setAnalyticsValue(
+        "totalLearned",
+        results[2]
+    );
+
+
+    setAnalyticsValue(
+        "totalMatches",
+        results[3]
+    );
+
+
+    setAnalyticsValue(
+        "totalInvites",
+        results[4]
+    );
+
+
+    setAnalyticsValue(
+        "totalQuizResults",
+        results[5]
+    );
+
+
+    setAnalyticsValue(
+        "totalStories",
+        results[6]
+    );
+
+
+    setAnalyticsValue(
+        "totalQuestions",
+        results[7]
+    );
+
+}
+
+
+/* -----------------------------------------
+   تحديث التحليلات
+----------------------------------------- */
+
+async function loadAnalytics() {
+
+    try {
+
+        await Promise.all([
+
+            loadOnlineAnalytics(),
+
+            loadGeneralAnalytics()
+
+        ]);
+
+
+        const update =
+            document.getElementById(
+                "analyticsLastUpdate"
+            );
+
+
+        if (update) {
+
+            update.textContent =
+                "آخر تحديث: " +
+                new Date().toLocaleTimeString(
+                    "ar-SA"
+                );
+
+        }
+
+
+        const errorBox =
+            document.getElementById(
+                "analyticsError"
+            );
+
+
+        if (errorBox) {
+
+            errorBox.style.display =
+                "none";
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Analytics error:",
+            error
+        );
+
+        const errorBox =
+            document.getElementById(
+                "analyticsError"
+            );
+
+
+        if (errorBox) {
+
+            errorBox.textContent =
+                "حدث خطأ أثناء تحميل التحليلات.";
+
+            errorBox.style.display =
+                "block";
+
+        }
+
+    }
+
+}
+
+
+/* -----------------------------------------
+   تشغيل التحليلات
+----------------------------------------- */
+
+function startAnalytics() {
+
+    loadAnalytics();
+
+
+    clearInterval(
+        analyticsTimer
+    );
+
+
+    analyticsTimer =
+        setInterval(
+            loadAnalytics,
+            5000
+        );
+
+}
+
+
+startAnalytics();
+

@@ -55,6 +55,412 @@
 
 <main class="container">
 
+    <!-- ==========================================
+     📊 تحليلات الموقع
+========================================== -->
+
+<section class="analytics-section">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                📊 تحليلات الموقع
+            </h2>
+
+            <p>
+                إحصائيات مباشرة عن نشاط المستخدمين.
+            </p>
+
+        </div>
+
+        <span
+            id="analyticsLastUpdate"
+            style="
+                color:#888;
+                font-size:12px;
+            "
+        >
+            جاري التحديث...
+        </span>
+
+    </div>
+
+
+    <!-- ==========================================
+         المتصلون الآن
+    ========================================== -->
+
+    <div
+        class="analytics-live"
+        style="
+            background:linear-gradient(
+                135deg,
+                #6254eb,
+                #8374ed
+            );
+            color:white;
+            border-radius:22px;
+            padding:22px;
+            margin-bottom:18px;
+        "
+    >
+
+        <div
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:15px;
+            "
+        >
+
+            <div>
+
+                <div
+                    style="
+                        font-size:13px;
+                        opacity:.85;
+                    "
+                >
+                    🟢 المتصلون الآن
+                </div>
+
+                <div
+                    id="onlineUsers"
+                    style="
+                        font-size:38px;
+                        font-weight:bold;
+                        margin-top:5px;
+                    "
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div
+                style="
+                    font-size:45px;
+                "
+            >
+                🟢
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         أماكن المستخدمين الآن
+    ========================================== -->
+
+    <div
+        class="analytics-grid"
+        style="
+            display:grid;
+            grid-template-columns:
+                repeat(auto-fit,minmax(150px,1fr));
+            gap:12px;
+            margin-bottom:20px;
+        "
+    >
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                🏠
+            </div>
+
+            <strong id="onlineHome">
+                0
+            </strong>
+
+            <span>
+                الرئيسية الآن
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                🎮
+            </div>
+
+            <strong id="onlineGames">
+                0
+            </strong>
+
+            <span>
+                الألعاب الآن
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                ⚔️
+            </div>
+
+            <strong id="onlineBattle">
+                0
+            </strong>
+
+            <span>
+                المعركة الآن
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                📚
+            </div>
+
+            <strong id="onlineLearning">
+                0
+            </strong>
+
+            <span>
+                تعلم الكلمات
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                📖
+            </div>
+
+            <strong id="onlineReading">
+                0
+            </strong>
+
+            <span>
+                Reading الآن
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                🧠
+            </div>
+
+            <strong id="onlineQuiz">
+                0
+            </strong>
+
+            <span>
+                الاختبارات الآن
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                💬
+            </div>
+
+            <strong id="onlineChat">
+                0
+            </strong>
+
+            <span>
+                الدردشة الآن
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         الإحصائيات العامة
+    ========================================== -->
+
+    <div
+        class="analytics-grid"
+        style="
+            display:grid;
+            grid-template-columns:
+                repeat(auto-fit,minmax(150px,1fr));
+            gap:12px;
+        "
+    >
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                👥
+            </div>
+
+            <strong id="totalUsers">
+                0
+            </strong>
+
+            <span>
+                إجمالي المستخدمين
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                🏠
+            </div>
+
+            <strong id="totalVisits">
+                0
+            </strong>
+
+            <span>
+                زيارات الرئيسية
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                📚
+            </div>
+
+            <strong id="totalLearned">
+                0
+            </strong>
+
+            <span>
+                كلمات متعلمة
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                    🎮
+            </div>
+
+            <strong id="totalMatches">
+                0
+            </strong>
+
+            <span>
+                مباريات
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                📩
+            </div>
+
+            <strong id="totalInvites">
+                0
+            </strong>
+
+            <span>
+                دعوات ألعاب
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                🧠
+            </div>
+
+            <strong id="totalQuizResults">
+                0
+            </strong>
+
+            <span>
+                نتائج الاختبارات
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                📖
+            </div>
+
+            <strong id="totalStories">
+                0
+            </strong>
+
+            <span>
+                قصص Reading
+            </span>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                ❓
+            </div>
+
+            <strong id="totalQuestions">
+                0
+            </strong>
+
+            <span>
+                أسئلة Reading
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         حالة التحميل
+    ========================================== -->
+
+    <div
+        id="analyticsError"
+        style="
+            display:none;
+            margin-top:15px;
+            background:#fff0f0;
+            color:#c83232;
+            padding:14px;
+            border-radius:14px;
+            font-size:13px;
+        "
+    ></div>
+
+</section>
+
 
 <!-- ==========================================
      عنوان لوحة التحكم
