@@ -1573,10 +1573,13 @@ async function rejectCurrentInvite() {
 /* ==================================================
    قبول دعوة
 ================================================== */
-
 async function acceptInvite(inviteId) {
 
     if (!currentUser) return;
+
+    // ==========================================
+    // 1. جلب الدعوة
+    // ==========================================
 
     const {
         data: invite,
@@ -1584,60 +1587,54 @@ async function acceptInvite(inviteId) {
     } = await supabaseClient
         .from("game_invites")
         .select("*")
-        .eq(
-            "id",
-            inviteId
-        )
-        .eq(
-            "receiver_id",
-            currentUser.id
-        )
-        .eq(
-            "status",
-            "pending"
-        )
+        .eq("id", inviteId)
+        .eq("receiver_id", currentUser.id)
+        .eq("status", "pending")
         .maybeSingle();
 
-    if (inviteError || !invite) {
+    if (inviteError) {
 
-        alert(
-            "هذه الدعوة لم تعد متاحة."
+        console.error(
+            "Get invite error:",
+            inviteError
         );
+
+        alert("حدث خطأ أثناء جلب الدعوة ❌");
+
+        return;
+    }
+
+    if (!invite) {
+
+        alert("هذه الدعوة لم تعد متاحة.");
 
         await loadIncomingInvites();
 
         return;
-
     }
 
 
+    // ==========================================
+    // 2. قبول الدعوة
+    // ==========================================
+
     const {
-        error
+        error: updateInviteError
     } = await supabaseClient
         .from("game_invites")
         .update({
-
-            status:
-                "accepted",
-
-            responded_at:
-                new Date().toISOString()
-
+            status: "accepted",
+            responded_at: new Date().toISOString()
         })
-        .eq(
-            "id",
-            inviteId
-        )
-        .eq(
-            "status",
-            "pending"
-        );
+        .eq("id", inviteId)
+        .eq("receiver_id", currentUser.id)
+        .eq("status", "pending");
 
-    if (error) {
+    if (updateInviteError) {
 
         console.error(
             "Accept invite error:",
-            error
+            updateInviteError
         );
 
         alert(
@@ -1645,25 +1642,74 @@ async function acceptInvite(inviteId) {
         );
 
         return;
-
     }
+
+
+    // ==========================================
+    // 3. إنشاء المباراة
+    // ==========================================
+
+    const {
+        data: match,
+        error: matchError
+    } = await supabaseClient
+        .from("game_matches")
+        .insert({
+
+            invite_id: invite.id,
+
+            player1_id: invite.sender_id,
+
+            player2_id: invite.receiver_id,
+
+            game_type: "battle",
+
+            current_question: 0,
+
+            player1_score: 0,
+
+            player2_score: 0,
+
+            status: "waiting"
+
+        })
+        .select()
+        .single();
+
+
+    if (matchError) {
+
+        console.error(
+            "Create match error:",
+            matchError
+        );
+
+        alert(
+            "تم قبول الدعوة لكن حدث خطأ أثناء إنشاء المباراة ❌"
+        );
+
+        return;
+    }
+
+
+    // ==========================================
+    // 4. إزالة الدعوة من الشاشة
+    // ==========================================
 
     removeInviteFromScreen(
         inviteId
     );
 
-    /*
-       حالياً نعرض رسالة مؤقتة.
-       في الخطوة التالية نربط القبول
-       بصفحة المباراة الفعلية.
-    */
 
-    alert(
-        "تم قبول الدعوة ⚔️\n\nسنبدأ الآن ببناء شاشة المباراة."
-    );
+    // ==========================================
+    // 5. فتح شاشة المباراة
+    // ==========================================
+
+    window.location.href =
+        "battle.html?match=" +
+        encodeURIComponent(match.id);
 
 }
-
 
 /* ==================================================
    رفض دعوة
