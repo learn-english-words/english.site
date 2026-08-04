@@ -1,3 +1,4 @@
+
 // ==========================================
 // EnglishWords — ADMIN.JS
 // ==========================================
@@ -61,7 +62,6 @@ async function checkAdmin() {
 }
 
 
-
 // ==========================================
 // التصنيفات
 // ==========================================
@@ -71,10 +71,8 @@ async function loadAdminCategories() {
     const categorySelect =
         document.getElementById("category");
 
-
     const container =
         document.getElementById("adminCategoriesList");
-
 
     let databaseCategories = [];
 
@@ -436,7 +434,6 @@ async function loadAdminCategories() {
 }
 
 
-
 // ==========================================
 // معاينة الصورة
 // ==========================================
@@ -483,7 +480,6 @@ function previewImage(event) {
     reader.readAsDataURL(file);
 
 }
-
 
 
 // ==========================================
@@ -543,7 +539,6 @@ async function uploadImage(file) {
     return data.publicUrl;
 
 }
-
 
 
 // ==========================================
@@ -676,7 +671,6 @@ function editWord(id) {
     });
 
 }
-
 
 
 // ==========================================
@@ -964,7 +958,6 @@ async function saveWord() {
 }
 
 
-
 // ==========================================
 // إعادة النموذج
 // ==========================================
@@ -1037,7 +1030,6 @@ function resetForm() {
 }
 
 
-
 // ==========================================
 // تحميل الكلمات
 // ==========================================
@@ -1088,7 +1080,6 @@ async function loadWords() {
     renderWords();
 
 }
-
 
 
 // ==========================================
@@ -1248,7 +1239,6 @@ function renderWords(
 }
 
 
-
 // ==========================================
 // اسم التصنيف
 // ==========================================
@@ -1355,7 +1345,6 @@ function getCategoryName(categoryKey) {
 }
 
 
-
 // ==========================================
 // البحث
 // ==========================================
@@ -1425,7 +1414,6 @@ function searchWords() {
     renderWords(filtered);
 
 }
-
 
 
 // ==========================================
@@ -1498,7 +1486,6 @@ async function deleteWord(id) {
 }
 
 
-
 // ==========================================
 // الرئيسية
 // ==========================================
@@ -1509,7 +1496,6 @@ function goHome() {
         "index.html";
 
 }
-
 
 
 // ==========================================
@@ -1660,7 +1646,6 @@ async function saveAdminMessage() {
     await loadAdminMessages();
 
 }
-
 
 
 // ==========================================
@@ -1840,7 +1825,6 @@ async function loadAdminMessages() {
 }
 
 
-
 // ==========================================
 // حذف رسالة
 // ==========================================
@@ -1900,7 +1884,6 @@ async function deleteAdminMessage(id) {
 }
 
 
-
 // ==========================================
 // حماية HTML
 // ==========================================
@@ -1933,7 +1916,6 @@ function escapeAdminHtml(text) {
     return div.innerHTML;
 
 }
-
 
 
 // ==================================================
@@ -2085,7 +2067,6 @@ async function saveReadingStory() {
 }
 
 
-
 // ==================================================
 // تنظيف نموذج القصة
 // ==================================================
@@ -2132,7 +2113,6 @@ function clearReadingStoryForm() {
     ).checked = true;
 
 }
-
 
 
 // ==================================================
@@ -2352,7 +2332,6 @@ async function loadReadingStories() {
 }
 
 
-
 // ==================================================
 // تحديث قوائم القصص
 // ==================================================
@@ -2441,7 +2420,6 @@ function updateReadingStorySelects(stories) {
 }
 
 
-
 // ==================================================
 // حذف قصة
 // ==================================================
@@ -2509,7 +2487,6 @@ async function deleteReadingStory(id) {
     }
 
 }
-
 
 
 // ==================================================
@@ -2696,7 +2673,6 @@ async function saveReadingQuestion() {
     await loadReadingQuestions();
 
 }
-
 
 
 // ==================================================
@@ -2911,7 +2887,6 @@ async function loadReadingQuestions() {
 }
 
 
-
 // ==================================================
 // حذف سؤال
 // ==================================================
@@ -2959,7 +2934,6 @@ async function deleteReadingQuestion(id) {
     await loadReadingQuestions();
 
 }
-
 
 
 // =========================================================
@@ -3195,7 +3169,6 @@ async function saveCategory() {
 }
 
 
-
 // =========================================================
 // حذف تصنيف
 // =========================================================
@@ -3277,7 +3250,6 @@ async function deleteCategory(categoryId) {
 }
 
 
-
 // =========================================================
 // 📊 تحليلات الموقع
 // =========================================================
@@ -3303,7 +3275,6 @@ function setAnalyticsValue(id, value) {
 }
 
 
-
 // ==========================================
 // بداية اليوم
 // ==========================================
@@ -3327,225 +3298,11 @@ function getStartOfToday() {
 }
 
 
-
-// ==========================================
-// جلب الزيارات
-// ==========================================
-
-async function loadVisitAnalytics() {
-
-    const now =
-        new Date();
-
-
-    const fiveMinutesAgo =
-        new Date(
-            now.getTime() -
-            5 * 60 * 1000
-        );
-
-
-    const onlineSince =
-        new Date(
-            now.getTime() -
-            45 * 1000
-        );
-
-
-    const startToday =
-        getStartOfToday();
-
-
-    // ==========================================
-    // إجمالي الزيارات
-    // ==========================================
-
-    const {
-        count: totalVisits,
-        error: totalError
-    } =
-        await supabaseClient
-            .from("home_page_visits")
-            .select(
-                "*",
-                {
-                    count: "exact",
-                    head: true
-                }
-            );
-
-
-    if (totalError) {
-
-        console.error(
-            "Total visits error:",
-            totalError
-        );
-
-    }
-
-
-    setAnalyticsValue(
-        "totalVisits",
-        totalVisits || 0
-    );
-
-
-    // ==========================================
-    // زيارات اليوم
-    // ==========================================
-
-    const {
-        count: todayVisits,
-        error: todayError
-    } =
-        await supabaseClient
-            .from("home_page_visits")
-            .select(
-                "*",
-                {
-                    count: "exact",
-                    head: true
-                }
-            )
-            .gte(
-                "entered_at",
-                startToday.toISOString()
-            );
-
-
-    if (todayError) {
-
-        console.error(
-            "Today visits error:",
-            todayError
-        );
-
-    }
-
-
-    setAnalyticsValue(
-        "todayVisits",
-        todayVisits || 0
-    );
-
-
-    // ==========================================
-    // آخر 5 دقائق
-    // ==========================================
-
-    const {
-        data: recentData,
-        error: recentError
-    } =
-        await supabaseClient
-            .from("home_page_visits")
-            .select(
-                "user_id, entered_at, last_seen"
-            )
-            .gte(
-                "entered_at",
-                fiveMinutesAgo.toISOString()
-            );
-
-
-    if (recentError) {
-
-        console.error(
-            "Recent visits error:",
-            recentError
-        );
-
-    }
-
-
-    const recentUsers =
-        new Set();
-
-
-    (recentData || []).forEach(
-        item => {
-
-            if (item.user_id) {
-
-                recentUsers.add(
-                    item.user_id
-                );
-
-            }
-
-        }
-    );
-
-
-    setAnalyticsValue(
-        "recentUsers",
-        recentUsers.size
-    );
-
-
-    // ==========================================
-    // المتصلون الآن
-    // ==========================================
-
-    const {
-        data: onlineData,
-        error: onlineError
-    } =
-        await supabaseClient
-            .from("home_page_visits")
-            .select(
-                "user_id, page, entered_at, last_seen"
-            )
-            .gte(
-                "last_seen",
-                onlineSince.toISOString()
-            );
-
-
-    if (onlineError) {
-
-        console.error(
-            "Online visits error:",
-            onlineError
-        );
-
-    }
-
-
-    const onlineUsers =
-        new Set();
-
-
-    (onlineData || []).forEach(
-        item => {
-
-            if (item.user_id) {
-
-                onlineUsers.add(
-                    item.user_id
-                );
-
-            }
-
-        }
-    );
-
-
-    setAnalyticsValue(
-        "onlineUsers",
-        onlineUsers.size
-    );
-
-}
-
-
-
 // ==========================================
 // أسماء الصفحات
 // ==========================================
 
-function getPageName(page) {
+function getAnalyticsPageName(page) {
 
     const pages = {
 
@@ -3588,7 +3345,6 @@ function getPageName(page) {
 }
 
 
-
 // ==========================================
 // تنسيق التاريخ
 // ==========================================
@@ -3627,10 +3383,273 @@ function formatAnalyticsDate(dateValue) {
 }
 
 
+// ==========================================
+// تنسيق الساعة
+// ==========================================
 
-// ==========================================
-// تحميل جدول المستخدمين
-// ==========================================
+function formatAnalyticsTime(dateValue) {
+
+    if (!dateValue) {
+
+        return "—";
+
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+
+    if (Number.isNaN(date.getTime())) {
+
+        return "—";
+
+    }
+
+
+    return date.toLocaleTimeString(
+        "ar-SA",
+        {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+// =========================================================
+// 📊 الإحصائيات الرئيسية
+// =========================================================
+
+async function loadVisitAnalytics() {
+
+    try {
+
+        const now =
+            new Date();
+
+
+        const fiveMinutesAgo =
+            new Date(
+                now.getTime() -
+                5 * 60 * 1000
+            );
+
+
+        const onlineLimit =
+            new Date(
+                now.getTime() -
+                45 * 1000
+            );
+
+
+        // ==========================================
+        // إجمالي الزيارات
+        // ==========================================
+
+        const {
+            count: totalVisits,
+            error: totalError
+        } =
+            await supabaseClient
+                .from("user_visit_logs")
+                .select(
+                    "*",
+                    {
+                        count: "exact",
+                        head: true
+                    }
+                );
+
+
+        if (totalError) {
+
+            console.error(
+                "Total visits error:",
+                totalError
+            );
+
+        }
+
+
+        setAnalyticsValue(
+            "totalVisits",
+            totalVisits || 0
+        );
+
+
+        // ==========================================
+        // زيارات اليوم
+        // ==========================================
+
+        const {
+            count: todayVisits,
+            error: todayError
+        } =
+            await supabaseClient
+                .from("user_visit_logs")
+                .select(
+                    "*",
+                    {
+                        count: "exact",
+                        head: true
+                    }
+                )
+                .gte(
+                    "entered_at",
+                    getStartOfToday().toISOString()
+                );
+
+
+        if (todayError) {
+
+            console.error(
+                "Today visits error:",
+                todayError
+            );
+
+        }
+
+
+        setAnalyticsValue(
+            "todayVisits",
+            todayVisits || 0
+        );
+
+
+        // ==========================================
+        // دخلوا خلال آخر 5 دقائق
+        // ==========================================
+
+        const {
+            data: recentData,
+            error: recentError
+        } =
+            await supabaseClient
+                .from("user_visit_logs")
+                .select(
+                    "user_id, entered_at, last_seen"
+                )
+                .gte(
+                    "entered_at",
+                    fiveMinutesAgo.toISOString()
+                );
+
+
+        if (recentError) {
+
+            console.error(
+                "Recent visits error:",
+                recentError
+            );
+
+        }
+
+
+        const recentUsers =
+            new Set();
+
+
+        (recentData || []).forEach(
+            item => {
+
+                if (item.user_id) {
+
+                    recentUsers.add(
+                        String(
+                            item.user_id
+                        )
+                    );
+
+                }
+
+            }
+        );
+
+
+        setAnalyticsValue(
+            "recentUsers",
+            recentUsers.size
+        );
+
+
+        // ==========================================
+        // المتصلون الآن
+        // ==========================================
+
+        const {
+            data: onlineData,
+            error: onlineError
+        } =
+            await supabaseClient
+                .from("user_presence")
+                .select(
+                    "user_id, page, last_seen"
+                )
+                .gte(
+                    "last_seen",
+                    fiveMinutesAgo.toISOString()
+                );
+
+
+        if (onlineError) {
+
+            console.error(
+                "Online presence error:",
+                onlineError
+            );
+
+        }
+
+
+        const onlineUsers =
+            new Set();
+
+
+        (onlineData || []).forEach(
+            item => {
+
+                if (
+                    item.user_id &&
+                    item.last_seen &&
+                    new Date(
+                        item.last_seen
+                    ) >= onlineLimit
+                ) {
+
+                    onlineUsers.add(
+                        String(
+                            item.user_id
+                        )
+                    );
+
+                }
+
+            }
+        );
+
+
+        setAnalyticsValue(
+            "onlineUsers",
+            onlineUsers.size
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Visit analytics error:",
+            error
+        );
+
+    }
+
+}
+
+
+// =========================================================
+// 👥 جدول المستخدمين
+// =========================================================
 
 async function loadAnalyticsUsers() {
 
@@ -3647,10 +3666,19 @@ async function loadAnalyticsUsers() {
         new Date();
 
 
-    const onlineSince =
+    // متصل الآن = آخر نشاط خلال 45 ثانية
+    const onlineLimit =
         new Date(
             now.getTime() -
             45 * 1000
+        );
+
+
+    // آخر 5 دقائق
+    const fiveMinutesAgo =
+        new Date(
+            now.getTime() -
+            5 * 60 * 1000
         );
 
 
@@ -3667,7 +3695,7 @@ async function loadAnalyticsUsers() {
                 "
             >
 
-                جاري تحميل المستخدمين...
+                ⏳ جاري تحميل نشاط المستخدمين...
 
             </td>
 
@@ -3676,32 +3704,449 @@ async function loadAnalyticsUsers() {
     `;
 
 
-    // ==========================================
-    // نجيب أحدث نشاط
-    // ==========================================
+    try {
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("home_page_visits")
-            .select(
-                "id, user_id, page, entered_at, last_seen"
-            )
-            .order(
-                "last_seen",
-                {
-                    ascending: false
+        // ==========================================
+        // جلب سجلات الزيارات
+        // ==========================================
+
+        const {
+            data: visits,
+            error: visitsError
+        } =
+            await supabaseClient
+                .from("user_visit_logs")
+                .select(
+                    "id, user_id, page, entered_at, last_seen"
+                )
+                .order(
+                    "last_seen",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(100);
+
+
+        if (visitsError) {
+
+            console.error(
+                "Visit logs error:",
+                visitsError
+            );
+
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        style="
+                            padding:25px;
+                            text-align:center;
+                            color:#d93636;
+                        "
+                    >
+
+                        ❌ حدث خطأ أثناء تحميل سجل الزيارات.
+
+                        <br><br>
+
+                        <small>
+                            ${escapeAdminHtml(
+                                visitsError.message
+                            )}
+                        </small>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        const visitRows =
+            visits || [];
+
+
+        if (visitRows.length === 0) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        style="
+                            padding:25px;
+                            text-align:center;
+                            color:#888;
+                        "
+                    >
+
+                        لا توجد زيارات حتى الآن.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        // ==========================================
+        // جلب IDs المستخدمين
+        // ==========================================
+
+        const userIds =
+            [
+                ...new Set(
+                    visitRows
+                        .map(
+                            item =>
+                                item.user_id
+                        )
+                        .filter(Boolean)
+                        .map(
+                            id =>
+                                String(id)
+                        )
+                )
+            ];
+
+
+        // ==========================================
+        // جلب أسماء المستخدمين
+        // ==========================================
+
+        const profilesMap =
+            new Map();
+
+
+        if (userIds.length > 0) {
+
+            const {
+                data: profiles,
+                error: profilesError
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .select(
+                        "id, display_name"
+                    )
+                    .in(
+                        "id",
+                        userIds
+                    );
+
+
+            if (profilesError) {
+
+                console.error(
+                    "Profiles analytics error:",
+                    profilesError
+                );
+
+            } else {
+
+                (profiles || []).forEach(
+                    profile => {
+
+                        profilesMap.set(
+                            String(
+                                profile.id
+                            ),
+                            profile.display_name ||
+                            "بدون اسم"
+                        );
+
+                    }
+                );
+
+            }
+
+        }
+
+
+        // ==========================================
+        // تنظيف الجدول
+        // ==========================================
+
+        table.innerHTML = "";
+
+
+        // ==========================================
+        // عرض السجلات
+        // ==========================================
+
+        visitRows.forEach(
+            visit => {
+
+                const userId =
+                    String(
+                        visit.user_id || ""
+                    );
+
+
+                const username =
+                    profilesMap.get(
+                        userId
+                    ) ||
+                    "مستخدم";
+
+
+                if (!visit.last_seen) {
+
+                    return;
+
                 }
-            )
-            .limit(100);
 
 
-    if (error) {
+                const lastSeen =
+                    new Date(
+                        visit.last_seen
+                    );
+
+
+                // ==========================================
+                // الحالة
+                // ==========================================
+
+                let statusHtml = "";
+
+
+                if (
+                    lastSeen >=
+                    onlineLimit
+                ) {
+
+                    statusHtml = `
+
+                        <span
+                            style="
+                                display:inline-flex;
+                                align-items:center;
+                                gap:5px;
+                                background:#e9f9ef;
+                                color:#20855a;
+                                padding:6px 10px;
+                                border-radius:8px;
+                                font-size:12px;
+                                font-weight:bold;
+                                white-space:nowrap;
+                            "
+                        >
+
+                            🟢 متصل الآن
+
+                        </span>
+
+                    `;
+
+                } else if (
+                    lastSeen >=
+                    fiveMinutesAgo
+                ) {
+
+                    statusHtml = `
+
+                        <span
+                            style="
+                                display:inline-flex;
+                                align-items:center;
+                                gap:5px;
+                                background:#fff7df;
+                                color:#a56b00;
+                                padding:6px 10px;
+                                border-radius:8px;
+                                font-size:12px;
+                                font-weight:bold;
+                                white-space:nowrap;
+                            "
+                        >
+
+                            🕐 آخر 5 دقائق
+
+                        </span>
+
+                    `;
+
+                } else {
+
+                    statusHtml = `
+
+                        <span
+                            style="
+                                display:inline-flex;
+                                align-items:center;
+                                gap:5px;
+                                background:#f1f2f5;
+                                color:#777;
+                                padding:6px 10px;
+                                border-radius:8px;
+                                font-size:12px;
+                                white-space:nowrap;
+                            "
+                        >
+
+                            ⚪ غير متصل
+
+                        </span>
+
+                    `;
+
+                }
+
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.style.borderBottom =
+                    "1px solid #edf0f5";
+
+
+                row.innerHTML = `
+
+                    <!-- المستخدم -->
+
+                    <td
+                        style="
+                            padding:13px;
+                            font-weight:bold;
+                        "
+                    >
+
+                        👤
+
+                        ${escapeAdminHtml(
+                            username
+                        )}
+
+                    </td>
+
+
+                    <!-- الصفحة -->
+
+                    <td
+                        style="
+                            padding:13px;
+                        "
+                    >
+
+                        ${escapeAdminHtml(
+                            getAnalyticsPageName(
+                                visit.page
+                            )
+                        )}
+
+                    </td>
+
+
+                    <!-- دخل الساعة -->
+
+                    <td
+                        style="
+                            padding:13px;
+                            color:#666;
+                            font-size:13px;
+                            white-space:nowrap;
+                        "
+                    >
+
+                        ${escapeAdminHtml(
+                            formatAnalyticsTime(
+                                visit.entered_at
+                            )
+                        )}
+
+                    </td>
+
+
+                    <!-- آخر نشاط -->
+
+                    <td
+                        style="
+                            padding:13px;
+                            color:#666;
+                            font-size:13px;
+                            white-space:nowrap;
+                        "
+                    >
+
+                        ${escapeAdminHtml(
+                            formatAnalyticsTime(
+                                visit.last_seen
+                            )
+                        )}
+
+                    </td>
+
+
+                    <!-- الحالة -->
+
+                    <td
+                        style="
+                            padding:13px;
+                        "
+                    >
+
+                        ${statusHtml}
+
+                    </td>
+
+                `;
+
+
+                table.appendChild(row);
+
+            }
+        );
+
+
+        // ==========================================
+        // إذا لم ينتج أي صف
+        // ==========================================
+
+        if (
+            table.children.length === 0
+        ) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        style="
+                            padding:25px;
+                            text-align:center;
+                            color:#888;
+                        "
+                    >
+
+                        لا توجد بيانات نشاط.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    } catch (error) {
 
         console.error(
-            "Analytics users error:",
+            "Analytics users unexpected error:",
             error
         );
 
@@ -3719,7 +4164,7 @@ async function loadAnalyticsUsers() {
                     "
                 >
 
-                    ❌ حدث خطأ أثناء تحميل نشاط المستخدمين.
+                    ❌ حدث خطأ غير متوقع أثناء تحميل المستخدمين.
 
                 </td>
 
@@ -3727,291 +4172,14 @@ async function loadAnalyticsUsers() {
 
         `;
 
-        return;
     }
-
-
-    const visits =
-        data || [];
-
-
-    if (visits.length === 0) {
-
-        table.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="5"
-                    style="
-                        padding:25px;
-                        text-align:center;
-                        color:#888;
-                    "
-                >
-
-                    لا توجد زيارات حتى الآن.
-
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-    }
-
-
-    // ==========================================
-    // IDs المستخدمين
-    // ==========================================
-
-    const userIds =
-        [
-            ...new Set(
-                visits
-                    .map(
-                        item =>
-                            item.user_id
-                    )
-                    .filter(Boolean)
-            )
-        ];
-
-
-    // ==========================================
-    // جلب profiles بشكل منفصل
-    // حتى لا نعتمد على Foreign Key
-    // ==========================================
-
-    let profilesMap =
-        new Map();
-
-
-    if (userIds.length > 0) {
-
-        const {
-            data: profiles,
-            error: profilesError
-        } =
-            await supabaseClient
-                .from("profiles")
-                .select(
-                    "id, display_name"
-                )
-                .in(
-                    "id",
-                    userIds
-                );
-
-
-        if (profilesError) {
-
-            console.error(
-                "Profiles analytics error:",
-                profilesError
-            );
-
-        } else {
-
-            (profiles || []).forEach(
-                profile => {
-
-                    profilesMap.set(
-                        String(profile.id),
-                        profile.display_name ||
-                        "بدون اسم"
-                    );
-
-                }
-            );
-
-        }
-
-    }
-
-
-    table.innerHTML = "";
-
-
-    // ==========================================
-    // عرض المستخدمين
-    // ==========================================
-
-    visits.forEach(
-        visit => {
-
-            const userId =
-                String(
-                    visit.user_id || ""
-                );
-
-
-            const username =
-                profilesMap.get(
-                    userId
-                ) ||
-                "مستخدم";
-
-
-            const isOnline =
-                visit.last_seen &&
-                new Date(
-                    visit.last_seen
-                ) >= onlineSince;
-
-
-            const row =
-                document.createElement("tr");
-
-
-            row.style.borderBottom =
-                "1px solid #edf0f5";
-
-
-            row.innerHTML = `
-
-                <!-- اسم المستخدم -->
-
-                <td
-                    style="
-                        padding:13px;
-                        font-weight:bold;
-                    "
-                >
-
-                    👤
-
-                    ${escapeAdminHtml(
-                        username
-                    )}
-
-                </td>
-
-
-                <!-- الصفحة -->
-
-                <td
-                    style="
-                        padding:13px;
-                    "
-                >
-
-                    ${escapeAdminHtml(
-                        getPageName(
-                            visit.page
-                        )
-                    )}
-
-                </td>
-
-
-                <!-- وقت الدخول -->
-
-                <td
-                    style="
-                        padding:13px;
-                        color:#666;
-                        font-size:13px;
-                    "
-                >
-
-                    ${escapeAdminHtml(
-                        formatAnalyticsDate(
-                            visit.entered_at
-                        )
-                    )}
-
-                </td>
-
-
-                <!-- آخر نشاط -->
-
-                <td
-                    style="
-                        padding:13px;
-                        color:#666;
-                        font-size:13px;
-                    "
-                >
-
-                    ${escapeAdminHtml(
-                        formatAnalyticsDate(
-                            visit.last_seen
-                        )
-                    )}
-
-                </td>
-
-
-                <!-- الحالة -->
-
-                <td
-                    style="
-                        padding:13px;
-                    "
-                >
-
-                    ${
-                        isOnline
-
-                            ? `
-
-                                <span
-                                    style="
-                                        display:inline-block;
-                                        background:#e9f9ef;
-                                        color:#20855a;
-                                        padding:6px 10px;
-                                        border-radius:8px;
-                                        font-size:12px;
-                                        font-weight:bold;
-                                    "
-                                >
-
-                                    🟢 متصل
-
-                                </span>
-
-                            `
-
-                            : `
-
-                                <span
-                                    style="
-                                        display:inline-block;
-                                        background:#f1f2f5;
-                                        color:#777;
-                                        padding:6px 10px;
-                                        border-radius:8px;
-                                        font-size:12px;
-                                    "
-                                >
-
-                                    ⚪ غير متصل
-
-                                </span>
-
-                            `
-                    }
-
-                </td>
-
-            `;
-
-
-            table.appendChild(row);
-
-        }
-    );
 
 }
 
 
-
-// ==========================================
-// تحميل التحليلات كلها
-// ==========================================
+// =========================================================
+// 📊 تحميل التحليلات كلها
+// =========================================================
 
 async function loadAnalytics() {
 
@@ -4037,7 +4205,12 @@ async function loadAnalytics() {
             update.textContent =
                 "آخر تحديث: " +
                 new Date().toLocaleTimeString(
-                    "ar-SA"
+                    "ar-SA",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit"
+                    }
                 );
 
         }
@@ -4085,10 +4258,9 @@ async function loadAnalytics() {
 }
 
 
-
-// ==========================================
+// =========================================================
 // 🔄 تحديث التحليلات يدويًا
-// ==========================================
+// =========================================================
 
 async function refreshAnalytics() {
 
@@ -4104,7 +4276,6 @@ async function refreshAnalytics() {
         );
 
 
-    // منع الضغط المتكرر أثناء التحديث
     if (
         button &&
         button.disabled
@@ -4172,18 +4343,15 @@ async function refreshAnalytics() {
 }
 
 
-
-// ==========================================
+// =========================================================
 // تشغيل التحليلات
-// بدون تحديث تلقائي
-// ==========================================
+// =========================================================
 
 async function startAnalytics() {
 
     await loadAnalytics();
 
 }
-
 
 
 // =========================================================
@@ -4209,7 +4377,8 @@ document.addEventListener(
 
         await loadReadingStories();
 
-        startAnalytics();
+        await startAnalytics();
 
     }
 );
+

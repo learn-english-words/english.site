@@ -10,91 +10,6 @@ let currentVisitId = null;
 
 
 /* =========================================================
-   بدء التتبع
-========================================================= */
-
-async function startPresence(pageName) {
-
-    try {
-
-        const {
-            data,
-            error
-        } = await supabaseClient.auth.getUser();
-
-
-        if (error || !data?.user) {
-
-            console.log(
-                "Presence: لا يوجد مستخدم مسجل دخول."
-            );
-
-            return;
-
-        }
-
-
-        presenceUser =
-            data.user;
-
-
-        currentPresencePage =
-            pageName || getPageName();
-
-
-        /* ==========================================
-           تسجيل الزيارة
-        ========================================== */
-
-        await createVisitLog(
-            currentPresencePage
-        );
-
-
-        /* ==========================================
-           تحديث المتصل الآن
-        ========================================== */
-
-        await updatePresence(
-            currentPresencePage
-        );
-
-
-        clearInterval(
-            presenceTimer
-        );
-
-
-        /*
-           تحديث كل 15 ثانية
-        */
-
-        presenceTimer =
-            setInterval(
-                () => {
-
-                    updatePresence(
-                        currentPresencePage
-                    );
-
-                },
-                15000
-            );
-
-
-    } catch (error) {
-
-        console.error(
-            "Presence start error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
    معرفة الصفحة الحالية
 ========================================================= */
 
@@ -111,54 +26,32 @@ function getPageName() {
         !file ||
         file === "index.html"
     ) {
-
         return "home";
-
     }
 
 
-    if (
-        file === "games.html"
-    ) {
-
+    if (file === "games.html") {
         return "games";
-
     }
 
 
-    if (
-        file === "battle.html"
-    ) {
-
+    if (file === "battle.html") {
         return "battle";
-
     }
 
 
-    if (
-        file === "reading.html"
-    ) {
-
+    if (file === "reading.html") {
         return "reading";
-
     }
 
 
-    if (
-        file === "quiz.html"
-    ) {
-
+    if (file === "quiz.html") {
         return "quiz";
-
     }
 
 
-    if (
-        file === "chat.html"
-    ) {
-
+    if (file === "chat.html") {
         return "chat";
-
     }
 
 
@@ -167,29 +60,31 @@ function getPageName() {
         file === "learning.html" ||
         file === "words.html"
     ) {
-
         return "learning";
-
     }
 
 
-    return file.replace(
-        ".html",
-        ""
-    ) || "home";
+    return (
+        file.replace(".html", "") ||
+        "home"
+    );
 
 }
 
 
 /* =========================================================
-   إنشاء سجل زيارة جديد
+   إنشاء سجل زيارة
 ========================================================= */
 
-async function createVisitLog(
-    pageName
-) {
+async function createVisitLog(pageName) {
 
-    if (!presenceUser) return;
+    if (!presenceUser) {
+        return;
+    }
+
+
+    const now =
+        new Date().toISOString();
 
 
     const {
@@ -197,9 +92,7 @@ async function createVisitLog(
         error
     } =
         await supabaseClient
-
             .from("user_visit_logs")
-
             .insert({
 
                 user_id:
@@ -209,15 +102,13 @@ async function createVisitLog(
                     pageName,
 
                 entered_at:
-                    new Date().toISOString(),
+                    now,
 
                 last_seen:
-                    new Date().toISOString()
+                    now
 
             })
-
             .select("id")
-
             .single();
 
 
@@ -227,7 +118,6 @@ async function createVisitLog(
             "Create visit log error:",
             error
         );
-
 
         return;
 
@@ -241,94 +131,157 @@ async function createVisitLog(
 
 
 /* =========================================================
-   تحديث المتواجد الآن
+   تحديث آخر نشاط
 ========================================================= */
 
-async function updatePresence(
-    pageName
-) {
+async function updatePresence(pageName) {
 
-    if (!presenceUser) return;
+    if (!presenceUser) {
+        return;
+    }
 
 
     const now =
         new Date().toISOString();
 
 
-    /* ==========================================
-       user_presence
-    ========================================== */
+    if (!currentVisitId) {
 
-    const {
-        error: presenceError
-    } =
-        await supabaseClient
-
-            .from("user_presence")
-
-            .upsert({
-
-                user_id:
-                    presenceUser.id,
-
-                page:
-                    pageName,
-
-                last_seen:
-                    now
-
-            }, {
-
-                onConflict:
-                    "user_id"
-
-            });
-
-
-    if (presenceError) {
-
-        console.error(
-            "Update presence error:",
-            presenceError
+        await createVisitLog(
+            pageName
         );
+
+        return;
 
     }
 
 
-    /* ==========================================
-       user_visit_logs
-    ========================================== */
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("user_visit_logs")
+            .update({
 
-    if (currentVisitId) {
+                last_seen:
+                    now
 
-        const {
-            error: visitError
-        } =
-            await supabaseClient
-
-                .from("user_visit_logs")
-
-                .update({
-
-                    last_seen:
-                        now
-
-                })
-
-                .eq(
-                    "id",
-                    currentVisitId
-                );
-
-
-        if (visitError) {
-
-            console.error(
-                "Update visit log error:",
-                visitError
+            })
+            .eq(
+                "id",
+                currentVisitId
             );
 
+
+    if (error) {
+
+        console.error(
+            "Update presence error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   بدء التتبع
+========================================================= */
+
+async function startPresence(pageName) {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (
+            error ||
+            !data?.user
+        ) {
+
+            console.log(
+                "Presence: لا يوجد مستخدم مسجل دخول."
+            );
+
+            return;
+
         }
+
+
+        presenceUser =
+            data.user;
+
+
+        currentPresencePage =
+            pageName ||
+            getPageName();
+
+
+        /* ==========================================
+           إنشاء زيارة جديدة
+        ========================================== */
+
+        await createVisitLog(
+            currentPresencePage
+        );
+
+
+        /* ==========================================
+           تحديث النشاط مباشرة
+        ========================================== */
+
+        await updatePresence(
+            currentPresencePage
+        );
+
+
+        /* ==========================================
+           إلغاء المؤقت القديم
+        ========================================== */
+
+        clearInterval(
+            presenceTimer
+        );
+
+
+        /* ==========================================
+           تحديث كل 15 ثانية
+        ========================================== */
+
+        presenceTimer =
+            setInterval(
+                async () => {
+
+                    if (
+                        document.visibilityState !==
+                        "visible"
+                    ) {
+                        return;
+                    }
+
+
+                    await updatePresence(
+                        currentPresencePage ||
+                        getPageName()
+                    );
+
+                },
+                15000
+            );
+
+
+    } catch (error) {
+
+        console.error(
+            "Presence start error:",
+            error
+        );
 
     }
 
@@ -354,9 +307,7 @@ document.addEventListener(
 
 
         if (!presenceUser) {
-
             return;
-
         }
 
 
@@ -364,10 +315,9 @@ document.addEventListener(
             getPageName();
 
 
-        /*
-           إذا انتقل إلى صفحة مختلفة
-           نبدأ سجل زيارة جديد
-        */
+        /* ==========================================
+           إذا انتقل المستخدم إلى صفحة أخرى
+        ========================================== */
 
         if (
             currentPresencePage !==
@@ -376,6 +326,10 @@ document.addEventListener(
 
             currentPresencePage =
                 page;
+
+
+            currentVisitId =
+                null;
 
 
             await createVisitLog(
@@ -399,14 +353,39 @@ document.addEventListener(
 
 window.addEventListener(
     "focus",
-    () => {
+    async () => {
 
-        if (!presenceUser) return;
+        if (!presenceUser) {
+            return;
+        }
 
 
-        updatePresence(
-            currentPresencePage ||
-            getPageName()
+        const page =
+            getPageName();
+
+
+        if (
+            currentPresencePage !==
+            page
+        ) {
+
+            currentPresencePage =
+                page;
+
+
+            currentVisitId =
+                null;
+
+
+            await createVisitLog(
+                page
+            );
+
+        }
+
+
+        await updatePresence(
+            page
         );
 
     }
@@ -416,15 +395,6 @@ window.addEventListener(
 /* =========================================================
    تشغيل تلقائي
 ========================================================= */
-
-/*
-   إذا كنت تستدعي startPresence("home")
-   أو startPresence("games")
-   من صفحاتك، لا تحتاج هذا الجزء.
-
-   أما إذا لم تكن تستدعيها من الصفحة،
-   سيتم تشغيلها تلقائيًا.
-*/
 
 document.addEventListener(
     "DOMContentLoaded",
