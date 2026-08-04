@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 
 <head>
@@ -7,7 +6,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-   content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
 <title>لعب مع المستخدمين</title>
 
@@ -215,7 +214,7 @@ input {
 
 .reject-btn {
     background: #fff0f0;
-    color: #d43d3d;
+    color: #d43d43;
 }
 
 /* =========================================
@@ -267,11 +266,6 @@ input {
 
 .online {
     color: #22a866;
-    font-size: 11px;
-}
-
-.offline {
-    color: #999;
     font-size: 11px;
 }
 
@@ -402,7 +396,6 @@ input {
 
 <main class="page">
 
-```
 <header class="header">
 
     <button
@@ -513,9 +506,9 @@ input {
     </div>
 
 </div>
-```
 
 </main>
+
 
 <!-- =========================================
      نافذة اختيار اللعبة
@@ -525,106 +518,106 @@ input {
     id="gameModal"
     class="overlay">
 
-```
-<div class="modal">
+    <div class="modal">
 
-    <h2>
-        🎮 اختر اللعبة
-    </h2>
+        <h2>
+            🎮 اختر اللعبة
+        </h2>
 
-    <p id="selectedUserText">
-        اختر لعبة لإرسال الدعوة
-    </p>
+        <p id="selectedUserText">
+            اختر لعبة لإرسال الدعوة
+        </p>
 
-    <div class="game-options">
+        <div class="game-options">
+
+            <button
+                class="game-option"
+                onclick="sendGameInvite('battle')">
+
+                <div class="game-icon">
+                    ⚔️
+                </div>
+
+                <div>
+
+                    <strong>
+                        معركة الكلمات
+                    </strong>
+
+                    <small>
+                        من يعرف كلمات إنجليزية أكثر؟
+                    </small>
+
+                </div>
+
+            </button>
+
+
+            <button
+                class="game-option"
+                onclick="sendGameInvite('meaning_race')">
+
+                <div class="game-icon">
+                    🏃
+                </div>
+
+                <div>
+
+                    <strong>
+                        سباق المعاني
+                    </strong>
+
+                    <small>
+                        اختر المعنى الصحيح بأسرع وقت
+                    </small>
+
+                </div>
+
+            </button>
+
+
+            <button
+                class="game-option"
+                onclick="sendGameInvite('listen_battle')">
+
+                <div class="game-icon">
+                    🎧
+                </div>
+
+                <div>
+
+                    <strong>
+                        تحدي الاستماع
+                    </strong>
+
+                    <small>
+                        اسمع الكلمة واختبر سرعتك
+                    </small>
+
+                </div>
+
+            </button>
+
+        </div>
 
         <button
-            class="game-option"
-            onclick="sendGameInvite('word_battle')">
+            class="cancel-btn"
+            onclick="closeGameModal()">
 
-            <div class="game-icon">
-                ⚔️
-            </div>
-
-            <div>
-
-                <strong>
-                    معركة الكلمات
-                </strong>
-
-                <small>
-                    من يعرف كلمات إنجليزية أكثر؟
-                </small>
-
-            </div>
-
-        </button>
-
-
-        <button
-            class="game-option"
-            onclick="sendGameInvite('meaning_race')">
-
-            <div class="game-icon">
-                🏃
-            </div>
-
-            <div>
-
-                <strong>
-                    سباق المعاني
-                </strong>
-
-                <small>
-                    اختر المعنى الصحيح بأسرع وقت
-                </small>
-
-            </div>
-
-        </button>
-
-
-        <button
-            class="game-option"
-            onclick="sendGameInvite('listen_battle')">
-
-            <div class="game-icon">
-                🎧
-            </div>
-
-            <div>
-
-                <strong>
-                    تحدي الاستماع
-                </strong>
-
-                <small>
-                    اسمع الكلمة واختبر سرعتك
-                </small>
-
-            </div>
+            إلغاء
 
         </button>
 
     </div>
 
-    <button
-        class="cancel-btn"
-        onclick="closeGameModal()">
-
-        إلغاء
-
-    </button>
-
 </div>
-```
 
-</div>
 
 <div
     id="message"
     class="message">
 </div>
+
 
 <script>
 
@@ -633,7 +626,9 @@ input {
 ================================================= */
 
 let currentUser = null;
+
 let selectedReceiver = null;
+
 let realtimeChannel = null;
 
 
@@ -897,10 +892,6 @@ async function sendGameInvite(gameType) {
         selectedReceiver.name;
 
 
-    /* -----------------------------------------
-       منع دعوة النفس
-    ----------------------------------------- */
-
     if (
         receiverId ===
         currentUser.id
@@ -915,9 +906,9 @@ async function sendGameInvite(gameType) {
     }
 
 
-    /* -----------------------------------------
-       التأكد من عدم وجود دعوة معلقة
-    ----------------------------------------- */
+    /* ==========================================
+       منع دعوة مكررة
+    ========================================== */
 
     const {
         data: existing,
@@ -943,13 +934,16 @@ async function sendGameInvite(gameType) {
         )
         .limit(1);
 
+
     if (existingError) {
 
         console.error(
+            "Check existing invite error:",
             existingError
         );
 
     }
+
 
     if (
         existing &&
@@ -967,9 +961,9 @@ async function sendGameInvite(gameType) {
     }
 
 
-    /* -----------------------------------------
+    /* ==========================================
        إنشاء الدعوة
-    ----------------------------------------- */
+    ========================================== */
 
     const {
         error
@@ -1027,6 +1021,9 @@ function getGameName(type) {
 
     const games = {
 
+        battle:
+            "⚔️ معركة الكلمات",
+
         word_battle:
             "⚔️ معركة الكلمات",
 
@@ -1041,7 +1038,6 @@ function getGameName(type) {
     return games[type] ||
         "🎮 لعبة";
 
-
 }
 
 
@@ -1052,7 +1048,6 @@ function getGameName(type) {
 async function loadIncomingInvites() {
 
     if (!currentUser) return;
-
 
     const {
         data,
@@ -1268,7 +1263,7 @@ async function loadIncomingInvites() {
 
 
 /* =================================================
-   الرد على الدعوة
+   قبول / رفض الدعوة
 ================================================= */
 
 async function respondToInvite(
@@ -1280,14 +1275,132 @@ async function respondToInvite(
     if (!currentUser) return;
 
 
+    /* ==========================================
+       رفض الدعوة
+    ========================================== */
+
+    if (response === "rejected") {
+
+        const {
+            error
+        } = await supabaseClient
+            .from("game_invites")
+            .update({
+
+                status:
+                    "rejected",
+
+                responded_at:
+                    new Date().toISOString()
+
+            })
+            .eq(
+                "id",
+                inviteId
+            )
+            .eq(
+                "receiver_id",
+                currentUser.id
+            )
+            .eq(
+                "status",
+                "pending"
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Reject invite error:",
+                error
+            );
+
+            showMessage(
+                "حدث خطأ أثناء رفض الدعوة ❌"
+            );
+
+            return;
+
+        }
+
+
+        showMessage(
+            "تم رفض الدعوة."
+        );
+
+        await loadIncomingInvites();
+
+        return;
+
+    }
+
+
+    /* ==========================================
+       جلب الدعوة قبل قبولها
+    ========================================== */
+
     const {
-        error
+        data: invite,
+        error: inviteError
+    } = await supabaseClient
+        .from("game_invites")
+        .select("*")
+        .eq(
+            "id",
+            inviteId
+        )
+        .eq(
+            "receiver_id",
+            currentUser.id
+        )
+        .eq(
+            "status",
+            "pending"
+        )
+        .maybeSingle();
+
+
+    if (inviteError) {
+
+        console.error(
+            "Get invite error:",
+            inviteError
+        );
+
+        showMessage(
+            "حدث خطأ أثناء جلب الدعوة ❌"
+        );
+
+        return;
+
+    }
+
+
+    if (!invite) {
+
+        showMessage(
+            "هذه الدعوة لم تعد متاحة."
+        );
+
+        await loadIncomingInvites();
+
+        return;
+
+    }
+
+
+    /* ==========================================
+       قبول الدعوة
+    ========================================== */
+
+    const {
+        error: updateError
     } = await supabaseClient
         .from("game_invites")
         .update({
 
             status:
-                response,
+                "accepted",
 
             responded_at:
                 new Date().toISOString()
@@ -1307,15 +1420,15 @@ async function respondToInvite(
         );
 
 
-    if (error) {
+    if (updateError) {
 
         console.error(
-            "خطأ في الرد على الدعوة:",
-            error
+            "Accept invite error:",
+            updateError
         );
 
         showMessage(
-            "حدث خطأ أثناء معالجة الدعوة ❌"
+            "حدث خطأ أثناء قبول الدعوة ❌"
         );
 
         return;
@@ -1323,42 +1436,89 @@ async function respondToInvite(
     }
 
 
-    if (
-        response ===
-        "accepted"
-    ) {
+    /* ==========================================
+       إنشاء المباراة
+    ========================================== */
 
-        showMessage(
-            "تم قبول الدعوة 🎮"
+    const {
+        data: match,
+        error: matchError
+    } = await supabaseClient
+        .from("game_matches")
+        .insert({
+
+            invite_id:
+                invite.id,
+
+            player1_id:
+                invite.sender_id,
+
+            player2_id:
+                invite.receiver_id,
+
+            game_type:
+                "battle",
+
+            current_question:
+                0,
+
+            player1_score:
+                0,
+
+            player2_score:
+                0,
+
+            status:
+                "waiting"
+
+        })
+        .select()
+        .single();
+
+
+    if (matchError) {
+
+        console.error(
+            "Create match error:",
+            matchError
         );
 
-
-        /*
-         * مؤقتًا نفتح صفحة اللعبة.
-         * بعد ذلك سنبني اللعبة نفسها.
-         */
-
-        setTimeout(() => {
-
-            window.location.href =
-                "battle-game.html?invite=" +
-                encodeURIComponent(
-                    inviteId
-                );
-
-        }, 700);
-
-
-    } else {
-
         showMessage(
-            "تم رفض الدعوة."
+            "تم قبول الدعوة لكن تعذر إنشاء المباراة ❌"
         );
+
+        return;
 
     }
 
 
+    console.log(
+        "Match created:",
+        match
+    );
+
+
     await loadIncomingInvites();
+
+
+    showMessage(
+        "تم قبول الدعوة ⚔️ جاري الدخول إلى المباراة..."
+    );
+
+
+    /* ==========================================
+       الدخول إلى نفس المباراة
+    ========================================== */
+
+    setTimeout(() => {
+
+        window.location.href =
+            "battle.html?match=" +
+            encodeURIComponent(
+                match.id
+            );
+
+    }, 700);
 
 }
 
@@ -1372,22 +1532,46 @@ function setupRealtime() {
     if (!currentUser) return;
 
 
+    if (realtimeChannel) {
+
+        supabaseClient.removeChannel(
+            realtimeChannel
+        );
+
+    }
+
+
     realtimeChannel =
         supabaseClient
             .channel(
                 "game-invites-" +
                 currentUser.id
             )
+
+
+            /* =====================================
+               دعوة جديدة
+            ===================================== */
+
             .on(
                 "postgres_changes",
                 {
-                    event: "INSERT",
-                    schema: "public",
-                    table: "game_invites",
+
+                    event:
+                        "INSERT",
+
+                    schema:
+                        "public",
+
+                    table:
+                        "game_invites",
+
                     filter:
                         "receiver_id=eq." +
                         currentUser.id
+
                 },
+
                 async payload => {
 
                     console.log(
@@ -1403,16 +1587,31 @@ function setupRealtime() {
 
                 }
             )
+
+
+            /* =====================================
+               تحديث دعوة
+            ===================================== */
+
             .on(
                 "postgres_changes",
                 {
-                    event: "UPDATE",
-                    schema: "public",
-                    table: "game_invites",
+
+                    event:
+                        "UPDATE",
+
+                    schema:
+                        "public",
+
+                    table:
+                        "game_invites",
+
                     filter:
                         "receiver_id=eq." +
                         currentUser.id
+
                 },
+
                 async payload => {
 
                     console.log(
@@ -1424,6 +1623,8 @@ function setupRealtime() {
 
                 }
             )
+
+
             .subscribe(
                 status => {
 
@@ -1444,8 +1645,11 @@ function setupRealtime() {
 
 let searchTimer = null;
 
+
 document
-    .getElementById("searchInput")
+    .getElementById(
+        "searchInput"
+    )
     .addEventListener(
         "input",
         function() {
@@ -1460,7 +1664,9 @@ document
             searchTimer =
                 setTimeout(() => {
 
-                    loadUsers(value);
+                    loadUsers(
+                        value
+                    );
 
                 }, 250);
 
@@ -1475,7 +1681,9 @@ document
 function escapeHtml(text) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     div.textContent =
         text || "";
@@ -1560,4 +1768,5 @@ window.addEventListener(
 </script>
 
 </body>
+
 </html>
