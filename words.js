@@ -3,9 +3,7 @@
 // ==========================================
 
 let words = [];
-
 let currentIndex = 0;
-
 let favorite = false;
 
 
@@ -13,11 +11,8 @@ let favorite = false;
 // قراءة اختيار المستخدم
 // ==========================================
 
-const selectedLevel =
-    localStorage.getItem("selectedLevel");
-
-const selectedCategory =
-    localStorage.getItem("selectedCategory");
+const selectedLevel = localStorage.getItem("selectedLevel");
+const selectedCategory = localStorage.getItem("selectedCategory");
 
 
 // ==========================================
@@ -31,67 +26,37 @@ async function loadWords() {
         error: userError
     } = await supabaseClient.auth.getUser();
 
-
     if (userError || !user) {
-
         alert("⚠️ يجب تسجيل الدخول أولاً.");
-
         window.location.href = "login.html";
-
         return;
     }
-
 
     const {
         data,
         error
     } = await supabaseClient
-
         .from("words")
-
         .select("*")
-
         .eq("level", selectedLevel)
-
         .eq("category", selectedCategory)
-
-        .order(
-            "created_at",
-            {
-                ascending: true
-            }
-        );
-
+        .order("created_at", {
+            ascending: true
+        });
 
     if (error) {
-
-        console.error(
-            "Supabase error:",
-            error
-        );
-
-        alert(
-            "❌ حدث خطأ أثناء تحميل الكلمات."
-        );
-
+        console.error("Supabase error:", error);
+        alert("❌ حدث خطأ أثناء تحميل الكلمات.");
         return;
     }
-
 
     words = data || [];
 
-
     if (words.length === 0) {
-
-        alert(
-            "ما فيه كلمات بهذا المستوى والتصنيف حتى الآن."
-        );
-
+        alert("ما فيه كلمات بهذا المستوى والتصنيف حتى الآن.");
         window.location.href = "learn.html";
-
         return;
     }
-
 
     loadWord();
 }
@@ -103,9 +68,7 @@ async function loadWords() {
 
 function loadWord() {
 
-    const word =
-        words[currentIndex];
-
+    const word = words[currentIndex];
 
     if (!word) return;
 
@@ -114,25 +77,20 @@ function loadWord() {
     // الصورة
     // ==========================================
 
-    const imageBox =
-        document.getElementById("wordEmoji");
-
+    const imageBox = document.getElementById("wordEmoji");
 
     if (word.image) {
 
         imageBox.innerHTML = `
-
             <img
                 src="${word.image}"
                 alt="${word.english || ""}"
             >
-
         `;
 
     } else {
 
-        imageBox.textContent =
-            word.emoji || "🖼️";
+        imageBox.textContent = word.emoji || "🖼️";
 
     }
 
@@ -141,9 +99,7 @@ function loadWord() {
     // الإنجليزية
     // ==========================================
 
-    document.getElementById(
-        "englishWord"
-    ).textContent =
+    document.getElementById("englishWord").textContent =
         word.english || "";
 
 
@@ -151,75 +107,60 @@ function loadWord() {
     // العربية
     // ==========================================
 
-    const arabicWord =
-        document.getElementById("arabicWord");
+    const arabicWord = document.getElementById("arabicWord");
+
+    arabicWord.textContent = word.arabic || "";
+
+    // نخفي الترجمة عند الانتقال لكلمة جديدة
+    arabicWord.classList.remove("show-translation");
 
 
-    if (arabicWord) {
+    // ==========================================
+    // زر إظهار الترجمة
+    // ==========================================
 
-        arabicWord.textContent =
-            word.arabic || "";
+    const translationBtn =
+        document.getElementById("translationBtn");
+
+    if (translationBtn) {
+
+        translationBtn.textContent = "👁️ إظهار الترجمة";
+
+        translationBtn.classList.remove("active");
 
     }
-
-
-    // ==========================================
-    // إخفاء ترجمة الكلمة
-    // ==========================================
-
-    hideTranslation();
 
 
     // ==========================================
     // المثال
     // ==========================================
 
-    document.getElementById(
-        "exampleText"
-    ).textContent =
+    document.getElementById("exampleText").textContent =
         word.example || "";
-
 
     const exampleArabic =
         document.getElementById("exampleArabic");
 
+    exampleArabic.textContent =
+        word.exampleArabic || "";
 
-    if (exampleArabic) {
-
-        exampleArabic.textContent =
-            word.exampleArabic || "";
-
-    }
-
-
-    // ==========================================
-    // إخفاء ترجمة المثال
-    // ==========================================
-
-    hideExampleTranslation();
+    // إخفاء ترجمة المثال عند تغيير الكلمة
+    exampleArabic.classList.remove("show-translation");
 
 
     // ==========================================
     // التقدم
     // ==========================================
 
-    const number =
-        currentIndex + 1;
+    const number = currentIndex + 1;
 
-
-    document.getElementById(
-        "progressText"
-    ).textContent =
+    document.getElementById("progressText").textContent =
         number + " / " + words.length;
-
 
     const percent =
         (number / words.length) * 100;
 
-
-    document.getElementById(
-        "progressFill"
-    ).style.width =
+    document.getElementById("progressFill").style.width =
         percent + "%";
 
 
@@ -228,9 +169,7 @@ function loadWord() {
     // ==========================================
 
     if ("speechSynthesis" in window) {
-
         window.speechSynthesis.cancel();
-
     }
 
 
@@ -240,10 +179,8 @@ function loadWord() {
 
     favorite = false;
 
-
     const favoriteBtn =
         document.getElementById("favoriteBtn");
-
 
     if (favoriteBtn) {
 
@@ -263,76 +200,38 @@ function loadWord() {
 // إظهار / إخفاء ترجمة الكلمة
 // ==========================================
 
-function toggleTranslation() {
+function toggleWordTranslation() {
 
-    const translation =
+    const arabicWord =
         document.getElementById("arabicWord");
 
-    const button =
+    const translationBtn =
         document.getElementById("translationBtn");
 
-
-    if (!translation || !button) return;
-
-
-    const isHidden =
-        translation.classList.contains(
-            "hidden-translation"
-        );
+    if (!arabicWord || !translationBtn) return;
 
 
-    if (isHidden) {
-
-        translation.classList.remove(
-            "hidden-translation"
-        );
+    const isVisible =
+        arabicWord.classList.contains("show-translation");
 
 
-        button.textContent =
-            "🙈 إخفاء الترجمة";
+    if (isVisible) {
 
+        arabicWord.classList.remove("show-translation");
+
+        translationBtn.textContent =
+            "👁️ إظهار الترجمة";
+
+        translationBtn.classList.remove("active");
 
     } else {
 
-        translation.classList.add(
-            "hidden-translation"
-        );
+        arabicWord.classList.add("show-translation");
 
+        translationBtn.textContent =
+            "🙈 إخفاء الترجمة";
 
-        button.textContent =
-            "👁️ إظهار الترجمة";
-
-    }
-
-}
-
-
-// ==========================================
-// إخفاء ترجمة الكلمة
-// ==========================================
-
-function hideTranslation() {
-
-    const translation =
-        document.getElementById("arabicWord");
-
-    const button =
-        document.getElementById("translationBtn");
-
-
-    if (translation) {
-
-        translation.classList.add(
-            "hidden-translation"
-        );
-
-    }
-
-
-    if (button) {
-
-        button.textContent =
-            "👁️ إظهار الترجمة";
+        translationBtn.classList.add("active");
 
     }
 
@@ -345,78 +244,36 @@ function hideTranslation() {
 
 function toggleExampleTranslation() {
 
-    const translation =
+    const exampleArabic =
         document.getElementById("exampleArabic");
 
-    const button =
-        document.getElementById(
-            "exampleTranslationBtn"
-        );
+    const exampleTranslationBtn =
+        document.getElementById("exampleTranslationBtn");
+
+    if (!exampleArabic || !exampleTranslationBtn) return;
 
 
-    if (!translation || !button) return;
+    const isVisible =
+        exampleArabic.classList.contains("show-translation");
 
 
-    const isHidden =
-        translation.classList.contains(
-            "hidden-translation"
-        );
+    if (isVisible) {
 
+        exampleArabic.classList.remove("show-translation");
 
-    if (isHidden) {
+        exampleTranslationBtn.textContent =
+            "👁️ إظهار الترجمة";
 
-        translation.classList.remove(
-            "hidden-translation"
-        );
-
-
-        button.textContent =
-            "🙈 إخفاء الترجمة";
-
+        exampleTranslationBtn.classList.remove("active");
 
     } else {
 
-        translation.classList.add(
-            "hidden-translation"
-        );
+        exampleArabic.classList.add("show-translation");
 
+        exampleTranslationBtn.textContent =
+            "🙈 إخفاء الترجمة";
 
-        button.textContent =
-            "👁️ إظهار الترجمة";
-
-    }
-
-}
-
-
-// ==========================================
-// إخفاء ترجمة المثال
-// ==========================================
-
-function hideExampleTranslation() {
-
-    const translation =
-        document.getElementById("exampleArabic");
-
-    const button =
-        document.getElementById(
-            "exampleTranslationBtn"
-        );
-
-
-    if (translation) {
-
-        translation.classList.add(
-            "hidden-translation"
-        );
-
-    }
-
-
-    if (button) {
-
-        button.textContent =
-            "👁️ إظهار الترجمة";
+        exampleTranslationBtn.classList.add("active");
 
     }
 
@@ -429,62 +286,37 @@ function hideExampleTranslation() {
 
 async function checkFavorite() {
 
-    const word =
-        words[currentIndex];
-
+    const word = words[currentIndex];
 
     if (!word || !word.id) return;
 
-
     const {
         data: { user }
-    } =
-        await supabaseClient
-            .auth
-            .getUser();
-
+    } = await supabaseClient.auth.getUser();
 
     if (!user) return;
-
 
     const {
         data,
         error
-    } =
-        await supabaseClient
-
-            .from("favorites")
-
-            .select("id")
-
-            .eq("user_id", user.id)
-
-            .eq("word_id", word.id)
-
-            .maybeSingle();
-
+    } = await supabaseClient
+        .from("favorites")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("word_id", word.id)
+        .maybeSingle();
 
     if (error) {
-
-        console.error(
-            "Favorite check error:",
-            error
-        );
-
+        console.error("Favorite check error:", error);
         return;
     }
-
 
     if (data) {
 
         favorite = true;
 
-
         const button =
-            document.getElementById(
-                "favoriteBtn"
-            );
-
+            document.getElementById("favoriteBtn");
 
         if (button) {
 
@@ -506,42 +338,27 @@ async function checkFavorite() {
 
 function speakWord() {
 
-    const word =
-        words[currentIndex];
-
+    const word = words[currentIndex];
 
     if (!word || !word.english) return;
 
-
     if (!("speechSynthesis" in window)) {
 
-        alert(
-            "⚠️ جهازك لا يدعم النطق الصوتي."
-        );
+        alert("⚠️ جهازك لا يدعم النطق الصوتي.");
 
         return;
     }
 
-
     const speech =
-        new SpeechSynthesisUtterance(
-            word.english
-        );
-
+        new SpeechSynthesisUtterance(word.english);
 
     speech.lang = "en-US";
-
     speech.rate = 0.8;
-
     speech.pitch = 1;
-
 
     window.speechSynthesis.cancel();
 
-    window.speechSynthesis.speak(
-        speech
-    );
-
+    window.speechSynthesis.speak(speech);
 }
 
 
@@ -551,49 +368,32 @@ function speakWord() {
 
 function speakExample() {
 
-    const word =
-        words[currentIndex];
-
+    const word = words[currentIndex];
 
     if (!word || !word.example) {
 
-        alert(
-            "⚠️ لا توجد جملة لهذه الكلمة."
-        );
+        alert("⚠️ لا توجد جملة لهذه الكلمة.");
 
         return;
     }
-
 
     if (!("speechSynthesis" in window)) {
 
-        alert(
-            "⚠️ جهازك لا يدعم النطق الصوتي."
-        );
+        alert("⚠️ جهازك لا يدعم النطق الصوتي.");
 
         return;
     }
 
-
     const speech =
-        new SpeechSynthesisUtterance(
-            word.example
-        );
-
+        new SpeechSynthesisUtterance(word.example);
 
     speech.lang = "en-US";
-
     speech.rate = 0.8;
-
     speech.pitch = 1;
-
 
     window.speechSynthesis.cancel();
 
-    window.speechSynthesis.speak(
-        speech
-    );
-
+    window.speechSynthesis.speak(speech);
 }
 
 
@@ -603,49 +403,32 @@ function speakExample() {
 
 function speakExampleSlow() {
 
-    const word =
-        words[currentIndex];
-
+    const word = words[currentIndex];
 
     if (!word || !word.example) {
 
-        alert(
-            "⚠️ لا توجد جملة لهذه الكلمة."
-        );
+        alert("⚠️ لا توجد جملة لهذه الكلمة.");
 
         return;
     }
-
 
     if (!("speechSynthesis" in window)) {
 
-        alert(
-            "⚠️ جهازك لا يدعم النطق الصوتي."
-        );
+        alert("⚠️ جهازك لا يدعم النطق الصوتي.");
 
         return;
     }
 
-
     const speech =
-        new SpeechSynthesisUtterance(
-            word.example
-        );
-
+        new SpeechSynthesisUtterance(word.example);
 
     speech.lang = "en-US";
-
     speech.rate = 0.5;
-
     speech.pitch = 1;
-
 
     window.speechSynthesis.cancel();
 
-    window.speechSynthesis.speak(
-        speech
-    );
-
+    window.speechSynthesis.speak(speech);
 }
 
 
@@ -655,63 +438,44 @@ function speakExampleSlow() {
 
 async function answer(known) {
 
-    const word =
-        words[currentIndex];
-
+    const word = words[currentIndex];
 
     if (!word || !word.id) return;
-
 
     const {
         data: { user },
         error: userError
-    } =
-        await supabaseClient
-            .auth
-            .getUser();
-
+    } = await supabaseClient.auth.getUser();
 
     if (userError || !user) {
 
-        alert(
-            "⚠️ يجب تسجيل الدخول أولاً."
-        );
+        alert("⚠️ يجب تسجيل الدخول أولاً.");
 
-        window.location.href =
-            "login.html";
+        window.location.href = "login.html";
 
         return;
     }
 
 
     // ==========================================
-    // أعرف الكلمة
+    // أعرف
     // ==========================================
 
     if (known) {
 
         const {
             error: learnedError
-        } =
-            await supabaseClient
-
-                .from("learned_words")
-
-                .upsert(
-
-                    {
-                        user_id: user.id,
-
-                        word_id: String(word.id)
-                    },
-
-                    {
-                        onConflict:
-                            "user_id,word_id"
-                    }
-
-                );
-
+        } = await supabaseClient
+            .from("learned_words")
+            .upsert(
+                {
+                    user_id: user.id,
+                    word_id: String(word.id)
+                },
+                {
+                    onConflict: "user_id,word_id"
+                }
+            );
 
         if (learnedError) {
 
@@ -721,25 +485,17 @@ async function answer(known) {
             );
 
             alert(
-                "❌ خطأ Supabase:\n\n" +
-                "Code: " +
-                (learnedError.code || "") +
-                "\n\nMessage: " +
-                (learnedError.message || "") +
-                "\n\nDetails: " +
-                (learnedError.details || "") +
-                "\n\nHint: " +
-                (learnedError.hint || "")
+                "❌ حدث خطأ أثناء حفظ الكلمة:\n" +
+                learnedError.message
             );
 
             return;
         }
-
     }
 
 
     // ==========================================
-    // لا أعرف الكلمة
+    // لا أعرف
     // ==========================================
 
     if (!known) {
@@ -747,22 +503,12 @@ async function answer(known) {
         const {
             data: existing,
             error: checkError
-        } =
-            await supabaseClient
-
-                .from("review_words")
-
-                .select("id")
-
-                .eq("user_id", user.id)
-
-                .eq(
-                    "word_id",
-                    String(word.id)
-                )
-
-                .maybeSingle();
-
+        } = await supabaseClient
+            .from("review_words")
+            .select("id")
+            .eq("user_id", user.id)
+            .eq("word_id", String(word.id))
+            .maybeSingle();
 
         if (checkError) {
 
@@ -784,22 +530,12 @@ async function answer(known) {
 
             const {
                 error: insertError
-            } =
-                await supabaseClient
-
-                    .from("review_words")
-
-                    .insert(
-
-                        {
-                            user_id: user.id,
-
-                            word_id:
-                                String(word.id)
-                        }
-
-                    );
-
+            } = await supabaseClient
+                .from("review_words")
+                .insert({
+                    user_id: user.id,
+                    word_id: String(word.id)
+                });
 
             if (insertError) {
 
@@ -815,102 +551,69 @@ async function answer(known) {
 
                 return;
             }
-
         }
-
     }
 
 
     nextWord();
-
 }
 
 
 // ==========================================
-// حفظ / إزالة المفضلة
+// المفضلة
 // ==========================================
 
 async function toggleFavorite() {
 
     const button =
-        document.getElementById(
-            "favoriteBtn"
-        );
-
+        document.getElementById("favoriteBtn");
 
     const {
         data: { user },
         error: userError
-    } =
-        await supabaseClient
-            .auth
-            .getUser();
-
+    } = await supabaseClient.auth.getUser();
 
     if (userError || !user) {
 
-        alert(
-            "⚠️ يجب تسجيل الدخول أولاً."
-        );
+        alert("⚠️ يجب تسجيل الدخول أولاً.");
 
-        window.location.href =
-            "login.html";
+        window.location.href = "login.html";
 
         return;
     }
 
-
-    const word =
-        words[currentIndex];
-
+    const word = words[currentIndex];
 
     if (!word || !word.id) {
 
-        alert(
-            "⚠️ لا يمكن حفظ هذه الكلمة."
-        );
+        alert("⚠️ لا يمكن حفظ هذه الكلمة.");
 
         return;
     }
 
 
     // ==========================================
-    // إزالة من المفضلة
+    // إزالة
     // ==========================================
 
     if (favorite) {
 
         const {
             error
-        } =
-            await supabaseClient
-
-                .from("favorites")
-
-                .delete()
-
-                .eq(
-                    "user_id",
-                    user.id
-                )
-
-                .eq(
-                    "word_id",
-                    word.id
-                );
-
+        } = await supabaseClient
+            .from("favorites")
+            .delete()
+            .eq("user_id", user.id)
+            .eq("word_id", word.id);
 
         if (error) {
 
             console.error(error);
 
-            alert(
-                "❌ حدث خطأ أثناء إزالة الكلمة."
-            );
+            alert("❌ حدث خطأ أثناء إزالة الكلمة.");
 
             return;
         }
-
 
         favorite = false;
 
@@ -929,21 +632,12 @@ async function toggleFavorite() {
 
     const {
         error
-    } =
-        await supabaseClient
-
-            .from("favorites")
-
-            .insert(
-
-                {
-                    user_id: user.id,
-
-                    word_id: word.id
-                }
-
-            );
-
+    } = await supabaseClient
+        .from("favorites")
+        .insert({
+            user_id: user.id,
+            word_id: word.id
+        });
 
     if (error) {
 
@@ -959,16 +653,12 @@ async function toggleFavorite() {
             return;
         }
 
-
         console.error(error);
 
-        alert(
-            "❌ حدث خطأ أثناء حفظ الكلمة."
-        );
+        alert("❌ حدث خطأ أثناء حفظ الكلمة.");
 
         return;
     }
-
 
     favorite = true;
 
@@ -976,7 +666,6 @@ async function toggleFavorite() {
 
     button.innerHTML =
         "★ <span>محفوظة</span>";
-
 }
 
 
@@ -986,10 +675,7 @@ async function toggleFavorite() {
 
 function nextWord() {
 
-    if (
-        currentIndex <
-        words.length - 1
-    ) {
+    if (currentIndex < words.length - 1) {
 
         currentIndex++;
 
@@ -1004,9 +690,7 @@ function nextWord() {
         currentIndex = 0;
 
         loadWord();
-
     }
-
 }
 
 
@@ -1018,7 +702,6 @@ function goBack() {
 
     window.location.href =
         "learn.html";
-
 }
 
 
@@ -1030,7 +713,6 @@ function goHome() {
 
     window.location.href =
         "index.html";
-
 }
 
 

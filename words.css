@@ -1,7 +1,3 @@
-/* =========================================================
-   Words Page
-   ========================================================= */
-
 * {
     box-sizing: border-box;
 }
@@ -40,9 +36,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    الشريط العلوي
-   ========================================================= */
+========================================== */
 
 .topbar {
     width: 100%;
@@ -90,7 +86,6 @@ button {
     width: 44px;
     height: 44px;
     border-radius: 14px;
-
     font-size: 20px;
 }
 
@@ -111,9 +106,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    الحاوية
-   ========================================================= */
+========================================== */
 
 .container {
     width: 100%;
@@ -125,9 +120,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    التقدم
-   ========================================================= */
+========================================== */
 
 .progress-area {
     background: white;
@@ -188,9 +183,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    بطاقة الكلمة
-   ========================================================= */
+========================================== */
 
 .word-card {
     background: white;
@@ -208,9 +203,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    الصورة
-   ========================================================= */
+========================================== */
 
 .image-container {
     width: 100%;
@@ -259,9 +254,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    محتوى الكلمة
-   ========================================================= */
+========================================== */
 
 .word-content {
     text-align: center;
@@ -269,71 +264,79 @@ button {
 
 .english-word {
     font-size: 36px;
-
     line-height: 1.15;
 
     font-weight: 800;
 
     color: #191a2b;
 
-    margin-bottom: 10px;
+    margin-bottom: 7px;
 
     direction: ltr;
 }
 
 
-/* =========================================================
-   الترجمة العربية
-   ========================================================= */
+/* ==========================================
+   الترجمة العربية للكلمة
+========================================== */
 
 .arabic-word {
-    display: none;
-
     font-size: 21px;
 
     font-weight: 600;
 
     color: #777787;
 
-    margin: 0 auto 11px;
+    margin-bottom: 10px;
 
-    line-height: 1.5;
+    min-height: 0;
 
-    animation: translationShow .2s ease;
+    opacity: 0;
+
+    visibility: hidden;
+
+    height: 0;
+
+    overflow: hidden;
+
+    transform: translateY(-5px);
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
 }
 
-.arabic-word.show {
-    display: block;
-}
+.arabic-word.show-translation {
+    opacity: 1;
 
-@keyframes translationShow {
+    visibility: visible;
 
-    from {
-        opacity: 0;
-        transform: translateY(-4px);
-    }
+    height: auto;
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    min-height: 28px;
+
+    transform: translateY(0);
+
+    margin-bottom: 13px;
 }
 
 
-/* =========================================================
-   زر إظهار الترجمة
-   ========================================================= */
+/* ==========================================
+   زر إظهار ترجمة الكلمة
+========================================== */
 
 .translation-btn {
-    border: 1px solid #dedcf4;
+    border: 1px solid #e2e1ed;
 
-    background: #f7f6ff;
+    background: #f8f7ff;
 
     color: #5c51dc;
 
     border-radius: 12px;
 
-    padding: 9px 15px;
+    padding: 9px 16px;
+
+    margin-bottom: 10px;
 
     font-size: 13px;
 
@@ -341,15 +344,13 @@ button {
 
     cursor: pointer;
 
-    margin-bottom: 10px;
-
     transition:
-        background .15s ease,
-        transform .15s ease;
+        transform .15s ease,
+        background .15s ease;
 }
 
 .translation-btn:hover {
-    background: #eeecff;
+    background: #efedff;
 }
 
 .translation-btn:active {
@@ -361,9 +362,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    زر سماع الكلمة
-   ========================================================= */
+========================================== */
 
 .sound-btn {
     border: none;
@@ -400,9 +401,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    المثال
-   ========================================================= */
+========================================== */
 
 .example {
     margin-top: 17px;
@@ -444,6 +445,11 @@ button {
     text-align: left;
 }
 
+
+/* ==========================================
+   ترجمة المثال
+========================================== */
+
 .example small {
     display: block;
 
@@ -452,12 +458,73 @@ button {
     font-size: 12px;
 
     line-height: 1.6;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    height: 0;
+
+    overflow: hidden;
+
+    transform: translateY(-4px);
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+}
+
+.example small.show-translation {
+    opacity: 1;
+
+    visibility: visible;
+
+    height: auto;
+
+    transform: translateY(0);
 }
 
 
-/* =========================================================
+/* ==========================================
+   زر إظهار ترجمة المثال
+========================================== */
+
+.example-translation-btn {
+    border: 1px solid #e2e1ed;
+
+    background: white;
+
+    color: #5c51dc;
+
+    border-radius: 10px;
+
+    padding: 7px 12px;
+
+    margin-top: 7px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.example-translation-btn:hover {
+    background: #f5f4ff;
+}
+
+.example-translation-btn:active {
+    transform: scale(.97);
+}
+
+.example-translation-btn.active {
+    background: #eeecff;
+}
+
+
+/* ==========================================
    أزرار نطق المثال
-   ========================================================= */
+========================================== */
 
 .example-sound-buttons {
     display: flex;
@@ -500,9 +567,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    أعرف / لا أعرف
-   ========================================================= */
+========================================== */
 
 .knowledge-buttons {
     display: grid;
@@ -538,7 +605,6 @@ button {
 
 .dont-know {
     background: #fff0f3;
-
     color: #e04762;
 
     box-shadow:
@@ -547,7 +613,6 @@ button {
 
 .know {
     background: #e6f8ef;
-
     color: #23925e;
 
     box-shadow:
@@ -555,9 +620,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    الإجراءات
-   ========================================================= */
+========================================== */
 
 .actions {
     display: grid;
@@ -589,11 +654,6 @@ button {
     transform: scale(.97);
 }
 
-
-/* =========================================================
-   المفضلة
-   ========================================================= */
-
 #favoriteBtn {
     border: 1px solid #e6e4ef;
 
@@ -616,18 +676,8 @@ button {
 
 #favoriteBtn span {
     font-size: 10px;
-
     color: #777783;
 }
-
-#favoriteBtn.active {
-    background: #fffaf0;
-}
-
-
-/* =========================================================
-   التالي
-   ========================================================= */
 
 .next-btn {
     border: none;
@@ -646,9 +696,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    الكمبيوتر
-   ========================================================= */
+========================================== */
 
 @media (min-width: 800px) {
 
@@ -670,9 +720,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    الجوال
-   ========================================================= */
+========================================== */
 
 @media (max-width: 600px) {
 
@@ -706,11 +756,7 @@ button {
 
     .container {
         max-width: 500px;
-
-        padding:
-            10px
-            11px
-            14px;
+        padding: 10px 11px 14px;
     }
 
     .progress-area {
@@ -749,19 +795,17 @@ button {
 
     .english-word {
         font-size: 28px;
-        margin-bottom: 5px;
+        margin-bottom: 3px;
     }
 
     .arabic-word {
         font-size: 17px;
-        margin-bottom: 7px;
     }
 
     .translation-btn {
-        padding: 7px 12px;
-        border-radius: 10px;
+        padding: 8px 13px;
         font-size: 11px;
-        margin-bottom: 7px;
+        margin-bottom: 8px;
     }
 
     .sound-btn {
@@ -788,6 +832,11 @@ button {
 
     .example small {
         font-size: 10px;
+    }
+
+    .example-translation-btn {
+        font-size: 10px;
+        padding: 6px 10px;
     }
 
     .example-sound-buttons {
@@ -834,9 +883,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    جوالات صغيرة جدًا
-   ========================================================= */
+========================================== */
 
 @media (max-width: 380px) {
 
@@ -880,9 +929,9 @@ button {
 }
 
 
-/* =========================================================
+/* ==========================================
    شاشة قصيرة
-   ========================================================= */
+========================================== */
 
 @media (max-width: 600px) and (max-height: 700px) {
 
@@ -909,9 +958,9 @@ button {
 }
 
 
-/* =========================================================
-   شاشة جوال قصيرة جدًا
-   ========================================================= */
+/* ==========================================
+   شاشة قصيرة جدًا
+========================================== */
 
 @media (max-width: 600px) and (max-height: 620px) {
 
@@ -939,12 +988,6 @@ button {
 
     .arabic-word {
         font-size: 14px;
-        margin-bottom: 5px;
-    }
-
-    .translation-btn {
-        padding: 6px 10px;
-        margin-bottom: 5px;
     }
 
     .sound-btn {
@@ -974,133 +1017,6 @@ button {
 }
 
 
-/* =========================================================
-   الصور
-   ========================================================= */
-
 img {
     max-width: 100%;
-}/* =========================================================
-   إخفاء الترجمة
-========================================================= */
-
-.hidden-translation {
-    display: none !important;
-}
-
-
-/* =========================================================
-   منطقة ترجمة الكلمة
-========================================================= */
-
-.translation-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-
-.translation-btn {
-    border: 1px solid #e2e1ed;
-
-    background: #f8f8fc;
-
-    color: #5c51dc;
-
-    border-radius: 11px;
-
-    padding: 8px 15px;
-
-    font-family: inherit;
-
-    font-size: 12px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition:
-        transform .15s ease,
-        background .15s ease;
-}
-
-
-.translation-btn:hover {
-    background: #efedff;
-}
-
-
-.translation-btn:active {
-    transform: scale(.96);
-}
-
-
-/* =========================================================
-   ترجمة المثال
-========================================================= */
-
-.example-translation-area {
-    margin-top: 5px;
-}
-
-
-.example-translation-btn {
-    margin-top: 6px;
-
-    border: 1px solid #e2e1ed;
-
-    background: white;
-
-    color: #666678;
-
-    border-radius: 9px;
-
-    padding: 6px 11px;
-
-    font-family: inherit;
-
-    font-size: 10px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition:
-        transform .15s ease,
-        background .15s ease;
-}
-
-
-.example-translation-btn:hover {
-    background: #f5f4ff;
-}
-
-
-.example-translation-btn:active {
-    transform: scale(.97);
-}
-
-
-/* =========================================================
-   الجوال
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .translation-btn {
-        padding: 6px 12px;
-
-        font-size: 10px;
-
-        border-radius: 9px;
-    }
-
-
-    .example-translation-btn {
-        padding: 5px 9px;
-
-        font-size: 9px;
-    }
-
 }
