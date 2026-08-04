@@ -41,9 +41,9 @@ input {
     padding: 20px 16px 40px;
 }
 
-/* =========================
+/* =========================================
    الهيدر
-========================= */
+========================================= */
 
 .header {
     display: flex;
@@ -78,9 +78,9 @@ input {
     font-size: 12px;
 }
 
-/* =========================
+/* =========================================
    البانر
-========================= */
+========================================= */
 
 .hero {
     background: linear-gradient(135deg, #6254eb, #8374ed);
@@ -108,9 +108,9 @@ input {
     opacity: .92;
 }
 
-/* =========================
+/* =========================================
    الأقسام
-========================= */
+========================================= */
 
 .section-title {
     display: flex;
@@ -153,9 +153,9 @@ input {
     box-shadow: 0 3px 15px rgba(0,0,0,.05);
 }
 
-/* =========================
+/* =========================================
    الدعوات
-========================= */
+========================================= */
 
 .invite-card {
     background: white;
@@ -222,9 +222,9 @@ input {
     color: #d43d43;
 }
 
-/* =========================
+/* =========================================
    البحث
-========================= */
+========================================= */
 
 .search-box {
     background: white;
@@ -291,9 +291,9 @@ input {
     cursor: default;
 }
 
-/* =========================
+/* =========================================
    نافذة اللعبة
-========================= */
+========================================= */
 
 .overlay {
     display: none;
@@ -372,9 +372,9 @@ input {
     font-size: 14px;
 }
 
-/* =========================
+/* =========================================
    الرسالة
-========================= */
+========================================= */
 
 .message {
     position: fixed;
@@ -404,6 +404,8 @@ input {
 <header class="header">
 
 ```
+<!-- تم تغييره من history.back() إلى index.html -->
+
 <button
     class="back-btn"
     onclick="goHome()">
@@ -513,6 +515,10 @@ input {
 
 </main>
 
+<!-- =========================================
+     نافذة اختيار اللعبة
+========================================= -->
+
 <div
     id="gameModal"
     class="overlay">
@@ -545,7 +551,7 @@ input {
                 </strong>
 
                 <small>
-                    تعرف على الكلمة من الصورة
+                    من يعرف كلمات إنجليزية أكثر؟
                 </small>
 
             </div>
@@ -639,13 +645,20 @@ let acceptedCheckInterval = null;
 
 function goHome() {
 
-    window.location.href = "index.html";
+    /*
+       نذهب مباشرة إلى index.html
+       بدل history.back()
+    */
+
+    window.location.replace(
+        "index.html"
+    );
 
 }
 
 
 /* =================================================
-   المستخدم الحالي
+   تحميل المستخدم الحالي
 ================================================= */
 
 async function loadCurrentUser() {
@@ -655,15 +668,22 @@ async function loadCurrentUser() {
         error
     } = await supabaseClient.auth.getUser();
 
-    if (error || !data.user) {
+    if (
+        error ||
+        !data ||
+        !data.user
+    ) {
 
-        window.location.href = "login.html";
+        window.location.replace(
+            "login.html"
+        );
 
         return false;
 
     }
 
-    currentUser = data.user;
+    currentUser =
+        data.user;
 
     return true;
 
@@ -671,25 +691,33 @@ async function loadCurrentUser() {
 
 
 /* =================================================
-   الرسائل
+   رسالة
 ================================================= */
 
 function showMessage(text) {
 
     const box =
-        document.getElementById("message");
+        document.getElementById(
+            "message"
+        );
 
-    box.textContent = text;
+    box.textContent =
+        text;
 
-    box.style.display = "block";
+    box.style.display =
+        "block";
 
-    clearTimeout(window.messageTimer);
+    clearTimeout(
+        window.messageTimer
+    );
 
-    window.messageTimer = setTimeout(() => {
+    window.messageTimer =
+        setTimeout(() => {
 
-        box.style.display = "none";
+            box.style.display =
+                "none";
 
-    }, 3000);
+        }, 3000);
 
 }
 
@@ -703,7 +731,9 @@ async function loadUsers(search = "") {
     if (!currentUser) return;
 
     const container =
-        document.getElementById("usersList");
+        document.getElementById(
+            "usersList"
+        );
 
     container.innerHTML = `
         <div class="empty-box">
@@ -714,27 +744,44 @@ async function loadUsers(search = "") {
     let query =
         supabaseClient
             .from("profiles")
-            .select("id, display_name, is_public")
-            .eq("is_public", true)
-            .neq("id", currentUser.id)
-            .order("display_name", {
-                ascending: true
-            })
+            .select(
+                "id, display_name, is_public"
+            )
+            .eq(
+                "is_public",
+                true
+            )
+            .neq(
+                "id",
+                currentUser.id
+            )
+            .order(
+                "display_name",
+                {
+                    ascending: true
+                }
+            )
             .limit(50);
+
 
     if (search.trim()) {
 
-        query = query.ilike(
-            "display_name",
-            "%" + search.trim() + "%"
-        );
+        query =
+            query.ilike(
+                "display_name",
+                "%" +
+                search.trim() +
+                "%"
+            );
 
     }
+
 
     const {
         data,
         error
     } = await query;
+
 
     if (error) {
 
@@ -753,7 +800,11 @@ async function loadUsers(search = "") {
 
     }
 
-    if (!data || data.length === 0) {
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
         container.innerHTML = `
             <div class="empty-box">
@@ -765,20 +816,33 @@ async function loadUsers(search = "") {
 
     }
 
-    container.innerHTML = "";
+
+    container.innerHTML =
+        "";
+
 
     data.forEach(user => {
 
         const name =
-            user.display_name || "مستخدم";
+            user.display_name ||
+            "مستخدم";
+
 
         const firstLetter =
-            name.charAt(0).toUpperCase();
+            name
+                .charAt(0)
+                .toUpperCase();
+
 
         const card =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        card.className = "user-card";
+
+        card.className =
+            "user-card";
+
 
         card.innerHTML = `
 
@@ -811,7 +875,10 @@ async function loadUsers(search = "") {
 
         `;
 
-        container.appendChild(card);
+
+        container.appendChild(
+            card
+        );
 
     });
 
@@ -819,7 +886,7 @@ async function loadUsers(search = "") {
 
 
 /* =================================================
-   نافذة اختيار اللعبة
+   فتح نافذة اللعبة
 ================================================= */
 
 function openGameModal(
@@ -829,11 +896,14 @@ function openGameModal(
 
     selectedReceiver = {
 
-        id: receiverId,
+        id:
+            receiverId,
 
-        name: receiverName
+        name:
+            receiverName
 
     };
+
 
     document.getElementById(
         "selectedUserText"
@@ -841,20 +911,29 @@ function openGameModal(
         "إرسال دعوة إلى: " +
         receiverName;
 
+
     document.getElementById(
         "gameModal"
-    ).style.display = "flex";
+    ).style.display =
+        "flex";
 
 }
 
+
+/* =================================================
+   إغلاق النافذة
+================================================= */
 
 function closeGameModal() {
 
     document.getElementById(
         "gameModal"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
-    selectedReceiver = null;
+
+    selectedReceiver =
+        null;
 
 }
 
@@ -863,7 +942,9 @@ function closeGameModal() {
    إرسال الدعوة
 ================================================= */
 
-async function sendGameInvite(gameType) {
+async function sendGameInvite(
+    gameType
+) {
 
     if (!currentUser) {
 
@@ -875,6 +956,7 @@ async function sendGameInvite(gameType) {
 
     }
 
+
     if (!selectedReceiver) {
 
         showMessage(
@@ -885,13 +967,19 @@ async function sendGameInvite(gameType) {
 
     }
 
+
     const receiverId =
         selectedReceiver.id;
+
 
     const receiverName =
         selectedReceiver.name;
 
-    if (receiverId === currentUser.id) {
+
+    if (
+        receiverId ===
+        currentUser.id
+    ) {
 
         showMessage(
             "لا يمكنك دعوة نفسك 😄"
@@ -900,6 +988,11 @@ async function sendGameInvite(gameType) {
         return;
 
     }
+
+
+    /* ==========================================
+       منع دعوة مكررة
+    ========================================== */
 
     const {
         data: existing,
@@ -925,6 +1018,7 @@ async function sendGameInvite(gameType) {
         )
         .limit(1);
 
+
     if (existingError) {
 
         console.error(
@@ -933,6 +1027,7 @@ async function sendGameInvite(gameType) {
         );
 
     }
+
 
     if (
         existing &&
@@ -948,6 +1043,11 @@ async function sendGameInvite(gameType) {
         return;
 
     }
+
+
+    /* ==========================================
+       إنشاء الدعوة
+    ========================================== */
 
     const {
         error
@@ -969,6 +1069,7 @@ async function sendGameInvite(gameType) {
 
         });
 
+
     if (error) {
 
         console.error(
@@ -984,7 +1085,9 @@ async function sendGameInvite(gameType) {
 
     }
 
+
     closeGameModal();
+
 
     showMessage(
         "تم إرسال الدعوة إلى " +
@@ -1017,18 +1120,23 @@ function getGameName(type) {
 
     };
 
-    return games[type] || "🎮 لعبة";
+
+    return (
+        games[type] ||
+        "🎮 لعبة"
+    );
 
 }
 
 
 /* =================================================
-   تحميل الدعوات
+   تحميل الدعوات الواردة
 ================================================= */
 
 async function loadIncomingInvites() {
 
     if (!currentUser) return;
+
 
     const {
         data,
@@ -1059,6 +1167,7 @@ async function loadIncomingInvites() {
             }
         );
 
+
     if (error) {
 
         console.error(
@@ -1070,17 +1179,23 @@ async function loadIncomingInvites() {
 
     }
 
+
     const container =
         document.getElementById(
             "invitesList"
         );
+
 
     const count =
         document.getElementById(
             "inviteCount"
         );
 
-    if (!data || data.length === 0) {
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
         container.innerHTML = `
             <div class="empty-box">
@@ -1088,17 +1203,27 @@ async function loadIncomingInvites() {
             </div>
         `;
 
-        count.style.display = "none";
+
+        count.style.display =
+            "none";
+
 
         return;
 
     }
 
-    count.textContent = data.length;
 
-    count.style.display = "flex";
+    count.textContent =
+        data.length;
 
-    container.innerHTML = "";
+
+    count.style.display =
+        "flex";
+
+
+    container.innerHTML =
+        "";
+
 
     const senderIds = [
         ...new Set(
@@ -1109,9 +1234,13 @@ async function loadIncomingInvites() {
         )
     ];
 
+
     let profiles = [];
 
-    if (senderIds.length > 0) {
+
+    if (
+        senderIds.length > 0
+    ) {
 
         const {
             data: profileData,
@@ -1126,6 +1255,7 @@ async function loadIncomingInvites() {
                 senderIds
             );
 
+
         if (!profileError) {
 
             profiles =
@@ -1134,6 +1264,7 @@ async function loadIncomingInvites() {
         }
 
     }
+
 
     data.forEach(invite => {
 
@@ -1144,15 +1275,21 @@ async function loadIncomingInvites() {
                     invite.sender_id
             );
 
+
         const senderName =
             sender?.display_name ||
             "مستخدم";
 
+
         const card =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         card.className =
             "invite-card";
+
 
         card.innerHTML = `
 
@@ -1213,7 +1350,10 @@ async function loadIncomingInvites() {
 
         `;
 
-        container.appendChild(card);
+
+        container.appendChild(
+            card
+        );
 
     });
 
@@ -1221,7 +1361,7 @@ async function loadIncomingInvites() {
 
 
 /* =================================================
-   قبول / رفض
+   قبول / رفض الدعوة
 ================================================= */
 
 async function respondToInvite(
@@ -1232,7 +1372,15 @@ async function respondToInvite(
 
     if (!currentUser) return;
 
-    if (response === "rejected") {
+
+    /* ==========================================
+       رفض
+    ========================================== */
+
+    if (
+        response ===
+        "rejected"
+    ) {
 
         const {
             error
@@ -1260,6 +1408,7 @@ async function respondToInvite(
                 "pending"
             );
 
+
         if (error) {
 
             console.error(
@@ -1275,15 +1424,23 @@ async function respondToInvite(
 
         }
 
+
         showMessage(
             "تم رفض الدعوة."
         );
 
+
         await loadIncomingInvites();
+
 
         return;
 
     }
+
+
+    /* ==========================================
+       جلب الدعوة
+    ========================================== */
 
     const {
         data: invite,
@@ -1305,6 +1462,7 @@ async function respondToInvite(
         )
         .maybeSingle();
 
+
     if (inviteError) {
 
         console.error(
@@ -1320,6 +1478,7 @@ async function respondToInvite(
 
     }
 
+
     if (!invite) {
 
         showMessage(
@@ -1331,6 +1490,11 @@ async function respondToInvite(
         return;
 
     }
+
+
+    /* ==========================================
+       قبول الدعوة
+    ========================================== */
 
     const {
         data: acceptedInvite,
@@ -1361,6 +1525,7 @@ async function respondToInvite(
         .select()
         .maybeSingle();
 
+
     if (updateError) {
 
         console.error(
@@ -1376,6 +1541,7 @@ async function respondToInvite(
 
     }
 
+
     if (!acceptedInvite) {
 
         showMessage(
@@ -1387,6 +1553,11 @@ async function respondToInvite(
         return;
 
     }
+
+
+    /* ==========================================
+       التأكد هل المباراة موجودة
+    ========================================== */
 
     const {
         data: oldMatch,
@@ -1400,6 +1571,7 @@ async function respondToInvite(
         )
         .maybeSingle();
 
+
     if (oldMatchError) {
 
         console.error(
@@ -1409,7 +1581,14 @@ async function respondToInvite(
 
     }
 
-    let match = oldMatch;
+
+    let match =
+        oldMatch;
+
+
+    /* ==========================================
+       إنشاء المباراة إذا لم تكن موجودة
+    ========================================== */
 
     if (!match) {
 
@@ -1448,6 +1627,7 @@ async function respondToInvite(
             .select()
             .single();
 
+
         if (matchError) {
 
             console.error(
@@ -1463,23 +1643,51 @@ async function respondToInvite(
 
         }
 
-        match = newMatch;
+
+        match =
+            newMatch;
 
     }
 
+
+    console.log(
+        "Match created/found:",
+        match
+    );
+
+
     await loadIncomingInvites();
+
 
     showMessage(
         "تم قبول الدعوة ⚔️ جاري الدخول إلى المباراة..."
     );
 
+
+    /* ==========================================
+       تسجيل أن هذه الدعوة تم فتحها
+       حتى لا يعيد الفحص إدخالنا للمعركة
+    ========================================== */
+
+    sessionStorage.setItem(
+        "battle_invite_handled_" +
+        invite.id,
+        "true"
+    );
+
+
+    /* ==========================================
+       الطرف الذي ضغط قبول يدخل
+    ========================================== */
+
     setTimeout(() => {
 
-        window.location.href =
+        window.location.replace(
             "battle.html?match=" +
             encodeURIComponent(
                 match.id
-            );
+            )
+        );
 
     }, 500);
 
@@ -1487,12 +1695,37 @@ async function respondToInvite(
 
 
 /* =================================================
-   إيجاد المباراة للطرف الذي أرسل الدعوة
+   البحث عن المباراة بعد قبول الدعوة
+   للطرف الذي أرسل الدعوة
 ================================================= */
 
-async function openAcceptedMatch(inviteId) {
+async function openAcceptedMatch(
+    inviteId
+) {
 
     if (!currentUser) return;
+
+
+    /*
+       إذا كانت الدعوة سبق فتحها،
+       لا ندخل اللاعب مرة أخرى.
+    */
+
+    const handledKey =
+        "battle_invite_handled_" +
+        inviteId;
+
+
+    if (
+        sessionStorage.getItem(
+            handledKey
+        ) === "true"
+    ) {
+
+        return;
+
+    }
+
 
     if (acceptedMatchTimer) {
 
@@ -1500,9 +1733,11 @@ async function openAcceptedMatch(inviteId) {
             acceptedMatchTimer
         );
 
-        acceptedMatchTimer = null;
+        acceptedMatchTimer =
+            null;
 
     }
+
 
     const {
         data: match,
@@ -1522,6 +1757,7 @@ async function openAcceptedMatch(inviteId) {
         )
         .maybeSingle();
 
+
     if (error) {
 
         console.error(
@@ -1529,41 +1765,62 @@ async function openAcceptedMatch(inviteId) {
             error
         );
 
+
         acceptedMatchTimer =
             setTimeout(() => {
 
-                openAcceptedMatch(inviteId);
+                openAcceptedMatch(
+                    inviteId
+                );
 
             }, 1000);
+
 
         return;
 
     }
+
 
     if (!match) {
 
         acceptedMatchTimer =
             setTimeout(() => {
 
-                openAcceptedMatch(inviteId);
+                openAcceptedMatch(
+                    inviteId
+                );
 
             }, 700);
+
 
         return;
 
     }
 
+
+    /*
+       تسجيل الدعوة قبل الانتقال
+    */
+
+    sessionStorage.setItem(
+        handledKey,
+        "true"
+    );
+
+
     showMessage(
         "🎮 تم قبول دعوتك! جاري الدخول إلى المعركة..."
     );
 
+
     setTimeout(() => {
 
-        window.location.href =
+        window.location.replace(
             "battle.html?match=" +
             encodeURIComponent(
                 match.id
-            );
+            )
+        );
 
     }, 500);
 
@@ -1571,12 +1828,14 @@ async function openAcceptedMatch(inviteId) {
 
 
 /* =================================================
-   فحص الدعوات المقبولة
+   فحص الدعوات التي أرسلناها
+   حتى لو Realtime لم يعمل
 ================================================= */
 
 async function checkAcceptedInvites() {
 
     if (!currentUser) return;
+
 
     const {
         data,
@@ -1604,7 +1863,8 @@ async function checkAcceptedInvites() {
                 ascending: false
             }
         )
-        .limit(5);
+        .limit(10);
+
 
     if (error) {
 
@@ -1617,15 +1877,52 @@ async function checkAcceptedInvites() {
 
     }
 
-    if (!data || data.length === 0) return;
 
-    for (const invite of data) {
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    for (
+        const invite
+        of data
+    ) {
+
+        /*
+           أهم جزء في الإصلاح:
+           إذا سبق فتح هذه الدعوة،
+           لا نعيد فتح المعركة.
+        */
+
+        const handledKey =
+            "battle_invite_handled_" +
+            invite.id;
+
+
+        if (
+            sessionStorage.getItem(
+                handledKey
+            ) === "true"
+        ) {
+
+            continue;
+
+        }
+
 
         const {
-            data: match
+            data: match,
+            error: matchError
         } = await supabaseClient
             .from("game_matches")
-            .select("id")
+            .select(
+                "id, player1_id, player2_id"
+            )
             .eq(
                 "invite_id",
                 invite.id
@@ -1636,13 +1933,38 @@ async function checkAcceptedInvites() {
             )
             .maybeSingle();
 
+
+        if (matchError) {
+
+            console.error(
+                "Find match error:",
+                matchError
+            );
+
+            continue;
+
+        }
+
+
         if (match) {
 
-            window.location.href =
+            /*
+               نسجلها قبل الانتقال
+            */
+
+            sessionStorage.setItem(
+                handledKey,
+                "true"
+            );
+
+
+            window.location.replace(
                 "battle.html?match=" +
                 encodeURIComponent(
                     match.id
-                );
+                )
+            );
+
 
             return;
 
@@ -1661,6 +1983,7 @@ function setupRealtime() {
 
     if (!currentUser) return;
 
+
     if (realtimeChannel) {
 
         supabaseClient.removeChannel(
@@ -1669,12 +1992,18 @@ function setupRealtime() {
 
     }
 
+
     realtimeChannel =
         supabaseClient
             .channel(
                 "game-invites-" +
                 currentUser.id
             )
+
+
+            /* =====================================
+               دعوة جديدة للطرف المستقبل
+            ===================================== */
 
             .on(
                 "postgres_changes",
@@ -1702,7 +2031,9 @@ function setupRealtime() {
                         payload.new
                     );
 
+
                     await loadIncomingInvites();
+
 
                     showMessage(
                         "🎮 وصلت دعوة لعبة جديدة!"
@@ -1710,6 +2041,11 @@ function setupRealtime() {
 
                 }
             )
+
+
+            /* =====================================
+               تحديث الدعوة للطرف المرسل
+            ===================================== */
 
             .on(
                 "postgres_changes",
@@ -1737,12 +2073,13 @@ function setupRealtime() {
                         payload.new
                     );
 
+
                     if (
                         payload.new.status ===
                         "accepted"
                     ) {
 
-                        openAcceptedMatch(
+                        await openAcceptedMatch(
                             payload.new.id
                         );
 
@@ -1751,14 +2088,17 @@ function setupRealtime() {
                 }
             )
 
-            .subscribe(status => {
 
-                console.log(
-                    "Realtime:",
-                    status
-                );
+            .subscribe(
+                status => {
 
-            });
+                    console.log(
+                        "Realtime:",
+                        status
+                    );
+
+                }
+            );
 
 }
 
@@ -1767,10 +2107,14 @@ function setupRealtime() {
    البحث
 ================================================= */
 
-let searchTimer = null;
+let searchTimer =
+    null;
+
 
 document
-    .getElementById("searchInput")
+    .getElementById(
+        "searchInput"
+    )
     .addEventListener(
         "input",
         function() {
@@ -1779,13 +2123,17 @@ document
                 searchTimer
             );
 
+
             const value =
                 this.value;
+
 
             searchTimer =
                 setTimeout(() => {
 
-                    loadUsers(value);
+                    loadUsers(
+                        value
+                    );
 
                 }, 250);
 
@@ -1800,10 +2148,14 @@ document
 function escapeHtml(text) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     div.textContent =
         text || "";
+
 
     return div.innerHTML;
 
@@ -1816,18 +2168,35 @@ function escapeHtml(text) {
 
 function escapeJs(text) {
 
-    return String(text || "")
-        .replace(/\\/g, "\\\\")
-        .replace(/'/g, "\\'")
-        .replace(/"/g, '\\"')
-        .replace(/\n/g, "\\n")
-        .replace(/\r/g, "\\r");
+    return String(
+        text || ""
+    )
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        )
+        .replace(
+            /"/g,
+            '\\"'
+        )
+        .replace(
+            /\n/g,
+            "\\n"
+        )
+        .replace(
+            /\r/g,
+            "\\r"
+        );
 
 }
 
 
 /* =================================================
-   التشغيل
+   تشغيل
 ================================================= */
 
 async function startPage() {
@@ -1835,13 +2204,27 @@ async function startPage() {
     const loggedIn =
         await loadCurrentUser();
 
+
     if (!loggedIn) return;
+
 
     await loadUsers();
 
+
     await loadIncomingInvites();
 
+
     setupRealtime();
+
+
+    /*
+       فحص كل 2.5 ثانية للتأكد أن
+       مرسل الدعوة يدخل حتى لو Realtime
+       لم يصل له.
+
+       لكن checkAcceptedInvites الآن
+       يتجاهل الدعوات التي سبق فتحها.
+    */
 
     acceptedCheckInterval =
         setInterval(() => {
@@ -1857,7 +2240,7 @@ startPage();
 
 
 /* =================================================
-   التنظيف
+   تنظيف
 ================================================= */
 
 window.addEventListener(
@@ -1872,6 +2255,7 @@ window.addEventListener(
 
         }
 
+
         if (acceptedMatchTimer) {
 
             clearTimeout(
@@ -1879,6 +2263,7 @@ window.addEventListener(
             );
 
         }
+
 
         if (acceptedCheckInterval) {
 
