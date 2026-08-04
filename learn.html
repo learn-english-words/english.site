@@ -2,63 +2,34 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>تعلم الكلمات | EnglishWords</title>
 
     <link rel="stylesheet" href="learn.css">
-
 </head>
 
 <body>
 
-
-<!-- ==========================================
-     الشريط العلوي
-========================================== -->
-
 <header class="topbar">
 
-    <button
-        class="back-btn"
-        onclick="goHome()">
-
+    <button class="back-btn" onclick="goHome()">
         <span>→</span>
         الرئيسية
-
     </button>
 
     <div class="page-title">
-
-        <span class="title-icon">
-            📚
-        </span>
-
-        <span>
-            تعلم الكلمات
-        </span>
-
+        <span class="title-icon">📚</span>
+        <span>تعلم الكلمات</span>
     </div>
 
 </header>
 
 
-
-<!-- ==========================================
-     المحتوى
-========================================== -->
-
 <main class="container">
 
-
-    <!-- ==========================================
-         المقدمة
-    ========================================== -->
-
+    <!-- المقدمة -->
     <section class="intro">
 
         <div class="intro-content">
@@ -81,249 +52,131 @@
         </div>
 
         <div class="intro-decoration">
-
-            <div class="floating-book">
-                📚
-            </div>
-
-            <div class="floating-star star-one">
-                ✦
-            </div>
-
-            <div class="floating-star star-two">
-                ✦
-            </div>
-
+            <div class="floating-book">📚</div>
+            <div class="floating-star star-one">✦</div>
+            <div class="floating-star star-two">✦</div>
         </div>
 
     </section>
 
 
+    <!-- المستوى -->
+    <div class="section-heading">
 
-    <!-- ==========================================
-         اختيار المستوى
-    ========================================== -->
+        <div class="heading-content">
 
-    <section class="selection-section">
+            <span class="section-number">01</span>
 
-        <div class="section-heading">
-
-            <div class="heading-inner">
-
-                <span class="section-number">
-                    01
-                </span>
-
-                <div>
-
-                    <h2>
-                        اختر مستواك
-                    </h2>
-
-                    <p>
-                        اختر المستوى المناسب لك
-                    </p>
-
-                </div>
-
+            <div>
+                <h2>اختر مستواك</h2>
+                <p>اختر المستوى المناسب لك</p>
             </div>
 
         </div>
 
-
-        <section class="levels">
-
-
-            <!-- A1 -->
-
-            <button
-                type="button"
-                class="level-card"
-                data-level="A1"
-                onclick="selectLevel(this, 'A1')">
-
-                <div class="level-badge">
-                    A1
-                </div>
-
-                <div class="level-content">
-
-                    <h3>
-                        مبتدئ
-                    </h3>
-
-                    <p>
-                        كلمات إنجليزية أساسية وسهلة
-                    </p>
-
-                </div>
-
-                <div class="select-circle">
-                    ✓
-                </div>
-
-            </button>
+    </div>
 
 
+    <section class="levels">
 
-            <!-- A2 -->
+        <button
+            type="button"
+            class="level-card"
+            onclick="selectLevel(this, 'A1')">
 
-            <button
-                type="button"
-                class="level-card"
-                data-level="A2"
-                onclick="selectLevel(this, 'A2')">
+            <div class="level-badge">A1</div>
 
-                <div class="level-badge">
-                    A2
-                </div>
+            <div class="level-content">
+                <h3>مبتدئ</h3>
+                <p>كلمات إنجليزية أساسية وسهلة</p>
+            </div>
 
-                <div class="level-content">
+            <div class="select-circle">✓</div>
 
-                    <h3>
-                        متوسط
-                    </h3>
-
-                    <p>
-                        كلمات أكثر تنوعًا واستخدامًا
-                    </p>
-
-                </div>
-
-                <div class="select-circle">
-                    ✓
-                </div>
-
-            </button>
+        </button>
 
 
+        <button
+            type="button"
+            class="level-card"
+            onclick="selectLevel(this, 'A2')">
 
-            <!-- B1 -->
+            <div class="level-badge">A2</div>
 
-            <button
-                type="button"
-                class="level-card"
-                data-level="B1"
-                onclick="selectLevel(this, 'B1')">
+            <div class="level-content">
+                <h3>متوسط</h3>
+                <p>كلمات أكثر تنوعًا واستخدامًا</p>
+            </div>
 
-                <div class="level-badge">
-                    B1
-                </div>
+            <div class="select-circle">✓</div>
 
-                <div class="level-content">
-
-                    <h3>
-                        متقدم
-                    </h3>
-
-                    <p>
-                        كلمات أصعب ومفيدة للمحادثة
-                    </p>
-
-                </div>
-
-                <div class="select-circle">
-                    ✓
-                </div>
-
-            </button>
+        </button>
 
 
-        </section>
+        <button
+            type="button"
+            class="level-card"
+            onclick="selectLevel(this, 'B1')">
+
+            <div class="level-badge">B1</div>
+
+            <div class="level-content">
+                <h3>متقدم</h3>
+                <p>كلمات أصعب ومفيدة للمحادثة</p>
+            </div>
+
+            <div class="select-circle">✓</div>
+
+        </button>
 
     </section>
 
 
+    <!-- التصنيف -->
+    <div class="section-heading category-heading">
 
-    <!-- ==========================================
-         اختيار التصنيف
-    ========================================== -->
+        <div class="heading-content">
 
-    <section class="selection-section category-section">
+            <span class="section-number">02</span>
 
-        <div class="section-heading">
-
-            <div class="heading-inner">
-
-                <span class="section-number">
-                    02
-                </span>
-
-                <div>
-
-                    <h2>
-                        اختر التصنيف
-                    </h2>
-
-                    <p>
-                        ماذا تريد أن تتعلم اليوم؟
-                    </p>
-
-                </div>
-
+            <div>
+                <h2>اختر التصنيف</h2>
+                <p>ماذا تريد أن تتعلم اليوم؟</p>
             </div>
 
         </div>
 
-
-        <!--
-            سيتم تحميل التصنيفات من Supabase هنا
-        -->
-
-        <section
-            id="categoriesContainer"
-            class="categories">
-
-            <div class="loading-categories">
-
-                <div class="loading-spinner"></div>
-
-                <span>
-                    جاري تحميل التصنيفات...
-                </span>
-
-            </div>
-
-        </section>
+    </div>
 
 
-        <!-- رسالة الخطأ -->
+    <!--
+        سيتم تحميل التصنيفات من Supabase
+        جدول categories
+    -->
+    <section
+        class="categories"
+        id="categoriesContainer">
 
-        <div
-            id="categoryError"
-            class="category-error"
-            hidden>
-
-            حدث خطأ أثناء تحميل التصنيفات.
-
-            <button
-                type="button"
-                onclick="loadCategories()">
-
-                إعادة المحاولة
-
-            </button>
-
+        <div class="loading-categories">
+            <span>⏳</span>
+            جاري تحميل التصنيفات...
         </div>
 
     </section>
 
 
+    <!-- رسالة الاختيار -->
+    <div
+        id="selectionMessage"
+        class="selection-message">
 
-    <!-- ==========================================
-         زر البداية
-    ========================================== -->
+        اختر المستوى والتصنيف للبدء 👆
 
+    </div>
+
+
+    <!-- زر البداية -->
     <div class="start-area">
-
-        <div
-            id="selectionMessage"
-            class="selection-message">
-
-            اختر المستوى والتصنيف للبدء 👆
-
-        </div>
-
 
         <button
             type="button"
@@ -332,9 +185,7 @@
             onclick="startLearning()"
             disabled>
 
-            <span>
-                ابدأ التعلم
-            </span>
+            <span>ابدأ التعلم 🚀</span>
 
             <span class="start-arrow">
                 ←
@@ -344,22 +195,22 @@
 
     </div>
 
-
 </main>
 
 
-
-<!-- ==========================================
-     Supabase
-========================================== -->
-
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="supabase.js"></script>
 
+<script src="presence.js"></script>
+
 <script src="learn.js"></script>
 
 
-</body>
+<script>
+startPresence("learn");
+</script>
 
+</body>
 </html>
