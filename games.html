@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>EnglishWords - الألعاب</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f7f8fc;
+    color: #171827;
+    font-family: Arial, Tahoma, sans-serif;
+}
+
+.page {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    min-height: 100vh;
+    padding: 20px 16px 40px;
+}
+
+/* =========================
+   الهيدر
+========================= */
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.back-btn {
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(0,0,0,.07);
+}
+
+.header-text {
+    flex: 1;
+}
+
+.header-text h1 {
+    margin: 0 0 5px;
+    font-size: 25px;
+}
+
+.header-text p {
+    margin: 0;
+    color: #888;
+    font-size: 13px;
+}
+
+/* =========================
+   بانر
+========================= */
+
+.hero {
+    background: linear-gradient(135deg, #6254eb, #8374ed);
+    color: white;
+    border-radius: 25px;
+    padding: 25px 22px;
+    margin-bottom: 22px;
+    box-shadow: 0 10px 25px rgba(98,84,235,.22);
+}
+
+.hero-icon {
+    font-size: 42px;
+    margin-bottom: 8px;
+}
+
+.hero h2 {
+    margin: 0 0 8px;
+    font-size: 23px;
+}
+
+.hero p {
+    margin: 0;
+    line-height: 1.7;
+    font-size: 14px;
+    opacity: .9;
+}
+
+/* =========================
+   عنوان
+========================= */
+
+.section-title {
+    margin: 0 4px 12px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* =========================
+   الألعاب
+========================= */
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.game-card {
+    border: none;
+    border-radius: 22px;
+    padding: 18px 15px;
+    min-height: 175px;
+    text-align: right;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform .15s;
+}
+
+.game-card:active {
+    transform: scale(.96);
+}
+
+.game-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 31px;
+    margin-bottom: 15px;
+}
+
+.game-card h3 {
+    margin: 0 0 7px;
+    font-size: 16px;
+}
+
+.game-card p {
+    margin: 0;
+    color: #777;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* ألوان الألعاب */
+
+.battle {
+    background: #ffe7ea;
+}
+
+.battle .game-icon {
+    background: #ffd0d7;
+}
+
+.race {
+    background: #e4f9ef;
+}
+
+.race .game-icon {
+    background: #c9f2df;
+}
+
+.memory {
+    background: #eaf3ff;
+}
+
+.memory .game-icon {
+    background: #d4e6ff;
+}
+
+.guess {
+    background: #fff3d9;
+}
+
+.guess .game-icon {
+    background: #ffe4a8;
+}
+
+.mistake {
+    background: #f0edff;
+}
+
+.mistake .game-icon {
+    background: #ded8ff;
+}
+
+.time {
+    background: #e7f8ff;
+}
+
+.time .game-icon {
+    background: #cdefff;
+}
+
+/* =========================
+   قريباً
+========================= */
+
+.coming-soon {
+    position: absolute;
+    top: 12px;
+    left: 10px;
+    background: rgba(255,255,255,.75);
+    padding: 5px 8px;
+    border-radius: 10px;
+    font-size: 9px;
+    color: #777;
+}
+
+/* =========================
+   الجوال
+========================= */
+
+@media (max-width: 360px) {
+
+    .games-grid {
+        gap: 8px;
+    }
+
+    .game-card {
+        padding: 14px 12px;
+        min-height: 160px;
+    }
+
+    .game-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 27px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main class="page">
+
+    <!-- الهيدر -->
+
+    <header class="header">
+
+        <button
+            class="back-btn"
+            onclick="window.location.href='index.html'">
+
+            →
+            
+        </button>
+
+        <div class="header-text">
+
+            <h1>
+                الألعاب 🎮
+            </h1>
+
+            <p>
+                تعلم الإنجليزية بطريقة ممتعة
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <!-- البانر -->
+
+    <section class="hero">
+
+        <div class="hero-icon">
+            🎮
+        </div>
+
+        <h2>
+            العب وتعلم!
+        </h2>
+
+        <p>
+            اختبر سرعتك وذاكرتك ومعلوماتك
+            في ألعاب ممتعة تساعدك على تطوير الإنجليزية.
+        </p>
+
+    </section>
+
+
+    <div class="section-title">
+        اختر لعبة 👇
+    </div>
+
+
+    <!-- الألعاب -->
+
+    <section class="games-grid">
+
+
+        <!-- معركة الكلمات -->
+
+        <button
+            class="game-card battle"
+            onclick="openGame('battle')">
+
+            <span class="coming-soon">
+                قريباً
+            </span>
+
+            <div class="game-icon">
+                ⚔️
+            </div>
+
+            <h3>
+                معركة الكلمات
+            </h3>
+
+            <p>
+                لاعب ضد لاعب
+                وتنافس على النقاط
+            </p>
+
+        </button>
+
+
+        <!-- سباق الكلمات -->
+
+        <button
+            class="game-card race"
+            onclick="openGame('race')">
+
+            <span class="coming-soon">
+                قريباً
+            </span>
+
+            <div class="game-icon">
+                🏃
+            </div>
+
+            <h3>
+                سباق الكلمات
+            </h3>
+
+            <p>
+                كن الأسرع واختر الإجابة
+                الصحيحة
+            </p>
+
+        </button>
+
+
+        <!-- تحدي الذاكرة -->
+
+        <button
+            class="game-card memory"
+            onclick="openGame('memory')">
+
+            <span class="coming-soon">
+                قريباً
+            </span>
+
+            <div class="game-icon">
+                🧠
+            </div>
+
+            <h3>
+                تحدي الذاكرة
+            </h3>
+
+            <p>
+                طابق الكلمة الإنجليزية
+                مع معناها
+            </p>
+
+        </button>
+
+
+        <!-- خمن الكلمة -->
+
+        <button
+            class="game-card guess"
+            onclick="openGame('guess')">
+
+            <span class="coming-soon">
+                قريباً
+            </span>
+
+            <div class="game-icon">
+                🕵️
+            </div>
+
+            <h3>
+                خمن الكلمة
+            </h3>
+
+            <p>
+                اكتشف الكلمة من
+                التلميحات
+            </p>
+
+        </button>
+
+
+        <!-- لا تخطئ -->
+
+        <button
+            class="game-card mistake"
+            onclick="openGame('mistake')">
+
+            <span class="coming-soon">
+                قريباً
+            </span>
+
+            <div class="game-icon">
+                💣
+            </div>
+
+            <h3>
+                لا تخطئ
+            </h3>
+
+            <p>
+                لديك 3 قلوب فقط
+                ❤️ ❤️ ❤️
+            </p>
+
+        </button>
+
+
+        <!-- 60 ثانية -->
+
+        <button
+            class="game-card time"
+            onclick="openGame('time')">
+
+            <span class="coming-soon">
+                قريباً
+            </span>
+
+            <div class="game-icon">
+                🔥
+            </div>
+
+            <h3>
+                تحدي 60 ثانية
+            </h3>
+
+            <p>
+                كم سؤال تستطيع
+                حله خلال دقيقة؟
+            </p>
+
+        </button>
+
+
+    </section>
+
+</main>
+
+
+<script>
+
+function openGame(game) {
+
+    if (game === "battle") {
+
+        alert(
+            "⚔️ معركة الكلمات ستكون قريباً!"
+        );
+
+        return;
+    }
+
+    if (game === "race") {
+
+        alert(
+            "🏃 سباق الكلمات سيكون قريباً!"
+        );
+
+        return;
+    }
+
+    if (game === "memory") {
+
+        alert(
+            "🧠 تحدي الذاكرة سيكون قريباً!"
+        );
+
+        return;
+    }
+
+    if (game === "guess") {
+
+        alert(
+            "🕵️ خمن الكلمة سيكون قريباً!"
+        );
+
+        return;
+    }
+
+    if (game === "mistake") {
+
+        alert(
+            "💣 لعبة لا تخطئ ستكون قريباً!"
+        );
+
+        return;
+    }
+
+    if (game === "time") {
+
+        alert(
+            "🔥 تحدي 60 ثانية سيكون قريباً!"
+        );
+
+        return;
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>
