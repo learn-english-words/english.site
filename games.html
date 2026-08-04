@@ -1290,41 +1290,25 @@ async function loadIncomingInvites() {
             "incomingInvites"
         );
 
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("game_invites")
-        .select(`
-            id,
-            sender_id,
-            receiver_id,
-            game_type,
-            status,
-            created_at,
-            profiles:sender_id (
-                id,
-                display_name
-            )
-        `)
-        .eq(
-            "receiver_id",
-            currentUser.id
-        )
-        .eq(
-            "game_type",
-            "battle"
-        )
-        .eq(
-            "status",
-            "pending"
-        )
-        .order(
-            "created_at",
-            {
-                ascending: false
-            }
-        );
+  const {
+    data,
+    error
+} = await supabaseClient
+    .from("game_invites")
+    .select(`
+        id,
+        sender_id,
+        receiver_id,
+        game_type,
+        status,
+        created_at
+    `)
+    .eq("receiver_id", currentUser.id)
+    .eq("game_type", "battle")
+    .eq("status", "pending")
+    .order("created_at", {
+        ascending: false
+    });
 
     if (error) {
 
