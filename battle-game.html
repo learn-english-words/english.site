@@ -1,0 +1,2190 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>⚔️ معركة الكلمات</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f7f8fc;
+    color: #171827;
+    font-family: Arial, Tahoma, sans-serif;
+}
+
+button {
+    font-family: inherit;
+}
+
+.game-page {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    min-height: 100vh;
+    padding: 20px 16px 40px;
+}
+
+/* =========================
+   الهيدر
+========================= */
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.back-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    font-size: 21px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,.07);
+}
+
+.game-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* =========================
+   اللاعبين
+========================= */
+
+.players-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+    display: grid;
+    grid-template-columns: 1fr 70px 1fr;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.player {
+    text-align: center;
+}
+
+.player-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    margin: auto auto 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8e5ff;
+    color: #5b4ee8;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.player-name {
+    font-size: 13px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.player-score {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.you-label {
+    color: #6658eb;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.vs {
+    text-align: center;
+    font-weight: bold;
+    color: #999;
+    font-size: 16px;
+}
+
+/* =========================
+   السؤال
+========================= */
+
+.question-card {
+    background: white;
+    border-radius: 25px;
+    padding: 24px 18px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+    text-align: center;
+}
+
+.round-text {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.timer {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    margin: 0 auto 17px;
+    background: #f0edff;
+    color: #5b4ee8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.timer.danger {
+    background: #fff0f0;
+    color: #e33e3e;
+}
+
+.question-label {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.english-word {
+    font-size: 36px;
+    font-weight: bold;
+    color: #292650;
+    margin-bottom: 22px;
+    direction: ltr;
+}
+
+.options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 11px;
+}
+
+.option {
+    border: 2px solid #ededf2;
+    background: #fafafd;
+    border-radius: 16px;
+    padding: 16px 8px;
+    min-height: 60px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: .15s;
+}
+
+.option:hover {
+    border-color: #7669f3;
+    background: #f7f5ff;
+}
+
+.option:disabled {
+    cursor: default;
+}
+
+.option.correct {
+    background: #e5f9ef;
+    border-color: #35b878;
+    color: #16834f;
+}
+
+.option.wrong {
+    background: #fff0f0;
+    border-color: #ef5b5b;
+    color: #d43d3d;
+}
+
+.waiting {
+    display: none;
+    margin-top: 18px;
+    padding: 13px;
+    background: #f5f3ff;
+    color: #5b4ee8;
+    border-radius: 13px;
+    font-size: 13px;
+}
+
+/* =========================
+   الرسائل
+========================= */
+
+.status-message {
+    min-height: 24px;
+    text-align: center;
+    margin-top: 14px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.loading {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.spinner {
+    width: 42px;
+    height: 42px;
+    border: 4px solid #e5e3ff;
+    border-top-color: #6658eb;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================
+   النتيجة
+========================= */
+
+.result-screen {
+    display: none;
+    background: white;
+    border-radius: 27px;
+    padding: 32px 20px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,.08);
+}
+
+.result-icon {
+    font-size: 70px;
+    margin-bottom: 10px;
+}
+
+.result-title {
+    font-size: 27px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.result-subtitle {
+    color: #888;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.final-score {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.final-score-box {
+    background: #f7f7fb;
+    border-radius: 17px;
+    padding: 15px;
+}
+
+.final-score-box strong {
+    display: block;
+    font-size: 27px;
+    margin-top: 5px;
+}
+
+.home-btn {
+    width: 100%;
+    border: none;
+    background: linear-gradient(145deg,#7669f3,#5b4ee8);
+    color: white;
+    padding: 14px;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* =========================
+   خطأ
+========================= */
+
+.error-box {
+    display: none;
+    background: white;
+    border-radius: 22px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+}
+
+.error-icon {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.retry-btn {
+    border: none;
+    background: #6254eb;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 13px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+@media(max-width:380px) {
+
+    .english-word {
+        font-size: 30px;
+    }
+
+    .options {
+        gap: 8px;
+    }
+
+    .option {
+        font-size: 13px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main class="game-page">
+
+    <div class="top-bar">
+
+        <button
+            class="back-btn"
+            onclick="leaveGame()">
+
+            ←
+
+        </button>
+
+        <div class="game-title">
+            ⚔️ معركة الكلمات
+        </div>
+
+        <div style="width:44px;"></div>
+
+    </div>
+
+    <!-- التحميل -->
+
+    <section
+        id="loadingScreen"
+        class="loading">
+
+        <div class="spinner"></div>
+
+        <strong>
+            جاري تجهيز المباراة...
+        </strong>
+
+        <p style="color:#888;font-size:13px;">
+            انتظر لحظة
+        </p>
+
+    </section>
+
+    <!-- الخطأ -->
+
+    <section
+        id="errorBox"
+        class="error-box">
+
+        <div class="error-icon">
+            😕
+        </div>
+
+        <h2>
+            تعذر بدء المباراة
+        </h2>
+
+        <p
+            id="errorText"
+            style="color:#777;line-height:1.7;">
+        </p>
+
+        <button
+            class="retry-btn"
+            onclick="location.reload()">
+
+            إعادة المحاولة
+
+        </button>
+
+    </section>
+
+    <!-- اللعبة -->
+
+    <section id="gameScreen" style="display:none;">
+
+        <div class="players-card">
+
+            <div class="player">
+
+                <div
+                    id="myAvatar"
+                    class="player-avatar">
+
+                    ؟
+
+                </div>
+
+                <div
+                    id="myName"
+                    class="player-name">
+
+                    أنت
+
+                </div>
+
+                <div
+                    id="myScore"
+                    class="player-score">
+
+                    0
+
+                </div>
+
+                <div class="you-label">
+                    أنت
+                </div>
+
+            </div>
+
+            <div class="vs">
+                VS
+            </div>
+
+            <div class="player">
+
+                <div
+                    id="opponentAvatar"
+                    class="player-avatar">
+
+                    ؟
+
+                </div>
+
+                <div
+                    id="opponentName"
+                    class="player-name">
+
+                    الخصم
+
+                </div>
+
+                <div
+                    id="opponentScore"
+                    class="player-score">
+
+                    0
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="question-card">
+
+            <div
+                id="roundText"
+                class="round-text">
+
+                السؤال 1 من 10
+
+            </div>
+
+            <div
+                id="timer"
+                class="timer">
+
+                10
+
+            </div>
+
+            <div class="question-label">
+                اختر معنى الكلمة:
+            </div>
+
+            <div
+                id="englishWord"
+                class="english-word">
+
+                ...
+
+            </div>
+
+            <div
+                id="options"
+                class="options">
+
+            </div>
+
+            <div
+                id="waitingMessage"
+                class="waiting">
+
+                ⏳ تمت الإجابة، ننتظر الخصم...
+
+            </div>
+
+            <div
+                id="statusMessage"
+                class="status-message">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- النتيجة -->
+
+    <section
+        id="resultScreen"
+        class="result-screen">
+
+        <div
+            id="resultIcon"
+            class="result-icon">
+
+            🏆
+
+        </div>
+
+        <div
+            id="resultTitle"
+            class="result-title">
+
+            انتهت المباراة!
+
+        </div>
+
+        <div
+            id="resultSubtitle"
+            class="result-subtitle">
+
+        </div>
+
+        <div class="final-score">
+
+            <div class="final-score-box">
+
+                أنت
+
+                <strong id="finalMyScore">
+                    0
+                </strong>
+
+            </div>
+
+            <div class="final-score-box">
+
+                الخصم
+
+                <strong id="finalOpponentScore">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+        <button
+            class="home-btn"
+            onclick="window.location.href='index.html'">
+
+            العودة للرئيسية 🏠
+
+        </button>
+
+    </section>
+
+</main>
+
+<script>
+
+/* =========================================================
+   الإعدادات
+========================================================= */
+
+const TOTAL_ROUNDS = 10;
+const QUESTION_TIME = 10;
+
+let currentUser = null;
+let invite = null;
+let match = null;
+
+let words = [];
+let currentWord = null;
+
+let currentRound = 0;
+let myScore = 0;
+let opponentScore = 0;
+
+let answered = false;
+let timerInterval = null;
+let realtimeChannel = null;
+
+let myPlayerColumn = null;
+let opponentId = null;
+
+/* =========================================================
+   عناصر الصفحة
+========================================================= */
+
+const loadingScreen =
+    document.getElementById("loadingScreen");
+
+const errorBox =
+    document.getElementById("errorBox");
+
+const errorText =
+    document.getElementById("errorText");
+
+const gameScreen =
+    document.getElementById("gameScreen");
+
+const resultScreen =
+    document.getElementById("resultScreen");
+
+/* =========================================================
+   بداية الصفحة
+========================================================= */
+
+async function initGame() {
+
+    try {
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const inviteId =
+            params.get("invite");
+
+        if (!inviteId) {
+
+            showError(
+                "لم يتم العثور على دعوة المباراة."
+            );
+
+            return;
+
+        }
+
+        invite = inviteId;
+
+        const {
+            data: { user },
+            error
+        } =
+            await supabaseClient.auth.getUser();
+
+        if (error || !user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+        currentUser = user;
+
+        await loadInvite();
+
+        await loadWords();
+
+        await createOrLoadMatch();
+
+        setupRealtime();
+
+    } catch (error) {
+
+        console.error(error);
+
+        showError(
+            "حدث خطأ أثناء تجهيز المباراة."
+        );
+
+    }
+
+}
+
+/* =========================================================
+   تحميل الدعوة
+========================================================= */
+
+async function loadInvite() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("game_invites")
+            .select("*")
+            .eq("id", invite)
+            .maybeSingle();
+
+    if (error) {
+
+        console.error(error);
+
+        throw new Error(
+            "تعذر تحميل الدعوة."
+        );
+
+    }
+
+    if (!data) {
+
+        throw new Error(
+            "الدعوة غير موجودة."
+        );
+
+    }
+
+    if (data.status !== "accepted") {
+
+        throw new Error(
+            "هذه الدعوة لم يتم قبولها بعد."
+        );
+
+    }
+
+    if (
+        data.sender_id !== currentUser.id &&
+        data.receiver_id !== currentUser.id
+    ) {
+
+        throw new Error(
+            "ليس لديك صلاحية لهذه المباراة."
+        );
+
+    }
+
+    if (
+        data.sender_id === currentUser.id
+    ) {
+
+        opponentId =
+            data.receiver_id;
+
+    } else {
+
+        opponentId =
+            data.sender_id;
+
+    }
+
+}
+
+/* =========================================================
+   تحميل الكلمات
+========================================================= */
+
+async function loadWords() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("words")
+            .select("id, english, arabic")
+            .not("english", "is", null)
+            .not("arabic", "is", null)
+            .limit(1000);
+
+    if (error) {
+
+        console.error(error);
+
+        throw new Error(
+            "تعذر تحميل كلمات اللعبة."
+        );
+
+    }
+
+    if (!data || data.length < 4) {
+
+        throw new Error(
+            "يجب أن يحتوي جدول words على 4 كلمات على الأقل."
+        );
+
+    }
+
+    words = data;
+
+}
+
+/* =========================================================
+   إنشاء المباراة أو تحميلها
+========================================================= */
+
+async function createOrLoadMatch() {
+
+    let {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("game_matches")
+            .select("*")
+            .eq("invite_id", invite)
+            .maybeSingle();
+
+    if (error) {
+
+        console.error(error);
+
+        throw new Error(
+            "تعذر تحميل المباراة."
+        );
+
+    }
+
+    if (!data) {
+
+        const isSender =
+            await getIsSender();
+
+        if (!isSender) {
+
+            /* انتظر حتى ينشئها صاحب الدعوة */
+
+            await waitForMatch();
+
+            return;
+
+        }
+
+        const {
+            data: newMatch,
+            error: insertError
+        } =
+            await supabaseClient
+                .from("game_matches")
+                .insert({
+
+                    invite_id:
+                        invite,
+
+                    player1_id:
+                        currentUser.id,
+
+                    player2_id:
+                        opponentId,
+
+                    current_question:
+                        0,
+
+                    player1_score:
+                        0,
+
+                    player2_score:
+                        0,
+
+                    status:
+                        "playing"
+
+                })
+                .select()
+                .single();
+
+        if (insertError) {
+
+            /*
+             * في حال أن الطرف الآخر أنشأ المباراة
+             * في نفس اللحظة، نحاول تحميلها.
+             */
+
+            console.warn(insertError);
+
+            await waitForMatch();
+
+            return;
+
+        }
+
+        match = newMatch;
+
+    } else {
+
+        match = data;
+
+    }
+
+    setupPlayerInfo();
+
+    currentRound =
+        Number(match.current_question || 0);
+
+    myScore =
+        getMyScore(match);
+
+    opponentScore =
+        getOpponentScore(match);
+
+    updateScores();
+
+    if (match.status === "finished") {
+
+        showFinalResult();
+
+        return;
+
+    }
+
+    showGame();
+
+    if (currentRound >= TOTAL_ROUNDS) {
+
+        finishGame();
+
+        return;
+
+    }
+
+    startRound();
+
+}
+
+/* =========================================================
+   معرفة صاحب الدعوة
+========================================================= */
+
+async function getIsSender() {
+
+    return (
+        invite &&
+        currentUser &&
+        await isInviteSender()
+    );
+
+}
+
+async function isInviteSender() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("game_invites")
+            .select("sender_id")
+            .eq("id", invite)
+            .single();
+
+    if (error || !data) {
+
+        return false;
+
+    }
+
+    return (
+        data.sender_id ===
+        currentUser.id
+    );
+
+}
+
+/* =========================================================
+   الانتظار حتى ينشئ الطرف الآخر المباراة
+========================================================= */
+
+function waitForMatch() {
+
+    return new Promise(
+        resolve => {
+
+            let attempts = 0;
+
+            const interval =
+                setInterval(
+                    async () => {
+
+                        attempts++;
+
+                        const {
+                            data,
+                            error
+                        } =
+                            await supabaseClient
+                                .from("game_matches")
+                                .select("*")
+                                .eq(
+                                    "invite_id",
+                                    invite
+                                )
+                                .maybeSingle();
+
+                        if (data) {
+
+                            clearInterval(
+                                interval
+                            );
+
+                            match = data;
+
+                            setupPlayerInfo();
+
+                            currentRound =
+                                Number(
+                                    match.current_question || 0
+                                );
+
+                            myScore =
+                                getMyScore(match);
+
+                            opponentScore =
+                                getOpponentScore(match);
+
+                            updateScores();
+
+                            showGame();
+
+                            startRound();
+
+                            resolve();
+
+                            return;
+
+                        }
+
+                        if (attempts >= 30) {
+
+                            clearInterval(
+                                interval
+                            );
+
+                            showError(
+                                "لم يبدأ الطرف الآخر المباراة. حاول مرة أخرى."
+                            );
+
+                            resolve();
+
+                        }
+
+                    },
+                    1000
+                );
+
+        }
+    );
+
+}
+
+/* =========================================================
+   بيانات اللاعبين
+========================================================= */
+
+function setupPlayerInfo() {
+
+    if (!match) return;
+
+    if (
+        currentUser.id ===
+        match.player1_id
+    ) {
+
+        myPlayerColumn =
+            "player1";
+
+        opponentId =
+            match.player2_id;
+
+    } else {
+
+        myPlayerColumn =
+            "player2";
+
+        opponentId =
+            match.player1_id;
+
+    }
+
+    loadPlayerNames();
+
+}
+
+/* =========================================================
+   أسماء اللاعبين
+========================================================= */
+
+async function loadPlayerNames() {
+
+    const ids = [
+        match.player1_id,
+        match.player2_id
+    ];
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("id, display_name")
+            .in("id", ids);
+
+    if (error) {
+
+        console.error(
+            "Profile error:",
+            error
+        );
+
+        return;
+
+    }
+
+    const player1 =
+        data?.find(
+            item =>
+                item.id ===
+                match.player1_id
+        );
+
+    const player2 =
+        data?.find(
+            item =>
+                item.id ===
+                match.player2_id
+        );
+
+    const myProfile =
+        currentUser.id ===
+        match.player1_id
+            ? player1
+            : player2;
+
+    const opponentProfile =
+        currentUser.id ===
+        match.player1_id
+            ? player2
+            : player1;
+
+    const myName =
+        myProfile?.display_name ||
+        "أنت";
+
+    const opponentName =
+        opponentProfile?.display_name ||
+        "الخصم";
+
+    document.getElementById(
+        "myName"
+    ).textContent =
+        myName;
+
+    document.getElementById(
+        "opponentName"
+    ).textContent =
+        opponentName;
+
+    document.getElementById(
+        "myAvatar"
+    ).textContent =
+        myName
+            .charAt(0)
+            .toUpperCase();
+
+    document.getElementById(
+        "opponentAvatar"
+    ).textContent =
+        opponentName
+            .charAt(0)
+            .toUpperCase();
+
+}
+
+/* =========================================================
+   النتيجة الخاصة بي
+========================================================= */
+
+function getMyScore(game) {
+
+    if (
+        currentUser.id ===
+        game.player1_id
+    ) {
+
+        return Number(
+            game.player1_score || 0
+        );
+
+    }
+
+    return Number(
+        game.player2_score || 0
+    );
+
+}
+
+function getOpponentScore(game) {
+
+    if (
+        currentUser.id ===
+        game.player1_id
+    ) {
+
+        return Number(
+            game.player2_score || 0
+        );
+
+    }
+
+    return Number(
+        game.player1_score || 0
+    );
+
+}
+
+/* =========================================================
+   عرض اللعبة
+========================================================= */
+
+function showGame() {
+
+    loadingScreen.style.display =
+        "none";
+
+    errorBox.style.display =
+        "none";
+
+    gameScreen.style.display =
+        "block";
+
+}
+
+/* =========================================================
+   الجولة
+========================================================= */
+
+function startRound() {
+
+    clearTimer();
+
+    if (
+        currentRound >=
+        TOTAL_ROUNDS
+    ) {
+
+        finishGame();
+
+        return;
+
+    }
+
+    answered = false;
+
+    document.getElementById(
+        "roundText"
+    ).textContent =
+        `السؤال ${currentRound + 1} من ${TOTAL_ROUNDS}`;
+
+    document.getElementById(
+        "waitingMessage"
+    ).style.display =
+        "none";
+
+    document.getElementById(
+        "statusMessage"
+    ).textContent =
+        "";
+
+    const randomIndex =
+        Math.floor(
+            Math.random() *
+            words.length
+        );
+
+    currentWord =
+        words[randomIndex];
+
+    document.getElementById(
+        "englishWord"
+    ).textContent =
+        currentWord.english;
+
+    createOptions();
+
+    startTimer();
+
+}
+
+/* =========================================================
+   الخيارات
+========================================================= */
+
+function createOptions() {
+
+    const optionsBox =
+        document.getElementById(
+            "options"
+        );
+
+    optionsBox.innerHTML = "";
+
+    let wrongWords =
+        words.filter(
+            word =>
+                word.id !==
+                currentWord.id
+        );
+
+    wrongWords =
+        shuffle(wrongWords)
+        .slice(0, 3);
+
+    let answers = [
+        currentWord,
+        ...wrongWords
+    ];
+
+    answers =
+        shuffle(answers);
+
+    answers.forEach(
+        word => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.className =
+                "option";
+
+            button.textContent =
+                word.arabic;
+
+            button.dataset.id =
+                String(word.id);
+
+            button.onclick =
+                () => {
+
+                    answerQuestion(
+                        button,
+                        word
+                    );
+
+                };
+
+            optionsBox.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+/* =========================================================
+   المؤقت
+========================================================= */
+
+function startTimer() {
+
+    let seconds =
+        QUESTION_TIME;
+
+    const timer =
+        document.getElementById(
+            "timer"
+        );
+
+    timer.textContent =
+        seconds;
+
+    timer.classList.remove(
+        "danger"
+    );
+
+    timerInterval =
+        setInterval(
+            () => {
+
+                seconds--;
+
+                timer.textContent =
+                    seconds;
+
+                if (seconds <= 3) {
+
+                    timer.classList.add(
+                        "danger"
+                    );
+
+                }
+
+                if (seconds <= 0) {
+
+                    clearTimer();
+
+                    if (!answered) {
+
+                        timeOut();
+
+                    }
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+/* =========================================================
+   انتهاء الوقت
+========================================================= */
+
+function timeOut() {
+
+    if (answered) return;
+
+    answered = true;
+
+    disableOptions();
+
+    const correct =
+        document.querySelector(
+            `.option[data-id="${currentWord.id}"]`
+        );
+
+    if (correct) {
+
+        correct.classList.add(
+            "correct"
+        );
+
+    }
+
+    document.getElementById(
+        "statusMessage"
+    ).textContent =
+        "⏰ انتهى الوقت!";
+
+    document.getElementById(
+        "statusMessage"
+    ).style.color =
+        "#d43d3d";
+
+    showWaiting();
+
+    setTimeout(
+        nextRound,
+        1000
+    );
+
+}
+
+/* =========================================================
+   الإجابة
+========================================================= */
+
+async function answerQuestion(
+    button,
+    selectedWord
+) {
+
+    if (answered) return;
+
+    answered = true;
+
+    clearTimer();
+
+    disableOptions();
+
+    const correct =
+        document.querySelector(
+            `.option[data-id="${currentWord.id}"]`
+        );
+
+    if (correct) {
+
+        correct.classList.add(
+            "correct"
+        );
+
+    }
+
+    if (
+        selectedWord.id ===
+        currentWord.id
+    ) {
+
+        button.classList.add(
+            "correct"
+        );
+
+        myScore++;
+
+        updateScores();
+
+        document.getElementById(
+            "statusMessage"
+        ).textContent =
+            "✅ إجابة صحيحة! +1";
+
+        document.getElementById(
+            "statusMessage"
+        ).style.color =
+            "#16834f";
+
+        await saveMyScore();
+
+    } else {
+
+        button.classList.add(
+            "wrong"
+        );
+
+        document.getElementById(
+            "statusMessage"
+        ).textContent =
+            "❌ إجابة خاطئة";
+
+        document.getElementById(
+            "statusMessage"
+        ).style.color =
+            "#d43d3d";
+
+    }
+
+    showWaiting();
+
+    setTimeout(
+        nextRound,
+        1000
+    );
+
+}
+
+/* =========================================================
+   حفظ النتيجة
+========================================================= */
+
+async function saveMyScore() {
+
+    if (!match) return;
+
+    const updateData = {};
+
+    if (
+        currentUser.id ===
+        match.player1_id
+    ) {
+
+        updateData.player1_score =
+            myScore;
+
+    } else {
+
+        updateData.player2_score =
+            myScore;
+
+    }
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("game_matches")
+            .update(updateData)
+            .eq(
+                "id",
+                match.id
+            )
+            .select()
+            .single();
+
+    if (error) {
+
+        console.error(
+            "Score update error:",
+            error
+        );
+
+        return;
+
+    }
+
+    match = data;
+
+}
+
+/* =========================================================
+   الجولة التالية
+========================================================= */
+
+async function nextRound() {
+
+    if (!match) return;
+
+    currentRound++;
+
+    /*
+     * لا نسمح لكل لاعب أن يغير الجولة
+     * أكثر من اللازم.
+     */
+
+    if (
+        currentRound >=
+        TOTAL_ROUNDS
+    ) {
+
+        await updateRound();
+
+        finishGame();
+
+        return;
+
+    }
+
+    await updateRound();
+
+    startRound();
+
+}
+
+/* =========================================================
+   تحديث رقم الجولة
+========================================================= */
+
+async function updateRound() {
+
+    const newRound =
+        currentRound;
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("game_matches")
+            .update({
+
+                current_question:
+                    newRound
+
+            })
+            .eq(
+                "id",
+                match.id
+            )
+            .select()
+            .single();
+
+    if (!error && data) {
+
+        match = data;
+
+    }
+
+}
+
+/* =========================================================
+   Realtime
+========================================================= */
+
+function setupRealtime() {
+
+    if (!match) return;
+
+    realtimeChannel =
+        supabaseClient
+            .channel(
+                "game-match-" +
+                match.id
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event: "UPDATE",
+                    schema: "public",
+                    table: "game_matches",
+                    filter:
+                        "id=eq." +
+                        match.id
+                },
+                payload => {
+
+                    handleRealtimeUpdate(
+                        payload.new
+                    );
+
+                }
+            )
+            .subscribe(
+                status => {
+
+                    console.log(
+                        "Realtime:",
+                        status
+                    );
+
+                }
+            );
+
+}
+
+/* =========================================================
+   استقبال تحديث الخصم
+========================================================= */
+
+function handleRealtimeUpdate(
+    newMatch
+) {
+
+    if (!newMatch) return;
+
+    const oldOpponentScore =
+        opponentScore;
+
+    match =
+        newMatch;
+
+    myScore =
+        getMyScore(newMatch);
+
+    opponentScore =
+        getOpponentScore(newMatch);
+
+    updateScores();
+
+    if (
+        opponentScore >
+        oldOpponentScore
+    ) {
+
+        document.getElementById(
+            "statusMessage"
+        ).textContent =
+            "⚡ الخصم حصل على نقطة!";
+
+        document.getElementById(
+            "statusMessage"
+        ).style.color =
+            "#d87720";
+
+    }
+
+    if (
+        newMatch.status ===
+        "finished"
+    ) {
+
+        showFinalResult();
+
+    }
+
+}
+
+/* =========================================================
+   تحديث النقاط
+========================================================= */
+
+function updateScores() {
+
+    document.getElementById(
+        "myScore"
+    ).textContent =
+        myScore;
+
+    document.getElementById(
+        "opponentScore"
+    ).textContent =
+        opponentScore;
+
+}
+
+/* =========================================================
+   تعطيل الخيارات
+========================================================= */
+
+function disableOptions() {
+
+    document
+        .querySelectorAll(
+            ".option"
+        )
+        .forEach(
+            button => {
+
+                button.disabled =
+                    true;
+
+            }
+        );
+
+}
+
+/* =========================================================
+   انتظار الخصم
+========================================================= */
+
+function showWaiting() {
+
+    document.getElementById(
+        "waitingMessage"
+    ).style.display =
+        "block";
+
+}
+
+/* =========================================================
+   إنهاء المباراة
+========================================================= */
+
+async function finishGame() {
+
+    clearTimer();
+
+    if (!match) return;
+
+    /*
+     * نقرأ آخر نسخة من المباراة
+     */
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("game_matches")
+            .select("*")
+            .eq(
+                "id",
+                match.id
+            )
+            .single();
+
+    if (error) {
+
+        console.error(error);
+
+        return;
+
+    }
+
+    match = data;
+
+    myScore =
+        getMyScore(match);
+
+    opponentScore =
+        getOpponentScore(match);
+
+    let winnerId = null;
+
+    if (
+        myScore >
+        opponentScore
+    ) {
+
+        winnerId =
+            currentUser.id;
+
+    } else if (
+        opponentScore >
+        myScore
+    ) {
+
+        winnerId =
+            opponentId;
+
+    }
+
+    /*
+     * إذا لم تنته المباراة بعد
+     * نحدثها.
+     */
+
+    if (
+        match.status !==
+        "finished"
+    ) {
+
+        const {
+            data: finishedMatch,
+            error: finishError
+        } =
+            await supabaseClient
+                .from("game_matches")
+                .update({
+
+                    status:
+                        "finished",
+
+                    winner_id:
+                        winnerId,
+
+                    finished_at:
+                        new Date().toISOString()
+
+                })
+                .eq(
+                    "id",
+                    match.id
+                )
+                .select()
+                .single();
+
+        if (
+            !finishError &&
+            finishedMatch
+        ) {
+
+            match =
+                finishedMatch;
+
+        }
+
+    }
+
+    showFinalResult();
+
+}
+
+/* =========================================================
+   النتيجة النهائية
+========================================================= */
+
+function showFinalResult() {
+
+    clearTimer();
+
+    gameScreen.style.display =
+        "none";
+
+    loadingScreen.style.display =
+        "none";
+
+    resultScreen.style.display =
+        "block";
+
+    myScore =
+        getMyScore(match);
+
+    opponentScore =
+        getOpponentScore(match);
+
+    document.getElementById(
+        "finalMyScore"
+    ).textContent =
+        myScore;
+
+    document.getElementById(
+        "finalOpponentScore"
+    ).textContent =
+        opponentScore;
+
+    const icon =
+        document.getElementById(
+            "resultIcon"
+        );
+
+    const title =
+        document.getElementById(
+            "resultTitle"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "resultSubtitle"
+        );
+
+    if (
+        myScore >
+        opponentScore
+    ) {
+
+        icon.textContent =
+            "🏆";
+
+        title.textContent =
+            "فزت! 🔥";
+
+        subtitle.textContent =
+            "أداء رائع! تغلبت على خصمك في معركة الكلمات.";
+
+    } else if (
+        myScore <
+        opponentScore
+    ) {
+
+        icon.textContent =
+            "😅";
+
+        title.textContent =
+            "هذه المرة خسرْت";
+
+        subtitle.textContent =
+            "لا بأس! جرب مرة أخرى وطوّر كلماتك.";
+
+    } else {
+
+        icon.textContent =
+            "🤝";
+
+        title.textContent =
+            "تعادل!";
+
+        subtitle.textContent =
+            "كانت مباراة قوية جدًا بينكما.";
+
+    }
+
+}
+
+/* =========================================================
+   الخروج
+========================================================= */
+
+function leaveGame() {
+
+    const confirmed =
+        confirm(
+            "هل تريد الخروج من المباراة؟"
+        );
+
+    if (!confirmed) return;
+
+    clearTimer();
+
+    if (realtimeChannel) {
+
+        supabaseClient.removeChannel(
+            realtimeChannel
+        );
+
+    }
+
+    window.location.href =
+        "index.html";
+
+}
+
+/* =========================================================
+   الخطأ
+========================================================= */
+
+function showError(
+    message
+) {
+
+    loadingScreen.style.display =
+        "none";
+
+    gameScreen.style.display =
+        "none";
+
+    resultScreen.style.display =
+        "none";
+
+    errorBox.style.display =
+        "block";
+
+    errorText.textContent =
+        message;
+
+}
+
+/* =========================================================
+   المؤقت
+========================================================= */
+
+function clearTimer() {
+
+    if (timerInterval) {
+
+        clearInterval(
+            timerInterval
+        );
+
+        timerInterval =
+            null;
+
+    }
+
+}
+
+/* =========================================================
+   خلط
+========================================================= */
+
+function shuffle(array) {
+
+    const result =
+        [...array];
+
+    for (
+        let i = result.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+        [
+            result[i],
+            result[j]
+        ] = [
+            result[j],
+            result[i]
+        ];
+
+    }
+
+    return result;
+
+}
+
+/* =========================================================
+   التشغيل
+========================================================= */
+
+initGame();
+
+</script>
+
+</body>
+
+</html>
+
