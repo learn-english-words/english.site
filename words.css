@@ -55,7 +55,7 @@ button {
 
     background: rgba(255, 255, 255, 0.92);
 
-    border-bottom: 1px solid #eeeef3;
+    border-bottom: 1px solid #eeeeF3;
 
     box-shadow:
         0 3px 18px rgba(20, 20, 50, 0.05);
@@ -73,8 +73,8 @@ button {
     cursor: pointer;
 
     transition:
-        transform 0.15s ease,
-        background 0.15s ease;
+        transform .15s ease,
+        background .15s ease;
 }
 
 .back-btn {
@@ -94,14 +94,14 @@ button {
     font-size: 20px;
 }
 
+.back-btn:active,
+.home-btn:active {
+    transform: scale(.94);
+}
+
 .back-btn:hover,
 .home-btn:hover {
     background: #e9e7ff;
-}
-
-.back-btn:active,
-.home-btn:active {
-    transform: scale(0.94);
 }
 
 .title {
@@ -141,7 +141,7 @@ button {
     box-shadow:
         0 5px 20px rgba(20, 20, 50, 0.06);
 
-    border: 1px solid #eeeef3;
+    border: 1px solid #eeeeF3;
 }
 
 .progress-info {
@@ -184,7 +184,7 @@ button {
             #5b4ee8
         );
 
-    transition: width 0.35s ease;
+    transition: width .35s ease;
 }
 
 
@@ -199,7 +199,7 @@ button {
 
     padding: 20px;
 
-    border: 1px solid #eeeef3;
+    border: 1px solid #eeeeF3;
 
     box-shadow:
         0 10px 30px rgba(20, 20, 50, 0.07);
@@ -276,15 +276,14 @@ button {
 
     color: #191a2b;
 
-    margin-bottom: 7px;
+    margin-bottom: 10px;
 
     direction: ltr;
 }
 
 
 /* =========================================================
-   الترجمة العربية للكلمة
-   مخفية افتراضيًا
+   الترجمة العربية
    ========================================================= */
 
 .arabic-word {
@@ -296,14 +295,28 @@ button {
 
     color: #777787;
 
-    margin: 10px 0 13px;
+    margin: 0 auto 11px;
+
+    line-height: 1.5;
+
+    animation: translationShow .2s ease;
 }
 
-
-/* تظهر الترجمة عند إضافة class show-translation */
-
-.arabic-word.show-translation {
+.arabic-word.show {
     display: block;
+}
+
+@keyframes translationShow {
+
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
@@ -312,17 +325,15 @@ button {
    ========================================================= */
 
 .translation-btn {
-    border: 1px solid #e2e1ed;
+    border: 1px solid #dedcf4;
 
-    background: #f8f8fc;
+    background: #f7f6ff;
 
     color: #5c51dc;
 
     border-radius: 12px;
 
-    padding: 9px 16px;
-
-    margin-bottom: 10px;
+    padding: 9px 15px;
 
     font-size: 13px;
 
@@ -330,17 +341,23 @@ button {
 
     cursor: pointer;
 
+    margin-bottom: 10px;
+
     transition:
-        background 0.15s ease,
-        transform 0.15s ease;
+        background .15s ease,
+        transform .15s ease;
 }
 
 .translation-btn:hover {
-    background: #efedff;
+    background: #eeecff;
 }
 
 .translation-btn:active {
-    transform: scale(0.96);
+    transform: scale(.96);
+}
+
+.translation-btn.active {
+    background: #e9e7ff;
 }
 
 
@@ -371,15 +388,15 @@ button {
     cursor: pointer;
 
     box-shadow:
-        0 6px 15px rgba(92, 80, 230, 0.20);
+        0 6px 15px rgba(92, 80, 230, .20);
 
     transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease;
+        transform .15s ease,
+        box-shadow .15s ease;
 }
 
 .sound-btn:active {
-    transform: scale(0.96);
+    transform: scale(.96);
 }
 
 
@@ -427,52 +444,14 @@ button {
     text-align: left;
 }
 
-
-/* =========================================================
-   ترجمة المثال
-   ========================================================= */
-
 .example small {
-    display: none;
+    display: block;
 
     color: #888895;
 
     font-size: 12px;
 
     line-height: 1.6;
-}
-
-.example small.show-translation {
-    display: block;
-}
-
-
-/* =========================================================
-   زر ترجمة المثال
-   ========================================================= */
-
-.example-translation-btn {
-    border: 1px solid #e2e1ed;
-
-    background: white;
-
-    color: #5c51dc;
-
-    border-radius: 10px;
-
-    padding: 7px 12px;
-
-    margin-top: 7px;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.example-translation-btn:hover {
-    background: #f5f4ff;
 }
 
 
@@ -508,12 +487,12 @@ button {
     cursor: pointer;
 
     transition:
-        transform 0.15s ease,
-        background 0.15s ease;
+        transform .15s ease,
+        background .15s ease;
 }
 
 .example-sound-btn:active {
-    transform: scale(0.97);
+    transform: scale(.97);
 }
 
 .example-sound-btn:hover {
@@ -549,12 +528,12 @@ button {
     cursor: pointer;
 
     transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease;
+        transform .15s ease,
+        box-shadow .15s ease;
 }
 
 .knowledge-buttons button:active {
-    transform: scale(0.97);
+    transform: scale(.97);
 }
 
 .dont-know {
@@ -563,7 +542,7 @@ button {
     color: #e04762;
 
     box-shadow:
-        0 5px 15px rgba(224, 71, 98, 0.08);
+        0 5px 15px rgba(224, 71, 98, .08);
 }
 
 .know {
@@ -572,7 +551,7 @@ button {
     color: #23925e;
 
     box-shadow:
-        0 5px 15px rgba(35, 146, 94, 0.08);
+        0 5px 15px rgba(35, 146, 94, .08);
 }
 
 
@@ -602,17 +581,17 @@ button {
     font-weight: bold;
 
     transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease;
+        transform .15s ease,
+        box-shadow .15s ease;
 }
 
 .actions button:active {
-    transform: scale(0.97);
+    transform: scale(.97);
 }
 
 
 /* =========================================================
-   حفظ
+   المفضلة
    ========================================================= */
 
 #favoriteBtn {
@@ -637,12 +616,17 @@ button {
 
 #favoriteBtn span {
     font-size: 10px;
+
     color: #777783;
+}
+
+#favoriteBtn.active {
+    background: #fffaf0;
 }
 
 
 /* =========================================================
-   الكلمة التالية
+   التالي
    ========================================================= */
 
 .next-btn {
@@ -658,7 +642,7 @@ button {
         );
 
     box-shadow:
-        0 7px 18px rgba(92, 80, 230, 0.20);
+        0 7px 18px rgba(92, 80, 230, .20);
 }
 
 
@@ -708,20 +692,15 @@ button {
 
     .back-btn {
         min-height: 39px;
-
         padding: 0 12px;
-
         border-radius: 12px;
-
         font-size: 12px;
     }
 
     .home-btn {
         width: 39px;
         height: 39px;
-
         border-radius: 12px;
-
         font-size: 17px;
     }
 
@@ -736,15 +715,12 @@ button {
 
     .progress-area {
         padding: 10px 13px;
-
         margin-bottom: 9px;
-
         border-radius: 15px;
     }
 
     .progress-info {
         margin-bottom: 6px;
-
         font-size: 11px;
     }
 
@@ -758,15 +734,12 @@ button {
 
     .word-card {
         padding: 11px;
-
         border-radius: 21px;
     }
 
     .image-container {
         height: 150px;
-
         border-radius: 16px;
-
         margin-bottom: 9px;
     }
 
@@ -776,51 +749,40 @@ button {
 
     .english-word {
         font-size: 28px;
-
         margin-bottom: 5px;
     }
 
     .arabic-word {
         font-size: 17px;
-
         margin-bottom: 7px;
     }
 
     .translation-btn {
-        padding: 7px 13px;
-
+        padding: 7px 12px;
         border-radius: 10px;
-
         font-size: 11px;
-
         margin-bottom: 7px;
     }
 
     .sound-btn {
         padding: 8px 15px;
-
         border-radius: 12px;
-
         font-size: 12px;
     }
 
     .example {
         margin-top: 9px;
-
         padding: 9px 11px;
-
         border-radius: 14px;
     }
 
     .example > span {
         font-size: 11px;
-
         margin-bottom: 4px;
     }
 
     .example p {
         font-size: 12px;
-
         margin-bottom: 2px;
     }
 
@@ -828,53 +790,37 @@ button {
         font-size: 10px;
     }
 
-    .example-translation-btn {
-        padding: 6px 10px;
-
-        font-size: 10px;
-    }
-
     .example-sound-buttons {
         margin-top: 7px;
-
         gap: 6px;
     }
 
     .example-sound-btn {
         min-height: 31px;
-
         border-radius: 9px;
-
         font-size: 10px;
     }
 
     .knowledge-buttons {
         gap: 7px;
-
         margin-top: 8px;
     }
 
     .knowledge-buttons button {
         min-height: 43px;
-
         border-radius: 13px;
-
         font-size: 12px;
     }
 
     .actions {
         grid-template-columns: 72px 1fr;
-
         gap: 7px;
-
         margin-top: 7px;
     }
 
     .actions button {
         min-height: 43px;
-
         border-radius: 13px;
-
         font-size: 12px;
     }
 
@@ -889,7 +835,7 @@ button {
 
 
 /* =========================================================
-   الجوالات الصغيرة جدًا
+   جوالات صغيرة جدًا
    ========================================================= */
 
 @media (max-width: 380px) {
@@ -979,13 +925,11 @@ button {
 
     .progress-area {
         padding: 7px 10px;
-
         margin-bottom: 6px;
     }
 
     .image-container {
         height: 105px;
-
         margin-bottom: 6px;
     }
 
@@ -995,7 +939,11 @@ button {
 
     .arabic-word {
         font-size: 14px;
+        margin-bottom: 5px;
+    }
 
+    .translation-btn {
+        padding: 6px 10px;
         margin-bottom: 5px;
     }
 
@@ -1005,7 +953,6 @@ button {
 
     .example {
         margin-top: 6px;
-
         padding: 6px 8px;
     }
 
