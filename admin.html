@@ -55,412 +55,6 @@
 
 <main class="container">
 
-    <!-- ==========================================
-     📊 تحليلات الموقع
-========================================== -->
-
-<section class="analytics-section">
-
-    <div class="section-title">
-
-        <div>
-
-            <h2>
-                📊 تحليلات الموقع
-            </h2>
-
-            <p>
-                إحصائيات مباشرة عن نشاط المستخدمين.
-            </p>
-
-        </div>
-
-        <span
-            id="analyticsLastUpdate"
-            style="
-                color:#888;
-                font-size:12px;
-            "
-        >
-            جاري التحديث...
-        </span>
-
-    </div>
-
-
-    <!-- ==========================================
-         المتصلون الآن
-    ========================================== -->
-
-    <div
-        class="analytics-live"
-        style="
-            background:linear-gradient(
-                135deg,
-                #6254eb,
-                #8374ed
-            );
-            color:white;
-            border-radius:22px;
-            padding:22px;
-            margin-bottom:18px;
-        "
-    >
-
-        <div
-            style="
-                display:flex;
-                align-items:center;
-                justify-content:space-between;
-                gap:15px;
-            "
-        >
-
-            <div>
-
-                <div
-                    style="
-                        font-size:13px;
-                        opacity:.85;
-                    "
-                >
-                    🟢 المتصلون الآن
-                </div>
-
-                <div
-                    id="onlineUsers"
-                    style="
-                        font-size:38px;
-                        font-weight:bold;
-                        margin-top:5px;
-                    "
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div
-                style="
-                    font-size:45px;
-                "
-            >
-                🟢
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==========================================
-         أماكن المستخدمين الآن
-    ========================================== -->
-
-    <div
-        class="analytics-grid"
-        style="
-            display:grid;
-            grid-template-columns:
-                repeat(auto-fit,minmax(150px,1fr));
-            gap:12px;
-            margin-bottom:20px;
-        "
-    >
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                🏠
-            </div>
-
-            <strong id="onlineHome">
-                0
-            </strong>
-
-            <span>
-                الرئيسية الآن
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                🎮
-            </div>
-
-            <strong id="onlineGames">
-                0
-            </strong>
-
-            <span>
-                الألعاب الآن
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                ⚔️
-            </div>
-
-            <strong id="onlineBattle">
-                0
-            </strong>
-
-            <span>
-                المعركة الآن
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                📚
-            </div>
-
-            <strong id="onlineLearning">
-                0
-            </strong>
-
-            <span>
-                تعلم الكلمات
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                📖
-            </div>
-
-            <strong id="onlineReading">
-                0
-            </strong>
-
-            <span>
-                Reading الآن
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                🧠
-            </div>
-
-            <strong id="onlineQuiz">
-                0
-            </strong>
-
-            <span>
-                الاختبارات الآن
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                💬
-            </div>
-
-            <strong id="onlineChat">
-                0
-            </strong>
-
-            <span>
-                الدردشة الآن
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==========================================
-         الإحصائيات العامة
-    ========================================== -->
-
-    <div
-        class="analytics-grid"
-        style="
-            display:grid;
-            grid-template-columns:
-                repeat(auto-fit,minmax(150px,1fr));
-            gap:12px;
-        "
-    >
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                👥
-            </div>
-
-            <strong id="totalUsers">
-                0
-            </strong>
-
-            <span>
-                إجمالي المستخدمين
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                🏠
-            </div>
-
-            <strong id="totalVisits">
-                0
-            </strong>
-
-            <span>
-                زيارات الرئيسية
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                📚
-            </div>
-
-            <strong id="totalLearned">
-                0
-            </strong>
-
-            <span>
-                كلمات متعلمة
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                    🎮
-            </div>
-
-            <strong id="totalMatches">
-                0
-            </strong>
-
-            <span>
-                مباريات
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                📩
-            </div>
-
-            <strong id="totalInvites">
-                0
-            </strong>
-
-            <span>
-                دعوات ألعاب
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                🧠
-            </div>
-
-            <strong id="totalQuizResults">
-                0
-            </strong>
-
-            <span>
-                نتائج الاختبارات
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                📖
-            </div>
-
-            <strong id="totalStories">
-                0
-            </strong>
-
-            <span>
-                قصص Reading
-            </span>
-
-        </div>
-
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                ❓
-            </div>
-
-            <strong id="totalQuestions">
-                0
-            </strong>
-
-            <span>
-                أسئلة Reading
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==========================================
-         حالة التحميل
-    ========================================== -->
-
-    <div
-        id="analyticsError"
-        style="
-            display:none;
-            margin-top:15px;
-            background:#fff0f0;
-            color:#c83232;
-            padding:14px;
-            border-radius:14px;
-            font-size:13px;
-        "
-    ></div>
-
-</section>
-
 
 <!-- ==========================================
      عنوان لوحة التحكم
@@ -475,12 +69,275 @@
         </span>
 
         <h1>
-            إضافة كلمة جديدة 📚
+            لوحة تحكم EnglishWords 📚
         </h1>
 
         <p>
-            أضف الكلمات والصور والجمل التي ستظهر للمتعلمين.
+            إدارة الكلمات والتصنيفات والقراءة والرسائل ومتابعة نشاط المستخدمين.
         </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     📊 تحليلات الموقع
+========================================== -->
+
+<section class="analytics-section">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                📊 تحليلات الموقع
+            </h2>
+
+            <p id="analyticsLastUpdate">
+                جاري تحميل الإحصائيات...
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="analyticsError"
+        style="
+            display:none;
+            background:#fff0f0;
+            color:#d93636;
+            padding:12px 15px;
+            border-radius:12px;
+            margin-bottom:15px;
+        "
+    ></div>
+
+
+    <!-- الإحصائيات -->
+
+    <div
+        class="analytics-grid"
+        style="
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:15px;
+        "
+    >
+
+
+        <!-- المتصلون الآن -->
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                🟢
+            </div>
+
+            <strong id="onlineUsers">
+                0
+            </strong>
+
+            <span>
+                المتصلون الآن
+            </span>
+
+        </div>
+
+
+
+        <!-- آخر 5 دقائق -->
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                🕐
+            </div>
+
+            <strong id="recentUsers">
+                0
+            </strong>
+
+            <span>
+                دخلوا خلال آخر 5 دقائق
+            </span>
+
+        </div>
+
+
+
+        <!-- زيارات اليوم -->
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                📅
+            </div>
+
+            <strong id="todayVisits">
+                0
+            </strong>
+
+            <span>
+                زيارات اليوم
+            </span>
+
+        </div>
+
+
+
+        <!-- إجمالي الزيارات -->
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon">
+                📊
+            </div>
+
+            <strong id="totalVisits">
+                0
+            </strong>
+
+            <span>
+                إجمالي الزيارات
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         جدول نشاط المستخدمين
+    ========================================== -->
+
+    <div
+        class="form-card"
+        style="margin-top:20px;"
+    >
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    👤 نشاط المستخدمين
+                </h2>
+
+                <p>
+                    آخر المستخدمين الذين تم تسجيل نشاطهم.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            style="
+                width:100%;
+                overflow-x:auto;
+            "
+        >
+
+            <table
+                style="
+                    width:100%;
+                    border-collapse:collapse;
+                    min-width:700px;
+                "
+            >
+
+                <thead>
+
+                    <tr
+                        style="
+                            background:#f5f7fb;
+                            text-align:right;
+                        "
+                    >
+
+                        <th
+                            style="
+                                padding:13px;
+                                border-bottom:1px solid #e5e8ef;
+                            "
+                        >
+                            اسم المستخدم
+                        </th>
+
+
+                        <th
+                            style="
+                                padding:13px;
+                                border-bottom:1px solid #e5e8ef;
+                            "
+                        >
+                            الصفحة
+                        </th>
+
+
+                        <th
+                            style="
+                                padding:13px;
+                                border-bottom:1px solid #e5e8ef;
+                            "
+                        >
+                            وقت الدخول
+                        </th>
+
+
+                        <th
+                            style="
+                                padding:13px;
+                                border-bottom:1px solid #e5e8ef;
+                            "
+                        >
+                            آخر نشاط
+                        </th>
+
+
+                        <th
+                            style="
+                                padding:13px;
+                                border-bottom:1px solid #e5e8ef;
+                            "
+                        >
+                            الحالة
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="analyticsUsersTable">
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            style="
+                                padding:25px;
+                                text-align:center;
+                                color:#888;
+                            "
+                        >
+                            جاري تحميل المستخدمين...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
@@ -496,8 +353,6 @@
 
     <div class="form-grid">
 
-
-        <!-- الكلمة -->
 
         <div class="field">
 
@@ -515,8 +370,6 @@
 
 
 
-        <!-- المعنى -->
-
         <div class="field">
 
             <label>
@@ -532,8 +385,6 @@
         </div>
 
 
-
-        <!-- المستوى -->
 
         <div class="field">
 
@@ -561,8 +412,6 @@
 
 
 
-        <!-- التصنيف -->
-
         <div class="field">
 
             <label>
@@ -582,10 +431,6 @@
     </div>
 
 
-
-    <!-- ==========================================
-         الصورة
-    ========================================== -->
 
     <div class="field image-field">
 
@@ -619,10 +464,6 @@
     </div>
 
 
-
-    <!-- ==========================================
-         الجملة
-    ========================================== -->
 
     <div class="form-grid">
 
@@ -671,6 +512,7 @@
 </section>
 
 
+
 <!-- ==========================================
      إدارة التصنيفات
 ========================================== -->
@@ -698,9 +540,6 @@
 
         <div class="form-grid">
 
-
-            <!-- الاسم بالعربي -->
-
             <div class="field">
 
                 <label>
@@ -716,8 +555,6 @@
             </div>
 
 
-            <!-- الاسم بالإنجليزي -->
-
             <div class="field">
 
                 <label>
@@ -732,8 +569,6 @@
 
             </div>
 
-
-            <!-- الأيقونة -->
 
             <div class="field">
 
@@ -765,8 +600,6 @@
 
     </div>
 
-
-    <!-- التصنيفات الموجودة -->
 
     <div
         id="adminCategoriesList"
@@ -857,7 +690,6 @@
 
 
     <div class="form-card">
-
 
         <div class="field">
 
@@ -965,7 +797,6 @@
 
 <section class="reading-admin-section">
 
-
     <div class="section-title">
 
         <div>
@@ -984,8 +815,6 @@
 
 
 
-    <!-- إضافة قصة -->
-
     <div class="form-card">
 
         <h2 style="margin-top:0;">
@@ -994,7 +823,6 @@
 
 
         <div class="form-grid">
-
 
             <div class="field">
 
@@ -1086,7 +914,6 @@
                 >
 
             </div>
-
 
         </div>
 
@@ -1187,8 +1014,6 @@
 
 
 
-    <!-- القصص الموجودة -->
-
     <div
         class="words-section"
         style="margin-top:20px;"
@@ -1229,8 +1054,6 @@
     </div>
 
 
-
-    <!-- إضافة سؤال -->
 
     <div
         class="form-card"
@@ -1277,7 +1100,6 @@
 
 
         <div class="form-grid">
-
 
             <div class="field">
 
@@ -1388,8 +1210,6 @@
 
 
 
-    <!-- أسئلة القصة -->
-
     <div
         class="words-section"
         style="margin-top:20px;"
@@ -1441,17 +1261,12 @@
 
     </div>
 
-
 </section>
 
 
 </main>
 
 
-
-<!-- ==========================================
-     JavaScript
-========================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
