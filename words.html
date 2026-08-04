@@ -1,1 +1,290 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0" > <title>تعلم الكلمات</title> <link rel="stylesheet" href="words.css"> </head> <body> <!-- ========================================== الشريط العلوي ========================================== --> <header class="topbar"> <button class="back-btn" onclick="goBack()" > ← رجوع </button> <div class="title"> 📚 تعلم الكلمات </div> <button class="home-btn" onclick="goHome()" > 🏠 </button> </header> <!-- ========================================== المحتوى ========================================== --> <main class="container"> <!-- ========================================== التقدم ========================================== --> <div class="progress-area"> <div class="progress-info"> <span> تقدمك </span> <strong id="progressText"> 1 / 10 </strong> </div> <div class="progress-bar"> <div id="progressFill"></div> </div> </div> <!-- ========================================== بطاقة الكلمة ========================================== --> <section class="word-card"> <!-- الصورة --> <div class="image-container"> <div id="wordEmoji" class="word-image" > 🍎 </div> </div> <!-- محتوى الكلمة --> <div class="word-content"> <!-- الإنجليزية --> <div class="english-word" id="englishWord" > Apple </div> <!-- العربية --> <div class="arabic-word" id="arabicWord" > تفاحة </div> <!-- نطق الكلمة --> <button type="button" class="sound-btn" onclick="speakWord()" > 🔊 اسمع الكلمة </button> <!-- ====================================== المثال ======================================= --> <div class="example"> <span> 💡 مثال </span> <p id="exampleText"> I eat an apple. </p> <small id="exampleArabic"> أنا آكل تفاحة. </small> <!-- أزرار نطق الجملة --> <div class="example-sound-buttons"> <button type="button" class="example-sound-btn" onclick="speakExample()" > 🔊 اسمع الجملة </button> <button type="button" class="example-sound-btn" onclick="speakExampleSlow()" > 🐢 نطق بطيء </button> </div> </div> </div> </section> <!-- ========================================== أزرار المعرفة ========================================== --> <div class="knowledge-buttons"> <button class="dont-know" onclick="answer(false)" > ❌ لا أعرفها </button> <button class="know" onclick="answer(true)" > ✅ أعرفها </button> </div> <!-- ========================================== الإجراءات ========================================== --> <div class="actions"> <button id="favoriteBtn" onclick="toggleFavorite()" > ☆ <span> حفظ </span> </button> <button class="next-btn" onclick="nextWord()" > الكلمة التالية ← </button> </div> </main> <!-- Supabase --> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <script src="supabase.js"></script> <script src="words.js"></script> <script src="supabase.js"></script> <script src="notifications.js"></script> <script src="presence.js"></script> <script> startPresence("words"); </script> </body> </html>
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>تعلم الكلمات</title>
+
+    <link rel="stylesheet" href="words.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         الشريط العلوي
+    ========================================== -->
+
+    <header class="topbar">
+
+        <button
+            class="back-btn"
+            onclick="goBack()"
+        >
+            ← رجوع
+        </button>
+
+
+        <div class="title">
+            📚 تعلم الكلمات
+        </div>
+
+
+        <button
+            class="home-btn"
+            onclick="goHome()"
+        >
+            🏠
+        </button>
+
+    </header>
+
+
+
+    <!-- ==========================================
+         المحتوى
+    ========================================== -->
+
+    <main class="container">
+
+
+        <!-- ==========================================
+             التقدم
+        ========================================== -->
+
+        <div class="progress-area">
+
+            <div class="progress-info">
+
+                <span>
+                    تقدمك
+                </span>
+
+                <strong id="progressText">
+                    1 / 10
+                </strong>
+
+            </div>
+
+
+            <div class="progress-bar">
+
+                <div id="progressFill"></div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             بطاقة الكلمة
+        ========================================== -->
+
+        <section class="word-card">
+
+
+            <!-- الصورة -->
+
+            <div class="image-container">
+
+                <div
+                    id="wordEmoji"
+                    class="word-image"
+                >
+                    🍎
+                </div>
+
+            </div>
+
+
+
+            <!-- محتوى الكلمة -->
+
+            <div class="word-content">
+
+
+                <!-- الإنجليزية -->
+
+                <div
+                    class="english-word"
+                    id="englishWord"
+                >
+                    Apple
+                </div>
+
+
+
+                <!-- العربية -->
+
+                <div
+                    class="arabic-word"
+                    id="arabicWord"
+                >
+                    تفاحة
+                </div>
+
+
+
+                <!-- نطق الكلمة -->
+
+                <button
+                    type="button"
+                    class="sound-btn"
+                    onclick="speakWord()"
+                >
+                    🔊 اسمع الكلمة
+                </button>
+
+
+
+                <!-- ======================================
+                     المثال
+                ======================================= -->
+
+                <div class="example">
+
+
+                    <span>
+                        💡 مثال
+                    </span>
+
+
+                    <p id="exampleText">
+                        I eat an apple.
+                    </p>
+
+
+                    <small id="exampleArabic">
+                        أنا آكل تفاحة.
+                    </small>
+
+
+
+                    <!-- أزرار نطق الجملة -->
+
+                    <div class="example-sound-buttons">
+
+
+                        <button
+                            type="button"
+                            class="example-sound-btn"
+                            onclick="speakExample()"
+                        >
+                            🔊 اسمع الجملة
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="example-sound-btn"
+                            onclick="speakExampleSlow()"
+                        >
+                            🐢 نطق بطيء
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             أزرار المعرفة
+        ========================================== -->
+
+        <div class="knowledge-buttons">
+
+
+            <button
+                class="dont-know"
+                onclick="answer(false)"
+            >
+                ❌ لا أعرفها
+            </button>
+
+
+            <button
+                class="know"
+                onclick="answer(true)"
+            >
+                ✅ أعرفها
+            </button>
+
+
+        </div>
+
+
+
+        <!-- ==========================================
+             الإجراءات
+        ========================================== -->
+
+        <div class="actions">
+
+
+            <button
+                id="favoriteBtn"
+                onclick="toggleFavorite()"
+            >
+                ☆
+                <span>
+                    حفظ
+                </span>
+            </button>
+
+
+            <button
+                class="next-btn"
+                onclick="nextWord()"
+            >
+                الكلمة التالية
+                ←
+            </button>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- Supabase -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <script src="supabase.js"></script>
+
+    <script src="words.js"></script>
+
+
+
+<script src="supabase.js"></script>
+<script src="notifications.js"></script>
+
+
+
+</body>
+
+</html>
+
