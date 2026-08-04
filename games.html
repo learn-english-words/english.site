@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 
 <head>
@@ -6,11 +7,12 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+   content="width=device-width, initial-scale=1.0">
 
 <title>EnglishWords - الألعاب</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
 
 <style>
@@ -24,6 +26,10 @@ body {
     background: #f7f8fc;
     color: #171827;
     font-family: Arial, Tahoma, sans-serif;
+}
+
+button {
+    font-family: inherit;
 }
 
 .page {
@@ -160,8 +166,6 @@ body {
     line-height: 1.5;
 }
 
-/* ألوان الألعاب */
-
 .battle {
     background: #ffe7ea;
 }
@@ -226,8 +230,324 @@ body {
 }
 
 /* =========================
-   الجوال
+   شاشة المعركة
 ========================= */
+
+.battle-screen {
+    display: none;
+}
+
+.battle-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.battle-back {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    font-size: 21px;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(0,0,0,.07);
+}
+
+.battle-title {
+    flex: 1;
+}
+
+.battle-title h2 {
+    margin: 0 0 4px;
+    font-size: 21px;
+}
+
+.battle-title p {
+    margin: 0;
+    color: #888;
+    font-size: 12px;
+}
+
+.battle-banner {
+    background: linear-gradient(135deg, #ff526b, #ff7c8d);
+    color: white;
+    border-radius: 23px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 22px rgba(255,82,107,.2);
+}
+
+.battle-banner .big-icon {
+    font-size: 42px;
+    margin-bottom: 8px;
+}
+
+.battle-banner h2 {
+    margin: 0 0 7px;
+}
+
+.battle-banner p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.7;
+    opacity: .92;
+}
+
+/* =========================
+   الدعوات
+========================= */
+
+.invites-card {
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.06);
+}
+
+.invites-title {
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.invite-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.invite-item:last-child {
+    border-bottom: none;
+}
+
+.invite-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#7667f5,#5b4ee8);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.invite-info {
+    flex: 1;
+}
+
+.invite-info strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.invite-info small {
+    color: #999;
+}
+
+.invite-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.accept-btn,
+.reject-btn {
+    border: none;
+    padding: 8px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.accept-btn {
+    background: #dff8ea;
+    color: #16834f;
+}
+
+.reject-btn {
+    background: #ffe5e5;
+    color: #d43d3d;
+}
+
+/* =========================
+   المستخدمون
+========================= */
+
+.users-card {
+    background: white;
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.06);
+}
+
+.users-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.users-description {
+    color: #888;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.users-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.user-item:last-child {
+    border-bottom: none;
+}
+
+.user-avatar {
+    width: 47px;
+    height: 47px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#7667f5,#5b4ee8);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-info strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.user-info small {
+    color: #35a66f;
+    font-size: 11px;
+}
+
+.invite-user-btn {
+    border: none;
+    background: #6254eb;
+    color: white;
+    padding: 9px 12px;
+    border-radius: 11px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.invite-user-btn:disabled {
+    background: #c7c7cf;
+    cursor: default;
+}
+
+.empty-users {
+    text-align: center;
+    padding: 25px 10px;
+    color: #888;
+    font-size: 13px;
+}
+
+.loading-users {
+    text-align: center;
+    padding: 25px;
+    color: #888;
+}
+
+/* =========================
+   إشعار الدعوة
+========================= */
+
+.invite-notification {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.invite-box {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 24px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,.25);
+}
+
+.invite-box-icon {
+    font-size: 52px;
+    margin-bottom: 10px;
+}
+
+.invite-box h2 {
+    margin: 0 0 8px;
+}
+
+.invite-box p {
+    color: #777;
+    line-height: 1.7;
+    margin: 0 0 20px;
+}
+
+.notification-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.notification-buttons button {
+    border: none;
+    padding: 13px;
+    border-radius: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.notification-accept {
+    background: #35b878;
+    color: white;
+}
+
+.notification-reject {
+    background: #eeeeee;
+    color: #444;
+}
+
+/* =========================
+   رسالة
+========================= */
+
+.status-message {
+    min-height: 22px;
+    margin-top: 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+}
 
 @media (max-width: 360px) {
 
@@ -246,6 +566,11 @@ body {
         font-size: 27px;
     }
 
+    .invite-user-btn {
+        padding: 8px 9px;
+        font-size: 11px;
+    }
+
 }
 
 </style>
@@ -256,7 +581,12 @@ body {
 
 <main class="page">
 
-    <!-- الهيدر -->
+```
+<!-- =========================
+     صفحة الألعاب
+========================= -->
+
+<div id="gamesScreen">
 
     <header class="header">
 
@@ -265,7 +595,7 @@ body {
             onclick="window.location.href='index.html'">
 
             →
-            
+
         </button>
 
         <div class="header-text">
@@ -281,9 +611,6 @@ body {
         </div>
 
     </header>
-
-
-    <!-- البانر -->
 
     <section class="hero">
 
@@ -302,26 +629,17 @@ body {
 
     </section>
 
-
     <div class="section-title">
         اختر لعبة 👇
     </div>
 
-
-    <!-- الألعاب -->
-
     <section class="games-grid">
-
 
         <!-- معركة الكلمات -->
 
         <button
             class="game-card battle"
             onclick="openGame('battle')">
-
-            <span class="coming-soon">
-                قريباً
-            </span>
 
             <div class="game-icon">
                 ⚔️
@@ -337,7 +655,6 @@ body {
             </p>
 
         </button>
-
 
         <!-- سباق الكلمات -->
 
@@ -364,7 +681,6 @@ body {
 
         </button>
 
-
         <!-- تحدي الذاكرة -->
 
         <button
@@ -389,7 +705,6 @@ body {
             </p>
 
         </button>
-
 
         <!-- خمن الكلمة -->
 
@@ -416,7 +731,6 @@ body {
 
         </button>
 
-
         <!-- لا تخطئ -->
 
         <button
@@ -441,7 +755,6 @@ body {
             </p>
 
         </button>
-
 
         <!-- 60 ثانية -->
 
@@ -468,71 +781,1039 @@ body {
 
         </button>
 
+    </section>
+
+</div>
+
+
+<!-- =========================
+     شاشة معركة الكلمات
+========================= -->
+
+<div
+    id="battleScreen"
+    class="battle-screen">
+
+    <div class="battle-header">
+
+        <button
+            class="battle-back"
+            onclick="closeBattle()">
+
+            →
+
+        </button>
+
+        <div class="battle-title">
+
+            <h2>
+                ⚔️ معركة الكلمات
+            </h2>
+
+            <p>
+                اختر لاعبًا وأرسل له دعوة
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <section class="battle-banner">
+
+        <div class="big-icon">
+            ⚔️
+        </div>
+
+        <h2>
+            جاهز للتحدي؟
+        </h2>
+
+        <p>
+            تحدَّ مستخدمًا آخر في اختبار
+            كلمات إنجليزية وتنافسوا على أعلى نتيجة!
+        </p>
 
     </section>
 
+
+    <!-- الدعوات الواردة -->
+
+    <section class="invites-card">
+
+        <div class="invites-title">
+            📨 الدعوات الواردة
+        </div>
+
+        <div id="incomingInvites">
+
+            <div class="empty-users">
+                لا توجد دعوات حالياً
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- المستخدمون -->
+
+    <section class="users-card">
+
+        <div class="users-title">
+            👥 اللاعبين
+        </div>
+
+        <div class="users-description">
+            اختر مستخدمًا عامًا وأرسل له دعوة للعب.
+        </div>
+
+        <div
+            id="usersList"
+            class="users-list">
+
+            <div class="loading-users">
+                جاري تحميل المستخدمين...
+            </div>
+
+        </div>
+
+        <div
+            id="statusMessage"
+            class="status-message">
+
+        </div>
+
+    </section>
+
+</div>
+```
+
 </main>
 
+<!-- =========================
+     نافذة الدعوة
+========================= -->
+
+<div
+    id="inviteNotification"
+    class="invite-notification">
+
+```
+<div class="invite-box">
+
+    <div class="invite-box-icon">
+        ⚔️
+    </div>
+
+    <h2>
+        دعوة للعب!
+    </h2>
+
+    <p id="inviteText">
+        لديك دعوة جديدة لمعركة الكلمات.
+    </p>
+
+    <div class="notification-buttons">
+
+        <button
+            class="notification-accept"
+            onclick="acceptCurrentInvite()">
+
+            قبول ⚔️
+
+        </button>
+
+        <button
+            class="notification-reject"
+            onclick="rejectCurrentInvite()">
+
+            رفض
+
+        </button>
+
+    </div>
+
+</div>
+```
+
+</div>
 
 <script>
 
-function openGame(game) {
+/* ==================================================
+   المتغيرات
+================================================== */
+
+let currentUser = null;
+
+let currentInvite = null;
+
+let realtimeChannel = null;
+
+
+/* ==================================================
+   الحصول على المستخدم
+================================================== */
+
+async function loadCurrentUser() {
+
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
+
+    if (error || !user) {
+
+        window.location.href = "login.html";
+
+        return false;
+
+    }
+
+    currentUser = user;
+
+    return true;
+
+}
+
+
+/* ==================================================
+   فتح لعبة
+================================================== */
+
+async function openGame(game) {
 
     if (game === "battle") {
 
-        alert(
-            "⚔️ معركة الكلمات ستكون قريباً!"
-        );
+        const loggedIn =
+            await loadCurrentUser();
+
+        if (!loggedIn) return;
+
+        document.getElementById(
+            "gamesScreen"
+        ).style.display = "none";
+
+        document.getElementById(
+            "battleScreen"
+        ).style.display = "block";
+
+        await loadUsers();
+
+        await loadIncomingInvites();
+
+        subscribeToInvites();
 
         return;
+
     }
 
-    if (game === "race") {
+    alert(
+        "هذه اللعبة ستكون متوفرة قريباً 🎮"
+    );
 
-        alert(
-            "🏃 سباق الكلمات سيكون قريباً!"
-        );
+}
 
-        return;
-    }
 
-    if (game === "memory") {
+/* ==================================================
+   إغلاق معركة الكلمات
+================================================== */
 
-        alert(
-            "🧠 تحدي الذاكرة سيكون قريباً!"
-        );
+function closeBattle() {
 
-        return;
-    }
+    document.getElementById(
+        "battleScreen"
+    ).style.display = "none";
 
-    if (game === "guess") {
+    document.getElementById(
+        "gamesScreen"
+    ).style.display = "block";
 
-        alert(
-            "🕵️ خمن الكلمة سيكون قريباً!"
-        );
+    if (realtimeChannel) {
 
-        return;
-    }
+        supabaseClient
+            .removeChannel(
+                realtimeChannel
+            );
 
-    if (game === "mistake") {
+        realtimeChannel = null;
 
-        alert(
-            "💣 لعبة لا تخطئ ستكون قريباً!"
-        );
-
-        return;
-    }
-
-    if (game === "time") {
-
-        alert(
-            "🔥 تحدي 60 ثانية سيكون قريباً!"
-        );
-
-        return;
     }
 
 }
+
+
+/* ==================================================
+   تحميل المستخدمين العامين
+================================================== */
+
+async function loadUsers() {
+
+    const list =
+        document.getElementById(
+            "usersList"
+        );
+
+    list.innerHTML = `
+        <div class="loading-users">
+            جاري تحميل المستخدمين...
+        </div>
+    `;
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("profiles")
+        .select("id, display_name, is_public")
+        .eq("is_public", true)
+        .neq("id", currentUser.id)
+        .order(
+            "display_name",
+            {
+                ascending: true
+            }
+        );
+
+    if (error) {
+
+        console.error(
+            "Load users error:",
+            error
+        );
+
+        list.innerHTML = `
+            <div class="empty-users">
+                حدث خطأ أثناء تحميل المستخدمين ❌
+            </div>
+        `;
+
+        return;
+
+    }
+
+    if (!data || data.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty-users">
+                لا يوجد لاعبون متاحون حالياً 😔
+            </div>
+        `;
+
+        return;
+
+    }
+
+    list.innerHTML = "";
+
+    data.forEach(profile => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "user-item";
+
+        const name =
+            profile.display_name ||
+            "مستخدم";
+
+        const firstLetter =
+            name.charAt(0).toUpperCase();
+
+        item.innerHTML = `
+
+            <div class="user-avatar">
+                ${escapeHtml(firstLetter)}
+            </div>
+
+            <div class="user-info">
+
+                <strong>
+                    ${escapeHtml(name)}
+                </strong>
+
+                <small>
+                    ● متاح للعب
+                </small>
+
+            </div>
+
+            <button
+                class="invite-user-btn"
+                onclick="sendGameInvite('${profile.id}')">
+
+                🎮 دعوة
+
+            </button>
+
+        `;
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+/* ==================================================
+   إرسال دعوة
+================================================== */
+
+async function sendGameInvite(receiverId) {
+
+    if (!currentUser) return;
+
+    if (receiverId === currentUser.id) {
+
+        return;
+
+    }
+
+    const status =
+        document.getElementById(
+            "statusMessage"
+        );
+
+    status.style.color =
+        "#6254eb";
+
+    status.textContent =
+        "جاري إرسال الدعوة...";
+
+
+    /* منع إرسال دعوة مكررة معلقة */
+
+    const {
+        data: existing,
+        error: existingError
+    } = await supabaseClient
+        .from("game_invites")
+        .select("id")
+        .eq(
+            "sender_id",
+            currentUser.id
+        )
+        .eq(
+            "receiver_id",
+            receiverId
+        )
+        .eq(
+            "game_type",
+            "battle"
+        )
+        .eq(
+            "status",
+            "pending"
+        )
+        .maybeSingle();
+
+    if (existingError) {
+
+        console.error(
+            "Check invite error:",
+            existingError
+        );
+
+    }
+
+    if (existing) {
+
+        status.style.color =
+            "#d87720";
+
+        status.textContent =
+            "لديك دعوة معلقة لهذا المستخدم بالفعل.";
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } = await supabaseClient
+        .from("game_invites")
+        .insert({
+
+            sender_id:
+                currentUser.id,
+
+            receiver_id:
+                receiverId,
+
+            game_type:
+                "battle",
+
+            status:
+                "pending"
+
+        });
+
+    if (error) {
+
+        console.error(
+            "Send invite error:",
+            error
+        );
+
+        status.style.color =
+            "#d43d3d";
+
+        status.textContent =
+            "تعذر إرسال الدعوة ❌";
+
+        return;
+
+    }
+
+    status.style.color =
+        "#16834f";
+
+    status.textContent =
+        "تم إرسال الدعوة بنجاح ✅";
+
+}
+
+
+/* ==================================================
+   تحميل الدعوات الواردة
+================================================== */
+
+async function loadIncomingInvites() {
+
+    if (!currentUser) return;
+
+    const container =
+        document.getElementById(
+            "incomingInvites"
+        );
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("game_invites")
+        .select(`
+            id,
+            sender_id,
+            receiver_id,
+            game_type,
+            status,
+            created_at,
+            profiles:sender_id (
+                id,
+                display_name
+            )
+        `)
+        .eq(
+            "receiver_id",
+            currentUser.id
+        )
+        .eq(
+            "game_type",
+            "battle"
+        )
+        .eq(
+            "status",
+            "pending"
+        )
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
+
+    if (error) {
+
+        console.error(
+            "Load invites error:",
+            error
+        );
+
+        container.innerHTML = `
+            <div class="empty-users">
+                تعذر تحميل الدعوات ❌
+            </div>
+        `;
+
+        return;
+
+    }
+
+    if (!data || data.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-users">
+                لا توجد دعوات حالياً
+            </div>
+        `;
+
+        return;
+
+    }
+
+    container.innerHTML = "";
+
+    data.forEach(invite => {
+
+        addInviteToScreen(invite);
+
+    });
+
+}
+
+
+/* ==================================================
+   إضافة دعوة للشاشة
+================================================== */
+
+function addInviteToScreen(invite) {
+
+    const container =
+        document.getElementById(
+            "incomingInvites"
+        );
+
+    const existing =
+        document.getElementById(
+            "invite-" + invite.id
+        );
+
+    if (existing) return;
+
+    const senderName =
+        invite.profiles?.display_name ||
+        "مستخدم";
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "invite-item";
+
+    item.id =
+        "invite-" + invite.id;
+
+    item.innerHTML = `
+
+        <div class="invite-avatar">
+            ${escapeHtml(
+                senderName.charAt(0).toUpperCase()
+            )}
+        </div>
+
+        <div class="invite-info">
+
+            <strong>
+                ${escapeHtml(senderName)}
+            </strong>
+
+            <small>
+                يريد اللعب معك ⚔️
+            </small>
+
+        </div>
+
+        <div class="invite-buttons">
+
+            <button
+                class="accept-btn"
+                onclick="acceptInvite('${invite.id}')">
+
+                قبول
+
+            </button>
+
+            <button
+                class="reject-btn"
+                onclick="rejectInvite('${invite.id}')">
+
+                رفض
+
+            </button>
+
+        </div>
+
+    `;
+
+    container.appendChild(item);
+
+}
+
+
+/* ==================================================
+   Realtime
+================================================== */
+
+function subscribeToInvites() {
+
+    if (!currentUser) return;
+
+    if (realtimeChannel) {
+
+        supabaseClient
+            .removeChannel(
+                realtimeChannel
+            );
+
+    }
+
+    realtimeChannel =
+        supabaseClient
+            .channel(
+                "game-invites-" +
+                currentUser.id
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "game_invites",
+                    filter:
+                        "receiver_id=eq." +
+                        currentUser.id
+                },
+                async payload => {
+
+                    const invite =
+                        payload.new;
+
+                    if (
+                        invite.game_type !==
+                        "battle"
+                    ) {
+
+                        return;
+
+                    }
+
+                    await loadIncomingInvites();
+
+                    showInvitePopup(invite);
+
+                }
+            )
+            .subscribe();
+
+}
+
+
+/* ==================================================
+   نافذة الدعوة
+================================================== */
+
+async function showInvitePopup(invite) {
+
+    currentInvite =
+        invite;
+
+    let senderName =
+        "مستخدم";
+
+    const {
+        data
+    } = await supabaseClient
+        .from("profiles")
+        .select("display_name")
+        .eq(
+            "id",
+            invite.sender_id
+        )
+        .maybeSingle();
+
+    if (data?.display_name) {
+
+        senderName =
+            data.display_name;
+
+    }
+
+    document.getElementById(
+        "inviteText"
+    ).textContent =
+        senderName +
+        " يدعوك إلى معركة الكلمات ⚔️";
+
+    document.getElementById(
+        "inviteNotification"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* ==================================================
+   قبول الدعوة من النافذة
+================================================== */
+
+async function acceptCurrentInvite() {
+
+    if (!currentInvite) return;
+
+    const inviteId =
+        currentInvite.id;
+
+    closeInvitePopup();
+
+    await acceptInvite(
+        inviteId
+    );
+
+}
+
+
+/* ==================================================
+   رفض الدعوة من النافذة
+================================================== */
+
+async function rejectCurrentInvite() {
+
+    if (!currentInvite) return;
+
+    const inviteId =
+        currentInvite.id;
+
+    closeInvitePopup();
+
+    await rejectInvite(
+        inviteId
+    );
+
+}
+
+
+/* ==================================================
+   قبول دعوة
+================================================== */
+
+async function acceptInvite(inviteId) {
+
+    if (!currentUser) return;
+
+    const {
+        data: invite,
+        error: inviteError
+    } = await supabaseClient
+        .from("game_invites")
+        .select("*")
+        .eq(
+            "id",
+            inviteId
+        )
+        .eq(
+            "receiver_id",
+            currentUser.id
+        )
+        .eq(
+            "status",
+            "pending"
+        )
+        .maybeSingle();
+
+    if (inviteError || !invite) {
+
+        alert(
+            "هذه الدعوة لم تعد متاحة."
+        );
+
+        await loadIncomingInvites();
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } = await supabaseClient
+        .from("game_invites")
+        .update({
+
+            status:
+                "accepted",
+
+            responded_at:
+                new Date().toISOString()
+
+        })
+        .eq(
+            "id",
+            inviteId
+        )
+        .eq(
+            "status",
+            "pending"
+        );
+
+    if (error) {
+
+        console.error(
+            "Accept invite error:",
+            error
+        );
+
+        alert(
+            "حدث خطأ أثناء قبول الدعوة ❌"
+        );
+
+        return;
+
+    }
+
+    removeInviteFromScreen(
+        inviteId
+    );
+
+    /*
+       حالياً نعرض رسالة مؤقتة.
+       في الخطوة التالية نربط القبول
+       بصفحة المباراة الفعلية.
+    */
+
+    alert(
+        "تم قبول الدعوة ⚔️\n\nسنبدأ الآن ببناء شاشة المباراة."
+    );
+
+}
+
+
+/* ==================================================
+   رفض دعوة
+================================================== */
+
+async function rejectInvite(inviteId) {
+
+    if (!currentUser) return;
+
+    const {
+        error
+    } = await supabaseClient
+        .from("game_invites")
+        .update({
+
+            status:
+                "rejected",
+
+            responded_at:
+                new Date().toISOString()
+
+        })
+        .eq(
+            "id",
+            inviteId
+        )
+        .eq(
+            "receiver_id",
+            currentUser.id
+        )
+        .eq(
+            "status",
+            "pending"
+        );
+
+    if (error) {
+
+        console.error(
+            "Reject invite error:",
+            error
+        );
+
+        alert(
+            "حدث خطأ أثناء رفض الدعوة ❌"
+        );
+
+        return;
+
+    }
+
+    removeInviteFromScreen(
+        inviteId
+    );
+
+}
+
+
+/* ==================================================
+   إزالة دعوة من الشاشة
+================================================== */
+
+function removeInviteFromScreen(inviteId) {
+
+    const item =
+        document.getElementById(
+            "invite-" + inviteId
+        );
+
+    if (item) {
+
+        item.remove();
+
+    }
+
+    const container =
+        document.getElementById(
+            "incomingInvites"
+        );
+
+    if (
+        container &&
+        container.children.length === 0
+    ) {
+
+        container.innerHTML = `
+            <div class="empty-users">
+                لا توجد دعوات حالياً
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* ==================================================
+   إغلاق النافذة
+================================================== */
+
+function closeInvitePopup() {
+
+    document.getElementById(
+        "inviteNotification"
+    ).style.display =
+        "none";
+
+    currentInvite =
+        null;
+
+}
+
+
+/* ==================================================
+   حماية HTML
+================================================== */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text || "";
+
+    return div.innerHTML;
+
+}
+
+
+/* ==================================================
+   تشغيل
+================================================== */
+
+loadCurrentUser();
 
 </script>
 
