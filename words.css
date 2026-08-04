@@ -980,4 +980,127 @@ button {
 
 img {
     max-width: 100%;
+}/* =========================================================
+   إخفاء الترجمة
+========================================================= */
+
+.hidden-translation {
+    display: none !important;
+}
+
+
+/* =========================================================
+   منطقة ترجمة الكلمة
+========================================================= */
+
+.translation-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.translation-btn {
+    border: 1px solid #e2e1ed;
+
+    background: #f8f8fc;
+
+    color: #5c51dc;
+
+    border-radius: 11px;
+
+    padding: 8px 15px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        background .15s ease;
+}
+
+
+.translation-btn:hover {
+    background: #efedff;
+}
+
+
+.translation-btn:active {
+    transform: scale(.96);
+}
+
+
+/* =========================================================
+   ترجمة المثال
+========================================================= */
+
+.example-translation-area {
+    margin-top: 5px;
+}
+
+
+.example-translation-btn {
+    margin-top: 6px;
+
+    border: 1px solid #e2e1ed;
+
+    background: white;
+
+    color: #666678;
+
+    border-radius: 9px;
+
+    padding: 6px 11px;
+
+    font-family: inherit;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        background .15s ease;
+}
+
+
+.example-translation-btn:hover {
+    background: #f5f4ff;
+}
+
+
+.example-translation-btn:active {
+    transform: scale(.97);
+}
+
+
+/* =========================================================
+   الجوال
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .translation-btn {
+        padding: 6px 12px;
+
+        font-size: 10px;
+
+        border-radius: 9px;
+    }
+
+
+    .example-translation-btn {
+        padding: 5px 9px;
+
+        font-size: 9px;
+    }
+
 }
