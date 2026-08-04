@@ -4092,21 +4092,13 @@ async function loadAnalytics() {
 // تشغيل التحليلات
 // ==========================================
 
-function startAnalytics() {
+// ==========================================
+// تشغيل التحليلات — مرة واحدة فقط
+// ==========================================
 
-    loadAnalytics();
+async function startAnalytics() {
 
-
-    clearInterval(
-        analyticsTimer
-    );
-
-
-    analyticsTimer =
-        setInterval(
-            loadAnalytics,
-            5000
-        );
+    await loadAnalytics();
 
 }
 

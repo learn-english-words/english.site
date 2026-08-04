@@ -88,21 +88,49 @@
 
 <section class="analytics-section">
 
-    <div class="section-title">
+    <div
+    class="section-title"
+    style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:15px;
+    "
+>
 
-        <div>
+    <div>
 
-            <h2>
-                📊 تحليلات الموقع
-            </h2>
+        <h2>
+            📊 تحليلات الموقع
+        </h2>
 
-            <p id="analyticsLastUpdate">
-                جاري تحميل الإحصائيات...
-            </p>
-
-        </div>
+        <p id="analyticsLastUpdate">
+            جاري تحميل الإحصائيات...
+        </p>
 
     </div>
+
+
+    <button
+        id="refreshAnalyticsBtn"
+        type="button"
+        onclick="refreshAnalytics()"
+        style="
+            border:none;
+            background:#eef4ff;
+            color:#2563eb;
+            padding:10px 16px;
+            border-radius:10px;
+            cursor:pointer;
+            font-family:inherit;
+            font-weight:bold;
+            white-space:nowrap;
+        "
+    >
+        🔄 تحديث
+    </button>
+
+</div>
 
 
     <div
