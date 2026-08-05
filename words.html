@@ -1,11 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3809987460267480"
-     crossorigin="anonymous"></script>
-<meta name="google-adsense-account" content="ca-pub-3809987460267480">
+
+    <script async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3809987460267480"
+        crossorigin="anonymous">
+    </script>
+
+    <meta
+        name="google-adsense-account"
+        content="ca-pub-3809987460267480"
+    >
 
     <meta charset="UTF-8">
 
@@ -16,7 +22,75 @@
 
     <title>تعلم الكلمات</title>
 
-    <link rel="stylesheet" href="words.css">
+    <link
+        rel="stylesheet"
+        href="words.css"
+    >
+
+    <style>
+
+        /* ==========================================
+           زر إظهار / إخفاء الترجمة
+        ========================================== */
+
+        .translation-toggle {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            margin-top: 10px;
+
+            padding: 10px 18px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #f1f4f9;
+
+            color: #333;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+        }
+
+
+        .translation-toggle:hover {
+
+            transform: translateY(-1px);
+
+            background: #e7ebf2;
+
+        }
+
+
+        .translation-toggle:active {
+
+            transform: scale(0.98);
+
+        }
+
+
+        /* الترجمة مخفية افتراضيًا */
+
+        .arabic-word.hidden-translation {
+
+            display: none;
+
+        }
+
+    </style>
 
 </head>
 
@@ -131,11 +205,24 @@
                 <!-- العربية -->
 
                 <div
-                    class="arabic-word"
+                    class="arabic-word hidden-translation"
                     id="arabicWord"
                 >
                     تفاحة
                 </div>
+
+
+
+                <!-- زر إظهار الترجمة -->
+
+                <button
+                    type="button"
+                    id="translationToggle"
+                    class="translation-toggle"
+                    onclick="toggleTranslation()"
+                >
+                    👁️ إظهار الترجمة
+                </button>
 
 
 
@@ -249,9 +336,11 @@
                 onclick="toggleFavorite()"
             >
                 ☆
+
                 <span>
                     حفظ
                 </span>
+
             </button>
 
 
@@ -280,14 +369,139 @@
 
     <script src="words.js"></script>
 
+    <script src="notifications.js"></script>
 
 
-<script src="supabase.js"></script>
-<script src="notifications.js"></script>
 
+    <!-- ==========================================
+         إظهار / إخفاء الترجمة
+    ========================================== -->
+
+    <script>
+
+        function toggleTranslation() {
+
+            const arabicWord =
+                document.getElementById("arabicWord");
+
+            const toggleButton =
+                document.getElementById("translationToggle");
+
+
+            if (!arabicWord || !toggleButton) {
+
+                return;
+
+            }
+
+
+            const isHidden =
+                arabicWord.classList.contains("hidden-translation");
+
+
+            if (isHidden) {
+
+                arabicWord.classList.remove(
+                    "hidden-translation"
+                );
+
+                toggleButton.innerHTML =
+                    "🙈 إخفاء الترجمة";
+
+            } else {
+
+                arabicWord.classList.add(
+                    "hidden-translation"
+                );
+
+                toggleButton.innerHTML =
+                    "👁️ إظهار الترجمة";
+
+            }
+
+        }
+
+
+
+        /* ==========================================
+           إعادة إخفاء الترجمة
+           عند تغيير الكلمة
+        ========================================== */
+
+        function resetTranslationVisibility() {
+
+            const arabicWord =
+                document.getElementById("arabicWord");
+
+            const toggleButton =
+                document.getElementById("translationToggle");
+
+
+            if (arabicWord) {
+
+                arabicWord.classList.add(
+                    "hidden-translation"
+                );
+
+            }
+
+
+            if (toggleButton) {
+
+                toggleButton.innerHTML =
+                    "👁️ إظهار الترجمة";
+
+            }
+
+        }
+
+
+        /* ==========================================
+           مراقبة تغيّر الكلمة
+           بدون الحاجة لتعديل words.js
+        ========================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                resetTranslationVisibility();
+
+
+                const arabicWord =
+                    document.getElementById("arabicWord");
+
+
+                if (!arabicWord) {
+
+                    return;
+
+                }
+
+
+                const observer =
+                    new MutationObserver(function () {
+
+                        resetTranslationVisibility();
+
+                    });
+
+
+                observer.observe(
+                    arabicWord,
+                    {
+                        childList: true,
+                        characterData: true,
+                        subtree: true
+                    }
+                );
+
+            }
+        );
+
+    </script>
 
 
 </body>
 
 </html>
-

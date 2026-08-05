@@ -1,4 +1,3 @@
-
 // ==========================================
 // المتغيرات
 // ==========================================
@@ -8,6 +7,9 @@ let words = [];
 let currentIndex = 0;
 
 let favorite = false;
+
+// حالة ظهور الترجمة
+let translationVisible = false;
 
 
 // ==========================================
@@ -189,6 +191,41 @@ function loadWord() {
         word.arabic || "";
 
 
+    // ==========================================
+    // إخفاء الترجمة عند كل كلمة جديدة
+    // ==========================================
+
+    translationVisible = false;
+
+
+    const arabicWord =
+        document.getElementById(
+            "arabicWord"
+        );
+
+
+    const translationBtn =
+        document.getElementById(
+            "translationBtn"
+        );
+
+
+    if (arabicWord) {
+
+        arabicWord.style.display =
+            "none";
+
+    }
+
+
+    if (translationBtn) {
+
+        translationBtn.textContent =
+            "👁️ إظهار الترجمة";
+
+    }
+
+
 
     // ==========================================
     // المثال
@@ -277,6 +314,58 @@ function loadWord() {
     // التأكد هل الكلمة محفوظة
 
     checkFavorite();
+
+}
+
+
+// ==========================================
+// إظهار / إخفاء ترجمة الكلمة
+// ==========================================
+
+function toggleTranslation() {
+
+    const arabicWord =
+        document.getElementById(
+            "arabicWord"
+        );
+
+
+    const translationBtn =
+        document.getElementById(
+            "translationBtn"
+        );
+
+
+    if (!arabicWord || !translationBtn) {
+
+        return;
+
+    }
+
+
+    translationVisible =
+        !translationVisible;
+
+
+    if (translationVisible) {
+
+        arabicWord.style.display =
+            "block";
+
+
+        translationBtn.textContent =
+            "🙈 إخفاء الترجمة";
+
+    } else {
+
+        arabicWord.style.display =
+            "none";
+
+
+        translationBtn.textContent =
+            "👁️ إظهار الترجمة";
+
+    }
 
 }
 
@@ -989,4 +1078,3 @@ function goHome() {
 // ==========================================
 
 loadWords();
-
