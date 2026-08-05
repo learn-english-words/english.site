@@ -82,11 +82,17 @@
         }
 
 
-        /* الترجمة مخفية افتراضيًا */
+        /* ==========================================
+           الترجمة
+        ========================================== */
 
-        .arabic-word.hidden-translation {
+        .arabic-word {
 
-            display: none;
+            margin-top: 8px;
+
+            font-size: 22px;
+
+            font-weight: 700;
 
         }
 
@@ -191,7 +197,9 @@
             <div class="word-content">
 
 
-                <!-- الإنجليزية -->
+                <!-- ======================================
+                     الكلمة الإنجليزية
+                ======================================= -->
 
                 <div
                     class="english-word"
@@ -202,18 +210,22 @@
 
 
 
-                <!-- العربية -->
+                <!-- ======================================
+                     الترجمة العربية
+                ======================================= -->
 
                 <div
-                    class="arabic-word hidden-translation"
                     id="arabicWord"
+                    class="arabic-word"
+                    style="display:none;"
                 >
-                    تفاحة
                 </div>
 
 
 
-                <!-- زر إظهار الترجمة -->
+                <!-- ======================================
+                     زر إظهار / إخفاء الترجمة
+                ======================================= -->
 
                 <button
                     type="button"
@@ -226,7 +238,9 @@
 
 
 
-                <!-- نطق الكلمة -->
+                <!-- ======================================
+                     نطق الكلمة
+                ======================================= -->
 
                 <button
                     type="button"
@@ -360,7 +374,9 @@
 
 
 
-    <!-- Supabase -->
+    <!-- ==========================================
+         Supabase
+    ========================================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -370,136 +386,6 @@
     <script src="words.js"></script>
 
     <script src="notifications.js"></script>
-
-
-
-    <!-- ==========================================
-         إظهار / إخفاء الترجمة
-    ========================================== -->
-
-    <script>
-
-        function toggleTranslation() {
-
-            const arabicWord =
-                document.getElementById("arabicWord");
-
-            const toggleButton =
-                document.getElementById("translationToggle");
-
-
-            if (!arabicWord || !toggleButton) {
-
-                return;
-
-            }
-
-
-            const isHidden =
-                arabicWord.classList.contains("hidden-translation");
-
-
-            if (isHidden) {
-
-                arabicWord.classList.remove(
-                    "hidden-translation"
-                );
-
-                toggleButton.innerHTML =
-                    "🙈 إخفاء الترجمة";
-
-            } else {
-
-                arabicWord.classList.add(
-                    "hidden-translation"
-                );
-
-                toggleButton.innerHTML =
-                    "👁️ إظهار الترجمة";
-
-            }
-
-        }
-
-
-
-        /* ==========================================
-           إعادة إخفاء الترجمة
-           عند تغيير الكلمة
-        ========================================== */
-
-        function resetTranslationVisibility() {
-
-            const arabicWord =
-                document.getElementById("arabicWord");
-
-            const toggleButton =
-                document.getElementById("translationToggle");
-
-
-            if (arabicWord) {
-
-                arabicWord.classList.add(
-                    "hidden-translation"
-                );
-
-            }
-
-
-            if (toggleButton) {
-
-                toggleButton.innerHTML =
-                    "👁️ إظهار الترجمة";
-
-            }
-
-        }
-
-
-        /* ==========================================
-           مراقبة تغيّر الكلمة
-           بدون الحاجة لتعديل words.js
-        ========================================== */
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            function () {
-
-                resetTranslationVisibility();
-
-
-                const arabicWord =
-                    document.getElementById("arabicWord");
-
-
-                if (!arabicWord) {
-
-                    return;
-
-                }
-
-
-                const observer =
-                    new MutationObserver(function () {
-
-                        resetTranslationVisibility();
-
-                    });
-
-
-                observer.observe(
-                    arabicWord,
-                    {
-                        childList: true,
-                        characterData: true,
-                        subtree: true
-                    }
-                );
-
-            }
-        );
-
-    </script>
 
 
 </body>
