@@ -14,15 +14,190 @@
 
     <link rel="stylesheet" href="admin.css">
 
+    <style>
+
+        /* =====================================================
+           نظام أقسام لوحة التحكم
+        ===================================================== */
+
+        .admin-sections-nav {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .admin-section-btn {
+            border: 1px solid #e4e8f0;
+            background: white;
+            color: #273044;
+            padding: 17px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+            box-shadow: 0 3px 12px rgba(20, 30, 50, 0.04);
+        }
+
+        .admin-section-btn:hover {
+            transform: translateY(-2px);
+            border-color: #3478f6;
+            color: #3478f6;
+        }
+
+        .admin-section-btn.active {
+            background: #3478f6;
+            color: white;
+            border-color: #3478f6;
+            box-shadow: 0 5px 18px rgba(52, 120, 246, 0.20);
+        }
+
+        .admin-section-btn .section-icon {
+            display: block;
+            font-size: 25px;
+            margin-bottom: 6px;
+        }
+
+        .admin-panel {
+            display: none;
+            animation: adminPanelFade 0.2s ease;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        @keyframes adminPanelFade {
+
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        .admin-panel-header {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 16px rgba(20, 30, 50, 0.05);
+            border: 1px solid #edf0f5;
+        }
+
+        .admin-panel-header h2 {
+            margin: 0 0 7px;
+            font-size: 21px;
+        }
+
+        .admin-panel-header p {
+            margin: 0;
+            color: #8992a3;
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           زر الرجوع للأقسام
+        ===================================================== */
+
+        .back-to-sections {
+            display: none;
+            margin-bottom: 15px;
+        }
+
+        .back-to-sections button {
+            border: none;
+            background: #eef4ff;
+            color: #3478f6;
+            padding: 9px 13px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+
+        /* =====================================================
+           Textarea
+        ===================================================== */
+
+        .admin-textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dfe4ec;
+            border-radius: 11px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+            background: white;
+            line-height: 1.8;
+        }
+
+        .admin-textarea:focus {
+            border-color: #3478f6;
+        }
+
+
+        /* =====================================================
+           الجوال
+        ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .admin-sections-nav {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .admin-sections-nav {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 9px;
+            }
+
+            .admin-section-btn {
+                padding: 13px 7px;
+                font-size: 12px;
+                border-radius: 12px;
+            }
+
+            .admin-section-btn .section-icon {
+                font-size: 22px;
+            }
+
+            .admin-panel-header {
+                padding: 16px;
+            }
+
+            .admin-panel-header h2 {
+                font-size: 18px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 
 <body>
 
 
-<!-- ==========================================
+<!-- =====================================================
      الشريط العلوي
-========================================== -->
+===================================================== -->
 
 <header class="topbar">
 
@@ -56,9 +231,9 @@
 <main class="container">
 
 
-<!-- ==========================================
-     عنوان لوحة التحكم
-========================================== -->
+<!-- =====================================================
+     رأس لوحة التحكم
+===================================================== -->
 
 <section class="admin-header">
 
@@ -73,7 +248,7 @@
         </h1>
 
         <p>
-            إدارة الكلمات والتصنيفات والقراءة والرسائل ومتابعة نشاط المستخدمين.
+            اختر القسم الذي تريد إدارته من القائمة بالأسفل.
         </p>
 
     </div>
@@ -82,183 +257,259 @@
 
 
 
-<!-- ==========================================
-     📊 تحليلات الموقع
-========================================== -->
+<!-- =====================================================
+     قائمة الأقسام
+===================================================== -->
 
-<section class="analytics-section">
-
-    <div
-    class="section-title"
-    style="
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:15px;
-    "
+<nav
+    class="admin-sections-nav"
+    id="adminSectionsNav"
 >
-
-    <div>
-
-        <h2>
-            📊 تحليلات الموقع
-        </h2>
-
-        <p id="analyticsLastUpdate">
-            جاري تحميل الإحصائيات...
-        </p>
-
-    </div>
 
 
     <button
-        id="refreshAnalyticsBtn"
         type="button"
-        onclick="refreshAnalytics()"
-        style="
-            border:none;
-            background:#eef4ff;
-            color:#2563eb;
-            padding:10px 16px;
-            border-radius:10px;
-            cursor:pointer;
-            font-family:inherit;
-            font-weight:bold;
-            white-space:nowrap;
-        "
+        class="admin-section-btn active"
+        data-section="words"
+        onclick="showAdminSection('words')"
     >
-        🔄 تحديث
+
+        <span class="section-icon">
+            📚
+        </span>
+
+        الكلمات
+
+    </button>
+
+
+
+    <button
+        type="button"
+        class="admin-section-btn"
+        data-section="categories"
+        onclick="showAdminSection('categories')"
+    >
+
+        <span class="section-icon">
+            🗂️
+        </span>
+
+        التصنيفات
+
+    </button>
+
+
+
+    <button
+        type="button"
+        class="admin-section-btn"
+        data-section="messages"
+        onclick="showAdminSection('messages')"
+    >
+
+        <span class="section-icon">
+            📢
+        </span>
+
+        الرسائل
+
+    </button>
+
+
+
+    <button
+        type="button"
+        class="admin-section-btn"
+        data-section="reading"
+        onclick="showAdminSection('reading')"
+    >
+
+        <span class="section-icon">
+            📖
+        </span>
+
+        Reading
+
+    </button>
+
+
+
+    <button
+        type="button"
+        class="admin-section-btn"
+        data-section="analytics"
+        onclick="showAdminSection('analytics')"
+    >
+
+        <span class="section-icon">
+            📊
+        </span>
+
+        التحليلات
+
+    </button>
+
+
+</nav>
+
+
+
+<!-- =====================================================
+     زر الرجوع
+===================================================== -->
+
+<div class="back-to-sections">
+
+    <button
+        type="button"
+        onclick="scrollToAdminSections()"
+    >
+
+        ↩️ الأقسام
+
     </button>
 
 </div>
 
 
-    <div
-        id="analyticsError"
-        style="
-            display:none;
-            background:#fff0f0;
-            color:#d93636;
-            padding:12px 15px;
-            border-radius:12px;
-            margin-bottom:15px;
-        "
-    ></div>
+
+<!-- =====================================================
+     📚 قسم الكلمات
+===================================================== -->
+
+<section
+    id="adminPanelWords"
+    class="admin-panel active"
+>
 
 
-    <!-- الإحصائيات -->
+    <div class="admin-panel-header">
 
-    <div
-        class="analytics-grid"
-        style="
-            display:grid;
-            grid-template-columns:repeat(4,1fr);
-            gap:15px;
-        "
-    >
+        <h2>
+            📚 إدارة الكلمات
+        </h2>
 
-
-        <!-- المتصلون الآن -->
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                🟢
-            </div>
-
-            <strong id="onlineUsers">
-                0
-            </strong>
-
-            <span>
-                المتصلون الآن
-            </span>
-
-        </div>
-
-
-
-        <!-- آخر 5 دقائق -->
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                🕐
-            </div>
-
-            <strong id="recentUsers">
-                0
-            </strong>
-
-            <span>
-                دخلوا خلال آخر 5 دقائق
-            </span>
-
-        </div>
-
-
-
-        <!-- زيارات اليوم -->
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                📅
-            </div>
-
-            <strong id="todayVisits">
-                0
-            </strong>
-
-            <span>
-                زيارات اليوم
-            </span>
-
-        </div>
-
-
-
-        <!-- إجمالي الزيارات -->
-
-        <div class="analytics-card">
-
-            <div class="analytics-icon">
-                📊
-            </div>
-
-            <strong id="totalVisits">
-                0
-            </strong>
-
-            <span>
-                إجمالي الزيارات
-            </span>
-
-        </div>
+        <p>
+            أضف كلمات جديدة أو عدّل الكلمات الموجودة وابحث عنها.
+        </p>
 
     </div>
 
 
 
-    <!-- ==========================================
-         جدول نشاط المستخدمين
-    ========================================== -->
+    <!-- إضافة كلمة -->
 
-    <div
-        class="form-card"
-        style="margin-top:20px;"
-    >
+    <section class="form-card">
 
-        <div class="section-title">
+        <div class="form-grid">
 
-            <div>
 
-                <h2>
-                    👤 نشاط المستخدمين
-                </h2>
+            <div class="field">
+
+                <label>
+                    🇬🇧 الكلمة الإنجليزية
+                </label>
+
+                <input
+                    type="text"
+                    id="english"
+                    placeholder="مثال: Apple"
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label>
+                    🇸🇦 المعنى بالعربي
+                </label>
+
+                <input
+                    type="text"
+                    id="arabic"
+                    placeholder="مثال: تفاحة"
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label>
+                    📊 المستوى
+                </label>
+
+                <select id="level">
+
+                    <option value="A1">
+                        A1 - مبتدئ
+                    </option>
+
+                    <option value="A2">
+                        A2 - متوسط
+                    </option>
+
+                    <option value="B1">
+                        B1 - متقدم
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label>
+                    🗂️ التصنيف
+                </label>
+
+                <select id="category">
+
+                    <option value="">
+                        جاري تحميل التصنيفات...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="field image-field">
+
+            <label>
+                🖼️ صورة الكلمة
+            </label>
+
+
+            <input
+                type="file"
+                id="image"
+                accept="image/*"
+                onchange="previewImage(event)"
+            >
+
+
+            <div
+                id="imagePreview"
+                class="image-preview"
+            >
+
+                <span>
+                    🖼️
+                </span>
 
                 <p>
-                    آخر المستخدمين الذين تم تسجيل نشاطهم.
+                    ستظهر معاينة الصورة هنا
                 </p>
 
             </div>
@@ -266,307 +517,143 @@
         </div>
 
 
-        <div
-            style="
-                width:100%;
-                overflow-x:auto;
-            "
-        >
 
-            <table
-                style="
-                    width:100%;
-                    border-collapse:collapse;
-                    min-width:700px;
-                "
-            >
-
-                <thead>
-
-                    <tr
-                        style="
-                            background:#f5f7fb;
-                            text-align:right;
-                        "
-                    >
-
-                        <th
-                            style="
-                                padding:13px;
-                                border-bottom:1px solid #e5e8ef;
-                            "
-                        >
-                            اسم المستخدم
-                        </th>
+        <div class="form-grid">
 
 
-                        <th
-                            style="
-                                padding:13px;
-                                border-bottom:1px solid #e5e8ef;
-                            "
-                        >
-                            الصفحة
-                        </th>
+            <div class="field">
+
+                <label>
+                    💡 جملة بالإنجليزية
+                </label>
+
+                <input
+                    type="text"
+                    id="example"
+                    placeholder="I eat an apple."
+                >
+
+            </div>
 
 
-                        <th
-                            style="
-                                padding:13px;
-                                border-bottom:1px solid #e5e8ef;
-                            "
-                        >
-                            وقت الدخول
-                        </th>
 
+            <div class="field">
 
-                        <th
-                            style="
-                                padding:13px;
-                                border-bottom:1px solid #e5e8ef;
-                            "
-                        >
-                            آخر نشاط
-                        </th>
+                <label>
+                    🇸🇦 ترجمة الجملة
+                </label>
 
+                <input
+                    type="text"
+                    id="exampleArabic"
+                    placeholder="أنا آكل تفاحة."
+                >
 
-                        <th
-                            style="
-                                padding:13px;
-                                border-bottom:1px solid #e5e8ef;
-                            "
-                        >
-                            الحالة
-                        </th>
+            </div>
 
-                    </tr>
-
-                </thead>
-
-
-                <tbody id="analyticsUsersTable">
-
-                    <tr>
-
-                        <td
-                            colspan="5"
-                            style="
-                                padding:25px;
-                                text-align:center;
-                                color:#888;
-                            "
-                        >
-                            جاري تحميل المستخدمين...
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
 
         </div>
 
-    </div>
+
+
+        <button
+            class="save-btn"
+            onclick="saveWord()"
+        >
+
+            💾 حفظ الكلمة
+
+        </button>
+
+    </section>
+
+
+
+    <!-- الكلمات الموجودة -->
+
+    <section class="words-section">
+
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    📚 الكلمات المضافة
+                </h2>
+
+                <p>
+                    الكلمات الموجودة في البرنامج
+                </p>
+
+            </div>
+
+
+            <strong id="wordCount">
+                0 كلمة
+            </strong>
+
+        </div>
+
+
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔍 ابحث عن كلمة..."
+                oninput="searchWords()"
+            >
+
+        </div>
+
+
+
+        <div
+            id="wordsList"
+            class="words-list"
+        ></div>
+
+
+    </section>
+
 
 </section>
 
 
 
-<!-- ==========================================
-     إضافة كلمة
-========================================== -->
+<!-- =====================================================
+     🗂️ قسم التصنيفات
+===================================================== -->
 
-<section class="form-card">
-
-    <div class="form-grid">
-
-
-        <div class="field">
-
-            <label>
-                🇬🇧 الكلمة الإنجليزية
-            </label>
-
-            <input
-                type="text"
-                id="english"
-                placeholder="مثال: Apple"
-            >
-
-        </div>
+<section
+    id="adminPanelCategories"
+    class="admin-panel"
+>
 
 
+    <div class="admin-panel-header">
 
-        <div class="field">
+        <h2>
+            🗂️ إدارة التصنيفات
+        </h2>
 
-            <label>
-                🇸🇦 المعنى بالعربي
-            </label>
-
-            <input
-                type="text"
-                id="arabic"
-                placeholder="مثال: تفاحة"
-            >
-
-        </div>
-
-
-
-        <div class="field">
-
-            <label>
-                📊 المستوى
-            </label>
-
-            <select id="level">
-
-                <option value="A1">
-                    A1 - مبتدئ
-                </option>
-
-                <option value="A2">
-                    A2 - متوسط
-                </option>
-
-                <option value="B1">
-                    B1 - متقدم
-                </option>
-
-            </select>
-
-        </div>
-
-
-
-        <div class="field">
-
-            <label>
-                🗂️ التصنيف
-            </label>
-
-            <select id="category">
-
-                <option value="">
-                    جاري تحميل التصنيفات...
-                </option>
-
-            </select>
-
-        </div>
+        <p>
+            أضف تصنيفات جديدة تظهر تلقائيًا للمتعلمين.
+        </p>
 
     </div>
 
 
 
-    <div class="field image-field">
-
-        <label>
-            🖼️ صورة الكلمة
-        </label>
-
-        <input
-            type="file"
-            id="image"
-            accept="image/*"
-            onchange="previewImage(event)"
-        >
-
-
-        <div
-            id="imagePreview"
-            class="image-preview"
-        >
-
-            <span>
-                🖼️
-            </span>
-
-            <p>
-                ستظهر معاينة الصورة هنا
-            </p>
-
-        </div>
-
-    </div>
-
-
-
-    <div class="form-grid">
-
-        <div class="field">
-
-            <label>
-                💡 جملة بالإنجليزية
-            </label>
-
-            <input
-                type="text"
-                id="example"
-                placeholder="I eat an apple."
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>
-                🇸🇦 ترجمة الجملة
-            </label>
-
-            <input
-                type="text"
-                id="exampleArabic"
-                placeholder="أنا آكل تفاحة."
-            >
-
-        </div>
-
-    </div>
-
-
-
-    <button
-        class="save-btn"
-        onclick="saveWord()"
-    >
-
-        💾 حفظ الكلمة
-
-    </button>
-
-</section>
-
-
-
-<!-- ==========================================
-     إدارة التصنيفات
-========================================== -->
-
-<section class="categories-admin-section">
-
-    <div class="section-title">
-
-        <div>
-
-            <h2>
-                🗂️ إدارة التصنيفات
-            </h2>
-
-            <p>
-                أضف تصنيفات جديدة تظهر تلقائيًا للمتعلمين.
-            </p>
-
-        </div>
-
-    </div>
-
+    <!-- إضافة تصنيف -->
 
     <div class="form-card">
 
+
         <div class="form-grid">
+
 
             <div class="field">
 
@@ -581,6 +668,7 @@
                 >
 
             </div>
+
 
 
             <div class="field">
@@ -598,6 +686,7 @@
             </div>
 
 
+
             <div class="field">
 
                 <label>
@@ -613,7 +702,9 @@
 
             </div>
 
+
         </div>
+
 
 
         <button
@@ -626,8 +717,12 @@
 
         </button>
 
+
     </div>
 
+
+
+    <!-- التصنيفات الموجودة -->
 
     <div
         id="adminCategoriesList"
@@ -639,85 +734,39 @@
 
     </div>
 
-</section>
-
-
-
-<!-- ==========================================
-     الكلمات
-========================================== -->
-
-<section class="words-section">
-
-    <div class="section-title">
-
-        <div>
-
-            <h2>
-                📚 الكلمات المضافة
-            </h2>
-
-            <p>
-                الكلمات الموجودة في البرنامج
-            </p>
-
-        </div>
-
-
-        <strong id="wordCount">
-            0 كلمة
-        </strong>
-
-    </div>
-
-
-
-    <div class="search-box">
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="🔍 ابحث عن كلمة..."
-            oninput="searchWords()"
-        >
-
-    </div>
-
-
-    <div
-        id="wordsList"
-        class="words-list"
-    ></div>
 
 </section>
 
 
 
-<!-- ==========================================
-     رسائل المستخدمين
-========================================== -->
+<!-- =====================================================
+     📢 قسم الرسائل
+===================================================== -->
 
-<section class="messages-section">
+<section
+    id="adminPanelMessages"
+    class="admin-panel"
+>
 
-    <div class="section-title">
 
-        <div>
+    <div class="admin-panel-header">
 
-            <h2>
-                📢 رسائل المستخدمين
-            </h2>
+        <h2>
+            📢 رسائل المستخدمين
+        </h2>
 
-            <p>
-                أنشئ رسالة تظهر للمستخدمين خلال وقت تحدده
-            </p>
-
-        </div>
+        <p>
+            أنشئ رسالة تظهر للمستخدمين خلال وقت تحدده.
+        </p>
 
     </div>
 
 
+
+    <!-- إضافة رسالة -->
 
     <div class="form-card">
+
 
         <div class="field">
 
@@ -743,16 +792,9 @@
 
             <textarea
                 id="adminMessageText"
+                class="admin-textarea"
                 placeholder="اكتب الرسالة هنا..."
-                rows="5"
-                style="
-                    width:100%;
-                    padding:13px;
-                    border:1px solid #ddd;
-                    border-radius:10px;
-                    resize:vertical;
-                    font-size:16px;
-                "
+                rows="6"
             ></textarea>
 
         </div>
@@ -760,6 +802,7 @@
 
 
         <div class="form-grid">
+
 
             <div class="field">
 
@@ -775,6 +818,7 @@
             </div>
 
 
+
             <div class="field">
 
                 <label>
@@ -787,6 +831,7 @@
                 >
 
             </div>
+
 
         </div>
 
@@ -801,9 +846,12 @@
 
         </button>
 
+
     </div>
 
 
+
+    <!-- الرسائل الموجودة -->
 
     <div
         id="adminMessagesList"
@@ -815,42 +863,50 @@
 
     </div>
 
+
 </section>
 
 
 
-<!-- ==========================================
-     إدارة Reading
-========================================== -->
+<!-- =====================================================
+     📖 قسم Reading
+===================================================== -->
 
-<section class="reading-admin-section">
+<section
+    id="adminPanelReading"
+    class="admin-panel"
+>
 
-    <div class="section-title">
 
-        <div>
+    <div class="admin-panel-header">
 
-            <h2>
-                📖 إدارة Reading
-            </h2>
+        <h2>
+            📖 إدارة Reading
+        </h2>
 
-            <p>
-                أضف القصص والأسئلة والكلمات المهمة للمتعلمين.
-            </p>
-
-        </div>
+        <p>
+            أضف القصص والأسئلة والكلمات المهمة للمتعلمين.
+        </p>
 
     </div>
 
 
 
+    <!-- =================================================
+         إضافة قصة
+    ================================================= -->
+
     <div class="form-card">
+
 
         <h2 style="margin-top:0;">
             ➕ إضافة قصة جديدة
         </h2>
 
 
+
         <div class="form-grid">
+
 
             <div class="field">
 
@@ -943,6 +999,7 @@
 
             </div>
 
+
         </div>
 
 
@@ -955,17 +1012,9 @@
 
             <textarea
                 id="readingContent"
+                class="admin-textarea"
                 rows="10"
                 placeholder="اكتب القصة هنا باللغة الإنجليزية..."
-                style="
-                    width:100%;
-                    padding:13px;
-                    border:1px solid #ddd;
-                    border-radius:10px;
-                    resize:vertical;
-                    font-size:16px;
-                    line-height:1.8;
-                "
             ></textarea>
 
         </div>
@@ -980,17 +1029,9 @@
 
             <textarea
                 id="readingTranslation"
+                class="admin-textarea"
                 rows="10"
                 placeholder="اكتب ترجمة القصة هنا..."
-                style="
-                    width:100%;
-                    padding:13px;
-                    border:1px solid #ddd;
-                    border-radius:10px;
-                    resize:vertical;
-                    font-size:16px;
-                    line-height:1.8;
-                "
             ></textarea>
 
         </div>
@@ -1016,6 +1057,7 @@
                 "
             >
 
+
             <label
                 for="readingPublished"
                 style="cursor:pointer;"
@@ -1038,16 +1080,23 @@
 
         </button>
 
+
     </div>
 
 
+
+    <!-- =================================================
+         القصص الموجودة
+    ================================================= -->
 
     <div
         class="words-section"
         style="margin-top:20px;"
     >
 
+
         <div class="section-title">
+
 
             <div>
 
@@ -1066,6 +1115,7 @@
                 0 قصة
             </strong>
 
+
         </div>
 
 
@@ -1079,18 +1129,25 @@
 
         </div>
 
+
     </div>
 
 
+
+    <!-- =================================================
+         إضافة سؤال
+    ================================================= -->
 
     <div
         class="form-card"
         style="margin-top:20px;"
     >
 
+
         <h2 style="margin-top:0;">
             📝 إضافة سؤال
         </h2>
+
 
 
         <div class="field">
@@ -1128,6 +1185,7 @@
 
 
         <div class="form-grid">
+
 
             <div class="field">
 
@@ -1191,6 +1249,7 @@
 
             </div>
 
+
         </div>
 
 
@@ -1234,16 +1293,23 @@
 
         </button>
 
+
     </div>
 
 
+
+    <!-- =================================================
+         أسئلة القصص
+    ================================================= -->
 
     <div
         class="words-section"
         style="margin-top:20px;"
     >
 
+
         <div class="section-title">
+
 
             <div>
 
@@ -1256,6 +1322,7 @@
                 </p>
 
             </div>
+
 
         </div>
 
@@ -1287,7 +1354,353 @@
 
         </div>
 
+
     </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     📊 قسم التحليلات
+===================================================== -->
+
+<section
+    id="adminPanelAnalytics"
+    class="admin-panel"
+>
+
+
+    <div class="admin-panel-header">
+
+        <h2>
+            📊 تحليلات الموقع
+        </h2>
+
+        <p>
+            تابع الزيارات والمستخدمين المتصلين ونشاط الموقع.
+        </p>
+
+    </div>
+
+
+
+    <section class="analytics-section">
+
+
+        <div
+            class="section-title"
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:15px;
+            "
+        >
+
+
+            <div>
+
+                <h2>
+                    📊 إحصائيات الموقع
+                </h2>
+
+                <p id="analyticsLastUpdate">
+                    جاري تحميل الإحصائيات...
+                </p>
+
+            </div>
+
+
+
+            <button
+                id="refreshAnalyticsBtn"
+                type="button"
+                onclick="refreshAnalytics()"
+                style="
+                    border:none;
+                    background:#eef4ff;
+                    color:#2563eb;
+                    padding:10px 16px;
+                    border-radius:10px;
+                    cursor:pointer;
+                    font-family:inherit;
+                    font-weight:bold;
+                    white-space:nowrap;
+                "
+            >
+
+                🔄 تحديث
+
+            </button>
+
+
+        </div>
+
+
+
+        <div
+            id="analyticsError"
+            style="
+                display:none;
+                background:#fff0f0;
+                color:#d93636;
+                padding:12px 15px;
+                border-radius:12px;
+                margin-bottom:15px;
+            "
+        ></div>
+
+
+
+        <!-- الإحصائيات -->
+
+        <div
+            class="analytics-grid"
+            style="
+                display:grid;
+                grid-template-columns:repeat(4,1fr);
+                gap:15px;
+            "
+        >
+
+
+            <!-- المتصلون الآن -->
+
+            <div class="analytics-card">
+
+                <div class="analytics-icon">
+                    🟢
+                </div>
+
+                <strong id="onlineUsers">
+                    0
+                </strong>
+
+                <span>
+                    المتصلون الآن
+                </span>
+
+            </div>
+
+
+
+            <!-- آخر 5 دقائق -->
+
+            <div class="analytics-card">
+
+                <div class="analytics-icon">
+                    🕐
+                </div>
+
+                <strong id="recentUsers">
+                    0
+                </strong>
+
+                <span>
+                    دخلوا خلال آخر 5 دقائق
+                </span>
+
+            </div>
+
+
+
+            <!-- زيارات اليوم -->
+
+            <div class="analytics-card">
+
+                <div class="analytics-icon">
+                    📅
+                </div>
+
+                <strong id="todayVisits">
+                    0
+                </strong>
+
+                <span>
+                    زيارات اليوم
+                </span>
+
+            </div>
+
+
+
+            <!-- إجمالي الزيارات -->
+
+            <div class="analytics-card">
+
+                <div class="analytics-icon">
+                    📊
+                </div>
+
+                <strong id="totalVisits">
+                    0
+                </strong>
+
+                <span>
+                    إجمالي الزيارات
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             جدول نشاط المستخدمين
+        ================================================= -->
+
+        <div
+            class="form-card"
+            style="margin-top:20px;"
+        >
+
+
+            <div class="section-title">
+
+
+                <div>
+
+                    <h2>
+                        👤 نشاط المستخدمين
+                    </h2>
+
+                    <p>
+                        آخر المستخدمين الذين تم تسجيل نشاطهم.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div
+                style="
+                    width:100%;
+                    overflow-x:auto;
+                "
+            >
+
+
+                <table
+                    style="
+                        width:100%;
+                        border-collapse:collapse;
+                        min-width:700px;
+                    "
+                >
+
+
+                    <thead>
+
+                        <tr
+                            style="
+                                background:#f5f7fb;
+                                text-align:right;
+                            "
+                        >
+
+
+                            <th
+                                style="
+                                    padding:13px;
+                                    border-bottom:1px solid #e5e8ef;
+                                "
+                            >
+                                اسم المستخدم
+                            </th>
+
+
+
+                            <th
+                                style="
+                                    padding:13px;
+                                    border-bottom:1px solid #e5e8ef;
+                                "
+                            >
+                                الصفحة
+                            </th>
+
+
+
+                            <th
+                                style="
+                                    padding:13px;
+                                    border-bottom:1px solid #e5e8ef;
+                                "
+                            >
+                                وقت الدخول
+                            </th>
+
+
+
+                            <th
+                                style="
+                                    padding:13px;
+                                    border-bottom:1px solid #e5e8ef;
+                                "
+                            >
+                                آخر نشاط
+                            </th>
+
+
+
+                            <th
+                                style="
+                                    padding:13px;
+                                    border-bottom:1px solid #e5e8ef;
+                                "
+                            >
+                                الحالة
+                            </th>
+
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody id="analyticsUsersTable">
+
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                style="
+                                    padding:25px;
+                                    text-align:center;
+                                    color:#888;
+                                "
+                            >
+
+                                جاري تحميل المستخدمين...
+
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
 
 </section>
 
@@ -1295,6 +1708,10 @@
 </main>
 
 
+
+<!-- =====================================================
+     الملفات
+===================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -1305,6 +1722,205 @@
 <script src="admin.js"></script>
 
 <script src="notifications.js"></script>
+
+
+
+<!-- =====================================================
+     نظام التنقل بين أقسام لوحة التحكم
+===================================================== -->
+
+<script>
+
+    function showAdminSection(section) {
+
+        const panels = {
+
+            words:
+                document.getElementById("adminPanelWords"),
+
+            categories:
+                document.getElementById("adminPanelCategories"),
+
+            messages:
+                document.getElementById("adminPanelMessages"),
+
+            reading:
+                document.getElementById("adminPanelReading"),
+
+            analytics:
+                document.getElementById("adminPanelAnalytics")
+
+        };
+
+
+        /* إخفاء جميع الأقسام */
+
+        Object.values(panels).forEach(
+            panel => {
+
+                if (panel) {
+
+                    panel.classList.remove("active");
+
+                }
+
+            }
+        );
+
+
+        /* إلغاء تفعيل الأزرار */
+
+        document
+            .querySelectorAll(".admin-section-btn")
+            .forEach(button => {
+
+                button.classList.remove("active");
+
+            });
+
+
+        /* إظهار القسم المطلوب */
+
+        if (panels[section]) {
+
+            panels[section].classList.add("active");
+
+        }
+
+
+        /* تفعيل الزر */
+
+        const activeButton =
+            document.querySelector(
+                `.admin-section-btn[data-section="${section}"]`
+            );
+
+
+        if (activeButton) {
+
+            activeButton.classList.add("active");
+
+        }
+
+
+        /* حفظ القسم */
+
+        try {
+
+            localStorage.setItem(
+                "englishWordsAdminSection",
+                section
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "Could not save admin section:",
+                error
+            );
+
+        }
+
+
+        /* على الجوال يرجع لبداية المحتوى */
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+    }
+
+
+
+    function scrollToAdminSections() {
+
+        const nav =
+            document.getElementById(
+                "adminSectionsNav"
+            );
+
+
+        if (!nav) return;
+
+
+        nav.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+        });
+
+    }
+
+
+
+    /* =====================================================
+       تشغيل القسم المحفوظ
+    ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            let savedSection =
+                "words";
+
+
+            try {
+
+                savedSection =
+                    localStorage.getItem(
+                        "englishWordsAdminSection"
+                    ) || "words";
+
+            } catch (error) {
+
+                savedSection =
+                    "words";
+
+            }
+
+
+            const validSections = [
+
+                "words",
+
+                "categories",
+
+                "messages",
+
+                "reading",
+
+                "analytics"
+
+            ];
+
+
+            if (
+                !validSections.includes(
+                    savedSection
+                )
+            ) {
+
+                savedSection =
+                    "words";
+
+            }
+
+
+            showAdminSection(
+                savedSection
+            );
+
+        }
+    );
+
+</script>
 
 
 </body>
