@@ -748,17 +748,7 @@ function shuffleArray(array) {
 /* ==========================================
    تشغيل الصفحة
 ========================================== */
-
 async function startPage() {
-
-    const loggedIn =
-        await checkLogin();
-
-
-    if (!loggedIn) {
-        return;
-    }
-
 
     await loadWords();
 

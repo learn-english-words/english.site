@@ -7,7 +7,26 @@ let words = [];
 let currentIndex = 0;
 
 let favorite = false;
+// ==========================================
+// المستخدم الحالي
+// ==========================================
 
+let currentUser = null;
+
+
+// ==========================================
+// تحميل المستخدم (إن وجد)
+// ==========================================
+
+async function loadCurrentUser() {
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    currentUser = user || null;
+
+}
 
 // ==========================================
 // قراءة اختيار المستخدم
@@ -26,26 +45,11 @@ const selectedCategory =
 
 async function loadWords() {
 
-    const {
-        data: { user },
-        error: userError
-    } =
-        await supabaseClient.auth.getUser();
-
+   await loadCurrentUser();
 
     // لازم يكون مسجل دخول
 
-    if (userError || !user) {
-
-        alert(
-            "⚠️ يجب تسجيل الدخول أولاً."
-        );
-
-        window.location.href =
-            "login.html";
-
-        return;
-    }
+   // الزائر يستطيع التعلم بدون تسجيل دخول
 
 
     // ==========================================
@@ -82,14 +86,14 @@ async function loadWords() {
 
     if (error) {
 
-        console.error(
-            "Supabase error:",
-            error
-        );
+        console.error(error);
 
-        alert(
-            "❌ حدث خطأ أثناء تحميل الكلمات."
-        );
+alert(
+    "Code: " + error.code +
+    "\nMessage: " + error.message +
+    "\nDetails: " + error.details +
+    "\nHint: " + error.hint
+);
 
         return;
     }
@@ -723,6 +727,19 @@ async function answer(known) {
 
     const word =
         words[currentIndex];
+            // ==========================================
+    // إذا لم يكن المستخدم مسجل دخول
+    // ==========================================
+
+   if (!currentUser) {
+
+    alert(
+        "🔒 سجل الدخول لحفظ تقدمك."
+    );
+
+    return;
+
+}
 
 
     if (
@@ -748,21 +765,13 @@ async function answer(known) {
             .getUser();
 
 
-    if (
-        userError ||
-        !user
-    ) {
+   if (userError || !user) {
 
-        alert(
-            "⚠️ يجب تسجيل الدخول أولاً."
-        );
+    nextWord();
 
-        window.location.href =
-            "login.html";
+    return;
 
-        return;
-
-    }
+}
 
 
 
@@ -968,21 +977,17 @@ async function toggleFavorite() {
             .getUser();
 
 
-    if (
-        userError ||
-        !user
-    ) {
+   if (userError || !user) {
 
-        alert(
-            "⚠️ يجب تسجيل الدخول أولاً."
-        );
+    if (confirm("لحفظ الكلمات في المفضلة يجب تسجيل الدخول.\n\nهل تريد تسجيل الدخول الآن؟")) {
 
-        window.location.href =
-            "login.html";
-
-        return;
+        window.location.href = "login.html";
 
     }
+
+    return;
+
+}
 
 
     const word =

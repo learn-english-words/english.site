@@ -1227,4 +1227,59 @@ img {
 
     }
 
+}/* ==========================================
+   زر إظهار الترجمة
+========================================== */
+
+.translation-btn {
+
+    display: block;
+
+    margin: 12px auto 18px;
+
+    padding: 10px 18px;
+
+    border: 1px solid #dfe3eb;
+
+    border-radius: 12px;
+
+    background: #f7f8fb;
+
+    color: #333;
+
+    font-size: 15px;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+}
+
+
+.translation-btn:hover {
+
+    background: #eef1f7;
+
+    transform: translateY(-1px);
+
+}
+
+
+.translation-btn:active {
+
+    transform: scale(0.98);
+
+}
+
+
+/* الترجمة */
+
+.arabic-word {
+
+    margin-top: 5px;
+
+    margin-bottom: 8px;
+
 }

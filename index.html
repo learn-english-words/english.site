@@ -26,19 +26,7 @@
 
 
 <script>
-(async function checkLogin() {
 
-    const {
-        data: { user },
-        error
-    } = await supabaseClient.auth.getUser();
-
-    if (error || !user) {
-        window.location.replace("login.html");
-        return;
-    }
-
-})();
 </script>
 
 <style>
@@ -827,12 +815,13 @@ button {
         </button>
 
         <button
-            class="header-icon"
-            onclick="logout()">
+    class="header-icon"
+    id="loginButton"
+    onclick="loginOrLogout()">
 
-            🚪
+    🔑
 
-        </button>
+</button>
 
     </div>
 
@@ -882,7 +871,7 @@ button {
     </h2>
 
     <button
-        onclick="window.location.href='progress.html'">
+        onclick="currentUser ? window.location.href='progress.html' : showLoginPopup()"
 
         عرض التفاصيل
 
@@ -1113,7 +1102,7 @@ button {
 
     <button
         class="main-card-new card-review"
-        onclick="window.location.href='review.html'">
+        onclick="currentUser ? window.location.href='review.html' : showLoginPopup()"
 
         <div class="icon">
             🧠
@@ -1157,9 +1146,9 @@ button {
     </button>
 
 
-    <button
-        class="main-card-new card-reading"
-        onclick="window.location.href='reading.html'">
+  <button
+    class="main-card-new card-reading"
+    onclick="currentUser ? window.location.href='reading.html' : showLoginPopup()">
 
         <div class="icon">
             📖
@@ -1182,7 +1171,7 @@ button {
 
 <button
     class="main-card-new card-games"
-    onclick="window.location.href='games.html'">
+    onclick="openGames()">
 
     <div class="icon">
         🎮
@@ -1204,9 +1193,9 @@ button {
 
 
 
-    <button
-        class="main-card-new card-ai"
-        onclick="window.location.href='ai-chat.html'">
+   <button
+    class="main-card-new card-ai"
+    onclick="openAI()">
 
         <div class="icon">
             🤖
@@ -1240,7 +1229,7 @@ button {
     </h2>
 
     <button
-        onclick="window.location.href='favorites.html'">
+        onclick="currentUser ? window.location.href='favorites.html' : showLoginPopup()"
 
         عرض الكل
 
@@ -1318,7 +1307,7 @@ button {
     </button>
 
 
-    <button onclick="window.location.href='favorites.html'">
+    <button onclick="currentUser ? window.location.href='favorites.html' : showLoginPopup()">
 
         🔖
 
@@ -1329,7 +1318,7 @@ button {
     </button>
 
 
-    <button onclick="window.location.href='profile.html'">
+  
 
         ⋯
 
@@ -1454,7 +1443,70 @@ button {
 
 </div>
 
+<div
+    class="privacy-overlay"
+    id="loginOverlay">
 
+    <div class="privacy-box">
+
+        <div class="privacy-icon">
+            🔑
+        </div>
+
+        <h2>
+            سجل دخولك
+        </h2>
+
+        <p>
+
+            يمكنك تجربة الموقع بدون حساب.
+
+            <br><br>
+
+            لكن لحفظ تقدمك والكلمات المفضلة
+            يجب تسجيل الدخول.
+
+        </p>
+
+        <div class="privacy-buttons">
+
+            <button
+                class="make-public-btn"
+                onclick="window.location.href='login.html'">
+
+                تسجيل الدخول
+
+            </button>
+
+            <button
+                class="change-name-btn"
+                onclick="window.location.href='register.html'">
+
+                إنشاء حساب
+
+            </button>
+
+            <button
+                class="cancel-privacy-btn"
+                onclick="closeLoginPopup()">
+
+                لاحقًا
+
+            </button>
+
+    <button
+        class="cancel-privacy-btn"
+        onclick="closeLoginPopup()">
+
+        إلغاء
+
+    </button>
+
+        </div>
+
+    </div>
+
+</div>
 <script src="script.js"></script>
 
 
@@ -1480,17 +1532,24 @@ async function loadUser() {
     } = await supabaseClient.auth.getUser();
 
 
-    if (error || !user) {
+   if (error || !user) {
 
-        window.location.href = "login.html";
+    currentUser = null;
 
-        return;
+    document.getElementById("welcomeText").textContent =
+        "مرحباً بك 👋";
 
-    }
+    document.getElementById("userAvatar").textContent =
+        "👤";
 
+    return;
+
+}
 
     currentUser = user;
-
+document.getElementById(
+    "loginButton"
+).textContent = "🚪";
 
     const name =
         user.user_metadata?.name ||
@@ -2163,6 +2222,16 @@ function closeAdminMessage() {
 
 async function openChat() {
 
+
+if (!currentUser) {
+
+    showLoginPopup();
+
+    return;
+
+}
+
+
     if (!currentUser) {
 
         await loadUser();
@@ -2256,7 +2325,21 @@ function closePrivacyMessage() {
 /* ==================================================
    تسجيل الخروج
 ================================================== */
+function showLoginPopup() {
 
+    document.getElementById(
+        "loginOverlay"
+    ).style.display = "flex";
+
+}
+
+function closeLoginPopup() {
+
+    document.getElementById(
+        "loginOverlay"
+    ).style.display = "none";
+
+}
 async function logout() {
 
     const {
@@ -2277,6 +2360,17 @@ async function logout() {
 
     window.location.href =
         "login.html";
+
+}function loginOrLogout() {
+
+    if (!currentUser) {
+
+        window.location.href = "login.html";
+        return;
+
+    }
+
+    logout();
 
 }
 
@@ -2299,26 +2393,59 @@ function escapeHtml(text) {
 
 }
 
+/* ==================================================
+   حماية الألعاب و AI
+================================================== */
 
+function openGames() {
+
+    if (!currentUser) {
+
+        showLoginPopup();
+
+        return;
+
+    }
+
+    window.location.href = "games.html";
+
+}
+
+
+function openAI() {
+
+    if (!currentUser) {
+
+        showLoginPopup();
+
+        return;
+
+    }
+
+    window.location.href = "ai-chat.html";
+
+}
 /* ==================================================
    تشغيل الصفحة
 ================================================== */
 
 async function startHomePage() {
 
-    await loadUser();
+   await loadUser();
 
+await loadAdminMessage();
 
-    if (!currentUser) return;
+if (!currentUser) {
 
+    return;
 
-    await recordHomePageVisit();
+}
 
-    await loadStatistics();
+await recordHomePageVisit();
 
-    await loadSavedWords();
+await loadStatistics();
 
-    await loadAdminMessage();
+await loadSavedWords();
 
 }
 

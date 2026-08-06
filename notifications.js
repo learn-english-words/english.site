@@ -955,23 +955,14 @@
            الحصول على المستخدم
         */
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.getUser();
+       const {
+    data: { user },
+    error
+} = await supabaseClient.auth.getUser();
 
-
-        if (error) {
-
-            console.error(
-                "Notification auth error:",
-                error
-            );
-
-            return;
-
-        }
+if (error || !user) {
+    return;
+}
 
 
         if (!data || !data.user) {
