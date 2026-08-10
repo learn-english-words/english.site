@@ -10,6 +10,8 @@
 
 let words = [];
 
+let imageSizes = {};
+
 let selectedImage = "";
 
 let editingWordId = null;
@@ -1157,7 +1159,48 @@ async function getImageSizeFromUrl(url) {
 // ==========================================
 // عرض الكلمات
 // ==========================================
+async function getImageSizeFromUrl(url) {
 
+    try {
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const blob = await response.blob();
+
+        return blob.size;
+
+    } catch (error) {
+
+        console.error(
+            "Image size error:",
+            error
+        );
+
+        return null;
+    }
+}
+
+
+function formatImageSize(bytes) {
+
+    if (!bytes) {
+        return "غير معروف";
+    }
+
+    if (bytes < 1024) {
+        return bytes + " B";
+    }
+
+    if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(1) + " KB";
+    }
+
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+}
 function renderWords(
     displayWords = words
 ) {
@@ -1309,29 +1352,36 @@ wordsList.appendChild(item);
 if (word.image) {
 
     getImageSizeFromUrl(
-        word.image
-    ).then(size => {
+    word.image
+).then(size => {
 
-        const sizeElement =
-            document.getElementById(
-                `image-size-${word.id}`
-            );
+    if (size !== null) {
 
-        if (!sizeElement) return;
+        imageSizes[word.id] =
+            size;
 
-        if (size) {
+    }
 
-            sizeElement.textContent =
-                `🖼️ ${size}`;
+    const sizeElement =
+        document.getElementById(
+            `image-size-${word.id}`
+        );
 
-        } else {
+    if (!sizeElement) return;
 
-            sizeElement.textContent =
-                "🖼️ الحجم غير متاح";
+    if (size !== null) {
 
-        }
+        sizeElement.textContent =
+            `🖼️ ${formatImageSize(size)}`;
 
-    });
+    } else {
+
+        sizeElement.textContent =
+            "🖼️ الحجم غير متاح";
+
+    }
+
+});
 
 }
 
@@ -1453,6 +1503,52 @@ function getCategoryName(categoryKey) {
 // ==========================================
 
 function searchWords() {
+
+
+function sortWordsByImageSize() {
+
+    const filter =
+        document.getElementById(
+            "imageSizeFilter"
+        );
+
+    if (!filter) return;
+
+    const value =
+        filter.value;
+
+    if (!value) {
+
+        renderWords();
+
+        return;
+    }
+
+    const sorted =
+        [...words].sort(
+            (a, b) => {
+
+                const sizeA =
+                    imageSizes[a.id] || 0;
+
+                const sizeB =
+                    imageSizes[b.id] || 0;
+
+                if (value === "largest") {
+
+                    return sizeB - sizeA;
+
+                }
+
+                return sizeA - sizeB;
+
+            }
+        );
+
+    renderWords(sorted);
+}
+
+
 
     const input =
         document.getElementById(
