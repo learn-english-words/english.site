@@ -1504,8 +1504,7 @@ function getCategoryName(categoryKey) {
 
 function searchWords() {
 
-
-function sortWordsByImageSize() {
+async function sortWordsByImageSize() {
 
     const filter =
         document.getElementById(
@@ -1517,6 +1516,7 @@ function sortWordsByImageSize() {
     const value =
         filter.value;
 
+    // إذا رجعنا للوضع الطبيعي
     if (!value) {
 
         renderWords();
@@ -1524,7 +1524,49 @@ function sortWordsByImageSize() {
         return;
     }
 
-    const sorted =
+    // رسالة مؤقتة
+    const wordsList =
+        document.getElementById(
+            "wordsList"
+        );
+
+    if (wordsList) {
+
+        wordsList.innerHTML = `
+            <div class="word-item">
+                ⏳ جاري حساب أحجام الصور وترتيب الكلمات...
+            </div>
+        `;
+
+    }
+
+    // حساب أحجام جميع الصور
+    await Promise.all(
+
+        words.map(async word => {
+
+            if (!word.image) {
+
+                imageSizes[word.id] = 0;
+
+                return;
+
+            }
+
+            const size =
+                await getImageSizeFromUrl(
+                    word.image
+                );
+
+            imageSizes[word.id] =
+                size || 0;
+
+        })
+
+    );
+
+    // ترتيب الكلمات
+    const sortedWords =
         [...words].sort(
             (a, b) => {
 
@@ -1540,77 +1582,20 @@ function sortWordsByImageSize() {
 
                 }
 
-                return sizeA - sizeB;
+                if (value === "smallest") {
+
+                    return sizeA - sizeB;
+
+                }
+
+                return 0;
 
             }
         );
 
-    renderWords(sorted);
-}
-
-
-
-    const input =
-        document.getElementById(
-            "searchInput"
-        );
-
-
-    if (!input) return;
-
-
-    const search =
-        input.value
-            .toLowerCase()
-            .trim();
-
-
-    if (!search) {
-
-        renderWords();
-
-        return;
-    }
-
-
-    const filtered =
-        words.filter(
-            word => {
-
-                return (
-
-                    (
-                        word.english ||
-                        ""
-                    )
-                    .toLowerCase()
-                    .includes(search)
-
-                    ||
-
-                    (
-                        word.arabic ||
-                        ""
-                    )
-                    .toLowerCase()
-                    .includes(search)
-
-                    ||
-
-                    (
-                        word.category ||
-                        ""
-                    )
-                    .toLowerCase()
-                    .includes(search)
-
-                );
-
-            }
-        );
-
-
-    renderWords(filtered);
+    // عرض الترتيب الجديد
+    renderWords(sortedWords);
+};
 
 }
 
