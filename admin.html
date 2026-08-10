@@ -608,9 +608,7 @@
             >
 
         </div>
-<select
-    id="imageSizeFilter"
-    onchange="sortWordsByImageSize()"
+<select id="imageSizeFilter">
 >
 
     <option value="">
@@ -1739,6 +1737,102 @@
 
 <script src="admin.js"></script>
 
+<script>
+window.sortWordsByImageSize = function () {
+
+    const filter =
+        document.getElementById("imageSizeFilter");
+
+    const wordsList =
+        document.getElementById("wordsList");
+
+    if (!filter || !wordsList) {
+        return;
+    }
+
+    const items =
+        Array.from(wordsList.children);
+
+    items.sort(function (a, b) {
+
+        const aSizeElement =
+            a.querySelector(".image-size");
+
+        const bSizeElement =
+            b.querySelector(".image-size");
+
+        const aText =
+            aSizeElement
+                ? aSizeElement.textContent
+                : "";
+
+        const bText =
+            bSizeElement
+                ? bSizeElement.textContent
+                : "";
+
+        function convertToBytes(text) {
+
+            const match =
+                text.match(
+                    /([\d.,]+)\s*(B|KB|MB|GB)/i
+                );
+
+            if (!match) return 0;
+
+            const number =
+                parseFloat(
+                    match[1].replace(",", ".")
+                );
+
+            const unit =
+                match[2].toUpperCase();
+
+            if (unit === "GB")
+                return number * 1024 * 1024 * 1024;
+
+            if (unit === "MB")
+                return number * 1024 * 1024;
+
+            if (unit === "KB")
+                return number * 1024;
+
+            return number;
+        }
+
+        const aSize =
+            convertToBytes(aText);
+
+        const bSize =
+            convertToBytes(bText);
+
+        if (filter.value === "largest") {
+            return bSize - aSize;
+        }
+
+        if (filter.value === "smallest") {
+            return aSize - bSize;
+        }
+
+        return 0;
+    });
+
+    items.forEach(function (item) {
+        wordsList.appendChild(item);
+    });
+};
+
+document
+    .getElementById("imageSizeFilter")
+    ?.addEventListener(
+        "change",
+        window.sortWordsByImageSize
+    );
+
+</script>
+
+<script src="notifications.js"></script>
+
 <script src="notifications.js"></script>
 
 
@@ -1939,7 +2033,126 @@
     );
 
 </script>
+<script>
 
+function sortWordsByImageSize() {
+
+    const filter =
+        document.getElementById("imageSizeFilter");
+
+    const wordsList =
+        document.getElementById("wordsList");
+
+    if (!filter || !wordsList) return;
+
+    const items =
+        Array.from(wordsList.children);
+
+    if (!items.length) return;
+
+    // إذا رجع للاختيار الافتراضي
+    if (!filter.value) {
+
+        // إعادة تحميل الكلمات بالطريقة الأصلية
+        if (typeof loadWords === "function") {
+            loadWords();
+        }
+
+        return;
+    }
+
+    // تحويل حجم الصورة إلى Bytes
+    function getSizeInBytes(text) {
+
+        if (!text) return 0;
+
+        text = text
+            .replace("🖼️", "")
+            .trim()
+            .toUpperCase();
+
+        // استخراج الرقم
+        const match =
+            text.match(/([\d.,]+)\s*(B|KB|MB|GB)/);
+
+        if (!match) return 0;
+
+        const number =
+            parseFloat(
+                match[1].replace(",", ".")
+            );
+
+        const unit = match[2];
+
+        if (isNaN(number)) return 0;
+
+        switch (unit) {
+
+            case "GB":
+                return number * 1024 * 1024 * 1024;
+
+            case "MB":
+                return number * 1024 * 1024;
+
+            case "KB":
+                return number * 1024;
+
+            case "B":
+                return number;
+
+            default:
+                return 0;
+        }
+    }
+
+    items.sort(function(a, b) {
+
+        const sizeAElement =
+            a.querySelector(".image-size");
+
+        const sizeBElement =
+            b.querySelector(".image-size");
+
+        const sizeA =
+            getSizeInBytes(
+                sizeAElement
+                    ? sizeAElement.textContent
+                    : ""
+            );
+
+        const sizeB =
+            getSizeInBytes(
+                sizeBElement
+                    ? sizeBElement.textContent
+                    : ""
+            );
+
+        if (filter.value === "largest") {
+
+            return sizeB - sizeA;
+
+        }
+
+        if (filter.value === "smallest") {
+
+            return sizeA - sizeB;
+
+        }
+
+        return 0;
+
+    });
+
+    // إعادة ترتيب العناصر
+    items.forEach(function(item) {
+
+        wordsList.appendChild(item);
+
+    });
+
+}
+
+</script>
 
 </body>
 
