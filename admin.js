@@ -1082,6 +1082,78 @@ async function loadWords() {
 }
 
 
+
+
+
+
+
+
+// ==========================================
+// 📦 حساب حجم الصورة من الرابط
+// ==========================================
+
+async function getImageSizeFromUrl(url) {
+
+    if (!url) {
+        return null;
+    }
+
+    try {
+
+        const response =
+            await fetch(url, {
+                method: "HEAD"
+            });
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const contentLength =
+            response.headers.get("content-length");
+
+        if (!contentLength) {
+            return null;
+        }
+
+        const bytes =
+            Number(contentLength);
+
+        if (bytes < 1024) {
+
+            return bytes + " B";
+
+        }
+
+        if (bytes < 1024 * 1024) {
+
+            return (
+                bytes / 1024
+            ).toFixed(1) + " KB";
+
+        }
+
+        return (
+            bytes /
+            (1024 * 1024)
+        ).toFixed(2) + " MB";
+
+    } catch (error) {
+
+        console.error(
+            "Image size error:",
+            error
+        );
+
+        return null;
+    }
+}
+
+
+
+
+
+
 // ==========================================
 // عرض الكلمات
 // ==========================================
@@ -1149,89 +1221,120 @@ function renderWords(
                 );
 
 
-            item.innerHTML = `
+            
+item.innerHTML = `
 
-                <img
-                    src="${escapeAdminHtml(
-                        word.image || ""
-                    )}"
-                    alt="${escapeAdminHtml(
-                        word.english || ""
-                    )}"
-                >
+    <img
+        src="${escapeAdminHtml(
+            word.image || ""
+        )}"
+        alt="${escapeAdminHtml(
+            word.english || ""
+        )}"
+    >
+
+    <div class="word-info">
+
+        <h3>
+            ${escapeAdminHtml(
+                word.english || ""
+            )}
+        </h3>
+
+        <p>
+            ${escapeAdminHtml(
+                word.arabic || ""
+            )}
+        </p>
+
+        <div class="word-tags">
+
+            <span class="tag">
+                ${escapeAdminHtml(
+                    word.level || ""
+                )}
+            </span>
+
+            <span class="tag">
+                ${escapeAdminHtml(
+                    categoryName
+                )}
+            </span>
+
+            <span
+                class="tag image-size"
+                id="image-size-${escapeAdminHtml(
+                    word.id
+                )}"
+            >
+                🖼️ جاري حساب الحجم...
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="word-actions">
+
+        <button
+            class="edit-btn"
+            onclick="editWord('${escapeAdminHtml(
+                word.id
+            )}')"
+        >
+            ✏️ تعديل
+        </button>
+
+        <button
+            class="delete-btn"
+            onclick="deleteWord('${escapeAdminHtml(
+                word.id
+            )}')"
+        >
+            🗑️ حذف
+        </button>
+
+    </div>
+
+`;
 
 
-                <div class="word-info">
-
-                    <h3>
-                        ${escapeAdminHtml(
-                            word.english || ""
-                        )}
-                    </h3>
-
-
-                    <p>
-                        ${escapeAdminHtml(
-                            word.arabic || ""
-                        )}
-                    </p>
-
-
-                    <div class="word-tags">
-
-                        <span class="tag">
-
-                            ${escapeAdminHtml(
-                                word.level || ""
-                            )}
-
-                        </span>
-
-
-                        <span class="tag">
-
-                            ${escapeAdminHtml(
-                                categoryName
-                            )}
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="word-actions">
-
-                    <button
-                        class="edit-btn"
-                        onclick="editWord('${escapeAdminHtml(
-                            word.id
-                        )}')"
-                    >
-
-                        ✏️ تعديل
-
-                    </button>
-
-
-                    <button
-                        class="delete-btn"
-                        onclick="deleteWord('${escapeAdminHtml(
-                            word.id
-                        )}')"
-                    >
-
-                        🗑️ حذف
-
-                    </button>
-
-                </div>
-
-            `;
 
 
             wordsList.appendChild(item);
+
+wordsList.appendChild(item);
+
+// حساب حجم الصورة من الرابط
+if (word.image) {
+
+    getImageSizeFromUrl(
+        word.image
+    ).then(size => {
+
+        const sizeElement =
+            document.getElementById(
+                `image-size-${word.id}`
+            );
+
+        if (!sizeElement) return;
+
+        if (size) {
+
+            sizeElement.textContent =
+                `🖼️ ${size}`;
+
+        } else {
+
+            sizeElement.textContent =
+                "🖼️ الحجم غير متاح";
+
+        }
+
+    });
+
+}
+
 
         }
     );
