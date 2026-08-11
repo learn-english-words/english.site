@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>من نحن - EnglishWords</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        من نحن - EnglishWords
+    </title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -22,8 +29,32 @@
             width: 100%;
             max-width: 700px;
             margin: auto;
-            padding: 25px 18px 100px;
+            padding: 20px 18px 100px;
         }
+
+        /* زر الرئيسية */
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 18px;
+            background: white;
+            color: #5c51dc;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.06);
+            margin-bottom: 18px;
+            transition: .2s;
+        }
+
+        .back-home:hover {
+            transform: translateY(-2px);
+        }
+
+        /* الهيدر */
 
         .header {
             background: linear-gradient(120deg, #6254eb, #8374ed);
@@ -50,6 +81,8 @@
             opacity: .9;
         }
 
+        /* المحتوى */
+
         .content {
             background: white;
             border-radius: 22px;
@@ -67,15 +100,14 @@
             margin-top: 0;
         }
 
-        p, li {
+        p,
+        li {
             line-height: 2;
             color: #555;
             font-size: 14px;
         }
 
-        ul {
-            padding-right: 22px;
-        }
+        /* بطاقات المميزات */
 
         .feature {
             background: #f7f6ff;
@@ -93,7 +125,10 @@
         .feature span {
             color: #777;
             font-size: 13px;
+            line-height: 1.8;
         }
+
+        /* الفوتر */
 
         .footer {
             text-align: center;
@@ -105,7 +140,7 @@
         .footer a {
             color: #5c51dc;
             text-decoration: none;
-            margin: 0 6px;
+            margin: 0 5px;
             font-weight: bold;
         }
 
@@ -113,18 +148,45 @@
             font-size: 12px;
             color: #999;
         }
+
+        @media (max-width: 420px) {
+
+            .page {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+        }
+
     </style>
+
 </head>
 
 <body>
 
 <div class="page">
 
+    <!-- زر العودة -->
+
+    <a href="index.html" class="back-home">
+        ← العودة إلى الرئيسية
+    </a>
+
+    <!-- الهيدر -->
+
     <header class="header">
 
-        <div class="logo">📚</div>
+        <div class="logo">
+            📚
+        </div>
 
-        <h1>من نحن</h1>
+        <h1>
+            من نحن
+        </h1>
 
         <p>
             مرحبًا بك في EnglishWords
@@ -132,9 +194,13 @@
 
     </header>
 
+    <!-- المحتوى -->
+
     <main class="content">
 
-        <h2>ما هو EnglishWords؟</h2>
+        <h2>
+            ما هو EnglishWords؟
+        </h2>
 
         <p>
             EnglishWords هو موقع تعليمي تم تطويره لمساعدة المستخدمين
@@ -142,11 +208,13 @@
         </p>
 
         <p>
-            نؤمن أن تعلم اللغة يمكن أن يكون أسهل وأكثر متعة عندما يجمع
-            بين التعلم والممارسة والاختبارات والتفاعل.
+            نؤمن أن تعلم اللغة يمكن أن يكون أسهل وأكثر متعة عندما
+            يجمع بين التعلم والممارسة والاختبارات والتفاعل.
         </p>
 
-        <h2>هدفنا</h2>
+        <h2>
+            هدفنا
+        </h2>
 
         <p>
             هدف EnglishWords هو توفير تجربة تعليمية سهلة تساعد المستخدم
@@ -154,59 +222,98 @@
             خطوة بخطوة.
         </p>
 
-        <h2>ماذا يقدم الموقع؟</h2>
+        <h2>
+            ماذا يقدم الموقع؟
+        </h2>
 
         <div class="feature">
-            <strong>📚 تعلم الكلمات</strong>
+
+            <strong>
+                📚 تعلم الكلمات
+            </strong>
+
             <span>
                 تعلم كلمات إنجليزية جديدة مع معانيها والصور المساعدة.
             </span>
+
         </div>
 
         <div class="feature">
-            <strong>🏆 الاختبارات</strong>
+
+            <strong>
+                🏆 الاختبارات
+            </strong>
+
             <span>
                 اختبر معلوماتك وتعرّف على مستوى تقدمك.
             </span>
+
         </div>
 
         <div class="feature">
-            <strong>🧠 المراجعة</strong>
+
+            <strong>
+                🧠 المراجعة
+            </strong>
+
             <span>
                 راجع الكلمات التي تعلمتها وحافظ على معلوماتك.
             </span>
+
         </div>
 
         <div class="feature">
-            <strong>🎧 الاستماع</strong>
+
+            <strong>
+                🎧 الاستماع
+            </strong>
+
             <span>
                 تدرب على الاستماع للكلمات واختيار الإجابة الصحيحة.
             </span>
+
         </div>
 
         <div class="feature">
-            <strong>📖 القراءة</strong>
+
+            <strong>
+                📖 القراءة
+            </strong>
+
             <span>
                 اقرأ نصوصًا وقصصًا باللغة الإنجليزية للتدرب على الفهم.
             </span>
+
         </div>
 
         <div class="feature">
-            <strong>🎮 الألعاب</strong>
+
+            <strong>
+                🎮 الألعاب
+            </strong>
+
             <span>
                 تعلم بطريقة تفاعلية من خلال الألعاب والتحديات.
             </span>
+
         </div>
 
         <div class="feature">
-            <strong>🤖 الذكاء الاصطناعي</strong>
+
+            <strong>
+                🤖 الذكاء الاصطناعي
+            </strong>
+
             <span>
                 تدرب على اللغة الإنجليزية من خلال التفاعل مع ميزات
                 الذكاء الاصطناعي المتوفرة في الموقع.
             </span>
+
         </div>
 
-        <h2>تجربة تعليمية بسيطة</h2>
+        <h2>
+            تجربة تعليمية بسيطة
+        </h2>
 
         <p>
             نعمل على جعل استخدام الموقع بسيطًا وواضحًا، بحيث يستطيع
@@ -214,14 +321,18 @@
             من الأدوات بسهولة سواء من الهاتف أو الكمبيوتر.
         </p>
 
-        <h2>تطوير الموقع</h2>
+        <h2>
+            تطوير الموقع
+        </h2>
 
         <p>
             EnglishWords مشروع يتم تطويره باستمرار، وقد تتم إضافة
             ميزات ومحتويات جديدة مستقبلًا لتحسين تجربة التعلم.
         </p>
 
-        <h2>تواصل معنا</h2>
+        <h2>
+           learnwordsenglish@gmail.com
+        </h2>
 
         <p>
             إذا كان لديك اقتراح أو ملاحظة أو واجهت مشكلة أثناء استخدام
@@ -230,16 +341,34 @@
 
     </main>
 
+    <!-- الفوتر -->
+
     <footer class="footer">
 
         <div>
-            <a href="privacy.html">سياسة الخصوصية</a>
+
+            <a href="privacy.html">
+                سياسة الخصوصية
+            </a>
+
             •
-            <a href="terms.html">شروط الاستخدام</a>
+
+            <a href="terms.html">
+                شروط الاستخدام
+            </a>
+
             •
-            <a href="about.html">من نحن</a>
+
+            <a href="about.html">
+                من نحن
+            </a>
+
             •
-            <a href="contact.html">تواصل معنا</a>
+
+            <a href="contact.html">
+                تواصل معنا
+            </a>
+
         </div>
 
         <p>
