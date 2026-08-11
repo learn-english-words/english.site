@@ -732,3 +732,48 @@ footer {
 .card-games .icon {
     background: #ffe0a8;
 }
+
+
+/* ==================================================
+   الفوتر والروابط القانونية
+================================================== */
+
+.site-footer {
+    margin-top: 35px;
+    padding: 25px 10px 110px;
+    text-align: center;
+    border-top: 1px solid #eeeeee;
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #5c51dc;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-links span {
+    color: #b5b5bd;
+    font-size: 12px;
+}
+
+.footer-copy {
+    margin: 0;
+    color: #999;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
