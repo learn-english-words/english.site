@@ -926,58 +926,88 @@
     }
 
 
-   /* =====================================================
-   تحميل المستخدم الحالي
-===================================================== */
+    /* =====================================================
+       تحميل المستخدم الحالي
+    ===================================================== */
 
-async function initNotifications() {
+    async function initNotifications() {
 
-    if (typeof supabaseClient === "undefined") {
-        console.error(
-            "❌ supabaseClient غير موجود"
-        );
-        return;
-    }
-
-    try {
-
-        const result =
-            await supabaseClient.auth.getUser();
+        /*
+           نتأكد أن supabase.js
+           تم تحميله
+        */
 
         if (
-            result.error ||
-            !result.data ||
-            !result.data.user
+            typeof supabaseClient ===
+            "undefined"
         ) {
-            console.log(
-                "ℹ️ لا يوجد مستخدم مسجل الدخول"
+
+            console.error(
+                "❌ supabaseClient غير موجود. تأكد من تحميل supabase.js قبل notifications.js"
             );
+
             return;
+
         }
 
+
+        /*
+           الحصول على المستخدم
+        */
+
+       const {
+    data: { user },
+    error
+} = await supabaseClient.auth.getUser();
+
+if (error || !user) {
+    return;
+}
+
+
+        if (!data || !data.user) {
+
+            /*
+               المستخدم غير مسجل الدخول
+               لذلك لا نشترك في الإشعارات
+            */
+
+            return;
+
+        }
+
+
         notificationCurrentUser =
-            result.data.user;
+            data.user;
+
+
+        /*
+           إنشاء واجهة الإشعار
+        */
 
         createNotificationElement();
 
-        await requestBrowserNotificationPermission();
+
+        /*
+           طلب إذن إشعارات المتصفح
+        */
+
+        requestBrowserNotificationPermission();
+
+
+        /*
+           تشغيل Realtime
+        */
 
         subscribeToNotifications();
+
 
         console.log(
             "✅ نظام الإشعارات يعمل"
         );
 
-    } catch (error) {
-
-        console.error(
-            "❌ خطأ في initNotifications:",
-            error
-        );
-
     }
 
-}
 
     /* =====================================================
        تنظيف القناة
