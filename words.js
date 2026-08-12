@@ -7,6 +7,7 @@ let words = [];
 let currentIndex = 0;
 
 let favorite = false;
+let learningMoveCount = 0;
 // ==========================================
 // المستخدم الحالي
 // ==========================================
@@ -1165,6 +1166,9 @@ async function toggleFavorite() {
 
 function nextWord() {
 
+    learningMoveCount++;
+
+    // الانتقال للكلمة
     if (
         currentIndex <
         words.length - 1
@@ -1182,11 +1186,19 @@ function nextWord() {
             "🎉 أحسنت! أنهيت كلمات هذا التصنيف."
         );
 
-
         currentIndex = 0;
 
-
         loadWord();
+
+    }
+
+    // إعلان بعد كل 5 انتقالات
+    if (
+        learningMoveCount % 5 === 0 &&
+        typeof showAdsterra === "function"
+    ) {
+
+        showAdsterra();
 
     }
 
