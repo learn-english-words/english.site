@@ -191,16 +191,29 @@
 
             <!-- الصورة -->
 
-            <div class="image-container">
+           <div class="image-container" id="learningImageArea">
 
-                <div
-                    id="wordEmoji"
-                    class="word-image"
-                >
-                    🍎
-                </div>
+    <div
+        id="wordEmoji"
+        class="word-image"
+    >
+        🍎
+    </div>
 
-            </div>
+    <div
+        id="adContainer"
+        style="
+            display:none;
+            width:300px;
+            height:250px;
+            margin:0 auto;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+        "
+    ></div>
+
+</div>
 
 
 
@@ -370,13 +383,13 @@
             </button>
 
 
-            <button
-                class="next-btn"
-                onclick="nextWord()"
-            >
-                الكلمة التالية
-                ←
-            </button>
+             <button
+                 class="next-btn"
+                 onclick="nextWordWithAd()"
+              >
+             الكلمة التالية
+                 ←
+             </button>
 
 
         </div>
@@ -398,6 +411,100 @@
     <script src="words.js"></script>
 
     <script src="notifications.js"></script>
+
+
+
+
+<script>
+/* ==========================================
+   Adsterra - إعلان داخل مكان الصورة
+========================================== */
+
+let nextClickCount = 0;
+let adShownThisSession = false;
+
+function showAdsterra() {
+
+    const image = document.getElementById("wordEmoji");
+    const adContainer = document.getElementById("adContainer");
+
+    if (!image || !adContainer) return;
+
+    image.style.display = "none";
+
+    adContainer.innerHTML = "";
+    adContainer.style.display = "flex";
+
+    /* كود Adsterra */
+    const configScript = document.createElement("script");
+
+    configScript.textContent = `
+        atOptions = {
+            'key' : '0a02ffbb864c2862a09fc1d5f9486047',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+        };
+    `;
+
+    adContainer.appendChild(configScript);
+
+    const adScript = document.createElement("script");
+
+    adScript.src =
+        "https://www.highperformanceformat.com/0a02ffbb864c2862a09fc1d5f9486047/invoke.js";
+
+    adScript.async = true;
+
+    adContainer.appendChild(adScript);
+
+    /*
+      نعيد المحتوى بعد 3 ثوانٍ.
+      لا نعيد تحميل الإعلان بشكل متكرر بلا داعٍ.
+    */
+    setTimeout(() => {
+
+        adContainer.style.display = "none";
+        adContainer.innerHTML = "";
+
+        image.style.display = "flex";
+
+    }, 3000);
+}
+
+
+/* ==========================================
+   زر الكلمة التالية
+========================================== */
+
+function nextWordWithAd() {
+
+    nextClickCount++;
+
+    /*
+      ننتقل للكلمة التالية أولًا.
+    */
+    if (typeof nextWord === "function") {
+        nextWord();
+    }
+
+    /*
+      إعلان بعد كل 3 ضغطات.
+    */
+    if (nextClickCount % 3 === 0) {
+
+        showAdsterra();
+
+    }
+
+}
+</script>
+
+
+
+
+
 
 
 </body>
