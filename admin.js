@@ -10,6 +10,8 @@
 
 let words = [];
 
+let imageSizes = {};
+
 let selectedImage = "";
 
 let editingWordId = null;
@@ -1039,9 +1041,7 @@ async function loadWords() {
     const isAdmin =
         await checkAdmin();
 
-
     if (!isAdmin) return;
-
 
     const {
         data,
@@ -1057,28 +1057,182 @@ async function loadWords() {
                 }
             );
 
-
     if (error) {
 
         console.error(error);
-
 
         alert(
             "❌ لم نتمكن من تحميل الكلمات:\n" +
             error.message
         );
 
-
         return;
     }
-
 
     words =
         data || [];
 
+    // تصفير أحجام الصور القديمة
+    imageSizes = {};
 
     renderWords();
+}
 
+
+// ==========================================
+// 📦 حساب حجم الصورة من الرابط
+// ==========================================
+
+async function getImageSizeFromUrl(url) {
+
+    if (!url) {
+        return null;
+    }
+
+    try {
+
+        // نحاول أولًا HEAD
+        const headResponse =
+            await fetch(
+                url,
+                {
+                    method: "HEAD"
+                }
+            );
+
+        if (
+            headResponse.ok
+        ) {
+
+            const contentLength =
+                headResponse.headers.get(
+                    "content-length"
+                );
+
+            if (contentLength) {
+
+                return Number(
+                    contentLength
+                );
+
+            }
+
+        }
+
+        // إذا لم يرجع السيرفر content-length
+        // نحاول تحميل الصورة كـ blob
+        const response =
+            await fetch(url);
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const blob =
+            await response.blob();
+
+        return blob.size;
+
+    } catch (error) {
+
+        console.error(
+            "Image size error:",
+            error
+        );
+
+        return null;
+    }
+}
+
+
+// ==========================================
+// 🖼️ تنسيق حجم الصورة
+// ==========================================
+
+function formatImageSize(bytes) {
+
+    if (
+        bytes === null ||
+        bytes === undefined ||
+        Number.isNaN(Number(bytes))
+    ) {
+
+        return "غير معروف";
+    }
+
+    bytes =
+        Number(bytes);
+
+    if (bytes < 1024) {
+
+        return (
+            bytes.toFixed(0) +
+            " B"
+        );
+
+    }
+
+    if (
+        bytes <
+        1024 * 1024
+    ) {
+
+        return (
+            (bytes / 1024)
+                .toFixed(1) +
+            " KB"
+        );
+
+    }
+
+    return (
+        (bytes / (1024 * 1024))
+            .toFixed(2) +
+        " MB"
+    );
+}
+
+
+// ==========================================
+// 📊 حساب أحجام الصور
+// ==========================================
+
+async function calculateAllImageSizes() {
+
+    await Promise.all(
+
+        words.map(
+            async word => {
+
+                if (!word.image) {
+
+                    imageSizes[word.id] =
+                        null;
+
+                    return;
+                }
+
+                // إذا الحجم محسوب مسبقًا
+                if (
+                    Object.prototype.hasOwnProperty.call(
+                        imageSizes,
+                        word.id
+                    )
+                ) {
+
+                    return;
+                }
+
+                const size =
+                    await getImageSizeFromUrl(
+                        word.image
+                    );
+
+                imageSizes[word.id] =
+                    size;
+            }
+        )
+    );
 }
 
 
@@ -1095,12 +1249,10 @@ function renderWords(
             "wordsList"
         );
 
-
     const count =
         document.getElementById(
             "wordCount"
         );
-
 
     if (!wordsList) return;
 
@@ -1108,12 +1260,15 @@ function renderWords(
     if (count) {
 
         count.textContent =
-            words.length + " كلمة";
+            words.length +
+            " كلمة";
 
     }
 
 
-    if (displayWords.length === 0) {
+    if (
+        displayWords.length === 0
+    ) {
 
         wordsList.innerHTML = `
 
@@ -1136,8 +1291,9 @@ function renderWords(
         word => {
 
             const item =
-                document.createElement("div");
-
+                document.createElement(
+                    "div"
+                );
 
             item.className =
                 "word-item";
@@ -1147,6 +1303,61 @@ function renderWords(
                 getCategoryName(
                     word.category
                 );
+
+
+const imageSize =
+    imageSizes[word.id];
+
+
+// ==========================================
+// تحديد حالة الصورة
+// ==========================================
+
+let imageSizeText;
+
+
+// 🚫 لا توجد صورة أصلًا
+if (!word.image) {
+
+    imageSizeText =
+        "🖼️ لا توجد صورة";
+
+}
+
+
+// ⏳ توجد صورة ولم يتم حساب حجمها بعد
+else if (
+    imageSize === undefined
+) {
+
+    imageSizeText =
+        "🖼️ جاري حساب الحجم...";
+
+}
+
+
+// ❌ توجد صورة لكن تعذر معرفة حجمها
+else if (
+    imageSize === null
+) {
+
+    imageSizeText =
+        "🖼️ الحجم غير متاح";
+
+}
+
+
+// ✅ تم حساب الحجم
+else {
+
+    imageSizeText =
+        `🖼️ ${formatImageSize(
+            imageSize
+        )}`;
+
+}
+
+
 
 
             item.innerHTML = `
@@ -1160,7 +1371,6 @@ function renderWords(
                     )}"
                 >
 
-
                 <div class="word-info">
 
                     <h3>
@@ -1169,13 +1379,11 @@ function renderWords(
                         )}
                     </h3>
 
-
                     <p>
                         ${escapeAdminHtml(
                             word.arabic || ""
                         )}
                     </p>
-
 
                     <div class="word-tags">
 
@@ -1193,6 +1401,18 @@ function renderWords(
                             ${escapeAdminHtml(
                                 categoryName
                             )}
+
+                        </span>
+
+
+                        <span
+                            class="tag image-size"
+                            id="image-size-${escapeAdminHtml(
+                                word.id
+                            )}"
+                        >
+
+                            ${imageSizeText}
 
                         </span>
 
@@ -1231,12 +1451,372 @@ function renderWords(
             `;
 
 
-            wordsList.appendChild(item);
+            wordsList.appendChild(
+                item
+            );
+
+
+            // إذا لم يتم حساب الحجم
+            if (
+                imageSize ===
+                undefined &&
+                word.image
+            ) {
+
+                getImageSizeFromUrl(
+                    word.image
+                )
+                .then(
+                    size => {
+
+                        imageSizes[word.id] =
+                            size;
+
+
+                        const sizeElement =
+                            document.getElementById(
+                                `image-size-${word.id}`
+                            );
+
+
+                        if (!sizeElement)
+                            return;
+
+
+                        if (
+                            size !== null
+                        ) {
+
+                            sizeElement.textContent =
+                                `🖼️ ${formatImageSize(
+                                    size
+                                )}`;
+
+                        } else {
+
+                            sizeElement.textContent =
+                                "🖼️ الحجم غير متاح";
+
+                        }
+
+                    }
+                );
+
+            }
 
         }
     );
+}
+
+
+
+
+
+// ==========================================
+// 🔎 البحث
+// ==========================================
+
+function searchWords() {
+
+    const input =
+        document.getElementById(
+            "searchInput"
+        );
+
+    if (!input) return;
+
+    const search =
+        input.value
+            .toLowerCase()
+            .trim();
+
+    // إذا البحث فارغ
+    if (!search) {
+
+        applyImageSizeFilter();
+
+        return;
+    }
+
+    const filtered =
+        words.filter(
+            word => {
+
+                return (
+
+                    (
+                        word.english ||
+                        ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    (
+                        word.arabic ||
+                        ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    (
+                        word.category ||
+                        ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                );
+
+            }
+        );
+
+    renderWords(filtered);
+}
+
+
+// ==========================================
+// 📊 تصفية وترتيب حسب حجم الصورة
+// ==========================================
+
+async function applyImageSizeFilter() {
+
+    const filter =
+        document.getElementById(
+            "imageSizeFilter"
+        );
+
+    if (!filter) {
+
+        renderWords();
+
+        return;
+    }
+
+    const value =
+        filter.value;
+
+    // الوضع الطبيعي
+    if (!value) {
+
+        renderWords();
+
+        return;
+    }
+
+
+    const wordsList =
+        document.getElementById(
+            "wordsList"
+        );
+
+
+    if (wordsList) {
+
+        wordsList.innerHTML = `
+
+            <div class="word-item">
+
+                ⏳ جاري حساب أحجام الصور وترتيب الكلمات...
+
+            </div>
+
+        `;
+
+    }
+
+
+    // ==========================================
+    // حساب أحجام الصور
+    // ==========================================
+
+    await Promise.all(
+
+        words.map(
+            async word => {
+
+                // الكلمة بدون صورة
+                if (!word.image) {
+
+                    imageSizes[word.id] =
+                        null;
+
+                    return;
+                }
+
+
+                const size =
+                    await getImageSizeFromUrl(
+                        word.image
+                    );
+
+
+                imageSizes[word.id] =
+                    size;
+
+            }
+        )
+
+    );
+
+
+    // ==========================================
+    // ترتيب الكلمات
+    // ==========================================
+
+    const sortedWords =
+        [...words].sort(
+            (a, b) => {
+
+                const sizeA =
+                    Number(
+                        imageSizes[a.id] || 0
+                    );
+
+
+                const sizeB =
+                    Number(
+                        imageSizes[b.id] || 0
+                    );
+
+
+                // الأكبر ← الأصغر
+                if (
+                    value === "largest"
+                ) {
+
+                    return (
+                        sizeB -
+                        sizeA
+                    );
+
+                }
+
+
+                // الأصغر ← الأكبر
+                if (
+                    value === "smallest"
+                ) {
+
+                    return (
+                        sizeA -
+                        sizeB
+                    );
+
+                }
+
+
+                return 0;
+
+            }
+        );
+
+
+    renderWords(
+        sortedWords
+    );
 
 }
+
+
+// ==========================================
+// 🔄 عند تغيير فلتر الحجم
+// ==========================================
+
+function filterByImageSize() {
+
+    applyImageSizeFilter();
+
+}
+
+
+// ==========================================
+// 🖼️ الترتيب حسب حجم الصورة
+// ==========================================
+
+async function sortWordsByImageSize() {
+
+    await applyImageSizeFilter();
+
+}
+
+
+
+
+
+async function deleteWord(id) {
+
+    const isAdmin =
+        await checkAdmin();
+
+
+    if (!isAdmin) return;
+
+
+    if (
+        !confirm(
+            "هل تريد حذف هذه الكلمة؟"
+        )
+    ) {
+
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("words")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+
+        alert(
+            "❌ حدث خطأ أثناء حذف الكلمة:\n" +
+            error.message
+        );
+
+
+        return;
+    }
+
+
+    alert(
+        "🗑️ تم حذف الكلمة."
+    );
+
+
+    if (
+        String(editingWordId) ===
+        String(id)
+    ) {
+
+        resetForm();
+
+    }
+
+
+    // حذف الحجم من الذاكرة
+    delete imageSizes[id];
+
+
+    await loadWords();
+
+}
+
+
 
 
 // ==========================================
@@ -1351,67 +1931,98 @@ function getCategoryName(categoryKey) {
 
 function searchWords() {
 
-    const input =
+async function sortWordsByImageSize() {
+
+    const filter =
         document.getElementById(
-            "searchInput"
+            "imageSizeFilter"
         );
 
+    if (!filter) return;
 
-    if (!input) return;
+    const value =
+        filter.value;
 
-
-    const search =
-        input.value
-            .toLowerCase()
-            .trim();
-
-
-    if (!search) {
+    // إذا رجعنا للوضع الطبيعي
+    if (!value) {
 
         renderWords();
 
         return;
     }
 
+    // رسالة مؤقتة
+    const wordsList =
+        document.getElementById(
+            "wordsList"
+        );
 
-    const filtered =
-        words.filter(
-            word => {
+    if (wordsList) {
 
-                return (
+        wordsList.innerHTML = `
+            <div class="word-item">
+                ⏳ جاري حساب أحجام الصور وترتيب الكلمات...
+            </div>
+        `;
 
-                    (
-                        word.english ||
-                        ""
-                    )
-                    .toLowerCase()
-                    .includes(search)
+    }
 
-                    ||
+    // حساب أحجام جميع الصور
+    await Promise.all(
 
-                    (
-                        word.arabic ||
-                        ""
-                    )
-                    .toLowerCase()
-                    .includes(search)
+        words.map(async word => {
 
-                    ||
+            if (!word.image) {
 
-                    (
-                        word.category ||
-                        ""
-                    )
-                    .toLowerCase()
-                    .includes(search)
+                imageSizes[word.id] = 0;
 
+                return;
+
+            }
+
+            const size =
+                await getImageSizeFromUrl(
+                    word.image
                 );
+
+            imageSizes[word.id] =
+                size || 0;
+
+        })
+
+    );
+
+    // ترتيب الكلمات
+    const sortedWords =
+        [...words].sort(
+            (a, b) => {
+
+                const sizeA =
+                    imageSizes[a.id] || 0;
+
+                const sizeB =
+                    imageSizes[b.id] || 0;
+
+                if (value === "largest") {
+
+                    return sizeB - sizeA;
+
+                }
+
+                if (value === "smallest") {
+
+                    return sizeA - sizeB;
+
+                }
+
+                return 0;
 
             }
         );
 
-
-    renderWords(filtered);
+    // عرض الترتيب الجديد
+    renderWords(sortedWords);
+};
 
 }
 
@@ -4381,4 +4992,128 @@ document.addEventListener(
 
     }
 );
+
+
+// ==========================================
+// ترتيب الكلمات حسب حجم الصورة
+// ==========================================
+
+
+// ==========================================
+// 🖼️ ترتيب الكلمات حسب حجم الصورة
+// ==========================================
+
+window.sortWordsByImageSize = async function () {
+
+    const filter =
+        document.getElementById(
+            "imageSizeFilter"
+        );
+
+    if (!filter) {
+        console.error(
+            "❌ لم يتم العثور على imageSizeFilter"
+        );
+        return;
+    }
+
+    const value =
+        filter.value;
+
+    if (!value) {
+        renderWords();
+        return;
+    }
+
+    const wordsList =
+        document.getElementById(
+            "wordsList"
+        );
+
+    if (wordsList) {
+
+        wordsList.innerHTML = `
+            <div class="word-item">
+                ⏳ جاري حساب أحجام الصور وترتيب الكلمات...
+            </div>
+        `;
+
+    }
+
+    await Promise.all(
+
+        words.map(async word => {
+
+            // الكلمة بدون صورة
+            if (!word.image) {
+
+                imageSizes[word.id] =
+                    null;
+
+                return;
+            }
+
+            const size =
+                await getImageSizeFromUrl(
+                    word.image
+                );
+
+            imageSizes[word.id] =
+                size;
+
+        })
+
+    );
+
+
+    const sortedWords =
+        [...words].sort(
+            (a, b) => {
+
+                const sizeA =
+                    Number(
+                        imageSizes[a.id] || 0
+                    );
+
+                const sizeB =
+                    Number(
+                        imageSizes[b.id] || 0
+                    );
+
+
+                if (
+                    value === "largest"
+                ) {
+
+                    return (
+                        sizeB -
+                        sizeA
+                    );
+
+                }
+
+
+                if (
+                    value === "smallest"
+                ) {
+
+                    return (
+                        sizeA -
+                        sizeB
+                    );
+
+                }
+
+
+                return 0;
+
+            }
+        );
+
+
+    renderWords(
+        sortedWords
+    );
+
+};
 
