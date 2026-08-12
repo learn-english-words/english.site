@@ -13,7 +13,7 @@ let score = 0;
 let selectedLevel = "";
 
 const QUESTIONS_COUNT = 20;
-
+let quizMoveCount = 0;
 
 // ==========================================
 // اختيار المستوى
@@ -457,11 +457,11 @@ function checkAnswer(
 
 function nextQuestion() {
 
-    currentQuestion++;
+    quizMoveCount++;
 
     if (
         currentQuestion >=
-        quizWords.length
+        quizWords.length - 1
     ) {
 
         finishQuiz();
@@ -469,7 +469,20 @@ function nextQuestion() {
         return;
     }
 
+    currentQuestion++;
+
     showQuestion();
+
+    // إعلان بعد كل 5 أسئلة
+    if (
+        quizMoveCount % 5 === 0 &&
+        typeof showQuizAd === "function"
+    ) {
+
+        showQuizAd();
+
+    }
+
 }
 
 
@@ -629,4 +642,57 @@ function goHome() {
 
     window.location.href =
         "index.html";
+}
+
+function showQuizAd() {
+
+    const image =
+        document.getElementById("quizImage");
+
+    const adContainer =
+        document.getElementById("quizAdContainer");
+
+    if (!image || !adContainer) return;
+
+    image.style.display = "none";
+
+    adContainer.innerHTML = "";
+    adContainer.style.display = "flex";
+
+    const configScript =
+        document.createElement("script");
+
+    configScript.textContent = `
+        atOptions = {
+            'key' : '0a02ffbb864c2862a09fc1d5f9486047',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+        };
+    `;
+
+    adContainer.appendChild(configScript);
+
+    const adScript =
+        document.createElement("script");
+
+    adScript.src =
+        "https://www.highperformanceformat.com/0a02ffbb864c2862a09fc1d5f9486047/invoke.js";
+
+    adScript.async = true;
+
+    adContainer.appendChild(adScript);
+
+    // الإعلان يبقى 8 ثوانٍ
+    setTimeout(() => {
+
+        adContainer.style.display = "none";
+
+        adContainer.innerHTML = "";
+
+        image.style.display = "block";
+
+    }, 8000);
+
 }
