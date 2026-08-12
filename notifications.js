@@ -932,82 +932,52 @@
 
     async function initNotifications() {
 
-        /*
-           نتأكد أن supabase.js
-           تم تحميله
-        */
+    if (typeof supabaseClient === "undefined") {
+        console.error(
+            "❌ supabaseClient غير موجود"
+        );
+        return;
+    }
+
+    try {
+
+        const result =
+            await supabaseClient.auth.getUser();
 
         if (
-            typeof supabaseClient ===
-            "undefined"
+            result.error ||
+            !result.data ||
+            !result.data.user
         ) {
-
-            console.error(
-                "❌ supabaseClient غير موجود. تأكد من تحميل supabase.js قبل notifications.js"
+            console.log(
+                "ℹ️ لا يوجد مستخدم مسجل الدخول"
             );
-
             return;
-
         }
-
-
-        /*
-           الحصول على المستخدم
-        */
-
-       const {
-    data: { user },
-    error
-} = await supabaseClient.auth.getUser();
-
-if (error || !user) {
-    return;
-}
-
-
-        if (!data || !data.user) {
-
-            /*
-               المستخدم غير مسجل الدخول
-               لذلك لا نشترك في الإشعارات
-            */
-
-            return;
-
-        }
-
 
         notificationCurrentUser =
-            data.user;
-
-
-        /*
-           إنشاء واجهة الإشعار
-        */
+            result.data.user;
 
         createNotificationElement();
 
-
-        /*
-           طلب إذن إشعارات المتصفح
-        */
-
-        requestBrowserNotificationPermission();
-
-
-        /*
-           تشغيل Realtime
-        */
+        await requestBrowserNotificationPermission();
 
         subscribeToNotifications();
-
 
         console.log(
             "✅ نظام الإشعارات يعمل"
         );
 
+    } catch (error) {
+
+        console.error(
+            "❌ خطأ في initNotifications:",
+            error
+        );
+
     }
 
+}
 
     /* =====================================================
        تنظيف القناة
