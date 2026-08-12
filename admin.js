@@ -44,7 +44,7 @@ async function checkAdmin() {
 
 
     const ADMIN_ID =
-        "a1b0ce48-3846-4af6-a688-05368f6ec9bd";
+        "dee4f9dc-01eb-4dc8-8795-981e72ba6ab0";
 
 
     if (user.id !== ADMIN_ID) {
