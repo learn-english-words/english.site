@@ -932,89 +932,52 @@
 
 async function initNotifications() {
 
-    /*
-       نتأكد أن supabase.js
-       تم تحميله
-    */
-
-    if (
-        typeof supabaseClient ===
-        "undefined"
-    ) {
-
+    if (typeof supabaseClient === "undefined") {
         console.error(
-            "❌ supabaseClient غير موجود. تأكد من تحميل supabase.js قبل notifications.js"
+            "❌ supabaseClient غير موجود"
         );
-
         return;
-
     }
 
+    try {
 
-    /*
-       الحصول على المستخدم الحالي
-    */
+        const result =
+            await supabaseClient.auth.getUser();
 
-    const {
-        data,
-        error
-    } = await supabaseClient.auth.getUser();
+        if (
+            result.error ||
+            !result.data ||
+            !result.data.user
+        ) {
+            console.log(
+                "ℹ️ لا يوجد مستخدم مسجل الدخول"
+            );
+            return;
+        }
 
+        notificationCurrentUser =
+            result.data.user;
 
-    /*
-       إذا حدث خطأ أو لا يوجد مستخدم
-    */
+        createNotificationElement();
 
-    if (
-        error ||
-        !data ||
-        !data.user
-    ) {
+        await requestBrowserNotificationPermission();
+
+        subscribeToNotifications();
 
         console.log(
-            "ℹ️ لا يوجد مستخدم مسجل الدخول"
+            "✅ نظام الإشعارات يعمل"
         );
 
-        return;
+    } catch (error) {
+
+        console.error(
+            "❌ خطأ في initNotifications:",
+            error
+        );
 
     }
 
-
-    /*
-       حفظ المستخدم الحالي
-    */
-
-    notificationCurrentUser =
-        data.user;
-
-
-    /*
-       إنشاء واجهة الإشعار
-    */
-
-    createNotificationElement();
-
-
-    /*
-       طلب إذن إشعارات المتصفح
-    */
-
-    await requestBrowserNotificationPermission();
-
-
-    /*
-       تشغيل Realtime
-    */
-
-    subscribeToNotifications();
-
-
-    console.log(
-        "✅ نظام الإشعارات يعمل"
-    );
-
 }
-
 
     /* =====================================================
        تنظيف القناة
