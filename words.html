@@ -232,7 +232,18 @@
                 >
                     Apple
                 </div>
-
+                <div
+                 id="adWaitMessage"
+                style="
+                 display:none;
+                margin-top:8px;
+                  font-size:14px;
+               color:#777;
+              text-align:center;
+                   "
+            >
+                 من فضلك انتظر الإعلان <span id="adCountdown">5</span> ثوانٍ
+            </div>
 
 
                 <!-- ======================================
@@ -434,6 +445,20 @@ function showAdsterra() {
 
     adContainer.innerHTML = "";
     adContainer.style.display = "flex";
+    const adWaitMessage =
+    document.getElementById("adWaitMessage");
+
+if (adWaitMessage) {
+    adWaitMessage.style.display = "block";
+}
+
+setTimeout(() => {
+
+    if (adWaitMessage) {
+        adWaitMessage.style.display = "none";
+    }
+
+}, 5000);
 
     /* كود Adsterra */
     const configScript = document.createElement("script");
