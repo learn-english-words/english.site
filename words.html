@@ -459,9 +459,8 @@ function showAdsterra() {
 
     adContainer.appendChild(adScript);
 
-    /*
-      نعيد المحتوى بعد 3 ثوانٍ.
-      لا نعيد تحميل الإعلان بشكل متكرر بلا داعٍ.
+   /*
+      نعيد المحتوى بعد 8 ثوانٍ.
     */
     setTimeout(() => {
 
@@ -470,7 +469,7 @@ function showAdsterra() {
 
         image.style.display = "flex";
 
-    }, 3000);
+    }, 8000);
 }
 
 
@@ -489,10 +488,10 @@ function nextWordWithAd() {
         nextWord();
     }
 
-    /*
-      إعلان بعد كل 3 ضغطات.
+   /*
+      إعلان بعد كل 5 ضغطات.
     */
-    if (nextClickCount % 3 === 0) {
+    if (nextClickCount % 5 === 0) {
 
         showAdsterra();
 
