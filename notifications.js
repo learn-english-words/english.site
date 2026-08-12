@@ -926,87 +926,94 @@
     }
 
 
-    /* =====================================================
-       تحميل المستخدم الحالي
-    ===================================================== */
+   /* =====================================================
+   تحميل المستخدم الحالي
+===================================================== */
 
-    async function initNotifications() {
+async function initNotifications() {
 
-        /*
-           نتأكد أن supabase.js
-           تم تحميله
-        */
+    /*
+       نتأكد أن supabase.js
+       تم تحميله
+    */
 
-        if (
-            typeof supabaseClient ===
-            "undefined"
-        ) {
+    if (
+        typeof supabaseClient ===
+        "undefined"
+    ) {
 
-            console.error(
-                "❌ supabaseClient غير موجود. تأكد من تحميل supabase.js قبل notifications.js"
-            );
-
-            return;
-
-        }
-
-
-        /*
-           الحصول على المستخدم
-        */
-
-       const {
-    data: { user },
-    error
-} = await supabaseClient.auth.getUser();
-
-if (error || !user) {
-    return;
-}
-
-
-        if (!data || !data.user) {
-
-            /*
-               المستخدم غير مسجل الدخول
-               لذلك لا نشترك في الإشعارات
-            */
-
-            return;
-
-        }
-
-
-        notificationCurrentUser =
-            data.user;
-
-
-        /*
-           إنشاء واجهة الإشعار
-        */
-
-        createNotificationElement();
-
-
-        /*
-           طلب إذن إشعارات المتصفح
-        */
-
-        requestBrowserNotificationPermission();
-
-
-        /*
-           تشغيل Realtime
-        */
-
-        subscribeToNotifications();
-
-
-        console.log(
-            "✅ نظام الإشعارات يعمل"
+        console.error(
+            "❌ supabaseClient غير موجود. تأكد من تحميل supabase.js قبل notifications.js"
         );
 
+        return;
+
     }
+
+
+    /*
+       الحصول على المستخدم الحالي
+    */
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.getUser();
+
+
+    /*
+       إذا حدث خطأ أو لا يوجد مستخدم
+    */
+
+    if (
+        error ||
+        !data ||
+        !data.user
+    ) {
+
+        console.log(
+            "ℹ️ لا يوجد مستخدم مسجل الدخول"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       حفظ المستخدم الحالي
+    */
+
+    notificationCurrentUser =
+        data.user;
+
+
+    /*
+       إنشاء واجهة الإشعار
+    */
+
+    createNotificationElement();
+
+
+    /*
+       طلب إذن إشعارات المتصفح
+    */
+
+    await requestBrowserNotificationPermission();
+
+
+    /*
+       تشغيل Realtime
+    */
+
+    subscribeToNotifications();
+
+
+    console.log(
+        "✅ نظام الإشعارات يعمل"
+    );
+
+}
 
 
     /* =====================================================
