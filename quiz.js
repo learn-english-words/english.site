@@ -459,30 +459,24 @@ function nextQuestion() {
 
     quizMoveCount++;
 
-    if (
-        currentQuestion >=
-        quizWords.length - 1
-    ) {
+    // كل 5 انتقالات يظهر الإعلان
+    if (quizMoveCount % 5 === 0) {
 
-        finishQuiz();
+        showQuizAd();
 
         return;
     }
 
     currentQuestion++;
 
-    showQuestion();
+    if (currentQuestion >= quizWords.length) {
 
-    // إعلان بعد كل 5 أسئلة
-    if (
-        quizMoveCount % 5 === 0 &&
-        typeof showQuizAd === "function"
-    ) {
+        finishQuiz();
 
-        showQuizAd();
-
+        return;
     }
 
+    showQuestion();
 }
 
 
@@ -652,13 +646,19 @@ function showQuizAd() {
     const adContainer =
         document.getElementById("quizAdContainer");
 
-    if (!image || !adContainer) return;
+    if (!image || !adContainer) {
+        console.log("Ad elements not found");
+        return;
+    }
 
+    // نخفي الصورة
     image.style.display = "none";
 
+    // نظهر الإعلان
     adContainer.innerHTML = "";
     adContainer.style.display = "flex";
 
+    // كود الإعلان
     const configScript =
         document.createElement("script");
 
@@ -684,15 +684,25 @@ function showQuizAd() {
 
     adContainer.appendChild(adScript);
 
-    // الإعلان يبقى 8 ثوانٍ
+    // بعد 8 ثواني ننتقل للسؤال التالي
     setTimeout(() => {
 
         adContainer.style.display = "none";
-
         adContainer.innerHTML = "";
 
         image.style.display = "block";
 
-    }, 8000);
+        currentQuestion++;
 
+        if (currentQuestion >= quizWords.length) {
+
+            finishQuiz();
+
+        } else {
+
+            showQuestion();
+
+        }
+
+    }, 8000);
 }
