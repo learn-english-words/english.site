@@ -60,6 +60,7 @@ button { cursor: pointer; }
 .primary-btn { color: #fff; background: linear-gradient(135deg, var(--brand), var(--brand-dark)); }
 .danger-btn { color: #b52d43; background: #fff0f3; }
 .small-btn { min-height: 36px; padding: 0 13px; border-radius: 11px; }
+.call-start-btn { border: 0; color: #fff; background: linear-gradient(135deg, #18a873, #12845c); font-weight: 800; }
 
 .layout { display: grid; grid-template-columns: 350px 1fr; gap: 18px; min-height: calc(100vh - 132px); }
 .panel { border-radius: 24px; overflow: hidden; }
@@ -122,6 +123,21 @@ button { cursor: pointer; }
 .person-avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; color: var(--brand); background: var(--soft); font-weight: 900; }
 .person-name { flex: 1; }
 .notice { padding: 11px 13px; border-radius: 13px; margin-bottom: 12px; background: #effaf5; color: #177752; font-size: 13px; }
+.call-card { text-align: center; overflow: hidden; background: linear-gradient(165deg, #211d3f, #12172b); color: #fff; border-color: rgba(255,255,255,.1); }
+.call-card h2 { margin: 15px 0 4px; }
+.call-group-name { margin: 0; color: #c7c3e8; }
+.call-orb { width: 112px; height: 112px; margin: 8px auto; display: grid; place-items: center; border-radius: 50%; background: rgba(105,88,232,.25); border: 1px solid rgba(183,174,255,.4); box-shadow: 0 0 0 14px rgba(105,88,232,.08); }
+.call-orb span { display: grid; place-items: center; width: 76px; height: 76px; border-radius: 50%; font-size: 32px; background: linear-gradient(145deg, #7c6aed, #5544cc); }
+.call-orb.live { animation: callPulse 1.8s infinite; }
+@keyframes callPulse { 50% { box-shadow: 0 0 0 22px rgba(105,88,232,.04); transform: scale(1.02); } }
+.call-status { min-height: 20px; margin: 12px 0; color: #a9e7ce; font-size: 13px; }
+.call-people { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; min-height: 64px; margin: 14px 0 20px; }
+.call-person { display: flex; align-items: center; gap: 7px; padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.09); font-size: 12px; }
+.call-person i { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 50%; background: #6958e8; font-style: normal; font-weight: 900; }
+.call-controls { display: flex; justify-content: center; gap: 14px; }
+.call-control { width: 88px; height: 70px; display: grid; place-items: center; align-content: center; gap: 4px; border-radius: 18px; font-size: 20px; }
+.call-control span { font-size: 11px; }
+.call-control.muted { color: #b52d43; background: #fff0f3; }
 .hidden, [hidden] { display: none !important; }
 .loading { padding: 26px; color: var(--muted); text-align: center; }
 
@@ -130,6 +146,9 @@ button { cursor: pointer; }
     .topbar { border-radius: 18px; margin-bottom: 10px; padding: 12px; }
     .topbar p { display: none; }
     .topbar .primary-btn { padding: 0 12px; }
+    .chat-head { flex-wrap: wrap; }
+    .chat-title { flex-basis: calc(100% - 120px); }
+    .call-start-btn, .chat-head #inviteBtn { flex: 1; }
     .layout { display: block; min-height: calc(100vh - 88px); }
     .panel { border-radius: 18px; }
     .sidebar { min-height: calc(100vh - 88px); }

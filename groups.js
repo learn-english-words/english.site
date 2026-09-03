@@ -4,6 +4,10 @@ let groups = [];
 let selectedGroup = null;
 let profilesById = new Map();
 let messagesChannel = null;
+let callChannel = null;
+let localAudioStream = null;
+let callPeers = new Map();
+let callMuted = false;
 
 const byId = id => document.getElementById(id);
 const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char]);
@@ -90,6 +94,7 @@ async function answerInvitation(invitationId, status, groupId = null) {
 }
 
 async function openGroup(group) {
+    if (callChannel && selectedGroup?.id !== group.id) await leaveGroupCall();
     selectedGroup = group;
     renderGroups();
     byId("welcomeState").classList.add("hidden");
@@ -214,14 +219,165 @@ async function invitePerson(button) {
     button.textContent = "تم الإرسال ✓";
 }
 
+/* المحادثة الصوتية الجماعية: WebRTC للصوت وSupabase Realtime للإشارات والحضور. */
+async function joinGroupCall() {
+    if (!selectedGroup || callChannel) return;
+    if (!navigator.mediaDevices?.getUserMedia) {
+        showError("متصفحك لا يدعم المكالمات الصوتية.");
+        return;
+    }
+    showModal("callModal");
+    byId("callGroupName").textContent = selectedGroup.name;
+    byId("callStatus").textContent = "اسمح باستخدام الميكروفون للانضمام...";
+    try {
+        localAudioStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true }, video: false });
+    } catch (error) {
+        hideModal("callModal");
+        showError("تعذر تشغيل الميكروفون. اسمح للموقع باستخدامه ثم حاول مجددًا.");
+        return;
+    }
+    callMuted = false;
+    updateMuteButton();
+    byId("callOrb").classList.add("live");
+    byId("callStatus").textContent = "أنت داخل المحادثة الصوتية الآن";
+
+    callChannel = supabaseClient.channel(`voice-group-${selectedGroup.id}`, {
+        config: { presence: { key: currentUser.id }, broadcast: { self: false } }
+    });
+    callChannel
+        .on("presence", { event: "sync" }, renderCallParticipants)
+        .on("presence", { event: "leave" }, ({ key }) => removeCallPeer(key))
+        .on("broadcast", { event: "voice-signal" }, ({ payload }) => handleVoiceSignal(payload))
+        .subscribe(async status => {
+            if (status !== "SUBSCRIBED") return;
+            await callChannel.track({ user_id: currentUser.id, name: displayName(currentProfile), joined_at: new Date().toISOString() });
+            await sendVoiceSignal({ kind: "join" });
+        });
+}
+
+async function sendVoiceSignal(message) {
+    if (!callChannel) return;
+    await callChannel.send({ type: "broadcast", event: "voice-signal", payload: { ...message, sender_id: currentUser.id } });
+}
+
+function createCallPeer(userId) {
+    if (callPeers.has(userId)) return callPeers.get(userId);
+    const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }, { urls: "stun:stun1.l.google.com:19302" }] });
+    const peer = { pc, queuedCandidates: [] };
+    callPeers.set(userId, peer);
+    localAudioStream.getTracks().forEach(track => pc.addTrack(track, localAudioStream));
+    pc.onicecandidate = event => { if (event.candidate) sendVoiceSignal({ kind: "candidate", target_id: userId, candidate: event.candidate }); };
+    pc.ontrack = event => {
+        let audio = document.querySelector(`audio[data-call-user="${userId}"]`);
+        if (!audio) {
+            audio = document.createElement("audio");
+            audio.autoplay = true;
+            audio.dataset.callUser = userId;
+            byId("remoteAudioContainer").appendChild(audio);
+        }
+        audio.srcObject = event.streams[0];
+    };
+    pc.onconnectionstatechange = () => {
+        if (["failed", "closed", "disconnected"].includes(pc.connectionState)) removeCallPeer(userId);
+    };
+    return peer;
+}
+
+async function handleVoiceSignal(signal) {
+    if (!callChannel || signal.sender_id === currentUser.id) return;
+    if (signal.target_id && signal.target_id !== currentUser.id) return;
+    try {
+        if (signal.kind === "join") {
+            const peer = createCallPeer(signal.sender_id);
+            const offer = await peer.pc.createOffer();
+            await peer.pc.setLocalDescription(offer);
+            await sendVoiceSignal({ kind: "offer", target_id: signal.sender_id, description: peer.pc.localDescription });
+            return;
+        }
+        if (signal.kind === "offer") {
+            const peer = createCallPeer(signal.sender_id);
+            await peer.pc.setRemoteDescription(signal.description);
+            await flushCallCandidates(peer);
+            const answer = await peer.pc.createAnswer();
+            await peer.pc.setLocalDescription(answer);
+            await sendVoiceSignal({ kind: "answer", target_id: signal.sender_id, description: peer.pc.localDescription });
+            return;
+        }
+        const peer = createCallPeer(signal.sender_id);
+        if (signal.kind === "answer") {
+            await peer.pc.setRemoteDescription(signal.description);
+            await flushCallCandidates(peer);
+        } else if (signal.kind === "candidate" && signal.candidate) {
+            if (peer.pc.remoteDescription) await peer.pc.addIceCandidate(signal.candidate);
+            else peer.queuedCandidates.push(signal.candidate);
+        }
+    } catch (error) { console.error("Voice call signal error:", error); }
+}
+
+async function flushCallCandidates(peer) {
+    while (peer.queuedCandidates.length) await peer.pc.addIceCandidate(peer.queuedCandidates.shift());
+}
+
+function renderCallParticipants() {
+    if (!callChannel) return;
+    const state = callChannel.presenceState();
+    const people = Object.values(state).flat();
+    byId("callPeople").innerHTML = people.map(person => {
+        const name = person.user_id === currentUser.id ? "أنت" : (person.name || "عضو");
+        return `<span class="call-person"><i>${escapeHtml(name.charAt(0))}</i>${escapeHtml(name)}</span>`;
+    }).join("");
+    byId("callStatus").textContent = `${people.length || 1} في المحادثة الصوتية`;
+}
+
+function toggleCallMute() {
+    if (!localAudioStream) return;
+    callMuted = !callMuted;
+    localAudioStream.getAudioTracks().forEach(track => { track.enabled = !callMuted; });
+    updateMuteButton();
+}
+
+function updateMuteButton() {
+    const button = byId("muteCallBtn");
+    button.classList.toggle("muted", callMuted);
+    button.innerHTML = callMuted ? "🔇<span>تشغيل</span>" : "🎙️<span>كتم</span>";
+}
+
+function removeCallPeer(userId) {
+    const peer = callPeers.get(userId);
+    if (peer) peer.pc.close();
+    callPeers.delete(userId);
+    document.querySelector(`audio[data-call-user="${userId}"]`)?.remove();
+}
+
+async function leaveGroupCall() {
+    for (const userId of [...callPeers.keys()]) removeCallPeer(userId);
+    localAudioStream?.getTracks().forEach(track => track.stop());
+    localAudioStream = null;
+    if (callChannel) {
+        await callChannel.untrack();
+        await supabaseClient.removeChannel(callChannel);
+    }
+    callChannel = null;
+    byId("callOrb").classList.remove("live");
+    byId("callPeople").innerHTML = "";
+    hideModal("callModal");
+}
+
 let searchTimer;
 byId("peopleSearch").addEventListener("input", event => { clearTimeout(searchTimer); searchTimer = setTimeout(() => loadPeople(event.target.value), 250); });
 byId("openCreateBtn").addEventListener("click", () => showModal("createModal"));
 byId("inviteBtn").addEventListener("click", openInviteModal);
 byId("createForm").addEventListener("submit", createGroup);
 byId("messageForm").addEventListener("submit", sendMessage);
+byId("groupCallBtn").addEventListener("click", joinGroupCall);
+byId("muteCallBtn").addEventListener("click", toggleCallMute);
+byId("leaveCallBtn").addEventListener("click", leaveGroupCall);
 byId("mobileBackBtn").addEventListener("click", () => byId("chatPanel").classList.remove("mobile-open"));
 document.querySelectorAll("[data-close]").forEach(button => button.addEventListener("click", () => hideModal(button.dataset.close)));
-document.querySelectorAll(".modal").forEach(modal => modal.addEventListener("click", event => { if (event.target === modal) hideModal(modal.id); }));
-window.addEventListener("beforeunload", () => { if (messagesChannel) supabaseClient.removeChannel(messagesChannel); });
+document.querySelectorAll(".modal").forEach(modal => modal.addEventListener("click", event => {
+    if (event.target !== modal) return;
+    if (modal.id === "callModal") return;
+    hideModal(modal.id);
+}));
+window.addEventListener("beforeunload", () => { if (messagesChannel) supabaseClient.removeChannel(messagesChannel); if (callChannel) leaveGroupCall(); });
 init();

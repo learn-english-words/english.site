@@ -41,6 +41,7 @@
                     <button class="icon-btn mobile-back" id="mobileBackBtn" type="button" aria-label="العودة للمجموعات">←</button>
                     <div class="chat-avatar" id="groupAvatar">G</div>
                     <div class="chat-title"><h2 id="groupTitle">المجموعة</h2><p id="groupMeta">0 أعضاء</p></div>
+                    <button class="call-start-btn small-btn" id="groupCallBtn" type="button">🎙️ دخول الصوت</button>
                     <button class="ghost-btn small-btn" id="inviteBtn" type="button">دعوة شخص</button>
                 </header>
                 <div class="messages" id="messages"><div class="empty-state">لا توجد رسائل بعد. ابدأ أول محادثة 👋</div></div>
@@ -71,6 +72,21 @@
     </div>
 </div>
 
-<script src="groups.js?v=20260903-2"></script>
+<div class="modal" id="callModal" role="dialog" aria-modal="true" aria-labelledby="callTitle">
+    <div class="modal-card call-card">
+        <div class="call-orb" id="callOrb"><span>🎙️</span></div>
+        <h2 id="callTitle">المحادثة الصوتية</h2>
+        <p class="call-group-name" id="callGroupName">المجموعة</p>
+        <div class="call-status" id="callStatus">جاري تشغيل الميكروفون...</div>
+        <div class="call-people" id="callPeople"></div>
+        <div id="remoteAudioContainer" hidden></div>
+        <div class="call-controls">
+            <button class="ghost-btn call-control" id="muteCallBtn" type="button" aria-label="كتم الميكروفون">🎙️<span>كتم</span></button>
+            <button class="danger-btn call-control" id="leaveCallBtn" type="button" aria-label="مغادرة المكالمة">📞<span>مغادرة</span></button>
+        </div>
+    </div>
+</div>
+
+<script src="groups.js?v=20260903-3"></script>
 </body>
 </html>
