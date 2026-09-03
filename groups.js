@@ -159,12 +159,15 @@ async function createGroup(event) {
     if (!name) return;
     const submit = event.submitter;
     submit.disabled = true;
-    const { data, error } = await supabaseClient.from("groups").insert({ name, description: description || null, owner_id: currentUser.id }).select().single();
+    const { data, error } = await supabaseClient.rpc("create_learning_group", {
+        group_name: name,
+        group_description: description || null
+    });
     submit.disabled = false;
     if (error) { showError(error.message); return; }
     event.target.reset();
     hideModal("createModal");
-    await loadGroups(data.id);
+    await loadGroups(data);
 }
 
 async function sendMessage(event) {
