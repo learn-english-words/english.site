@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="أنشئ مجموعة وتدرّب على الإنجليزية مع أصدقائك في EnglishWords.">
+    <title>المجموعات - EnglishWords</title>
+    <link rel="stylesheet" href="groups.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+</head>
+<body>
+<main class="app">
+    <header class="topbar">
+        <button class="icon-btn" type="button" onclick="location.href='index.html'" aria-label="العودة للرئيسية">←</button>
+        <div class="topbar-copy">
+            <h1>مجموعات التعلّم 👥</h1>
+            <p>تدرّب على الإنجليزية وتبادل الرسائل مع مجموعتك</p>
+        </div>
+        <button class="primary-btn" type="button" id="openCreateBtn">＋ مجموعة جديدة</button>
+    </header>
+
+    <div class="layout">
+        <aside class="panel sidebar">
+            <div class="section-head"><h2>مجموعاتي</h2><span class="count" id="groupsCount">0</span></div>
+            <section class="invites hidden" id="invitesSection">
+                <div class="section-head"><h2>دعوات جديدة</h2><span class="count" id="invitesCount">0</span></div>
+                <div id="invitesList"></div>
+            </section>
+            <div class="groups-list" id="groupsList"><div class="loading">جاري تحميل مجموعاتك...</div></div>
+        </aside>
+
+        <section class="panel chat-panel" id="chatPanel">
+            <div class="empty-state" id="welcomeState">
+                <span class="emoji">🗣️</span>
+                <strong>اختر مجموعة وابدأ الحديث</strong>
+                <p>كوّن مجتمعًا صغيرًا يساعدك على ممارسة الإنجليزية يوميًا.</p>
+            </div>
+            <div class="chat-view" id="chatView">
+                <header class="chat-head">
+                    <button class="icon-btn mobile-back" id="mobileBackBtn" type="button" aria-label="العودة للمجموعات">←</button>
+                    <div class="chat-avatar" id="groupAvatar">G</div>
+                    <div class="chat-title"><h2 id="groupTitle">المجموعة</h2><p id="groupMeta">0 أعضاء</p></div>
+                    <button class="ghost-btn small-btn" id="inviteBtn" type="button">دعوة شخص</button>
+                </header>
+                <div class="messages" id="messages"><div class="empty-state">لا توجد رسائل بعد. ابدأ أول محادثة 👋</div></div>
+                <form class="composer" id="messageForm">
+                    <input id="messageInput" maxlength="1000" autocomplete="off" placeholder="اكتب رسالة للمجموعة..." aria-label="نص الرسالة">
+                    <button class="primary-btn" type="submit" id="sendBtn">إرسال</button>
+                </form>
+            </div>
+        </section>
+    </div>
+</main>
+
+<div class="modal" id="createModal" role="dialog" aria-modal="true" aria-labelledby="createTitle">
+    <form class="modal-card" id="createForm">
+        <div class="modal-head"><h2 id="createTitle">إنشاء مجموعة جديدة</h2><button class="icon-btn small-btn" type="button" data-close="createModal">✕</button></div>
+        <label class="field"><span>اسم المجموعة</span><input id="groupName" maxlength="60" required placeholder="مثال: نتحدث الإنجليزية يوميًا"></label>
+        <label class="field"><span>وصف قصير (اختياري)</span><textarea id="groupDescription" maxlength="180" rows="3" placeholder="ما هدف هذه المجموعة؟"></textarea></label>
+        <div class="modal-actions"><button class="ghost-btn" type="button" data-close="createModal">إلغاء</button><button class="primary-btn" type="submit">إنشاء المجموعة</button></div>
+    </form>
+</div>
+
+<div class="modal" id="inviteModal" role="dialog" aria-modal="true" aria-labelledby="inviteTitle">
+    <div class="modal-card">
+        <div class="modal-head"><h2 id="inviteTitle">دعوة إلى المجموعة</h2><button class="icon-btn small-btn" type="button" data-close="inviteModal">✕</button></div>
+        <div class="notice">اختر مستخدمًا عامًا، وستظهر له الدعوة هنا عند فتح صفحة المجموعات.</div>
+        <label class="field"><span>بحث عن مستخدم</span><input id="peopleSearch" autocomplete="off" placeholder="اكتب الاسم..."></label>
+        <div class="people-list" id="peopleList"><div class="loading">جاري تحميل المستخدمين...</div></div>
+    </div>
+</div>
+
+<script src="groups.js"></script>
+</body>
+</html>
