@@ -222,6 +222,9 @@ async function invitePerson(button) {
 /* المحادثة الصوتية الجماعية: WebRTC للصوت وSupabase Realtime للإشارات والحضور. */
 async function joinGroupCall() {
     if (!selectedGroup || callChannel) return;
+    const params = new URLSearchParams({ group: selectedGroup.id, name: selectedGroup.name });
+    location.href = `voice-room.html?${params.toString()}`;
+    return;
     if (!navigator.mediaDevices?.getUserMedia) {
         showError("متصفحك لا يدعم المكالمات الصوتية.");
         return;

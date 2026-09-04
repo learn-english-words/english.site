@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#12152f">
+    <title>الغرفة الصوتية - EnglishWords</title>
+    <link rel="stylesheet" href="voice-room.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+</head>
+<body>
+<main class="room-shell">
+    <header class="room-header">
+        <button class="round-btn" id="backBtn" aria-label="العودة">←</button>
+        <div class="room-heading"><span class="live-dot"></span><div><h1 id="roomName">الغرفة الصوتية</h1><p><span id="roomTimer">00:00</span> · محادثة مباشرة</p></div></div>
+        <button class="round-btn" id="shareBtn" aria-label="مشاركة الغرفة">↗</button>
+    </header>
+
+    <section class="topic-card">
+        <span class="topic-label">موضوع اليوم</span>
+        <h2 id="topicText">What made you smile today?</h2>
+        <button id="nextTopicBtn" type="button">موضوع آخر ✨</button>
+    </section>
+
+    <section class="stage" aria-labelledby="stageTitle">
+        <div class="section-title"><div><span>🎙️</span><h2 id="stageTitle">المتحدثون</h2></div><span id="speakerCount">0/6</span></div>
+        <div class="speaker-grid" id="speakerGrid">
+            <div class="connecting"><span class="loader"></span><p>جاري تشغيل الميكروفون...</p></div>
+        </div>
+    </section>
+
+    <section class="audience" aria-labelledby="audienceTitle">
+        <div class="section-title"><div><span>👥</span><h2 id="audienceTitle">المستمعون</h2></div><span id="audienceCount">0</span></div>
+        <div class="audience-list" id="audienceList"><p class="empty-note">لا يوجد مستمعون حاليًا</p></div>
+    </section>
+
+    <aside class="side-panel" id="sidePanel">
+        <div class="side-head"><h2>رسائل الغرفة</h2><button id="closeChatBtn" type="button">✕</button></div>
+        <div class="room-messages" id="roomMessages"><p class="system-message">رحّب بأعضاء المجموعة 👋</p></div>
+        <form class="room-composer" id="roomMessageForm"><input id="roomMessageInput" maxlength="200" placeholder="اكتب رسالة قصيرة..."><button>إرسال</button></form>
+    </aside>
+
+    <div id="remoteAudioContainer" hidden></div>
+    <div class="toast" id="roomToast"></div>
+
+    <footer class="controls">
+        <button class="control" id="chatBtn"><span>💬</span><small>الرسائل</small><b id="chatBadge" hidden>0</b></button>
+        <button class="control main-control" id="muteBtn"><span>🎙️</span><small>كتم</small></button>
+        <button class="control" id="handBtn"><span>✋</span><small>ارفع يدك</small></button>
+        <button class="control leave" id="leaveBtn"><span>📞</span><small>مغادرة</small></button>
+    </footer>
+</main>
+<script src="voice-room.js?v=20260904-1"></script>
+</body>
+</html>
