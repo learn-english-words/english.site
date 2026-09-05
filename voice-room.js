@@ -219,6 +219,16 @@ async function replaceOutgoingTrack(track) {
     }));
 }
 
+async function renegotiatePeers() {
+    await Promise.all([...peers.entries()].map(async ([peerId, { pc }]) => {
+        if (pc.signalingState !== "stable" || pc.connectionState === "closed") return;
+        const restartIce = ["failed", "disconnected"].includes(pc.iceConnectionState);
+        const offer = await pc.createOffer({ iceRestart: restartIce });
+        await pc.setLocalDescription(offer);
+        await send({ kind: "offer", target_id: peerId, description: pc.localDescription });
+    }));
+}
+
 async function restoreMicrophone() {
     const oldStream = stream;
     const replacementStream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints, video: false });
@@ -233,6 +243,7 @@ async function restoreMicrophone() {
     }
     stream = replacementStream;
     watchMicrophoneTrack(track);
+    await renegotiatePeers();
     oldStream?.getTracks().forEach(oldTrack => {
         oldTrack.onended = null;
         oldTrack.stop();
