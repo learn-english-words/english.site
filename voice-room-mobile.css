@@ -1,0 +1,36 @@
+@media (max-width: 650px) {
+    .room-shell { padding: 8px 8px 78px; }
+    .room-header { gap: 6px; }
+    .round-btn { width: 38px; height: 38px; border-radius: 12px; font-size: 17px; }
+    .room-heading { gap: 7px; }
+    .room-heading h1 { font-size: .92rem; }
+    .room-heading p { font-size: .7rem; margin-top: 3px; }
+    .live-dot { width: 8px; height: 8px; }
+    .topic-card { margin: 9px 0; padding: 11px 10px; border-radius: 16px; }
+    .topic-label { font-size: .65rem; }
+    .topic-card h2 { font-size: .98rem; margin: 5px 0 8px; }
+    .topic-card button { padding: 5px 10px; font-size: .72rem; }
+    .stage, .audience { border-radius: 16px; padding: 10px; margin-bottom: 8px; }
+    .section-title { font-size: .72rem; }
+    .section-title h2 { font-size: .84rem; }
+    .speaker-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; min-height: 112px; padding: 11px 0 2px; }
+    .avatar-wrap { width: 56px; height: 56px; }
+    .avatar { font-size: 1.25rem; border-width: 3px; }
+    .mic-state { width: 22px; height: 22px; font-size: .58rem; }
+    .speaker h3 { font-size: .76rem; margin: 6px 0 2px; }
+    .speaker p { font-size: .63rem; }
+    .audience-list { gap: 6px; margin-top: 9px; }
+    .audience-person { gap: 5px; padding: 4px 7px 4px 4px; font-size: .7rem; }
+    .audience-person i { width: 24px; height: 24px; }
+    .translation-card { padding: 10px !important; border-radius: 16px !important; margin-bottom: 8px !important; }
+    .translation-help { font-size: .68rem !important; margin: 7px 0 !important; }
+    .live-transcript, .captions { padding: 8px !important; }
+    .caption { padding: 7px !important; }
+    .caption p { font-size: .72rem !important; }
+    .controls { width: calc(100% - 12px); bottom: 6px; gap: 4px; padding: 5px; border-radius: 18px; justify-content: space-around; }
+    .control { flex: 1; width: auto; max-width: 64px; height: 54px; border-radius: 13px; gap: 1px; }
+    .control span { font-size: 1.05rem; }
+    .control small { font-size: .57rem; white-space: nowrap; }
+    .control b { top: 2px; left: 2px; min-width: 15px; height: 15px; font-size: .55rem; }
+    .toast { top: 58px; font-size: .78rem; padding: 8px 12px; }
+}

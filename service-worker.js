@@ -1,5 +1,5 @@
-const CACHE_NAME = "englishwords-app-v3";
-const APP_SHELL = ["./", "./index.html", "./home-modern.css?v=2", "./home-live.css?v=3", "./home-pwa.css?v=1", "./home-modern.js?v=6", "./manifest.webmanifest", "./app-icon-192.png", "./app-icon-512.png"];
+const CACHE_NAME = "englishwords-app-v4";
+const APP_SHELL = ["./", "./index.html", "./home-modern.css?v=2", "./home-live.css?v=3", "./home-pwa.css?v=1", "./home-mobile-compact.css?v=1", "./home-modern.js?v=6", "./manifest.webmanifest", "./app-icon-192.png", "./app-icon-512.png"];
 
 self.addEventListener("install", event => {
     event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));

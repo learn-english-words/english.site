@@ -1,0 +1,78 @@
+@media (max-width: 700px) {
+    body { padding-bottom: 67px; }
+    .top { height: 56px; padding: 0 10px; gap: 8px; }
+    .brand { font-size: .98rem; }
+    .brand i { display: grid; width: 27px; height: 25px; border-radius: 7px; font-size: .72rem; }
+    .actions { gap: 5px; }
+    .avatar > span { width: 32px; height: 32px; font-size: .8rem; }
+    .streak { font-size: .74rem; }
+    .dash { display: grid; grid-template-columns: minmax(0, 1fr); padding: 11px 9px; gap: 9px; }
+    .dash > * { grid-column: 1 !important; }
+    .hello { padding: 0 4px; }
+    .hello h1 { font-size: 1.45rem; margin: 1px 0; }
+    .hello p { font-size: .72rem; margin: 3px 0; }
+    .panel { padding: 11px; border-radius: 14px; }
+    .title h2 { font-size: .88rem; }
+    .title p { font-size: .68rem; margin-top: 3px; }
+    .title > a, .title > span { font-size: .67rem; }
+    .streak-panel { min-height: 0; }
+    .streak-panel::before, .streak-panel::after { display: none; }
+    .streak-panel .title { display: flex; }
+    .streak-panel .ring { display: grid; width: 92px; height: 92px; margin: 8px auto; }
+    .ring::before { inset: 8px; }
+    .ring > div { font-size: .9rem; }
+    .ring b { font-size: 1.35rem; }
+    .ring small { font-size: .58rem; }
+    .streak-panel .week { display: grid; }
+    .day { font-size: .56rem; }
+    .day i { width: 20px; height: 20px; margin-top: 4px; font-size: .62rem; }
+    .lesson { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; padding: 0; background: #f5f7fb; color: #111a30; }
+    .lesson-img { display: grid; min-height: 132px; height: 100%; font-size: 1rem; }
+    .lesson-img span { padding: 7px; }
+    .lesson-info { padding: 10px 9px 4px 0; }
+    .lesson-info > small { font-size: .65rem; }
+    .lesson-info h2 { color: #111a30; text-align: center; font-size: 1.05rem; margin: 9px 0 5px; }
+    .lesson-info p { color: #5f6678; text-align: center; font-size: .7rem; margin: 4px 0; }
+    .lesson-info #wordExample { color: #778094; font-size: .63rem; }
+    .fav { top: 2px; left: 3px; color: #8790a5; font-size: 1.3rem; }
+    .progress { height: 4px; margin-top: 8px; }
+    .cta { grid-column: 1 / -1; width: auto; margin: 0 9px 9px; padding: 9px; border-radius: 9px; font-size: .78rem; background: linear-gradient(135deg,#765ef5,#5942df); color: #fff; }
+    .vocab-body { margin: 9px 0; gap: 11px; }
+    .small-ring { width: 78px; height: 78px; flex-basis: 78px; border-width: 7px; }
+    .small-ring b { font-size: 1rem; }
+    .small-ring small { font-size: .58rem; }
+    .vocab li { font-size: .68rem; margin: 6px 0; }
+    .more { padding: 7px; font-size: .65rem; }
+    .practice-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; margin: 9px 0; }
+    .practice-grid a { padding: 8px 2px; border-radius: 9px; gap: 3px; }
+    .practice-grid span { font-size: 1.15rem; }
+    .practice-grid b { font-size: .62rem; }
+    .practice-grid small { font-size: .53rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .rooms { grid-template-columns: 1fr; gap: 6px; margin-top: 8px; }
+    .rooms article { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 7px; padding: 7px; }
+    .rooms article .faces-count { display: none; }
+    .rooms h3 { font-size: .7rem; }
+    .rooms p { font-size: .58rem; }
+    .live { font-size: .55rem; padding: 4px; }
+    .rooms button { width: auto; padding: 7px 10px; font-size: .68rem; background: var(--purple); color: #fff; }
+    .activity, .achievements { display: block; }
+    .chart { height: 105px; gap: 6px; padding-top: 16px; }
+    .bar { width: 24px; }
+    .bar::before { font-size: .58rem; top: -17px; }
+    .bar::after { font-size: .55rem; bottom: -20px; }
+    .badges { gap: 5px; margin-top: 10px; }
+    .badges span { width: 45px; height: 45px; border-radius: 13px; font-size: 1.25rem; }
+    .badges b { font-size: .6rem; }
+    .badges small { font-size: .52rem; }
+    .mobile-nav { height: 60px; }
+    .mobile-nav a { gap: 2px; font-size: .6rem; }
+    .mobile-nav span { font-size: 1rem; }
+    .install-app { bottom: 69px !important; left: 9px !important; padding: 7px 9px !important; font-size: .67rem; }
+}
+
+@media (min-width: 520px) and (max-width: 700px) {
+    .dash { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hello, .lesson, .groups, .activity, .achievements { grid-column: 1 / -1 !important; }
+    .streak-panel, .vocab, .practice { grid-column: auto !important; }
+    .practice-grid { grid-template-columns: repeat(3, 1fr); }
+}
