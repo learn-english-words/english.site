@@ -67,6 +67,11 @@ async function init() {
         return;
     }
     connect();
+    const resumeKey = `voice-mic-resumed:${groupId}`;
+    if (sessionStorage.getItem(resumeKey) === "true") {
+        sessionStorage.removeItem(resumeKey);
+        setTimeout(() => toast("تم تشغيل الميكروفون وإعادة الاتصال بالصوت"), 700);
+    }
     setInterval(updateTimer, 1000);
 }
 
@@ -271,13 +276,9 @@ async function toggleMute() {
             await updatePresence();
             applySpeakerState();
         } else {
-            await restoreMicrophone();
-            muted = false;
-            setMuteButton();
-            await updatePresence();
-            applySpeakerState();
-            toast("تم تشغيل الميكروفون");
-            if (translationEnabled) startRecognition();
+            sessionStorage.setItem(`voice-mic-resumed:${groupId}`, "true");
+            location.reload();
+            return;
         }
     } catch (error) {
         console.error("Microphone restore error:", error);
