@@ -18,6 +18,9 @@ let microphoneBusy = false;
 let speechRecognition = null;
 let translationEnabled = false;
 let recognitionRestartTimer = null;
+let silentAudioContext = null;
+let silentOscillator = null;
+let silentTrack = null;
 const topics = ["What made you smile today?", "What is your dream travel destination?", "Describe your perfect weekend.", "What new English word did you learn?", "Would you rather live by the sea or in the mountains?", "Tell us about your favorite food."];
 let topicIndex = 0;
 
@@ -91,8 +94,9 @@ function peer(id) {
     const connection = { pc, q: [] };
     peers.set(id, connection);
     stream.getAudioTracks().forEach(track => {
-        track.enabled = !muted;
-        pc.addTrack(track, stream);
+        const outgoingTrack = muted && silentTrack ? silentTrack : track;
+        const outgoingStream = outgoingTrack === track ? stream : new MediaStream([outgoingTrack]);
+        pc.addTrack(outgoingTrack, outgoingStream);
     });
     pc.onicecandidate = event => event.candidate && send({ kind: "candidate", target_id: id, candidate: event.candidate });
     pc.ontrack = event => {
@@ -171,6 +175,36 @@ function getAudioSender(pc) {
         || null;
 }
 
+async function getSilentTrack() {
+    if (silentTrack?.readyState === "live") return silentTrack;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) throw new Error("Web Audio is not supported");
+    silentAudioContext = new AudioContextClass();
+    if (silentAudioContext.state === "suspended") await silentAudioContext.resume();
+    const gain = silentAudioContext.createGain();
+    gain.gain.value = 0;
+    silentOscillator = silentAudioContext.createOscillator();
+    const destination = silentAudioContext.createMediaStreamDestination();
+    silentOscillator.connect(gain);
+    gain.connect(destination);
+    silentOscillator.start();
+    silentTrack = destination.stream.getAudioTracks()[0];
+    return silentTrack;
+}
+
+async function replaceOutgoingTrack(track) {
+    await Promise.all([...peers.values()].map(async ({ pc }) => {
+        const sender = getAudioSender(pc);
+        if (!sender) return;
+        await sender.replaceTrack(track);
+        const parameters = sender.getParameters();
+        if (parameters.encodings?.length) {
+            parameters.encodings.forEach(encoding => { encoding.active = true; });
+            await sender.setParameters(parameters).catch(() => {});
+        }
+    }));
+}
+
 async function restoreMicrophone() {
     let track = stream?.getAudioTracks()[0];
     if (!track || track.readyState === "ended") {
@@ -182,23 +216,7 @@ async function restoreMicrophone() {
         oldTracks.forEach(oldTrack => { oldTrack.onended = null; oldTrack.stop(); });
     }
     track.enabled = true;
-    await Promise.all([...peers.values()].map(async ({ pc }) => {
-        const sender = getAudioSender(pc);
-        if (sender) {
-            await sender.replaceTrack(track);
-            const parameters = sender.getParameters();
-            if (parameters.encodings?.length) {
-                parameters.encodings.forEach(encoding => { encoding.active = true; });
-                await sender.setParameters(parameters).catch(() => {});
-            }
-        } else {
-            pc.addTrack(track, stream);
-            const offer = await pc.createOffer();
-            await pc.setLocalDescription(offer);
-            const peerId = [...peers.entries()].find(([, connection]) => connection.pc === pc)?.[0];
-            if (peerId) send({ kind: "offer", target_id: peerId, description: pc.localDescription });
-        }
-    }));
+    await replaceOutgoingTrack(track);
     return track;
 }
 
@@ -209,8 +227,8 @@ async function toggleMute() {
     try {
         if (!muted) {
             stopRecognition();
-            const track = stream?.getAudioTracks()[0];
-            if (track) track.enabled = false;
+            const quietTrack = await getSilentTrack();
+            await replaceOutgoingTrack(quietTrack);
             muted = true;
             setMuteButton();
             await updatePresence();
@@ -369,6 +387,9 @@ async function leave() {
     translationEnabled = false;
     stopRecognition();
     stream?.getTracks().forEach(track => track.stop());
+    silentTrack?.stop();
+    try { silentOscillator?.stop(); } catch (error) {}
+    silentAudioContext?.close().catch(() => {});
     for (const id of peers.keys()) removePeer(id);
     if (channel) { await channel.untrack(); await supabaseClient.removeChannel(channel); }
     location.href = "groups.html";
@@ -398,5 +419,12 @@ $("roomMessageForm").onsubmit = event => {
     addMessage(message);
     input.value = "";
 };
-window.addEventListener("beforeunload", () => { translationEnabled = false; stopRecognition(); stream?.getTracks().forEach(track => track.stop()); });
+window.addEventListener("beforeunload", () => {
+    translationEnabled = false;
+    stopRecognition();
+    stream?.getTracks().forEach(track => track.stop());
+    silentTrack?.stop();
+    try { silentOscillator?.stop(); } catch (error) {}
+    silentAudioContext?.close().catch(() => {});
+});
 init();
