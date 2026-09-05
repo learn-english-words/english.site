@@ -206,17 +206,23 @@ async function replaceOutgoingTrack(track) {
 }
 
 async function restoreMicrophone() {
-    let track = stream?.getAudioTracks()[0];
-    if (!track || track.readyState === "ended") {
-        const replacementStream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints, video: false });
-        track = replacementStream.getAudioTracks()[0];
-        const oldTracks = stream?.getAudioTracks() || [];
-        stream = replacementStream;
-        watchMicrophoneTrack(track);
-        oldTracks.forEach(oldTrack => { oldTrack.onended = null; oldTrack.stop(); });
-    }
+    const oldStream = stream;
+    const replacementStream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints, video: false });
+    const track = replacementStream.getAudioTracks()[0];
+    if (!track) throw new Error("No microphone track was returned");
     track.enabled = true;
-    await replaceOutgoingTrack(track);
+    try {
+        await replaceOutgoingTrack(track);
+    } catch (error) {
+        replacementStream.getTracks().forEach(newTrack => newTrack.stop());
+        throw error;
+    }
+    stream = replacementStream;
+    watchMicrophoneTrack(track);
+    oldStream?.getTracks().forEach(oldTrack => {
+        oldTrack.onended = null;
+        oldTrack.stop();
+    });
     return track;
 }
 
