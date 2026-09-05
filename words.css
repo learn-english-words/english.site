@@ -1283,3 +1283,62 @@ img {
     margin-bottom: 8px;
 
 }
+
+/* =========================================================
+   الإعلان أعلى بطاقة التعلّم
+   ========================================================= */
+
+.learning-ad-area {
+    width: min(100%, 680px);
+    margin: 0 auto 16px;
+    padding: 12px 14px 10px;
+    border: 1px solid #e4e2f2;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(65, 54, 130, 0.08);
+    text-align: center;
+}
+
+.learning-ad-area[hidden] {
+    display: none !important;
+}
+
+.learning-ad-area.show {
+    animation: adSlideDown 0.24s ease-out;
+}
+
+.ad-label {
+    margin-bottom: 7px;
+    color: #8a8a98;
+    font-size: 12px;
+}
+
+.learning-ad-container {
+    display: flex;
+    width: 300px;
+    height: 250px;
+    max-width: 100%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ad-wait-message {
+    margin-top: 8px;
+    color: #777;
+    font-size: 13px;
+}
+
+@keyframes adSlideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    .learning-ad-area {
+        margin-bottom: 10px;
+        padding-inline: 8px;
+        border-radius: 15px;
+    }
+}

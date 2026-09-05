@@ -36,7 +36,7 @@
 
     <link
         rel="stylesheet"
-        href="words.css"
+        href="words.css?v=20260905-1"
     >
 
     <style>
@@ -181,6 +181,26 @@
         </div>
 
 
+        <!-- إعلان مستقل أعلى بطاقة الكلمة، ولا يستبدل الصورة -->
+        <aside
+            id="learningAdArea"
+            class="learning-ad-area"
+            aria-label="إعلان"
+            hidden
+        >
+            <div class="ad-label">إعلان</div>
+
+            <div
+                id="adContainer"
+                class="learning-ad-container"
+            ></div>
+
+            <div id="adWaitMessage" class="ad-wait-message">
+                سيختفي الإعلان خلال <span id="adCountdown">5</span> ثوانٍ
+            </div>
+        </aside>
+
+
 
         <!-- ==========================================
              بطاقة الكلمة
@@ -199,19 +219,6 @@
     >
         🍎
     </div>
-
-    <div
-        id="adContainer"
-        style="
-            display:none;
-            width:300px;
-            height:250px;
-            margin:0 auto;
-            align-items:center;
-            justify-content:center;
-            overflow:hidden;
-        "
-    ></div>
 
 </div>
 
@@ -232,20 +239,6 @@
                 >
                     Apple
                 </div>
-                <div
-                 id="adWaitMessage"
-                style="
-                 display:none;
-                margin-top:8px;
-                  font-size:14px;
-               color:#777;
-              text-align:center;
-                   "
-            >
-                 من فضلك انتظر الإعلان <span id="adCountdown">5</span> ثوانٍ ويختفي
-            </div>
-
-
                 <!-- ======================================
                      الترجمة العربية
                 ======================================= -->
@@ -428,22 +421,23 @@
 
 <script>
 /* ==========================================
-   Adsterra - إعلان داخل مكان الصورة
+   Adsterra - إعلان مستقل أعلى بطاقة الكلمة
 ========================================== */
 
 let nextClickCount = 0;
 let adShownThisSession = false;
+let adHideTimer = null;
 
 function showAdsterra() {
 
-    const image = document.getElementById("wordEmoji");
+    const adArea = document.getElementById("learningAdArea");
     const adContainer = document.getElementById("adContainer");
 
-    if (!image || !adContainer) return;
-
-    image.style.display = "none";
+    if (!adArea || !adContainer) return;
 
     adContainer.innerHTML = "";
+    adArea.hidden = false;
+    adArea.classList.add("show");
     adContainer.style.display = "flex";
     const adWaitMessage =
     document.getElementById("adWaitMessage");
@@ -487,12 +481,14 @@ setTimeout(() => {
    /*
       نعيد المحتوى بعد 8 ثوانٍ.
     */
-    setTimeout(() => {
+    clearTimeout(adHideTimer);
 
+    adHideTimer = setTimeout(() => {
+
+        adArea.classList.remove("show");
+        adArea.hidden = true;
         adContainer.style.display = "none";
         adContainer.innerHTML = "";
-
-        image.style.display = "flex";
 
     }, 8000);
 }
