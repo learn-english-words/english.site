@@ -90,7 +90,10 @@ function peer(id) {
     const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }, { urls: "stun:stun1.l.google.com:19302" }] });
     const connection = { pc, q: [] };
     peers.set(id, connection);
-    stream.getAudioTracks().forEach(track => pc.addTrack(track, stream));
+    stream.getAudioTracks().forEach(track => {
+        const sender = pc.addTrack(track, stream);
+        if (muted) sender.replaceTrack(null).catch(error => console.error("Initial mute error:", error));
+    });
     pc.onicecandidate = event => event.candidate && send({ kind: "candidate", target_id: id, candidate: event.candidate });
     pc.ontrack = event => {
         let audio = document.querySelector(`audio[data-u="${id}"]`);
@@ -162,6 +165,18 @@ async function updatePresence() {
     await channel.track({ user_id: user.id, name: profile.display_name, role: "speaker", muted, hand });
 }
 
+function getAudioSender(pc) {
+    const transceiver = pc.getTransceivers().find(item => item.sender && (item.sender.track?.kind === "audio" || item.receiver?.track?.kind === "audio"));
+    return transceiver?.sender || pc.getSenders().find(item => item.track?.kind === "audio") || null;
+}
+
+async function detachOutgoingAudio() {
+    await Promise.all([...peers.values()].map(async ({ pc }) => {
+        const sender = getAudioSender(pc);
+        if (sender) await sender.replaceTrack(null);
+    }));
+}
+
 async function restoreMicrophone() {
     let track = stream?.getAudioTracks()[0];
     if (!track || track.readyState === "ended") {
@@ -171,15 +186,15 @@ async function restoreMicrophone() {
         stream = replacementStream;
         watchMicrophoneTrack(track);
         await Promise.all([...peers.values()].map(async ({ pc }) => {
-            const sender = pc.getSenders().find(item => item.track?.kind === "audio" || item.track === null);
+            const sender = getAudioSender(pc);
             if (sender) await sender.replaceTrack(track);
             else pc.addTrack(track, stream);
         }));
         oldTracks.forEach(oldTrack => { oldTrack.onended = null; oldTrack.stop(); });
     } else {
         await Promise.all([...peers.values()].map(async ({ pc }) => {
-            const sender = pc.getSenders().find(item => item.track?.kind === "audio");
-            if (sender && sender.track !== track) await sender.replaceTrack(track);
+            const sender = getAudioSender(pc);
+            if (sender) await sender.replaceTrack(track);
         }));
     }
     track.enabled = true;
@@ -193,7 +208,7 @@ async function toggleMute() {
     try {
         if (!muted) {
             stopRecognition();
-            stream?.getAudioTracks().forEach(track => { track.enabled = false; });
+            await detachOutgoingAudio();
             muted = true;
             setMuteButton();
             await updatePresence();
