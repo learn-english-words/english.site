@@ -26,14 +26,24 @@ async function init() {
     currentProfile = profile || { id: user.id, display_name: user.user_metadata?.name || user.email?.split("@")[0] || "مستخدم" };
     profilesById.set(currentUser.id, currentProfile);
     await Promise.all([loadGroups(), loadInvitations()]);
+    await loadPublicGroups();
 }
 
 async function loadGroups(selectId = null) {
-    const { data, error } = await supabaseClient
+    let { data, error } = await supabaseClient
         .from("group_members")
-        .select("role, joined_at, groups(id, name, description, owner_id, created_at)")
+        .select("role, joined_at, groups(id, name, description, owner_id, created_at, is_public)")
         .eq("user_id", currentUser.id)
         .order("joined_at", { ascending: false });
+    if (error?.message?.includes("is_public")) {
+        const legacyResult = await supabaseClient
+            .from("group_members")
+            .select("role, joined_at, groups(id, name, description, owner_id, created_at)")
+            .eq("user_id", currentUser.id)
+            .order("joined_at", { ascending: false });
+        data = legacyResult.data;
+        error = legacyResult.error;
+    }
     if (error) { byId("groupsList").innerHTML = '<div class="empty-state">تعذّر تحميل المجموعات. تأكد من تنفيذ ملف إعداد قاعدة البيانات.</div>'; return; }
     groups = (data || []).map(item => ({ ...item.groups, role: item.role })).filter(item => item.id);
     renderGroups();
@@ -51,11 +61,54 @@ function renderGroups() {
         <button class="group-card ${selectedGroup?.id === group.id ? "active" : ""}" type="button" data-group-id="${group.id}">
             <h3>${escapeHtml(group.name)}</h3>
             <p>${escapeHtml(group.description || "مجموعة للتعلّم والمحادثة")}</p>
+            <span class="group-visibility ${group.is_public ? "" : "private"}">${group.is_public ? "🌐 عامة" : "🔒 خاصة"}</span>
         </button>`).join("");
     byId("groupsList").querySelectorAll("[data-group-id]").forEach(button => button.addEventListener("click", () => {
         const group = groups.find(item => item.id === button.dataset.groupId);
         if (group) openGroup(group);
     }));
+}
+
+async function loadPublicGroups() {
+    const memberIds = new Set(groups.map(group => group.id));
+    const { data, error } = await supabaseClient
+        .from("groups")
+        .select("id,name,description,owner_id,created_at,is_public")
+        .eq("is_public", true)
+        .order("created_at", { ascending: false })
+        .limit(30);
+    if (error) {
+        byId("publicGroupsList").innerHTML = '<div class="empty-state">فعّل ميزة المجموعات العامة من ملف SQL.</div>';
+        byId("publicGroupsCount").textContent = "0";
+        return;
+    }
+    const publicGroups = (data || []).filter(group => !memberIds.has(group.id));
+    byId("publicGroupsCount").textContent = publicGroups.length;
+    if (!publicGroups.length) {
+        byId("publicGroupsList").innerHTML = '<div class="empty-state">لا توجد مجموعات عامة جديدة حاليًا.</div>';
+        return;
+    }
+    byId("publicGroupsList").innerHTML = publicGroups.map(group => `
+        <article class="public-group-card">
+            <div><h3>${escapeHtml(group.name)}</h3><p>${escapeHtml(group.description || "مجموعة عامة لتعلّم الإنجليزية")}</p></div>
+            <button type="button" data-join-public="${group.id}">انضمام</button>
+        </article>`).join("");
+    byId("publicGroupsList").querySelectorAll("[data-join-public]").forEach(button => button.addEventListener("click", () => joinPublicGroup(button)));
+}
+
+async function joinPublicGroup(button) {
+    button.disabled = true;
+    button.textContent = "جاري الانضمام...";
+    const { error } = await supabaseClient.rpc("join_public_group", { target_group: button.dataset.joinPublic });
+    if (error) {
+        button.disabled = false;
+        button.textContent = "انضمام";
+        showError(error.message);
+        return;
+    }
+    const groupId = button.dataset.joinPublic;
+    await loadGroups(groupId);
+    await loadPublicGroups();
 }
 
 async function loadInvitations() {
@@ -161,18 +214,21 @@ async function createGroup(event) {
     event.preventDefault();
     const name = byId("groupName").value.trim();
     const description = byId("groupDescription").value.trim();
+    const isPublic = document.querySelector('input[name="groupVisibility"]:checked')?.value === "public";
     if (!name) return;
     const submit = event.submitter;
     submit.disabled = true;
     const { data, error } = await supabaseClient.rpc("create_learning_group", {
         group_name: name,
-        group_description: description || null
+        group_description: description || null,
+        group_is_public: isPublic
     });
     submit.disabled = false;
     if (error) { showError(error.message); return; }
     event.target.reset();
     hideModal("createModal");
     await loadGroups(data);
+    await loadPublicGroups();
 }
 
 async function sendMessage(event) {

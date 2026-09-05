@@ -158,3 +158,21 @@ button { cursor: pointer; }
 }
 
 @media (min-width: 761px) { .mobile-back { display: none !important; } }
+
+.public-groups { border-top: 1px solid var(--line); background: #fafbff; }
+.public-groups-list { padding: 10px; max-height: 260px; overflow: auto; }
+.public-group-card { display: grid; grid-template-columns: 1fr auto; gap: 9px; align-items: center; padding: 12px; margin-bottom: 8px; border: 1px solid #dedff0; border-radius: 15px; background: #fff; }
+.public-group-card h3 { margin: 0 0 4px; font-size: 14px; }
+.public-group-card p { margin: 0; color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.public-group-card button { border: 0; border-radius: 10px; padding: 8px 12px; color: #fff; background: var(--success); font-weight: 800; }
+.group-visibility { display: inline-flex; margin-top: 8px; padding: 3px 7px; border-radius: 99px; color: #177752; background: #e9faf3; font-size: 10px; font-weight: 800; }
+.group-visibility.private { color: #6d6485; background: #f1eef8; }
+.visibility-field { border: 0; padding: 0; margin: 16px 0; }
+.visibility-field legend { margin-bottom: 8px; font-size: 13px; font-weight: 800; }
+.visibility-option { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 13px; padding: 11px; margin-top: 8px; cursor: pointer; }
+.visibility-option:has(input:checked) { border-color: var(--brand); background: var(--soft); }
+.visibility-option input { accent-color: var(--brand); }
+.visibility-option>span { font-size: 20px; }
+.visibility-option div { display: grid; gap: 3px; }
+.visibility-option b { font-size: 13px; }
+.visibility-option small { color: var(--muted); font-size: 11px; }
