@@ -10,6 +10,7 @@ let profile;
 let channel;
 let stream;
 let muted = false;
+let speakerMuted = false;
 let hand = false;
 let startedAt = Date.now();
 let peers = new Map();
@@ -33,6 +34,18 @@ function toast(text) {
 function setMuteButton() {
     $("muteBtn").classList.toggle("active", muted);
     $("muteBtn").innerHTML = muted ? "<span>🔇</span><small>تشغيل</small>" : "<span>🎙️</span><small>كتم</small>";
+}
+
+function setSpeakerButton() {
+    $("speakerBtn").classList.toggle("active", speakerMuted);
+    $("speakerBtn").innerHTML = speakerMuted ? "<span>🔇</span><small>تشغيل الصوت</small>" : "<span>🔊</span><small>الصوت</small>";
+}
+
+function applySpeakerState() {
+    document.querySelectorAll("#remoteAudioContainer audio").forEach(audio => {
+        audio.muted = speakerMuted;
+        if (!speakerMuted) audio.play().catch(() => {});
+    });
 }
 
 async function init() {
@@ -108,6 +121,7 @@ function peer(id) {
             audio.dataset.u = id;
             $("remoteAudioContainer").appendChild(audio);
         }
+        audio.muted = speakerMuted;
         audio.srcObject = event.streams[0];
         audio.play().catch(() => {});
     };
@@ -238,11 +252,13 @@ async function toggleMute() {
             muted = true;
             setMuteButton();
             await updatePresence();
+            applySpeakerState();
         } else {
             await restoreMicrophone();
             muted = false;
             setMuteButton();
             await updatePresence();
+            applySpeakerState();
             toast("تم تشغيل الميكروفون");
             if (translationEnabled) startRecognition();
         }
@@ -257,6 +273,13 @@ async function toggleMute() {
         microphoneBusy = false;
         $("muteBtn").disabled = false;
     }
+}
+
+function toggleSpeaker() {
+    speakerMuted = !speakerMuted;
+    applySpeakerState();
+    setSpeakerButton();
+    toast(speakerMuted ? "تم كتم صوت المشاركين لديك" : "تم تشغيل صوت المشاركين");
 }
 
 function addCaption(caption) {
@@ -409,6 +432,7 @@ function updateTimer() {
 $("backBtn").onclick = leave;
 $("leaveBtn").onclick = leave;
 $("muteBtn").onclick = toggleMute;
+$("speakerBtn").onclick = toggleSpeaker;
 $("handBtn").onclick = toggleHand;
 $("nextTopicBtn").onclick = () => { $("topicText").textContent = topics[++topicIndex % topics.length]; };
 $("chatBtn").onclick = () => { $("sidePanel").classList.add("show"); unread = 0; $("chatBadge").hidden = true; };
