@@ -236,3 +236,86 @@ body {
     font-weight: bold;
     color: #4285f4;
 }
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0 12px;
+    color: #737d99;
+    font-size: 13px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: rgba(150, 155, 190, 0.2);
+}
+
+.guest-btn {
+    width: 100%;
+    min-height: 64px;
+    border: 1px solid rgba(114, 230, 165, 0.48);
+    border-radius: 14px;
+    padding: 9px 14px;
+    color: white;
+    background: linear-gradient(135deg, rgba(38, 122, 101, 0.42), rgba(30, 66, 100, 0.45));
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    text-align: right;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.guest-btn:hover {
+    transform: translateY(-2px);
+    border-color: #72e6a5;
+    box-shadow: 0 12px 28px rgba(53, 190, 137, 0.16);
+}
+
+.guest-btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
+}
+
+.guest-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: rgba(114, 230, 165, 0.14);
+    font-size: 19px;
+}
+
+.guest-copy {
+    display: grid;
+    gap: 4px;
+}
+
+.guest-copy b {
+    font-size: 15px;
+}
+
+.guest-copy small {
+    color: #a9b8c7;
+    font-size: 12px;
+}
+
+.guest-arrow {
+    color: #72e6a5;
+    font-size: 20px;
+}
+
+.guest-btn.loading .guest-icon {
+    animation: guestPulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes guestPulse {
+    to { opacity: 0.35; transform: scale(0.9); }
+}

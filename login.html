@@ -24,7 +24,7 @@
 
     <title>تسجيل الدخول | English Words</title>
 
-    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="auth.css?v=20260905-1">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -135,6 +135,20 @@
                 </span>
 
                 تسجيل الدخول باستخدام Google
+
+            </button>
+
+            <div class="auth-divider"><span>أو</span></div>
+
+            <button
+                type="button"
+                class="guest-btn"
+                id="guestBtn"
+                onclick="loginAsGuest()">
+
+                <span class="guest-icon">👤</span>
+                <span class="guest-copy"><b>الدخول كضيف</b><small>جرّب الموقع الآن بدون إنشاء حساب</small></span>
+                <span class="guest-arrow">←</span>
 
             </button>
 
@@ -311,6 +325,48 @@
 
             }
 
+        }
+
+
+        // ==========================================
+        // الدخول بحساب ضيف مؤقت
+        // ==========================================
+
+        async function loginAsGuest() {
+
+            const message = document.getElementById("message");
+            const button = document.getElementById("guestBtn");
+
+            message.textContent = "";
+            button.disabled = true;
+            button.classList.add("loading");
+            button.querySelector(".guest-copy b").textContent = "جاري تجهيز حساب الضيف...";
+
+            const { data, error } =
+                await supabaseClient.auth.signInAnonymously({
+                    options: {
+                        data: {
+                            name: "Guest",
+                            is_guest: true
+                        }
+                    }
+                });
+
+            if (error || !data?.user) {
+                button.disabled = false;
+                button.classList.remove("loading");
+                button.querySelector(".guest-copy b").textContent = "الدخول كضيف";
+                message.style.color = "#ff8d8d";
+                message.textContent = error?.message?.toLowerCase().includes("anonymous")
+                    ? "⚠️ فعّل تسجيل الدخول المجهول من إعدادات Supabase أولًا."
+                    : "❌ تعذر الدخول كضيف، حاول مرة أخرى.";
+                return;
+            }
+
+            sessionStorage.setItem("englishwords_guest", "true");
+            message.style.color = "#72e6a5";
+            message.textContent = "✅ أهلاً بك! سيتم نقلك الآن...";
+            setTimeout(() => window.location.replace("index.html"), 450);
         }
 
     </script>
