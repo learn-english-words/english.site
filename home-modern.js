@@ -188,6 +188,10 @@ async function init() {
         $("profileName").textContent = name;
         $("avatarLetter").textContent = name[0].toUpperCase();
         $("welcomeText").textContent = `أهلًا ${name}، جاهز لتطوير لغتك الإنجليزية اليوم؟`;
+    } else if (sessionStorage.getItem("englishwords_guest") === "true") {
+        $("profileName").textContent = "ضيف";
+        $("avatarLetter").textContent = "ض";
+        $("welcomeText").textContent = "أهلًا بك كضيف، جاهز لتجربة تعلّم الإنجليزية؟";
     }
     await Promise.allSettled([loadVocabulary(), loadFavoritesCount(), loadWeeklyActivity(), loadGroups()]);
 }

@@ -342,31 +342,26 @@
             button.classList.add("loading");
             button.querySelector(".guest-copy b").textContent = "جاري تجهيز حساب الضيف...";
 
-            const { data, error } =
-                await supabaseClient.auth.signInAnonymously({
-                    options: {
-                        data: {
-                            name: "Guest",
-                            is_guest: true
-                        }
-                    }
-                });
+            sessionStorage.setItem("englishwords_guest", "true");
+            sessionStorage.setItem("englishwords_guest_name", "ضيف");
 
-            if (error || !data?.user) {
-                button.disabled = false;
-                button.classList.remove("loading");
-                button.querySelector(".guest-copy b").textContent = "الدخول كضيف";
-                message.style.color = "#ff8d8d";
-                message.textContent = error?.message?.toLowerCase().includes("anonymous")
-                    ? "⚠️ فعّل تسجيل الدخول المجهول من إعدادات Supabase أولًا."
-                    : "❌ تعذر الدخول كضيف، حاول مرة أخرى.";
-                return;
+            try {
+                await Promise.race([
+                    supabaseClient.auth.signInAnonymously({
+                        options: {
+                            data: {
+                                name: "Guest",
+                                is_guest: true
+                            }
+                        }
+                    }),
+                    new Promise(resolve => setTimeout(resolve, 1200))
+                ]);
+            } catch (error) {
+                console.warn("Guest session will continue locally:", error);
             }
 
-            sessionStorage.setItem("englishwords_guest", "true");
-            message.style.color = "#72e6a5";
-            message.textContent = "✅ أهلاً بك! سيتم نقلك الآن...";
-            setTimeout(() => window.location.replace("index.html"), 450);
+            window.location.replace("index.html");
         }
 
     </script>
