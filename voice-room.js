@@ -179,14 +179,26 @@ async function restoreMicrophone() {
         const oldTracks = stream?.getAudioTracks() || [];
         stream = replacementStream;
         watchMicrophoneTrack(track);
-        await Promise.all([...peers.values()].map(async ({ pc }) => {
-            const sender = getAudioSender(pc);
-            if (sender) await sender.replaceTrack(track);
-            else pc.addTrack(track, stream);
-        }));
         oldTracks.forEach(oldTrack => { oldTrack.onended = null; oldTrack.stop(); });
     }
     track.enabled = true;
+    await Promise.all([...peers.values()].map(async ({ pc }) => {
+        const sender = getAudioSender(pc);
+        if (sender) {
+            await sender.replaceTrack(track);
+            const parameters = sender.getParameters();
+            if (parameters.encodings?.length) {
+                parameters.encodings.forEach(encoding => { encoding.active = true; });
+                await sender.setParameters(parameters).catch(() => {});
+            }
+        } else {
+            pc.addTrack(track, stream);
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            const peerId = [...peers.entries()].find(([, connection]) => connection.pc === pc)?.[0];
+            if (peerId) send({ kind: "offer", target_id: peerId, description: pc.localDescription });
+        }
+    }));
     return track;
 }
 
@@ -212,6 +224,8 @@ async function toggleMute() {
         }
     } catch (error) {
         console.error("Microphone restore error:", error);
+        const track = stream?.getAudioTracks()[0];
+        if (track) track.enabled = false;
         muted = true;
         setMuteButton();
         toast("تعذر تشغيل الميكروفون. تحقق من إذن المتصفح");
