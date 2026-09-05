@@ -132,7 +132,8 @@ function peer(id) {
 async function signal(signalData) {
     if (signalData.sender_id === user.id || (signalData.target_id && signalData.target_id !== user.id)) return;
     try {
-        if (signalData.kind === "join") {
+        if (signalData.kind === "join" || signalData.kind === "restart") {
+            if (signalData.kind === "restart") removePeer(signalData.sender_id);
             const connection = peer(signalData.sender_id);
             const offer = await connection.pc.createOffer();
             await connection.pc.setLocalDescription(offer);
@@ -229,6 +230,11 @@ async function renegotiatePeers() {
     }));
 }
 
+async function restartVoiceConnections() {
+    [...peers.keys()].forEach(removePeer);
+    await send({ kind: "restart" });
+}
+
 async function restoreMicrophone() {
     const oldStream = stream;
     const replacementStream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints, video: false });
@@ -243,7 +249,7 @@ async function restoreMicrophone() {
     }
     stream = replacementStream;
     watchMicrophoneTrack(track);
-    await renegotiatePeers();
+    await restartVoiceConnections();
     oldStream?.getTracks().forEach(oldTrack => {
         oldTrack.onended = null;
         oldTrack.stop();
