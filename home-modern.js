@@ -1,6 +1,7 @@
 const $ = id => document.getElementById(id);
 let currentUser = null;
 let roomChannels = [];
+let deferredInstallPrompt = null;
 
 const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]);
 
@@ -174,6 +175,7 @@ async function loadGroups() {
 }
 
 async function init() {
+    setupAppInstall();
     renderWeek();
     renderChart();
     const hour = new Date().getHours();
@@ -188,6 +190,54 @@ async function init() {
         $("welcomeText").textContent = `أهلًا ${name}، جاهز لتطوير لغتك الإنجليزية اليوم؟`;
     }
     await Promise.allSettled([loadVocabulary(), loadFavoritesCount(), loadWeeklyActivity(), loadGroups()]);
+}
+
+function isStandaloneApp() {
+    return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+
+function showInstallInstructions() {
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    $("installSteps").innerHTML = isIOS
+        ? "1. اضغط زر المشاركة في Safari.<br>2. اختر «إضافة إلى الشاشة الرئيسية».<br>3. اضغط «إضافة»."
+        : "1. افتح قائمة المتصفح ⋮ أو زر المشاركة.<br>2. اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».<br>3. وافق على التثبيت.";
+    $("installHelp").showModal();
+}
+
+async function installApp() {
+    if (!deferredInstallPrompt) {
+        showInstallInstructions();
+        return;
+    }
+    deferredInstallPrompt.prompt();
+    const { outcome } = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    if (outcome === "accepted") $("installAppBtn").hidden = true;
+}
+
+function setupAppInstall() {
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("service-worker.js").catch(error => console.warn("Service worker registration failed:", error));
+    }
+    if (isStandaloneApp()) {
+        $("installAppBtn").hidden = true;
+        return;
+    }
+    $("installAppBtn").hidden = false;
+    window.addEventListener("beforeinstallprompt", event => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        $("installAppBtn").hidden = false;
+    });
+    window.addEventListener("appinstalled", () => {
+        deferredInstallPrompt = null;
+        $("installAppBtn").hidden = true;
+    });
+    $("installAppBtn").addEventListener("click", installApp);
+    $("installCloseBtn").addEventListener("click", () => $("installHelp").close());
+    $("installHelp").addEventListener("click", event => {
+        if (event.target === $("installHelp")) $("installHelp").close();
+    });
 }
 
 $("profileBtn").onclick = () => { location.href = currentUser ? "profile.html" : "login.html"; };
