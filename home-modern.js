@@ -139,7 +139,8 @@ function updateRoomPresence(groupId, count) {
 }
 
 function watchRoom(group) {
-    const channel = supabaseClient.channel(`voice-group-${group.id}`, { config: { presence: { key: `home-${currentUser.id}` } } });
+    const viewerKey = currentUser?.id || `visitor-${crypto.randomUUID()}`;
+    const channel = supabaseClient.channel(`voice-group-${group.id}`, { config: { presence: { key: `home-${viewerKey}` } } });
     channel.on("presence", { event: "sync" }, () => {
         const count = Object.values(channel.presenceState()).reduce((sum, entries) => sum + entries.length, 0);
         updateRoomPresence(group.id, count);
@@ -148,29 +149,60 @@ function watchRoom(group) {
 }
 
 async function loadGroups() {
-    if (!currentUser) {
-        $("liveRooms").innerHTML = '<div class="rooms-empty"><span>سجّل دخولك لعرض مجموعاتك الصوتية</span><a href="login.html">تسجيل الدخول</a></div>';
-        return;
-    }
-    const { data, error } = await supabaseClient
-        .from("group_members")
-        .select("group_id,groups(id,name,description)")
-        .eq("user_id", currentUser.id)
-        .order("joined_at", { ascending: false })
-        .limit(3);
-    const groups = (data || []).map(item => item.groups).filter(Boolean);
-    if (error || !groups.length) {
-        $("liveRooms").innerHTML = '<div class="rooms-empty"><span>لا توجد مجموعات لديك حتى الآن</span><a href="groups.html">أنشئ مجموعة صوتية</a></div>';
+    const membershipRequest = currentUser
+        ? supabaseClient
+            .from("group_members")
+            .select("group_id,groups(id,name,description,is_public)")
+            .eq("user_id", currentUser.id)
+            .order("joined_at", { ascending: false })
+            .limit(8)
+        : Promise.resolve({ data: [], error: null });
+    const publicRequest = supabaseClient
+        .from("groups")
+        .select("id,name,description,is_public,created_at")
+        .eq("is_public", true)
+        .order("created_at", { ascending: false })
+        .limit(12);
+
+    const [membershipResult, publicResult] = await Promise.all([membershipRequest, publicRequest]);
+    const joinedGroups = (membershipResult.data || []).map(item => item.groups).filter(Boolean);
+    const joinedIds = new Set(joinedGroups.map(group => group.id));
+    const uniqueGroups = new Map();
+    [...(publicResult.data || []), ...joinedGroups].forEach(group => uniqueGroups.set(group.id, group));
+    const groups = [...uniqueGroups.values()].slice(0, 4);
+
+    if (!groups.length) {
+        const failed = membershipResult.error && publicResult.error;
+        $("liveRooms").innerHTML = `<div class="rooms-empty"><span>${failed ? "تعذر تحميل المجموعات الآن" : "لا توجد مجموعات عامة الآن"}</span><a href="groups.html">عرض المجموعات</a></div>`;
         return;
     }
     $("liveRooms").innerHTML = groups.map(group => `
         <article>
-            <span class="live waiting" data-room-status="${escapeHtml(group.id)}">جاهزة للصوت</span>
+            <span class="live waiting" data-room-status="${escapeHtml(group.id)}">${group.is_public && !joinedIds.has(group.id) ? "🌐 عامة" : "جاهزة للصوت"}</span>
             <div><h3>${escapeHtml(group.name)}</h3><p>${escapeHtml(group.description || "محادثة صوتية مع أعضاء المجموعة")}</p></div>
-            <span class="faces-count" data-room-count="${escapeHtml(group.id)}">ابدأ المحادثة</span>
-            <button type="button" data-room-link="${escapeHtml(roomLink(group))}">دخول</button>
+            <span class="faces-count" data-room-count="${escapeHtml(group.id)}">${joinedIds.has(group.id) ? "ابدأ المحادثة" : "متاحة للجميع"}</span>
+            <button type="button" data-room-id="${escapeHtml(group.id)}" data-room-link="${escapeHtml(roomLink(group))}" data-is-member="${joinedIds.has(group.id)}">${joinedIds.has(group.id) ? "دخول" : "انضمام"}</button>
         </article>`).join("");
-    $("liveRooms").querySelectorAll("[data-room-link]").forEach(button => button.addEventListener("click", () => { location.href = button.dataset.roomLink; }));
+    $("liveRooms").querySelectorAll("[data-room-link]").forEach(button => button.addEventListener("click", async () => {
+        if (!currentUser) {
+            sessionStorage.setItem("post_login_redirect", location.href);
+            location.href = "login.html";
+            return;
+        }
+        if (button.dataset.isMember !== "true") {
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.textContent = "جارٍ الانضمام…";
+            const { error } = await supabaseClient.rpc("join_public_group", { target_group: button.dataset.roomId });
+            if (error) {
+                button.disabled = false;
+                button.textContent = originalText;
+                alert(error.message || "تعذر الانضمام إلى المجموعة");
+                return;
+            }
+        }
+        location.href = button.dataset.roomLink;
+    }));
     groups.forEach(watchRoom);
 }
 

@@ -65,4 +65,12 @@ create policy "members or public view groups" on public.groups
 for select to authenticated
 using (is_public = true or owner_id = auth.uid() or public.can_view_group(id));
 
+-- السماح لزوار الصفحة الرئيسية برؤية أسماء المجموعات العامة فقط.
+grant usage on schema public to anon;
+grant select on public.groups to anon;
+drop policy if exists "visitors view public groups" on public.groups;
+create policy "visitors view public groups" on public.groups
+for select to anon
+using (is_public = true);
+
 notify pgrst, 'reload schema';
