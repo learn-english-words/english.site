@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#12152f">
     <title>الغرفة الصوتية - EnglishWords</title>
     <link rel="stylesheet" href="voice-room.css">
+    <link rel="stylesheet" href="voice-translation.css?v=1">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js"></script>
 </head>
@@ -35,6 +36,13 @@
         <div class="audience-list" id="audienceList"><p class="empty-note">لا يوجد مستمعون حاليًا</p></div>
     </section>
 
+    <section class="translation-card" aria-labelledby="translationTitle">
+        <div class="section-title"><div><span>🌐</span><h2 id="translationTitle">الترجمة الفورية</h2></div><span id="translationStatus">متوقفة</span></div>
+        <p class="translation-help">شغّل الترجمة ليظهر كلامك الإنجليزي مترجمًا بالعربية لجميع الموجودين في الغرفة.</p>
+        <div class="live-transcript" id="liveTranscript" hidden><small>أسمع الآن</small><p id="interimTranscript">...</p></div>
+        <div class="captions" id="captions"><p class="empty-note">ستظهر الترجمة هنا أثناء الحديث</p></div>
+    </section>
+
     <aside class="side-panel" id="sidePanel">
         <div class="side-head"><h2>رسائل الغرفة</h2><button id="closeChatBtn" type="button">✕</button></div>
         <div class="room-messages" id="roomMessages"><p class="system-message">رحّب بأعضاء المجموعة 👋</p></div>
@@ -46,11 +54,12 @@
 
     <footer class="controls">
         <button class="control" id="chatBtn"><span>💬</span><small>الرسائل</small><b id="chatBadge" hidden>0</b></button>
+        <button class="control" id="translateBtn"><span>🌐</span><small>ترجمة</small></button>
         <button class="control main-control" id="muteBtn"><span>🎙️</span><small>كتم</small></button>
         <button class="control" id="handBtn"><span>✋</span><small>ارفع يدك</small></button>
         <button class="control leave" id="leaveBtn"><span>📞</span><small>مغادرة</small></button>
     </footer>
 </main>
-<script src="voice-room.js?v=20260905-2"></script>
+<script src="voice-room.js?v=20260905-3"></script>
 </body>
 </html>

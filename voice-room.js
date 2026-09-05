@@ -15,6 +15,9 @@ let startedAt = Date.now();
 let peers = new Map();
 let unread = 0;
 let microphoneBusy = false;
+let speechRecognition = null;
+let translationEnabled = false;
+let recognitionRestartTimer = null;
 const topics = ["What made you smile today?", "What is your dream travel destination?", "Describe your perfect weekend.", "What new English word did you learn?", "Would you rather live by the sea or in the mountains?", "Tell us about your favorite food."];
 let topicIndex = 0;
 
@@ -56,6 +59,7 @@ function watchMicrophoneTrack(track) {
     track.onended = () => {
         if (!muted) {
             muted = true;
+            stopRecognition();
             setMuteButton();
             updatePresence();
             toast("توقف الميكروفون. اضغط تشغيل لإعادته");
@@ -70,6 +74,7 @@ function connect() {
         .on("presence", { event: "leave" }, ({ key }) => removePeer(key))
         .on("broadcast", { event: "voice-signal" }, ({ payload }) => signal(payload))
         .on("broadcast", { event: "room-chat" }, ({ payload }) => addMessage(payload))
+        .on("broadcast", { event: "room-caption" }, ({ payload }) => addCaption(payload))
         .subscribe(async status => {
             if (status === "SUBSCRIBED") {
                 await updatePresence();
@@ -187,6 +192,7 @@ async function toggleMute() {
     $("muteBtn").disabled = true;
     try {
         if (!muted) {
+            stopRecognition();
             stream?.getAudioTracks().forEach(track => { track.enabled = false; });
             muted = true;
             setMuteButton();
@@ -197,6 +203,7 @@ async function toggleMute() {
             setMuteButton();
             await updatePresence();
             toast("تم تشغيل الميكروفون");
+            if (translationEnabled) startRecognition();
         }
     } catch (error) {
         console.error("Microphone restore error:", error);
@@ -206,6 +213,116 @@ async function toggleMute() {
     } finally {
         microphoneBusy = false;
         $("muteBtn").disabled = false;
+    }
+}
+
+function addCaption(caption) {
+    const empty = $("captions").querySelector(".empty-note");
+    if (empty) empty.remove();
+    const element = document.createElement("article");
+    element.className = "caption";
+    element.innerHTML = `<div class="caption-head"><b>${esc(caption.sender_id === user.id ? "أنت" : caption.name)}</b><span>EN → AR</span></div><p class="source">${esc(caption.source)}</p><p class="translated">${esc(caption.translated)}</p>`;
+    $("captions").appendChild(element);
+    while ($("captions").children.length > 20) $("captions").firstElementChild.remove();
+    $("captions").scrollTop = $("captions").scrollHeight;
+}
+
+async function translateToArabic(text) {
+    const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0, 450))}&langpair=en|ar`);
+    if (!response.ok) throw new Error("Translation service unavailable");
+    const result = await response.json();
+    const translated = result?.responseData?.translatedText?.trim();
+    if (!translated) throw new Error("Empty translation");
+    return translated;
+}
+
+async function publishCaption(source) {
+    const cleanSource = source.trim();
+    if (!cleanSource) return;
+    $("translationStatus").textContent = "جاري الترجمة...";
+    try {
+        const translated = await translateToArabic(cleanSource);
+        const caption = { sender_id: user.id, name: profile.display_name, source: cleanSource, translated };
+        addCaption(caption);
+        await channel.send({ type: "broadcast", event: "room-caption", payload: caption });
+        $("translationStatus").textContent = "تستمع الآن";
+    } catch (error) {
+        console.error("Translation error:", error);
+        $("translationStatus").textContent = "تعذرت الترجمة";
+        toast("تعذرت ترجمة العبارة، حاول مرة أخرى");
+    }
+}
+
+function createRecognition() {
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Recognition) return null;
+    const recognition = new Recognition();
+    recognition.lang = "en-US";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.onresult = event => {
+        let interim = "";
+        let finalText = "";
+        for (let index = event.resultIndex; index < event.results.length; index += 1) {
+            const text = event.results[index][0].transcript;
+            if (event.results[index].isFinal) finalText += text;
+            else interim += text;
+        }
+        $("interimTranscript").textContent = interim || finalText || "...";
+        if (finalText.trim()) publishCaption(finalText);
+    };
+    recognition.onerror = event => {
+        if (["not-allowed", "service-not-allowed"].includes(event.error)) {
+            translationEnabled = false;
+            updateTranslationUI();
+            toast("اسمح للمتصفح بالتعرف على الكلام لتشغيل الترجمة");
+        }
+    };
+    recognition.onend = () => {
+        if (translationEnabled && !muted) {
+            clearTimeout(recognitionRestartTimer);
+            recognitionRestartTimer = setTimeout(startRecognition, 350);
+        }
+    };
+    return recognition;
+}
+
+function startRecognition() {
+    if (!translationEnabled || muted) return;
+    if (!speechRecognition) speechRecognition = createRecognition();
+    if (!speechRecognition) {
+        translationEnabled = false;
+        updateTranslationUI();
+        toast("الترجمة الصوتية غير مدعومة في هذا المتصفح. استخدم Chrome أو Edge");
+        return;
+    }
+    try { speechRecognition.start(); } catch (error) {
+        if (error.name !== "InvalidStateError") console.error("Speech recognition error:", error);
+    }
+}
+
+function stopRecognition() {
+    clearTimeout(recognitionRestartTimer);
+    if (!speechRecognition) return;
+    try { speechRecognition.stop(); } catch (error) {}
+}
+
+function updateTranslationUI() {
+    $("translateBtn").classList.toggle("translating", translationEnabled);
+    $("translateBtn").innerHTML = translationEnabled ? "<span>🌐</span><small>إيقاف الترجمة</small>" : "<span>🌐</span><small>ترجمة</small>";
+    $("translationStatus").textContent = translationEnabled ? (muted ? "افتح المايك للترجمة" : "تستمع الآن") : "متوقفة";
+    $("translationStatus").classList.toggle("on", translationEnabled);
+    $("liveTranscript").hidden = !translationEnabled;
+}
+
+function toggleTranslation() {
+    translationEnabled = !translationEnabled;
+    updateTranslationUI();
+    if (translationEnabled) {
+        startRecognition();
+        toast(muted ? "افتح المايك لبدء الترجمة" : "بدأت الترجمة الفورية من الإنجليزية للعربية");
+    } else {
+        stopRecognition();
     }
 }
 
@@ -230,6 +347,8 @@ function addMessage(message) {
 }
 
 async function leave() {
+    translationEnabled = false;
+    stopRecognition();
     stream?.getTracks().forEach(track => track.stop());
     for (const id of peers.keys()) removePeer(id);
     if (channel) { await channel.untrack(); await supabaseClient.removeChannel(channel); }
@@ -247,6 +366,7 @@ $("muteBtn").onclick = toggleMute;
 $("handBtn").onclick = toggleHand;
 $("nextTopicBtn").onclick = () => { $("topicText").textContent = topics[++topicIndex % topics.length]; };
 $("chatBtn").onclick = () => { $("sidePanel").classList.add("show"); unread = 0; $("chatBadge").hidden = true; };
+$("translateBtn").onclick = toggleTranslation;
 $("closeChatBtn").onclick = () => $("sidePanel").classList.remove("show");
 $("shareBtn").onclick = async () => { try { await navigator.clipboard.writeText(location.href); toast("تم نسخ رابط الغرفة"); } catch { toast("تعذر نسخ الرابط"); } };
 $("roomMessageForm").onsubmit = event => {
@@ -259,5 +379,5 @@ $("roomMessageForm").onsubmit = event => {
     addMessage(message);
     input.value = "";
 };
-window.addEventListener("beforeunload", () => { stream?.getTracks().forEach(track => track.stop()); });
+window.addEventListener("beforeunload", () => { translationEnabled = false; stopRecognition(); stream?.getTracks().forEach(track => track.stop()); });
 init();
