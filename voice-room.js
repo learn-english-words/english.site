@@ -91,8 +91,8 @@ function peer(id) {
     const connection = { pc, q: [] };
     peers.set(id, connection);
     stream.getAudioTracks().forEach(track => {
-        const sender = pc.addTrack(track, stream);
-        if (muted) sender.replaceTrack(null).catch(error => console.error("Initial mute error:", error));
+        track.enabled = !muted;
+        pc.addTrack(track, stream);
     });
     pc.onicecandidate = event => event.candidate && send({ kind: "candidate", target_id: id, candidate: event.candidate });
     pc.ontrack = event => {
@@ -166,15 +166,9 @@ async function updatePresence() {
 }
 
 function getAudioSender(pc) {
-    const transceiver = pc.getTransceivers().find(item => item.sender && (item.sender.track?.kind === "audio" || item.receiver?.track?.kind === "audio"));
-    return transceiver?.sender || pc.getSenders().find(item => item.track?.kind === "audio") || null;
-}
-
-async function detachOutgoingAudio() {
-    await Promise.all([...peers.values()].map(async ({ pc }) => {
-        const sender = getAudioSender(pc);
-        if (sender) await sender.replaceTrack(null);
-    }));
+    return pc.getSenders().find(sender => sender.track?.kind === "audio")
+        || pc.getTransceivers().find(item => item.receiver?.track?.kind === "audio")?.sender
+        || null;
 }
 
 async function restoreMicrophone() {
@@ -191,11 +185,6 @@ async function restoreMicrophone() {
             else pc.addTrack(track, stream);
         }));
         oldTracks.forEach(oldTrack => { oldTrack.onended = null; oldTrack.stop(); });
-    } else {
-        await Promise.all([...peers.values()].map(async ({ pc }) => {
-            const sender = getAudioSender(pc);
-            if (sender) await sender.replaceTrack(track);
-        }));
     }
     track.enabled = true;
     return track;
@@ -208,7 +197,8 @@ async function toggleMute() {
     try {
         if (!muted) {
             stopRecognition();
-            await detachOutgoingAudio();
+            const track = stream?.getAudioTracks()[0];
+            if (track) track.enabled = false;
             muted = true;
             setMuteButton();
             await updatePresence();
